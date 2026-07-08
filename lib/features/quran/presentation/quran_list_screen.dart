@@ -47,7 +47,13 @@ class QuranListScreen extends ConsumerWidget {
                     if (bookmark != null) ...[
                       _ContinueReadingHero(
                         surahNumber: bookmark.surah,
-                        onTap: () => context.push('/quran/${bookmark.surah}'),
+                        onTap: () {
+                          final pageNumber = bookmark.scrollOffset.round();
+                          final pageQuery = pageNumber > 0
+                              ? '?page=$pageNumber'
+                              : '';
+                          context.push('/quran/${bookmark.surah}$pageQuery');
+                        },
                       ),
                       const SizedBox(height: AppSpacing.xl),
                     ],

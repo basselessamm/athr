@@ -9,6 +9,8 @@ import 'package:athr/features/library/modules/recent_activity/providers/recent_a
 import 'package:athr/features/azkar/providers/azkar_providers.dart';
 import 'package:athr/features/settings/providers/settings_providers.dart';
 import 'package:athr/features/progress/providers/progress_providers.dart';
+import 'package:athr/core/database/database_providers.dart';
+import 'package:athr/features/favorites/providers/favorites_providers.dart';
 
 class AzkarReadingScreen extends ConsumerStatefulWidget {
   final String category;
@@ -197,7 +199,7 @@ class _AzkarReadingScreenState extends ConsumerState<AzkarReadingScreen>
   }
 }
 
-class _PremiumZikrPage extends StatefulWidget {
+class _PremiumZikrPage extends ConsumerStatefulWidget {
   final Dua zikr;
   final int pageNumber;
   final int totalCount;
@@ -214,10 +216,10 @@ class _PremiumZikrPage extends StatefulWidget {
   });
 
   @override
-  State<_PremiumZikrPage> createState() => _PremiumZikrPageState();
+  ConsumerState<_PremiumZikrPage> createState() => _PremiumZikrPageState();
 }
 
-class _PremiumZikrPageState extends State<_PremiumZikrPage>
+class _PremiumZikrPageState extends ConsumerState<_PremiumZikrPage>
     with AutomaticKeepAliveClientMixin {
   late int _remainingCount;
 
@@ -260,92 +262,94 @@ class _PremiumZikrPageState extends State<_PremiumZikrPage>
 
     return Directionality(
       textDirection: TextDirection.rtl,
-      child: GestureDetector(
-        onTap: _handleTap,
-        child: Container(
-          width: double.infinity,
-          height: double.infinity,
-          color: const Color(0xFFFDF7EF), // Base paper color
-          child: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.centerLeft,
-                end: Alignment.centerRight,
-                colors: isRightPage
-                    ? [
-                        Colors.black.withValues(alpha: 0.08),
-                        Colors.transparent,
-                        Colors.transparent,
-                        Colors.black.withValues(alpha: 0.02),
-                      ]
-                    : [
-                        Colors.black.withValues(alpha: 0.02),
-                        Colors.transparent,
-                        Colors.transparent,
-                        Colors.black.withValues(alpha: 0.08),
-                      ],
-                stops: const [0.0, 0.05, 0.95, 1.0],
-              ),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16.0,
-                vertical: 32.0,
-              ),
-              child: Container(
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: const Color(
-                      0xFFC7A87D,
-                    ), // Golden/Brownish elegant border
-                    width: 2.0,
-                  ),
+      child: Material(
+        color: const Color(0xFFFDF7EF), // Base paper color
+        child: InkWell(
+          onTap: _handleTap,
+          splashColor: const Color(0xFFC7A87D).withValues(alpha: 0.2),
+          highlightColor: Colors.transparent,
+          child: SizedBox.expand(
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                  colors: isRightPage
+                      ? [
+                          Colors.black.withValues(alpha: 0.08),
+                          Colors.transparent,
+                          Colors.transparent,
+                          Colors.black.withValues(alpha: 0.02),
+                        ]
+                      : [
+                          Colors.black.withValues(alpha: 0.02),
+                          Colors.transparent,
+                          Colors.transparent,
+                          Colors.black.withValues(alpha: 0.08),
+                        ],
+                  stops: const [0.0, 0.05, 0.95, 1.0],
                 ),
-                child: Column(
-                  children: [
-                    _buildHeader(),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 20.0,
-                          vertical: 16.0,
-                        ),
-                        child: SingleChildScrollView(
-                          physics: const BouncingScrollPhysics(),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Text(
-                                widget.zikr.duaText,
-                                style: GoogleFonts.amiri(
-                                  fontSize: widget.fontSize,
-                                  color: isDone
-                                      ? const Color(0xFF8B7355)
-                                      : const Color(0xFF2C1E16),
-                                  height: 1.9,
-                                ),
-                                textAlign: TextAlign.justify,
-                              ),
-                              const SizedBox(height: 24),
-                              if (widget.zikr.reference != null &&
-                                  widget.zikr.reference!.isNotEmpty)
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 32.0,
+                ),
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: const Color(
+                        0xFFC7A87D,
+                      ), // Golden/Brownish elegant border
+                      width: 2.0,
+                    ),
+                  ),
+                  child: Column(
+                    children: [
+                      _buildHeader(),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 20.0,
+                            vertical: 16.0,
+                          ),
+                          child: SingleChildScrollView(
+                            physics: const BouncingScrollPhysics(),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
                                 Text(
-                                  widget.zikr.reference!,
+                                  widget.zikr.duaText,
                                   style: GoogleFonts.amiri(
-                                    fontSize: widget.fontSize * 0.7,
-                                    color: const Color(0xFF5A4328),
-                                    fontWeight: FontWeight.bold,
+                                    fontSize: widget.fontSize,
+                                    color: isDone
+                                        ? const Color(0xFF8B7355)
+                                        : const Color(0xFF2C1E16),
+                                    height: 1.9,
                                   ),
-                                  textAlign: TextAlign.center,
+                                  textAlign: TextAlign.justify,
                                 ),
-                            ],
+                                const SizedBox(height: 24),
+                                if (widget.zikr.reference != null &&
+                                    widget.zikr.reference!.isNotEmpty)
+                                  Text(
+                                    widget.zikr.reference!,
+                                    style: GoogleFonts.amiri(
+                                      fontSize: widget.fontSize * 0.7,
+                                      color: const Color(0xFF5A4328),
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    _buildCounterButton(isDone),
-                    _buildFooter(),
-                  ],
+                      _buildCounterButton(isDone),
+                      _buildFooter(),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -428,20 +432,63 @@ class _PremiumZikrPageState extends State<_PremiumZikrPage>
   }
 
   Widget _buildFooter() {
+    final favoriteAsync = ref.watch(
+      isFavoriteProvider((type: 'azkar', reference: widget.zikr.id.toString())),
+    );
+
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
       decoration: const BoxDecoration(
         border: Border(top: BorderSide(color: Color(0xFFC7A87D), width: 1.5)),
       ),
-      child: Center(
-        child: Text(
-          '${_toArabicNumerals(widget.pageNumber)} / ${_toArabicNumerals(widget.totalCount)}',
-          style: GoogleFonts.amiri(
-            color: const Color(0xFF5A4328),
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              IconButton(
+                onPressed: () {
+                  Clipboard.setData(ClipboardData(text: widget.zikr.duaText));
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('تم نسخ الذكر')),
+                  );
+                },
+                icon: const Icon(Icons.copy, color: Color(0xFF5A4328), size: 20),
+                tooltip: 'نسخ الذكر',
+              ),
+              IconButton(
+                onPressed: () async {
+                  await ref.read(appDatabaseProvider).toggleFavorite(
+                        contentType: 'azkar',
+                        primaryReference: widget.zikr.id.toString(),
+                        secondaryReference: widget.category,
+                        title: widget.zikr.duaText.split('\n').first,
+                        contentText: widget.zikr.duaText,
+                        source: widget.category,
+                      );
+                },
+                icon: favoriteAsync.when(
+                  data: (isFavorite) => Icon(
+                    isFavorite ? Icons.favorite : Icons.favorite_border,
+                    color: isFavorite ? Theme.of(context).colorScheme.error : const Color(0xFF5A4328),
+                    size: 20,
+                  ),
+                  loading: () => const Icon(Icons.favorite_border, color: Color(0xFF5A4328), size: 20),
+                  error: (error, stackTrace) => const Icon(Icons.favorite_border, color: Color(0xFF5A4328), size: 20),
+                ),
+                tooltip: 'حفظ في المفضلة',
+              ),
+            ],
           ),
-        ),
+          Text(
+            '${_toArabicNumerals(widget.pageNumber)} / ${_toArabicNumerals(widget.totalCount)}',
+            style: GoogleFonts.amiri(
+              color: const Color(0xFF5A4328),
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
       ),
     );
   }

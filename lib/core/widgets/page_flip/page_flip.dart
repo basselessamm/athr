@@ -1,4 +1,3 @@
-library page_flip;
 
 export 'src/builders/builder.dart';
 export 'src/builders/image.dart';

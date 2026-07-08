@@ -119,4 +119,5 @@ flutter_launcher_icons:
 
 flutter_native_splash:
   color: "#FFFFFF"
+  image: "assets/images/app_icon.png"
   fullscreen: true

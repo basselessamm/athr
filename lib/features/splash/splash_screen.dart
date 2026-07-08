@@ -56,9 +56,12 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
   Widget build(BuildContext context) {
     final seederAsync = ref.watch(seederProvider);
 
-    ref.listen<AsyncValue<void>>(seederProvider, (_, state) {
+    ref.listen<AsyncValue<void>>(seederProvider, (_, state) async {
       if (!state.isLoading && !state.hasError) {
-        context.go('/');
+        await _controller.reverse();
+        if (context.mounted) {
+          context.go('/');
+        }
       }
     });
 
@@ -77,11 +80,11 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ClipRRect(
-                      borderRadius: BorderRadius.circular(48),
+                      borderRadius: BorderRadius.circular(32), // Adjusted radius for inner logo
                       child: Image.asset(
                         'assets/images/app_icon.png',
-                        width: 250,
-                        height: 250,
+                        width: 200, // Slightly smaller since the outer padding is gone
+                        height: 200,
                       ),
                     ),
                     const SizedBox(height: 24),

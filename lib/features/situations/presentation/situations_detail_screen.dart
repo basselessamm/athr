@@ -99,6 +99,25 @@ class SituationDetailScreen extends ConsumerWidget {
             _SectionCard(
               title: 'آيات مناسبة لهذا الموقف',
               icon: Icons.menu_book_rounded,
+              trailing: IconButton(
+                icon: const Icon(Icons.play_circle_fill_rounded),
+                color: theme.colorScheme.primary,
+                tooltip: 'استمع للتلاوة',
+                onPressed: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: const Text(
+                        'جاري تهيئة الصوتيات...',
+                        style: TextStyle(fontFamily: 'Cairo'),
+                      ),
+                      behavior: SnackBarBehavior.floating,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                  );
+                },
+              ),
               child: Column(
                 children: content.verses.map((verseRef) {
                   final verse = Quran.getVerse(
@@ -343,11 +362,13 @@ class _SectionCard extends StatelessWidget {
   final String title;
   final IconData icon;
   final Widget child;
+  final Widget? trailing;
 
   const _SectionCard({
     required this.title,
     required this.icon,
     required this.child,
+    this.trailing,
   });
 
   @override
@@ -371,13 +392,16 @@ class _SectionCard extends StatelessWidget {
               children: [
                 Icon(icon, color: theme.colorScheme.primary, size: 24),
                 const SizedBox(width: AppSpacing.sm),
-                Text(
-                  title,
-                  style: AppTypography.cairoTextTheme().titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: theme.colorScheme.primary,
+                Expanded(
+                  child: Text(
+                    title,
+                    style: AppTypography.cairoTextTheme().titleMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: theme.colorScheme.primary,
+                    ),
                   ),
                 ),
+                trailing ?? const SizedBox.shrink(),
               ],
             ),
             const SizedBox(height: AppSpacing.lg),

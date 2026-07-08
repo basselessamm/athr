@@ -6,7 +6,7 @@ import 'builders/builder.dart';
 class PageFlipWidget extends StatefulWidget {
   final PageFlipController? controller;
   const PageFlipWidget({
-    Key? key,
+    super.key,
     this.duration = const Duration(milliseconds: 450),
     this.cutoffForward = 0.8,
     this.cutoffPrevious = 0.1,
@@ -21,8 +21,7 @@ class PageFlipWidget extends StatefulWidget {
   }) : assert(
          initialIndex < children.length,
          'initialIndex cannot be greater than children length',
-       ),
-       super(key: key);
+       );
 
   final Color backgroundColor;
   final List<Widget> children;

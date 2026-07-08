@@ -11,6 +11,8 @@ class BookPageWidget extends StatefulWidget {
   final List<dynamic> verses;
   final double fontSize;
   final Function(int surah, int ayah)? onAyahTapped;
+  final int? highlightSurah;
+  final int? highlightAyah;
 
   const BookPageWidget({
     super.key,
@@ -20,6 +22,8 @@ class BookPageWidget extends StatefulWidget {
     required this.verses,
     required this.fontSize,
     this.onAyahTapped,
+    this.highlightSurah,
+    this.highlightAyah,
   });
 
   @override
@@ -178,6 +182,9 @@ class _BookPageWidgetState extends State<BookPageWidget> {
                     color: readingTheme.textColor,
                     height: 2.2,
                     textBaseline: TextBaseline.alphabetic,
+                    backgroundColor: (widget.highlightSurah == verse.surahNumber && widget.highlightAyah == verse.verseNumber)
+                        ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.15)
+                        : null,
                   ),
                   recognizer: recognizer,
                 ),

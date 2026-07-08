@@ -6,15 +6,19 @@ import 'package:quran_flutter/quran.dart';
 import 'package:athr/core/database/database_providers.dart';
 import 'package:athr/features/favorites/providers/favorites_providers.dart';
 import 'package:athr/features/quran/providers/quran_providers.dart';
+import 'package:athr/features/quran/providers/bookmark_provider.dart';
+import 'package:go_router/go_router.dart';
 
 class VerseBottomSheet extends ConsumerWidget {
   final int surahNumber;
   final int ayahNumber;
+  final VoidCallback? onFavoriteRemoved;
 
   const VerseBottomSheet({
     super.key,
     required this.surahNumber,
     required this.ayahNumber,
+    this.onFavoriteRemoved,
   });
 
   @override
@@ -28,7 +32,7 @@ class VerseBottomSheet extends ConsumerWidget {
     ).text;
     final reference = '$surahNumber:$ayahNumber';
     final favoriteAsync = ref.watch(
-      isFavoriteProvider((type: 'verse', reference: reference)),
+      isFavoriteProvider((type: 'quran', reference: reference)),
     );
 
     return DraggableScrollableSheet(
@@ -38,106 +42,142 @@ class VerseBottomSheet extends ConsumerWidget {
       expand: false,
       builder: (context, scrollController) {
         return Container(
-          padding: const EdgeInsets.all(24.0),
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.surface,
             borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // Header
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'الآية $ayahNumber',
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.copy),
-                        onPressed: () {
-                          Clipboard.setData(ClipboardData(text: verseText));
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('تم نسخ الآية')),
-                          );
-                        },
-                        tooltip: 'نسخ الآية',
-                      ),
-                      IconButton(
-                        onPressed: () async {
-                          await ref
-                              .read(appDatabaseProvider)
-                              .toggleFavorite(
-                                contentType: 'verse',
-                                primaryReference: reference,
-                                title:
-                                    'سورة ${Quran.getSurahName(surahNumber)} - الآية $ayahNumber',
-                                contentText: verseText,
-                                source: 'القرآن الكريم',
-                              );
-                        },
-                        icon: favoriteAsync.when(
-                          data: (isFavorite) => Icon(
-                            isFavorite ? Icons.favorite : Icons.favorite_border,
-                            color: isFavorite
-                                ? Theme.of(context).colorScheme.error
-                                : null,
-                          ),
-                          loading: () => const Icon(Icons.favorite_border),
-                          error: (error, stackTrace) =>
-                              const Icon(Icons.favorite_border),
+          child: SingleChildScrollView(
+            controller: scrollController,
+            physics: const BouncingScrollPhysics(),
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        'الآية $ayahNumber',
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
                         ),
-                        tooltip: 'حفظ في المفضلة',
                       ),
-                    ],
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-
-              Text(
-                verseText,
-                style: GoogleFonts.amiri(fontSize: 24, height: 1.8),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 24),
-
-              const Text(
-                'التفسير الميسر',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.grey,
-                ),
-              ),
-              const SizedBox(height: 8),
-
-              // Tafseer takes the remaining space
-              Expanded(
-                child: tafseerAsync.when(
-                  data: (tafseer) => SingleChildScrollView(
-                    controller: scrollController,
-                    physics: const BouncingScrollPhysics(),
-                    child: Text(
-                      tafseer,
-                      style: const TextStyle(fontSize: 16, height: 1.6),
-                      textAlign: TextAlign.justify,
                     ),
-                  ),
-                  loading: () =>
-                      const Center(child: CircularProgressIndicator()),
-                  error: (e, st) =>
-                      Center(child: Text('خطأ في تحميل التفسير: $e')),
+                    const SizedBox(width: 8),
+                    Wrap(
+                      spacing: 4,
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.copy),
+                          onPressed: () {
+                            Clipboard.setData(ClipboardData(text: verseText));
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('تم نسخ الآية')),
+                            );
+                          },
+                          tooltip: 'نسخ الآية',
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.bookmark_add_outlined),
+                          onPressed: () {
+                            final pageNumber = Quran.getPageNumber(
+                              surahNumber: surahNumber,
+                              verseNumber: ayahNumber,
+                            ).toDouble();
+                            ref
+                                .read(bookmarkProvider.notifier)
+                                .saveBookmark(surahNumber, pageNumber);
+
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text(
+                                  'تم إضافة العلامة المرجعية بنجاح',
+                                ),
+                              ),
+                            );
+                            context.pop();
+                          },
+                          tooltip: 'وضع علامة مرجعية',
+                        ),
+                        IconButton(
+                          onPressed: () async {
+                            final wasFavorite =
+                                favoriteAsync.valueOrNull ??
+                                await ref
+                                    .read(appDatabaseProvider)
+                                    .watchIsFavorite('quran', reference)
+                                    .first;
+
+                            await ref
+                                .read(appDatabaseProvider)
+                                .toggleFavorite(
+                                  contentType: 'quran',
+                                  primaryReference: reference,
+                                  title:
+                                      'سورة ${Quran.getSurahName(surahNumber)} - الآية $ayahNumber',
+                                  contentText: verseText,
+                                  source: 'القرآن الكريم',
+                                );
+
+                            if (wasFavorite) {
+                              onFavoriteRemoved?.call();
+                            }
+                          },
+                          icon: favoriteAsync.when(
+                            data: (isFavorite) => Icon(
+                              isFavorite
+                                  ? Icons.favorite
+                                  : Icons.favorite_border,
+                              color: isFavorite
+                                  ? Theme.of(context).colorScheme.error
+                                  : null,
+                            ),
+                            loading: () => const Icon(Icons.favorite_border),
+                            error: (error, stackTrace) =>
+                                const Icon(Icons.favorite_border),
+                          ),
+                          tooltip: 'حفظ في المفضلة',
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-              ),
-            ],
+                const SizedBox(height: 16),
+                Text(
+                  verseText,
+                  style: GoogleFonts.amiri(fontSize: 24, height: 1.8),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 24),
+                const Text(
+                  'التفسير الميسر',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                tafseerAsync.when(
+                  data: (tafseer) => Text(
+                    tafseer,
+                    style: const TextStyle(fontSize: 16, height: 1.6),
+                    textAlign: TextAlign.justify,
+                  ),
+                  loading: () => const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 32),
+                    child: Center(child: CircularProgressIndicator()),
+                  ),
+                  error: (e, st) => Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    child: Text('خطأ في تحميل التفسير: $e'),
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       },

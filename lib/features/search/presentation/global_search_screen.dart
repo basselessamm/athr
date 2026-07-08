@@ -88,9 +88,53 @@ class GlobalSearchScreen extends ConsumerWidget {
               child: searchResults.when(
                 data: (results) {
                   if (query.isEmpty) {
-                    return _EmptyState(
-                      icon: Icons.search_rounded,
-                      message: 'اكتب شيئاً للبحث في مكتبة أثر',
+                    return ListView(
+                      padding: const EdgeInsets.all(AppSpacing.xl),
+                      physics: const BouncingScrollPhysics(),
+                      children: [
+                        const _EmptyState(
+                          icon: Icons.search_rounded,
+                          message: 'عن ماذا تبحث اليوم؟',
+                        ),
+                        const SizedBox(height: AppSpacing.xl),
+                        Text(
+                          'اقتراحات شائعة',
+                          style: AppTypography.cairoTextTheme().titleMedium
+                              ?.copyWith(
+                                color: theme.colorScheme.onSurface,
+                                fontWeight: FontWeight.bold,
+                              ),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: AppSpacing.md),
+                        Wrap(
+                          spacing: AppSpacing.md,
+                          runSpacing: AppSpacing.md,
+                          alignment: WrapAlignment.center,
+                          children: [
+                            _SuggestionChip(
+                              label: 'سورة الكهف',
+                              icon: Icons.menu_book_rounded,
+                            ),
+                            _SuggestionChip(
+                              label: 'أذكار الصباح',
+                              icon: Icons.wb_sunny_rounded,
+                            ),
+                            _SuggestionChip(
+                              label: 'الصبر',
+                              icon: Icons.format_quote_rounded,
+                            ),
+                            _SuggestionChip(
+                              label: 'دعاء السفر',
+                              icon: Icons.volunteer_activism_rounded,
+                            ),
+                            _SuggestionChip(
+                              label: 'الوتر',
+                              icon: Icons.nights_stay_rounded,
+                            ),
+                          ],
+                        ),
+                      ],
                     );
                   }
                   if (results.isEmpty) {
@@ -296,6 +340,38 @@ class _SearchResultCard extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _SuggestionChip extends ConsumerWidget {
+  final String label;
+  final IconData icon;
+
+  const _SuggestionChip({required this.label, required this.icon});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final theme = Theme.of(context);
+    return ActionChip(
+      backgroundColor: theme.colorScheme.surface,
+      side: BorderSide(
+        color: theme.colorScheme.outlineVariant.withValues(alpha: 0.3),
+      ),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(AppRadius.lg),
+      ),
+      avatar: Icon(icon, size: 16, color: theme.colorScheme.primary),
+      label: Text(
+        label,
+        style: AppTypography.cairoTextTheme().bodyMedium?.copyWith(
+          color: theme.colorScheme.onSurface,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      onPressed: () {
+        ref.read(searchQueryProvider.notifier).state = label;
+      },
     );
   }
 }

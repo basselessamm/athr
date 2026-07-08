@@ -2,6 +2,10 @@ import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:athr/core/database/app_database.dart';
+import 'package:athr/features/home/providers/home_providers.dart';
+import 'package:athr/features/library/data/repositories/saved_items_repository_impl.dart';
+import 'package:athr/features/library/domain/entities/saved_item_type.dart';
+import 'package:athr/features/library/modules/recent_activity/data/repositories/recent_activity_repository_impl.dart';
 
 void main() {
   late AppDatabase database;
@@ -37,6 +41,40 @@ void main() {
 
     final favoritesAfterDelete = await database.watchFavorites().first;
     expect(favoritesAfterDelete, isEmpty);
+  });
+
+  test('saved items repository maps Quran and Azkar favorites for library', () async {
+    await database.toggleFavorite(
+      contentType: 'verse',
+      primaryReference: '2:255',
+      title: 'آية الكرسي',
+      contentText: 'اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ',
+      source: 'القرآن الكريم',
+    );
+
+    await database.toggleFavorite(
+      contentType: 'azkar',
+      primaryReference: '17',
+      secondaryReference: 'أذكار الصباح',
+      title: 'اللهم بك أصبحنا',
+      contentText: 'اللهم بك أصبحنا وبك أمسينا',
+      source: 'أذكار الصباح',
+    );
+
+    final repository = SavedItemsRepositoryImpl(database);
+
+    final quranItems = await repository.watchByType(SavedItemType.quran).first;
+    final azkarItems = await repository.watchByType(SavedItemType.azkar).first;
+
+    expect(quranItems, hasLength(1));
+    expect(quranItems.first.featureType, 'quran');
+    expect(quranItems.first.referenceId, 2);
+    expect(quranItems.first.secondaryId, 255);
+
+    expect(azkarItems, hasLength(1));
+    expect(azkarItems.first.featureType, 'azkar');
+    expect(azkarItems.first.referenceId, 17);
+    expect(azkarItems.first.collectionId, 'أذكار الصباح');
   });
 
   test('daily task and sunnah completion persist in same row', () async {
@@ -77,6 +115,27 @@ void main() {
     expect(entry.avoidedHarm, isTrue);
     expect(entry.quranRead, isTrue);
     expect(entry.note, 'مراجعة جيدة لليوم');
+  });
+
+  test('saveMuhasaba also records recent activity for library timeline', () async {
+    final recentActivityRepository = RecentActivityRepositoryImpl(database);
+    final actions = CompletionActions(database, recentActivityRepository);
+
+    await actions.saveMuhasaba(
+      prayed: true,
+      guardedTongue: true,
+      honoredParents: true,
+      avoidedHarm: false,
+      gaveCharity: false,
+      quranRead: true,
+      note: 'تمت المراجعة',
+    );
+
+    final recentActivities = await recentActivityRepository.watchRecentActivities().first;
+
+    expect(recentActivities, isNotEmpty);
+    expect(recentActivities.first.type, 'muhasaba');
+    expect(recentActivities.first.routePath, '/muhasaba');
   });
 
   test(

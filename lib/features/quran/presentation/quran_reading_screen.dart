@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:quran_flutter/quran.dart';
+import 'package:athr/core/database/database_providers.dart';
 import 'dart:async';
 
 import 'package:athr/features/quran/presentation/widgets/book_page_widget.dart';
@@ -27,11 +28,13 @@ class QuranPageModel {
 class QuranReadingScreen extends ConsumerStatefulWidget {
   final int surahNumber;
   final int? initialPage;
+  final int? highlightAyah;
 
   const QuranReadingScreen({
     super.key,
     required this.surahNumber,
     this.initialPage,
+    this.highlightAyah,
   });
 
   @override
@@ -47,14 +50,28 @@ class _QuranReadingScreenState extends ConsumerState<QuranReadingScreen>
   int _currentPageIndex = 0;
   final Set<int> _readPages = {};
 
+  int? _activeHighlightSurah;
+  int? _activeHighlightAyah;
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _calculatePages();
 
-    if (widget.initialPage != null) {
-      final idx = _pages.indexWhere((p) => p.pageNumber == widget.initialPage);
+    _activeHighlightSurah = widget.surahNumber;
+    _activeHighlightAyah = widget.highlightAyah;
+
+    int? targetPage = widget.initialPage;
+    if (targetPage == null && widget.highlightAyah != null) {
+      targetPage = Quran.getPageNumber(
+        surahNumber: widget.surahNumber,
+        verseNumber: widget.highlightAyah!,
+      );
+    }
+
+    if (targetPage != null) {
+      final idx = _pages.indexWhere((p) => p.pageNumber == targetPage);
       if (idx != -1) {
         _currentPageIndex = idx;
       }
@@ -66,6 +83,31 @@ class _QuranReadingScreenState extends ConsumerState<QuranReadingScreen>
     if (_pages.isNotEmpty) {
       _readPages.add(_pages[_currentPageIndex].pageNumber);
     }
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text(
+              '💡 تلميح: اضغط على أي آية لعرض تفسيرها',
+              style: TextStyle(
+                fontFamily: 'Cairo',
+                fontWeight: FontWeight.bold,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            backgroundColor: Theme.of(
+              context,
+            ).colorScheme.primary.withValues(alpha: 0.9),
+            duration: const Duration(seconds: 4),
+          ),
+        );
+      }
+    });
   }
 
   @override
@@ -127,6 +169,18 @@ class _QuranReadingScreenState extends ConsumerState<QuranReadingScreen>
       _secondsRead = 0;
       _readPages.clear();
       _readPages.add(lastPageModel.pageNumber);
+    }
+  }
+
+  @override
+  void didUpdateWidget(QuranReadingScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.surahNumber != oldWidget.surahNumber ||
+        widget.highlightAyah != oldWidget.highlightAyah) {
+      setState(() {
+        _activeHighlightSurah = widget.surahNumber;
+        _activeHighlightAyah = widget.highlightAyah;
+      });
     }
   }
 
@@ -267,8 +321,10 @@ class _QuranReadingScreenState extends ConsumerState<QuranReadingScreen>
               headerSubtitle: 'الجزء ${model.juzNum}',
               verses: model.verses,
               fontSize: quranFontSize,
-              onAyahTapped: (surah, ayah) {
-                showModalBottomSheet(
+              highlightSurah: _activeHighlightSurah,
+              highlightAyah: _activeHighlightAyah,
+              onAyahTapped: (surah, ayah) async {
+                await showModalBottomSheet(
                   context: context,
                   isScrollControlled: true,
                   backgroundColor: Colors.transparent,
@@ -279,9 +335,32 @@ class _QuranReadingScreenState extends ConsumerState<QuranReadingScreen>
                     child: VerseBottomSheet(
                       surahNumber: surah,
                       ayahNumber: ayah,
+                      onFavoriteRemoved: () {
+                        if (!mounted) return;
+                        setState(() {
+                          _activeHighlightSurah = null;
+                          _activeHighlightAyah = null;
+                        });
+                      },
                     ),
                   ),
                 );
+
+                if (!mounted) return;
+
+                if (_activeHighlightSurah == surah &&
+                    _activeHighlightAyah == ayah) {
+                  final isFav = await ref
+                      .read(appDatabaseProvider)
+                      .watchIsFavorite('quran', '$surah:$ayah')
+                      .first;
+                  if (!isFav && mounted) {
+                    setState(() {
+                      _activeHighlightSurah = null;
+                      _activeHighlightAyah = null;
+                    });
+                  }
+                }
               },
             );
           },

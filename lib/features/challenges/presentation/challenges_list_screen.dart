@@ -16,7 +16,7 @@ class ChallengesListScreen extends ConsumerWidget {
     final challenges = ref.watch(challengesProvider);
 
     return AthrScaffold(
-      title: 'التحديات والإنجازات',
+      title: 'الرحلات والإنجازات',
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -41,7 +41,7 @@ class ChallengesListScreen extends ConsumerWidget {
                 child: Column(
                   children: [
                     Text(
-                      'تحدى نفسك وارتقِ',
+                      'ابدأ رحلتك وارتقِ',
                       style: AppTypography.cairoTextTheme().headlineSmall
                           ?.copyWith(
                             fontWeight: FontWeight.bold,
@@ -50,7 +50,7 @@ class ChallengesListScreen extends ConsumerWidget {
                     ),
                     const SizedBox(height: AppSpacing.sm),
                     Text(
-                      'أكمل التحديات اليومية والأسبوعية لتحقيق أهدافك',
+                      'أكمل الرحلات اليومية والأسبوعية لتعزيز أثرك',
                       style: AppTypography.cairoTextTheme().bodyMedium
                           ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
                       textAlign: TextAlign.center,

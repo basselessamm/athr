@@ -116,6 +116,7 @@ class _FavoriteCard extends ConsumerWidget {
     Color typeColor;
 
     switch (item.contentType) {
+      case 'quran':
       case 'verse':
         typeIcon = Icons.menu_book_rounded;
         typeColor = const Color(0xFFD97736); // Warm Orange
@@ -124,6 +125,7 @@ class _FavoriteCard extends ConsumerWidget {
         typeIcon = Icons.format_quote_rounded;
         typeColor = const Color(0xFF3E6B5B); // Earthy Green
         break;
+      case 'azkar':
       case 'dua':
         typeIcon = Icons.volunteer_activism_rounded;
         typeColor = const Color(0xFF6B3E6A); // Deep Purple
@@ -292,11 +294,14 @@ class _FavoriteCard extends ConsumerWidget {
 
   void _openFavorite(BuildContext context, UserFavorite item) {
     switch (item.contentType) {
+      case 'quran':
       case 'verse':
         final parts = item.primaryReference.split(':');
         final surah = int.tryParse(parts.first);
+        final ayah = parts.length > 1 ? int.tryParse(parts[1]) : null;
         if (surah != null) {
-          context.push('/quran/$surah');
+          final ayahQuery = ayah != null ? '?ayah=$ayah' : '';
+          context.push('/quran/$surah$ayahQuery');
         }
         break;
       case 'hadith':
@@ -308,12 +313,15 @@ class _FavoriteCard extends ConsumerWidget {
           );
         }
         break;
+      case 'azkar':
       case 'dua':
-        final category = item.primaryReference;
-        context.pushNamed(
-          'azkarReading',
-          pathParameters: {'category': category},
-        );
+        final category = item.secondaryReference ?? item.source;
+        if (category.isNotEmpty) {
+          context.pushNamed(
+            'azkarReading',
+            pathParameters: {'category': category},
+          );
+        }
         break;
       default:
         break;

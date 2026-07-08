@@ -5,6 +5,8 @@ import 'package:quran_flutter/quran.dart';
 
 import 'package:athr/core/database/app_database.dart';
 import 'package:athr/core/database/database_providers.dart';
+import 'package:athr/features/library/modules/recent_activity/providers/recent_activity_providers.dart';
+import 'package:athr/features/library/modules/recent_activity/domain/repositories/recent_activity_repository.dart';
 
 int _getTodaySeed() {
   final now = DateTime.now();
@@ -176,13 +178,15 @@ final dailyProgressProvider = StreamProvider<DailyProgress>((ref) {
 
 final completionActionsProvider = Provider<CompletionActions>((ref) {
   final db = ref.watch(appDatabaseProvider);
-  return CompletionActions(db);
+  final recentActivities = ref.watch(recentActivityRepositoryProvider);
+  return CompletionActions(db, recentActivities);
 });
 
 class CompletionActions {
   final AppDatabase _db;
+  final RecentActivityRepository _recentActivities;
 
-  const CompletionActions(this._db);
+  const CompletionActions(this._db, this._recentActivities);
 
   Future<void> toggleTask({required String taskId, required bool isCompleted}) {
     return _db.setDailyTaskCompletion(taskId: taskId, isCompleted: isCompleted);
@@ -206,8 +210,8 @@ class CompletionActions {
     required bool gaveCharity,
     required bool quranRead,
     String? note,
-  }) {
-    return _db.saveMuhasabaEntry(
+  }) async {
+    await _db.saveMuhasabaEntry(
       prayed: prayed,
       guardedTongue: guardedTongue,
       honoredParents: honoredParents,
@@ -215,6 +219,13 @@ class CompletionActions {
       gaveCharity: gaveCharity,
       quranRead: quranRead,
       note: note,
+    );
+    
+    await _recentActivities.addRecentActivity(
+      type: 'muhasaba',
+      title: 'محاسبة اليوم',
+      subtitle: 'تم توثيق المحاسبة اليومية بنجاح',
+      routePath: '/muhasaba',
     );
   }
 }

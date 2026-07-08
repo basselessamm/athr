@@ -193,8 +193,13 @@ class LibraryScreen extends ConsumerWidget {
                             actionLabel: 'تصفح القرآن',
                             onAction: () => context.go('/quran'),
                             child: SavedQuranSection(
-                              onItemPressed: (item) =>
-                                  context.push('/quran/${item.referenceId}'),
+                              onItemPressed: (item) {
+                                final surah = item.referenceId;
+                                final ayah = item.secondaryId != null
+                                    ? '?ayah=${item.secondaryId}'
+                                    : '';
+                                context.push('/quran/$surah$ayah');
+                              },
                               onBrowsePressed: () => context.go('/quran'),
                             ),
                           ),
@@ -218,8 +223,9 @@ class LibraryScreen extends ConsumerWidget {
                             actionLabel: 'تصفح الأذكار',
                             onAction: () => context.go('/azkar'),
                             child: SavedAzkarSection(
-                              onItemPressed: (item) =>
-                                  context.push('/azkar/${item.previewText}'),
+                              onItemPressed: (item) => context.push(
+                                '/azkar/${Uri.encodeComponent(item.collectionId ?? item.previewText)}',
+                              ),
                               onBrowsePressed: () => context.go('/azkar'),
                             ),
                           ),
@@ -726,7 +732,6 @@ class _SnapshotCard extends StatelessWidget {
       onTap: onTap,
       borderRadius: BorderRadius.circular(AppRadius.lg),
       child: Ink(
-        constraints: const BoxConstraints(minHeight: 176),
         padding: const EdgeInsets.all(AppSpacing.md),
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -1030,9 +1035,13 @@ String _savedItemSummary(SavedItem item) {
     case 'quran':
       return 'سورة ${item.referenceId}${item.secondaryId != null ? ' • آية ${item.secondaryId}' : ''}';
     case 'hadith':
-      return 'حديث محفوظ للرجوع السريع';
+      return item.collectionId?.isNotEmpty == true
+          ? 'كتاب ${item.collectionId}'
+          : 'حديث محفوظ للرجوع السريع';
     case 'azkar':
-      return 'ذكر محفوظ من قسم ${item.referenceId}';
+      return item.collectionId?.isNotEmpty == true
+          ? 'من أذكار ${item.collectionId}'
+          : 'ذكر محفوظ للرجوع السريع';
     default:
       return 'عنصر محفوظ حديثاً';
   }
@@ -1041,11 +1050,20 @@ String _savedItemSummary(SavedItem item) {
 String _savedItemRoute(SavedItem item) {
   switch (item.featureType) {
     case 'quran':
-      return '/quran/${item.referenceId}';
+      final ayahQuery = item.secondaryId != null
+          ? '?ayah=${item.secondaryId}'
+          : '';
+      return '/quran/${item.referenceId}$ayahQuery';
     case 'hadith':
+      if (item.collectionId != null && item.collectionId!.isNotEmpty) {
+        return '/hadith/${Uri.encodeComponent(item.collectionId!)}';
+      }
       return '/hadith';
     case 'azkar':
-      return '/azkar/${item.previewText}';
+      final category = item.collectionId?.isNotEmpty == true
+          ? item.collectionId!
+          : item.previewText;
+      return '/azkar/${Uri.encodeComponent(category)}';
     default:
       return '/library';
   }

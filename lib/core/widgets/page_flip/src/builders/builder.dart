@@ -7,7 +7,7 @@ import '../effects/flip_effect.dart';
 
 class PageFlipBuilder extends StatefulWidget {
   const PageFlipBuilder({
-    Key? key,
+    super.key,
     required this.amount,
     this.backgroundColor,
     required this.child,
@@ -17,7 +17,7 @@ class PageFlipBuilder extends StatefulWidget {
     required this.currentPage,
     required this.currentWidget,
     required this.currentPageIndex,
-  }) : super(key: key);
+  });
 
   final Animation<double> amount;
   final int pageIndex;

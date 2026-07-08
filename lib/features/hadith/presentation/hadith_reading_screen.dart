@@ -185,6 +185,8 @@ class _HadithReadingScreenState extends ConsumerState<HadithReadingScreen>
                   hadithText: hadith.hadithTextAr,
                   reference: hadith.reference ?? '',
                   fontSize: fontSize,
+                  hadithId: hadith.id,
+                  bookName: hadith.bookName,
                 );
               },
             );

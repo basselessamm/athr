@@ -16,13 +16,13 @@ class DailyVerseCard extends ConsumerWidget {
     final verse = ref.watch(dailyVerseProvider);
     final favoriteAsync = ref.watch(
       isFavoriteProvider((
-        type: 'verse',
+        type: 'quran',
         reference: '${verse.surah}:${verse.ayah}',
       )),
     );
 
     return AthrCard(
-      onTap: () => context.push('/quran/${verse.surah}'),
+      onTap: () => context.push('/quran/${verse.surah}?ayah=${verse.ayah}'),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -41,7 +41,7 @@ class DailyVerseCard extends ConsumerWidget {
                   await ref
                       .read(appDatabaseProvider)
                       .toggleFavorite(
-                        contentType: 'verse',
+                        contentType: 'quran',
                         primaryReference: '${verse.surah}:${verse.ayah}',
                         title: 'سورة ${verse.surahName} - الآية ${verse.ayah}',
                         contentText: verse.text,

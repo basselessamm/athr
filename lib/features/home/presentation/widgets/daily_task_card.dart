@@ -29,7 +29,7 @@ class DailyTaskCard extends ConsumerWidget {
               ),
               TextButton(
                 onPressed: () => context.push('/challenges'),
-                child: const Text('كل التحديات'),
+                child: const Text('كل الرحلات'),
               ),
             ],
           ),

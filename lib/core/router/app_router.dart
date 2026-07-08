@@ -40,12 +40,17 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           final surahId =
               int.tryParse(state.pathParameters['surahId'] ?? '1') ?? 1;
           final pageParam = state.uri.queryParameters['page'];
+          final ayahParam = state.uri.queryParameters['ayah'];
           final initialPage = pageParam != null
               ? int.tryParse(pageParam)
+              : null;
+          final highlightAyah = ayahParam != null
+              ? int.tryParse(ayahParam)
               : null;
           return QuranReadingScreen(
             surahNumber: surahId,
             initialPage: initialPage,
+            highlightAyah: highlightAyah,
           );
         },
       ),

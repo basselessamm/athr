@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:athr/core/theme/app_spacing.dart';
@@ -92,14 +93,14 @@ class _MuhasabaScreenState extends ConsumerState<MuhasabaScreen> {
                   _buildHeader(theme),
                   const SizedBox(height: AppSpacing.xl),
                   _MuhasabaCheckItem(
-                    title: 'حافظت على الصلاة في وقتها قدر استطاعتي',
+                    title: 'هل أديت الصلوات الخمس اليوم في وقتها؟',
                     icon: Icons.access_time_filled_rounded,
                     value: _prayed,
                     onChanged: (value) => setState(() => _prayed = value),
                   ),
                   const SizedBox(height: AppSpacing.sm),
                   _MuhasabaCheckItem(
-                    title: 'حفظت لساني من الغيبة والأذى',
+                    title: 'هل حفظت لسانك من الغيبة وتجنبت الجدال؟',
                     icon: Icons.record_voice_over_rounded,
                     value: _guardedTongue,
                     onChanged: (value) =>
@@ -107,7 +108,7 @@ class _MuhasabaScreenState extends ConsumerState<MuhasabaScreen> {
                   ),
                   const SizedBox(height: AppSpacing.sm),
                   _MuhasabaCheckItem(
-                    title: 'أحسنت إلى والدي أو من له حق قريب',
+                    title: 'هل بررت والديك أو أدخلت السرور على أحبتك؟',
                     icon: Icons.favorite_rounded,
                     value: _honoredParents,
                     onChanged: (value) =>
@@ -115,28 +116,28 @@ class _MuhasabaScreenState extends ConsumerState<MuhasabaScreen> {
                   ),
                   const SizedBox(height: AppSpacing.sm),
                   _MuhasabaCheckItem(
-                    title: 'تجنبت ظلم أحد أو أذيته',
+                    title: 'هل عفوت عمن ظلمك أو تجاوزت عن زلة أحدهم؟',
                     icon: Icons.shield_rounded,
                     value: _avoidedHarm,
                     onChanged: (value) => setState(() => _avoidedHarm = value),
                   ),
                   const SizedBox(height: AppSpacing.sm),
                   _MuhasabaCheckItem(
-                    title: 'قدمت صدقة أو نفعًا عمليًا',
+                    title: 'هل تصدقت اليوم، ولو بابتسامة أو كلمة طيبة؟',
                     icon: Icons.clean_hands_rounded,
                     value: _gaveCharity,
                     onChanged: (value) => setState(() => _gaveCharity = value),
                   ),
                   const SizedBox(height: AppSpacing.sm),
                   _MuhasabaCheckItem(
-                    title: 'كان لي ورد من القرآن اليوم',
+                    title: 'هل قرأت وردك من القرآن اليوم؟',
                     icon: Icons.menu_book_rounded,
                     value: _quranRead,
                     onChanged: (value) => setState(() => _quranRead = value),
                   ),
                   const SizedBox(height: AppSpacing.xl),
                   Text(
-                    'ملاحظات وتأملات',
+                    'فضفضة روح',
                     style: AppTypography.cairoTextTheme().titleMedium?.copyWith(
                       fontWeight: FontWeight.bold,
                       color: theme.colorScheme.primary,
@@ -161,7 +162,7 @@ class _MuhasabaScreenState extends ConsumerState<MuhasabaScreen> {
                       style: AppTypography.cairoTextTheme().bodyMedium,
                       decoration: InputDecoration(
                         hintText:
-                            'ما الذي تحتاج أن تصلحه أو تثبته غدًا؟ كن صريحًا مع نفسك...',
+                            'كيف كان حال قلبك اليوم؟ اكتب ما تود إصلاحه غدًا...',
                         hintStyle: TextStyle(
                           color: theme.colorScheme.onSurfaceVariant.withValues(
                             alpha: 0.6,
@@ -338,55 +339,62 @@ class _MuhasabaCheckItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return GestureDetector(
-      onTap: () => onChanged(!value),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 250),
-        padding: const EdgeInsets.all(AppSpacing.md),
-        decoration: BoxDecoration(
-          color: value
-              ? theme.colorScheme.primaryContainer.withValues(alpha: 0.4)
-              : theme.colorScheme.surface,
-          borderRadius: BorderRadius.circular(AppRadius.lg),
-          border: Border.all(
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () {
+          HapticFeedback.lightImpact();
+          onChanged(!value);
+        },
+        borderRadius: BorderRadius.circular(AppRadius.lg),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 250),
+          padding: const EdgeInsets.all(AppSpacing.md),
+          decoration: BoxDecoration(
             color: value
-                ? theme.colorScheme.primary
-                : theme.colorScheme.outlineVariant.withValues(alpha: 0.3),
-            width: value ? 2 : 1,
-          ),
-          boxShadow: value ? AppShadows.card : AppShadows.minimal,
-        ),
-        child: Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(AppSpacing.sm),
-              decoration: BoxDecoration(
-                color: value
-                    ? theme.colorScheme.primary
-                    : theme.colorScheme.surfaceContainerHighest,
-                shape: BoxShape.circle,
-              ),
-              child: Icon(
-                value ? Icons.check_rounded : icon,
-                color: value
-                    ? theme.colorScheme.onPrimary
-                    : theme.colorScheme.onSurfaceVariant,
-                size: 20,
-              ),
+                ? theme.colorScheme.primaryContainer.withValues(alpha: 0.4)
+                : theme.colorScheme.surface,
+            borderRadius: BorderRadius.circular(AppRadius.lg),
+            border: Border.all(
+              color: value
+                  ? theme.colorScheme.primary
+                  : theme.colorScheme.outlineVariant.withValues(alpha: 0.3),
+              width: value ? 2 : 1,
             ),
-            const SizedBox(width: AppSpacing.md),
-            Expanded(
-              child: Text(
-                title,
-                style: AppTypography.cairoTextTheme().titleSmall?.copyWith(
-                  fontWeight: value ? FontWeight.bold : FontWeight.normal,
+            boxShadow: value ? AppShadows.card : AppShadows.minimal,
+          ),
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(AppSpacing.sm),
+                decoration: BoxDecoration(
                   color: value
-                      ? theme.colorScheme.onSurface
+                      ? theme.colorScheme.primary
+                      : theme.colorScheme.surfaceContainerHighest,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  value ? Icons.check_rounded : icon,
+                  color: value
+                      ? theme.colorScheme.onPrimary
                       : theme.colorScheme.onSurfaceVariant,
+                  size: 20,
                 ),
               ),
-            ),
-          ],
+              const SizedBox(width: AppSpacing.md),
+              Expanded(
+                child: Text(
+                  title,
+                  style: AppTypography.cairoTextTheme().titleSmall?.copyWith(
+                    fontWeight: value ? FontWeight.bold : FontWeight.normal,
+                    color: value
+                        ? theme.colorScheme.onSurface
+                        : theme.colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

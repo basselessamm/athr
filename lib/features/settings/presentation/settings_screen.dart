@@ -100,7 +100,7 @@ class SettingsScreen extends ConsumerWidget {
                     ),
                   ),
                   value: reduceMotion,
-                  activeColor: theme.colorScheme.primary,
+                  activeThumbColor: theme.colorScheme.primary,
                   onChanged: (val) {
                     ref.read(reduceMotionProvider.notifier).setMotion(val);
                   },
@@ -205,7 +205,7 @@ class SettingsScreen extends ConsumerWidget {
                             ?.copyWith(fontWeight: FontWeight.bold),
                       ),
                       value: notificationsEnabled,
-                      activeColor: theme.colorScheme.primary,
+                      activeThumbColor: theme.colorScheme.primary,
                       onChanged: (val) async {
                         final notifier = ref.read(
                           notificationsEnabledProvider.notifier,

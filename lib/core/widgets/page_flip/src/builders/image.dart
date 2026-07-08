@@ -3,12 +3,12 @@ import '../effects/flip_effect.dart';
 
 class PageFlipImage extends StatefulWidget {
   const PageFlipImage({
-    Key? key,
+    super.key,
     required this.amount,
     this.image,
     this.backgroundColor = const Color(0xFFFFFFCC),
     this.isRightSwipe = false,
-  }) : super(key: key);
+  });
 
   final Animation<double> amount;
   final ImageProvider? image;
@@ -41,6 +41,7 @@ class _PageFlipImageState extends State<PageFlipImage> {
   @override
   void didChangeDependencies() {
     _resolveImage();
+    // ignore: deprecated_member_use
     if (TickerMode.of(context)) {
       _listenToStream();
     } else {
