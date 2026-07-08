@@ -129,13 +129,13 @@ class FavoritesScreen extends ConsumerWidget {
       case 'hadith':
         final bookName = item.secondaryReference;
         if (bookName != null && bookName.isNotEmpty) {
-          context.push('/hadith/${Uri.encodeComponent(bookName)}');
+          context.pushNamed('hadithReading', pathParameters: {'bookName': bookName});
         }
         break;
       case 'dua':
         final category = item.secondaryReference;
         if (category != null && category.isNotEmpty) {
-          context.push('/azkar/${Uri.encodeComponent(category)}');
+          context.pushNamed('azkarReading', pathParameters: {'category': category});
         }
         break;
     }

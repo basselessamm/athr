@@ -78,9 +78,9 @@ class DailyDuaCard extends ConsumerWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           TextButton(
-                            onPressed: () => context.push(
-                              '/azkar/${Uri.encodeComponent(dua.category)}',
-                            ),
+                            onPressed: () {
+                              context.pushNamed('azkarReading', pathParameters: {'category': dua.category});
+                            },
                             child: const Text('فتح التصنيف'),
                           ),
                           IconButton(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:athr/core/widgets/premium_quran_flip_widget.dart';
 import 'package:athr/features/hadith/providers/hadith_providers.dart';
 import 'package:athr/features/settings/providers/settings_providers.dart';
 import 'package:athr/features/hadith/presentation/widgets/hadith_page_widget.dart';
@@ -61,65 +62,60 @@ class _HadithReadingScreenState extends ConsumerState<HadithReadingScreen> {
                 );
               }
 
-              return PageView.builder(
-                controller: _pageController,
-                reverse: true, // RTL scrolling
-                physics: const BouncingScrollPhysics(),
-                itemCount: hadiths.length + 1,
-                itemBuilder: (context, index) {
-                  if (index == hadiths.length) {
-                    return Container(
-                      color: const Color(0xFFFDF7EF),
-                      alignment: Alignment.center,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Icon(
-                            Icons.menu_book_rounded,
-                            size: 80,
-                            color: Color(0xFFC7A87D),
-                          ),
-                          const SizedBox(height: 24),
-                          const Text(
-                            'نهاية الكتاب',
-                            style: TextStyle(
-                              fontSize: 32,
-                              color: Color(0xFF5A4328),
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(height: 12),
-                          Text(
-                            widget.bookName,
-                            style: const TextStyle(
-                              fontSize: 22,
-                              color: Color(0xFF8B6F4E),
-                            ),
-                          ),
-                          const SizedBox(height: 48),
-                          ElevatedButton(
-                            onPressed: () => context.pop(),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFFC7A87D),
-                              foregroundColor: Colors.white,
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 40,
-                                vertical: 12,
-                              ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30),
-                              ),
-                            ),
-                            child: const Text(
-                              'عودة للكتب',
-                              style: TextStyle(fontSize: 18),
-                            ),
-                          ),
-                        ],
+              return PremiumQuranFlipWidget(
+                initialIndex: 0,
+                itemCount: hadiths.length,
+                endPage: Container(
+                  color: const Color(0xFFFDF7EF),
+                  alignment: Alignment.center,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(
+                        Icons.menu_book_rounded,
+                        size: 80,
+                        color: Color(0xFFC7A87D),
                       ),
-                    );
-                  }
-
+                      const SizedBox(height: 24),
+                      const Text(
+                        'نهاية الكتاب',
+                        style: TextStyle(
+                          fontSize: 32,
+                          color: Color(0xFF5A4328),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      Text(
+                        widget.bookName,
+                        style: const TextStyle(
+                          fontSize: 22,
+                          color: Color(0xFF8B6F4E),
+                        ),
+                      ),
+                      const SizedBox(height: 48),
+                      ElevatedButton(
+                        onPressed: () => context.pop(),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFFC7A87D),
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 40,
+                            vertical: 12,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                        ),
+                        child: const Text(
+                          'عودة للكتب',
+                          style: TextStyle(fontSize: 18),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                itemBuilder: (context, index) {
                   final hadith = hadiths[index];
                   return HadithPageWidget(
                     pageNumber: index + 1,

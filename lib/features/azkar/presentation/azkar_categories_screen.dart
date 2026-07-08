@@ -27,7 +27,7 @@ class AzkarCategoriesScreen extends ConsumerWidget {
               final category = categories[index];
               return AthrCard(
                 onTap: () {
-                  context.push('/azkar/${Uri.encodeComponent(category)}');
+                  context.pushNamed('azkarReading', pathParameters: {'category': category});
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,

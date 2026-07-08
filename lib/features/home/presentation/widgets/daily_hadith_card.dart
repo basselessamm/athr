@@ -64,9 +64,9 @@ class DailyHadithCard extends ConsumerWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           TextButton(
-                            onPressed: () => context.push(
-                              '/hadith/${Uri.encodeComponent(hadith.bookName)}',
-                            ),
+                            onPressed: () {
+                              context.pushNamed('hadithReading', pathParameters: {'bookName': hadith.bookName});
+                            },
                             child: const Text('فتح الكتاب'),
                           ),
                           IconButton(

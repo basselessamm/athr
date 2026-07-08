@@ -39,7 +39,7 @@ class HadithBooksScreen extends ConsumerWidget {
                 ),
                 child: InkWell(
                   onTap: () {
-                    context.push('/hadith/${Uri.encodeComponent(book)}');
+                    context.pushNamed('hadithReading', pathParameters: {'bookName': book});
                   },
                   borderRadius: BorderRadius.circular(16),
                   child: Container(

@@ -190,7 +190,9 @@ class _SearchScreenState extends ConsumerState<SearchScreen>
               ),
             ),
             onTap: () {
-              context.push('/hadith/${Uri.encodeComponent(hadith.bookName)}');
+              if (hadith.bookName != null) {
+                context.pushNamed('hadithReading', pathParameters: {'bookName': hadith.bookName!});
+              }
             },
           ),
         );

@@ -44,9 +44,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const AzkarCategoriesScreen(),
       ),
       GoRoute(
+        name: 'azkarReading',
         path: '/azkar/:category',
         builder: (context, state) {
-          final category = state.pathParameters['category']!;
+          final category = state.pathParameters['category'] ?? '';
           return AzkarReadingScreen(category: category);
         },
       ),
@@ -55,10 +56,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const HadithBooksScreen(),
       ),
       GoRoute(
+        name: 'hadithReading',
         path: '/hadith/:bookName',
         builder: (context, state) {
           final bookName = state.pathParameters['bookName'] ?? '';
-          return HadithReadingScreen(bookName: Uri.decodeComponent(bookName));
+          return HadithReadingScreen(bookName: bookName);
         },
       ),
       GoRoute(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:athr/core/widgets/premium_quran_flip_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:athr/core/database/app_database.dart';
 import 'package:athr/features/azkar/providers/azkar_providers.dart';
@@ -62,65 +63,60 @@ class _AzkarReadingScreenState extends ConsumerState<AzkarReadingScreen> {
                 );
               }
 
-              return PageView.builder(
-                controller: _pageController,
-                reverse: true,
-                physics: const BouncingScrollPhysics(),
-                itemCount: azkar.length + 1,
-                itemBuilder: (context, index) {
-                  if (index == azkar.length) {
-                    return Container(
-                      color: const Color(0xFFFDF7EF),
-                      alignment: Alignment.center,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Icon(
-                            Icons.verified,
-                            size: 80,
-                            color: Color(0xFFC7A87D),
-                          ),
-                          const SizedBox(height: 24),
-                          const Text(
-                            'تم بحمد الله',
-                            style: TextStyle(
-                              fontSize: 32,
-                              color: Color(0xFF5A4328),
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(height: 12),
-                          Text(
-                            widget.category,
-                            style: const TextStyle(
-                              fontSize: 22,
-                              color: Color(0xFF8B6F4E),
-                            ),
-                          ),
-                          const SizedBox(height: 48),
-                          ElevatedButton(
-                            onPressed: () => context.pop(),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFFC7A87D),
-                              foregroundColor: Colors.white,
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 40,
-                                vertical: 12,
-                              ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30),
-                              ),
-                            ),
-                            child: const Text(
-                              'عودة للأذكار',
-                              style: TextStyle(fontSize: 18),
-                            ),
-                          ),
-                        ],
+              return PremiumQuranFlipWidget(
+                initialIndex: 0,
+                itemCount: azkar.length,
+                endPage: Container(
+                  color: const Color(0xFFFDF7EF),
+                  alignment: Alignment.center,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(
+                        Icons.verified,
+                        size: 80,
+                        color: Color(0xFFC7A87D),
                       ),
-                    );
-                  }
-
+                      const SizedBox(height: 24),
+                      const Text(
+                        'تم بحمد الله',
+                        style: TextStyle(
+                          fontSize: 32,
+                          color: Color(0xFF5A4328),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      Text(
+                        widget.category,
+                        style: const TextStyle(
+                          fontSize: 22,
+                          color: Color(0xFF8B6F4E),
+                        ),
+                      ),
+                      const SizedBox(height: 48),
+                      ElevatedButton(
+                        onPressed: () => context.pop(),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFFC7A87D),
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 40,
+                            vertical: 12,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                        ),
+                        child: const Text(
+                          'عودة للأذكار',
+                          style: TextStyle(fontSize: 18),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                itemBuilder: (context, index) {
                   final zikr = azkar[index];
                   return _PremiumZikrPage(
                     key: ValueKey(zikr.id),

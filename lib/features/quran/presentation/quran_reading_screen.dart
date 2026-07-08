@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:quran_flutter/quran.dart';
 
 import 'package:athr/features/quran/presentation/widgets/book_page_widget.dart';
+import 'package:athr/core/widgets/premium_quran_flip_widget.dart';
 import 'package:athr/features/quran/presentation/widgets/verse_bottom_sheet.dart';
 
 class QuranPageModel {
@@ -97,65 +98,60 @@ class _QuranReadingScreenState extends ConsumerState<QuranReadingScreen> {
         titleTextStyle: const TextStyle(color: Colors.white, fontSize: 20),
       ),
       body: SafeArea(
-        child: PageView.builder(
-          controller: _pageController,
-          reverse: true, // RTL scrolling
-          physics: const BouncingScrollPhysics(),
-          itemCount: _pages.length + 1,
-          itemBuilder: (context, index) {
-            if (index == _pages.length) {
-              return Container(
-                color: const Color(0xFFFDF7EF),
-                alignment: Alignment.center,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(
-                      Icons.check_circle_outline,
-                      size: 80,
-                      color: Color(0xFFC7A87D),
-                    ),
-                    const SizedBox(height: 24),
-                    const Text(
-                      'نهاية السورة',
-                      style: TextStyle(
-                        fontSize: 32,
-                        color: Color(0xFF5A4328),
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    Text(
-                      'سورة ${Quran.getSurahName(widget.surahNumber)}',
-                      style: const TextStyle(
-                        fontSize: 22,
-                        color: Color(0xFF8B6F4E),
-                      ),
-                    ),
-                    const SizedBox(height: 48),
-                    ElevatedButton(
-                      onPressed: () => context.pop(),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFC7A87D),
-                        foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 40,
-                          vertical: 12,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                      ),
-                      child: const Text(
-                        'العودة للقرآن',
-                        style: TextStyle(fontSize: 18),
-                      ),
-                    ),
-                  ],
+        child: PremiumQuranFlipWidget(
+          initialIndex: 0,
+          itemCount: _pages.length,
+          endPage: Container(
+            color: const Color(0xFFFDF7EF),
+            alignment: Alignment.center,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(
+                  Icons.check_circle_outline,
+                  size: 80,
+                  color: Color(0xFFC7A87D),
                 ),
-              );
-            }
-
+                const SizedBox(height: 24),
+                const Text(
+                  'نهاية السورة',
+                  style: TextStyle(
+                    fontSize: 32,
+                    color: Color(0xFF5A4328),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  'سورة ${Quran.getSurahName(widget.surahNumber)}',
+                  style: const TextStyle(
+                    fontSize: 22,
+                    color: Color(0xFF8B6F4E),
+                  ),
+                ),
+                const SizedBox(height: 48),
+                ElevatedButton(
+                  onPressed: () => context.pop(),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFFC7A87D),
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 40,
+                      vertical: 12,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                  ),
+                  child: const Text(
+                    'العودة للقرآن',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          itemBuilder: (context, index) {
             final model = _pages[index];
 
             return BookPageWidget(
