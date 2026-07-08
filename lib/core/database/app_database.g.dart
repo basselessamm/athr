@@ -1157,6 +1157,925 @@ class DuaTableCompanion extends UpdateCompanion<Dua> {
   }
 }
 
+class $UserFavoriteTableTable extends UserFavoriteTable
+    with TableInfo<$UserFavoriteTableTable, UserFavorite> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $UserFavoriteTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _contentTypeMeta = const VerificationMeta(
+    'contentType',
+  );
+  @override
+  late final GeneratedColumn<String> contentType = GeneratedColumn<String>(
+    'content_type',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _primaryReferenceMeta = const VerificationMeta(
+    'primaryReference',
+  );
+  @override
+  late final GeneratedColumn<String> primaryReference = GeneratedColumn<String>(
+    'primary_reference',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _secondaryReferenceMeta =
+      const VerificationMeta('secondaryReference');
+  @override
+  late final GeneratedColumn<String> secondaryReference =
+      GeneratedColumn<String>(
+        'secondary_reference',
+        aliasedName,
+        true,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+      );
+  static const VerificationMeta _titleMeta = const VerificationMeta('title');
+  @override
+  late final GeneratedColumn<String> title = GeneratedColumn<String>(
+    'title',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _contentTextMeta = const VerificationMeta(
+    'contentText',
+  );
+  @override
+  late final GeneratedColumn<String> contentText = GeneratedColumn<String>(
+    'content_text',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _sourceMeta = const VerificationMeta('source');
+  @override
+  late final GeneratedColumn<String> source = GeneratedColumn<String>(
+    'source',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<String> createdAt = GeneratedColumn<String>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _noteMeta = const VerificationMeta('note');
+  @override
+  late final GeneratedColumn<String> note = GeneratedColumn<String>(
+    'note',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    contentType,
+    primaryReference,
+    secondaryReference,
+    title,
+    contentText,
+    source,
+    createdAt,
+    note,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'user_favorite_table';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<UserFavorite> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('content_type')) {
+      context.handle(
+        _contentTypeMeta,
+        contentType.isAcceptableOrUnknown(
+          data['content_type']!,
+          _contentTypeMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_contentTypeMeta);
+    }
+    if (data.containsKey('primary_reference')) {
+      context.handle(
+        _primaryReferenceMeta,
+        primaryReference.isAcceptableOrUnknown(
+          data['primary_reference']!,
+          _primaryReferenceMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_primaryReferenceMeta);
+    }
+    if (data.containsKey('secondary_reference')) {
+      context.handle(
+        _secondaryReferenceMeta,
+        secondaryReference.isAcceptableOrUnknown(
+          data['secondary_reference']!,
+          _secondaryReferenceMeta,
+        ),
+      );
+    }
+    if (data.containsKey('title')) {
+      context.handle(
+        _titleMeta,
+        title.isAcceptableOrUnknown(data['title']!, _titleMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_titleMeta);
+    }
+    if (data.containsKey('content_text')) {
+      context.handle(
+        _contentTextMeta,
+        contentText.isAcceptableOrUnknown(
+          data['content_text']!,
+          _contentTextMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_contentTextMeta);
+    }
+    if (data.containsKey('source')) {
+      context.handle(
+        _sourceMeta,
+        source.isAcceptableOrUnknown(data['source']!, _sourceMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_sourceMeta);
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    if (data.containsKey('note')) {
+      context.handle(
+        _noteMeta,
+        note.isAcceptableOrUnknown(data['note']!, _noteMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  List<Set<GeneratedColumn>> get uniqueKeys => [
+    {contentType, primaryReference},
+  ];
+  @override
+  UserFavorite map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return UserFavorite(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      contentType: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}content_type'],
+      )!,
+      primaryReference: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}primary_reference'],
+      )!,
+      secondaryReference: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}secondary_reference'],
+      ),
+      title: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}title'],
+      )!,
+      contentText: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}content_text'],
+      )!,
+      source: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}source'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}created_at'],
+      )!,
+      note: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}note'],
+      ),
+    );
+  }
+
+  @override
+  $UserFavoriteTableTable createAlias(String alias) {
+    return $UserFavoriteTableTable(attachedDatabase, alias);
+  }
+}
+
+class UserFavorite extends DataClass implements Insertable<UserFavorite> {
+  final int id;
+  final String contentType;
+  final String primaryReference;
+  final String? secondaryReference;
+  final String title;
+  final String contentText;
+  final String source;
+  final String createdAt;
+  final String? note;
+  const UserFavorite({
+    required this.id,
+    required this.contentType,
+    required this.primaryReference,
+    this.secondaryReference,
+    required this.title,
+    required this.contentText,
+    required this.source,
+    required this.createdAt,
+    this.note,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['content_type'] = Variable<String>(contentType);
+    map['primary_reference'] = Variable<String>(primaryReference);
+    if (!nullToAbsent || secondaryReference != null) {
+      map['secondary_reference'] = Variable<String>(secondaryReference);
+    }
+    map['title'] = Variable<String>(title);
+    map['content_text'] = Variable<String>(contentText);
+    map['source'] = Variable<String>(source);
+    map['created_at'] = Variable<String>(createdAt);
+    if (!nullToAbsent || note != null) {
+      map['note'] = Variable<String>(note);
+    }
+    return map;
+  }
+
+  UserFavoriteTableCompanion toCompanion(bool nullToAbsent) {
+    return UserFavoriteTableCompanion(
+      id: Value(id),
+      contentType: Value(contentType),
+      primaryReference: Value(primaryReference),
+      secondaryReference: secondaryReference == null && nullToAbsent
+          ? const Value.absent()
+          : Value(secondaryReference),
+      title: Value(title),
+      contentText: Value(contentText),
+      source: Value(source),
+      createdAt: Value(createdAt),
+      note: note == null && nullToAbsent ? const Value.absent() : Value(note),
+    );
+  }
+
+  factory UserFavorite.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return UserFavorite(
+      id: serializer.fromJson<int>(json['id']),
+      contentType: serializer.fromJson<String>(json['contentType']),
+      primaryReference: serializer.fromJson<String>(json['primaryReference']),
+      secondaryReference: serializer.fromJson<String?>(
+        json['secondaryReference'],
+      ),
+      title: serializer.fromJson<String>(json['title']),
+      contentText: serializer.fromJson<String>(json['contentText']),
+      source: serializer.fromJson<String>(json['source']),
+      createdAt: serializer.fromJson<String>(json['createdAt']),
+      note: serializer.fromJson<String?>(json['note']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'contentType': serializer.toJson<String>(contentType),
+      'primaryReference': serializer.toJson<String>(primaryReference),
+      'secondaryReference': serializer.toJson<String?>(secondaryReference),
+      'title': serializer.toJson<String>(title),
+      'contentText': serializer.toJson<String>(contentText),
+      'source': serializer.toJson<String>(source),
+      'createdAt': serializer.toJson<String>(createdAt),
+      'note': serializer.toJson<String?>(note),
+    };
+  }
+
+  UserFavorite copyWith({
+    int? id,
+    String? contentType,
+    String? primaryReference,
+    Value<String?> secondaryReference = const Value.absent(),
+    String? title,
+    String? contentText,
+    String? source,
+    String? createdAt,
+    Value<String?> note = const Value.absent(),
+  }) => UserFavorite(
+    id: id ?? this.id,
+    contentType: contentType ?? this.contentType,
+    primaryReference: primaryReference ?? this.primaryReference,
+    secondaryReference: secondaryReference.present
+        ? secondaryReference.value
+        : this.secondaryReference,
+    title: title ?? this.title,
+    contentText: contentText ?? this.contentText,
+    source: source ?? this.source,
+    createdAt: createdAt ?? this.createdAt,
+    note: note.present ? note.value : this.note,
+  );
+  UserFavorite copyWithCompanion(UserFavoriteTableCompanion data) {
+    return UserFavorite(
+      id: data.id.present ? data.id.value : this.id,
+      contentType: data.contentType.present
+          ? data.contentType.value
+          : this.contentType,
+      primaryReference: data.primaryReference.present
+          ? data.primaryReference.value
+          : this.primaryReference,
+      secondaryReference: data.secondaryReference.present
+          ? data.secondaryReference.value
+          : this.secondaryReference,
+      title: data.title.present ? data.title.value : this.title,
+      contentText: data.contentText.present
+          ? data.contentText.value
+          : this.contentText,
+      source: data.source.present ? data.source.value : this.source,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      note: data.note.present ? data.note.value : this.note,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('UserFavorite(')
+          ..write('id: $id, ')
+          ..write('contentType: $contentType, ')
+          ..write('primaryReference: $primaryReference, ')
+          ..write('secondaryReference: $secondaryReference, ')
+          ..write('title: $title, ')
+          ..write('contentText: $contentText, ')
+          ..write('source: $source, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('note: $note')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    contentType,
+    primaryReference,
+    secondaryReference,
+    title,
+    contentText,
+    source,
+    createdAt,
+    note,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is UserFavorite &&
+          other.id == this.id &&
+          other.contentType == this.contentType &&
+          other.primaryReference == this.primaryReference &&
+          other.secondaryReference == this.secondaryReference &&
+          other.title == this.title &&
+          other.contentText == this.contentText &&
+          other.source == this.source &&
+          other.createdAt == this.createdAt &&
+          other.note == this.note);
+}
+
+class UserFavoriteTableCompanion extends UpdateCompanion<UserFavorite> {
+  final Value<int> id;
+  final Value<String> contentType;
+  final Value<String> primaryReference;
+  final Value<String?> secondaryReference;
+  final Value<String> title;
+  final Value<String> contentText;
+  final Value<String> source;
+  final Value<String> createdAt;
+  final Value<String?> note;
+  const UserFavoriteTableCompanion({
+    this.id = const Value.absent(),
+    this.contentType = const Value.absent(),
+    this.primaryReference = const Value.absent(),
+    this.secondaryReference = const Value.absent(),
+    this.title = const Value.absent(),
+    this.contentText = const Value.absent(),
+    this.source = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.note = const Value.absent(),
+  });
+  UserFavoriteTableCompanion.insert({
+    this.id = const Value.absent(),
+    required String contentType,
+    required String primaryReference,
+    this.secondaryReference = const Value.absent(),
+    required String title,
+    required String contentText,
+    required String source,
+    required String createdAt,
+    this.note = const Value.absent(),
+  }) : contentType = Value(contentType),
+       primaryReference = Value(primaryReference),
+       title = Value(title),
+       contentText = Value(contentText),
+       source = Value(source),
+       createdAt = Value(createdAt);
+  static Insertable<UserFavorite> custom({
+    Expression<int>? id,
+    Expression<String>? contentType,
+    Expression<String>? primaryReference,
+    Expression<String>? secondaryReference,
+    Expression<String>? title,
+    Expression<String>? contentText,
+    Expression<String>? source,
+    Expression<String>? createdAt,
+    Expression<String>? note,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (contentType != null) 'content_type': contentType,
+      if (primaryReference != null) 'primary_reference': primaryReference,
+      if (secondaryReference != null) 'secondary_reference': secondaryReference,
+      if (title != null) 'title': title,
+      if (contentText != null) 'content_text': contentText,
+      if (source != null) 'source': source,
+      if (createdAt != null) 'created_at': createdAt,
+      if (note != null) 'note': note,
+    });
+  }
+
+  UserFavoriteTableCompanion copyWith({
+    Value<int>? id,
+    Value<String>? contentType,
+    Value<String>? primaryReference,
+    Value<String?>? secondaryReference,
+    Value<String>? title,
+    Value<String>? contentText,
+    Value<String>? source,
+    Value<String>? createdAt,
+    Value<String?>? note,
+  }) {
+    return UserFavoriteTableCompanion(
+      id: id ?? this.id,
+      contentType: contentType ?? this.contentType,
+      primaryReference: primaryReference ?? this.primaryReference,
+      secondaryReference: secondaryReference ?? this.secondaryReference,
+      title: title ?? this.title,
+      contentText: contentText ?? this.contentText,
+      source: source ?? this.source,
+      createdAt: createdAt ?? this.createdAt,
+      note: note ?? this.note,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (contentType.present) {
+      map['content_type'] = Variable<String>(contentType.value);
+    }
+    if (primaryReference.present) {
+      map['primary_reference'] = Variable<String>(primaryReference.value);
+    }
+    if (secondaryReference.present) {
+      map['secondary_reference'] = Variable<String>(secondaryReference.value);
+    }
+    if (title.present) {
+      map['title'] = Variable<String>(title.value);
+    }
+    if (contentText.present) {
+      map['content_text'] = Variable<String>(contentText.value);
+    }
+    if (source.present) {
+      map['source'] = Variable<String>(source.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<String>(createdAt.value);
+    }
+    if (note.present) {
+      map['note'] = Variable<String>(note.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('UserFavoriteTableCompanion(')
+          ..write('id: $id, ')
+          ..write('contentType: $contentType, ')
+          ..write('primaryReference: $primaryReference, ')
+          ..write('secondaryReference: $secondaryReference, ')
+          ..write('title: $title, ')
+          ..write('contentText: $contentText, ')
+          ..write('source: $source, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('note: $note')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $UserDailyActivityTableTable extends UserDailyActivityTable
+    with TableInfo<$UserDailyActivityTableTable, UserDailyActivity> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $UserDailyActivityTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _activityDateMeta = const VerificationMeta(
+    'activityDate',
+  );
+  @override
+  late final GeneratedColumn<String> activityDate = GeneratedColumn<String>(
+    'activity_date',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _completedTaskIdMeta = const VerificationMeta(
+    'completedTaskId',
+  );
+  @override
+  late final GeneratedColumn<String> completedTaskId = GeneratedColumn<String>(
+    'completed_task_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _completedSunnahIdMeta = const VerificationMeta(
+    'completedSunnahId',
+  );
+  @override
+  late final GeneratedColumn<String> completedSunnahId =
+      GeneratedColumn<String>(
+        'completed_sunnah_id',
+        aliasedName,
+        true,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+      );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<String> updatedAt = GeneratedColumn<String>(
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    activityDate,
+    completedTaskId,
+    completedSunnahId,
+    updatedAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'user_daily_activity_table';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<UserDailyActivity> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('activity_date')) {
+      context.handle(
+        _activityDateMeta,
+        activityDate.isAcceptableOrUnknown(
+          data['activity_date']!,
+          _activityDateMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_activityDateMeta);
+    }
+    if (data.containsKey('completed_task_id')) {
+      context.handle(
+        _completedTaskIdMeta,
+        completedTaskId.isAcceptableOrUnknown(
+          data['completed_task_id']!,
+          _completedTaskIdMeta,
+        ),
+      );
+    }
+    if (data.containsKey('completed_sunnah_id')) {
+      context.handle(
+        _completedSunnahIdMeta,
+        completedSunnahId.isAcceptableOrUnknown(
+          data['completed_sunnah_id']!,
+          _completedSunnahIdMeta,
+        ),
+      );
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_updatedAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {activityDate};
+  @override
+  UserDailyActivity map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return UserDailyActivity(
+      activityDate: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}activity_date'],
+      )!,
+      completedTaskId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}completed_task_id'],
+      ),
+      completedSunnahId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}completed_sunnah_id'],
+      ),
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}updated_at'],
+      )!,
+    );
+  }
+
+  @override
+  $UserDailyActivityTableTable createAlias(String alias) {
+    return $UserDailyActivityTableTable(attachedDatabase, alias);
+  }
+}
+
+class UserDailyActivity extends DataClass
+    implements Insertable<UserDailyActivity> {
+  final String activityDate;
+  final String? completedTaskId;
+  final String? completedSunnahId;
+  final String updatedAt;
+  const UserDailyActivity({
+    required this.activityDate,
+    this.completedTaskId,
+    this.completedSunnahId,
+    required this.updatedAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['activity_date'] = Variable<String>(activityDate);
+    if (!nullToAbsent || completedTaskId != null) {
+      map['completed_task_id'] = Variable<String>(completedTaskId);
+    }
+    if (!nullToAbsent || completedSunnahId != null) {
+      map['completed_sunnah_id'] = Variable<String>(completedSunnahId);
+    }
+    map['updated_at'] = Variable<String>(updatedAt);
+    return map;
+  }
+
+  UserDailyActivityTableCompanion toCompanion(bool nullToAbsent) {
+    return UserDailyActivityTableCompanion(
+      activityDate: Value(activityDate),
+      completedTaskId: completedTaskId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(completedTaskId),
+      completedSunnahId: completedSunnahId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(completedSunnahId),
+      updatedAt: Value(updatedAt),
+    );
+  }
+
+  factory UserDailyActivity.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return UserDailyActivity(
+      activityDate: serializer.fromJson<String>(json['activityDate']),
+      completedTaskId: serializer.fromJson<String?>(json['completedTaskId']),
+      completedSunnahId: serializer.fromJson<String?>(
+        json['completedSunnahId'],
+      ),
+      updatedAt: serializer.fromJson<String>(json['updatedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'activityDate': serializer.toJson<String>(activityDate),
+      'completedTaskId': serializer.toJson<String?>(completedTaskId),
+      'completedSunnahId': serializer.toJson<String?>(completedSunnahId),
+      'updatedAt': serializer.toJson<String>(updatedAt),
+    };
+  }
+
+  UserDailyActivity copyWith({
+    String? activityDate,
+    Value<String?> completedTaskId = const Value.absent(),
+    Value<String?> completedSunnahId = const Value.absent(),
+    String? updatedAt,
+  }) => UserDailyActivity(
+    activityDate: activityDate ?? this.activityDate,
+    completedTaskId: completedTaskId.present
+        ? completedTaskId.value
+        : this.completedTaskId,
+    completedSunnahId: completedSunnahId.present
+        ? completedSunnahId.value
+        : this.completedSunnahId,
+    updatedAt: updatedAt ?? this.updatedAt,
+  );
+  UserDailyActivity copyWithCompanion(UserDailyActivityTableCompanion data) {
+    return UserDailyActivity(
+      activityDate: data.activityDate.present
+          ? data.activityDate.value
+          : this.activityDate,
+      completedTaskId: data.completedTaskId.present
+          ? data.completedTaskId.value
+          : this.completedTaskId,
+      completedSunnahId: data.completedSunnahId.present
+          ? data.completedSunnahId.value
+          : this.completedSunnahId,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('UserDailyActivity(')
+          ..write('activityDate: $activityDate, ')
+          ..write('completedTaskId: $completedTaskId, ')
+          ..write('completedSunnahId: $completedSunnahId, ')
+          ..write('updatedAt: $updatedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(activityDate, completedTaskId, completedSunnahId, updatedAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is UserDailyActivity &&
+          other.activityDate == this.activityDate &&
+          other.completedTaskId == this.completedTaskId &&
+          other.completedSunnahId == this.completedSunnahId &&
+          other.updatedAt == this.updatedAt);
+}
+
+class UserDailyActivityTableCompanion
+    extends UpdateCompanion<UserDailyActivity> {
+  final Value<String> activityDate;
+  final Value<String?> completedTaskId;
+  final Value<String?> completedSunnahId;
+  final Value<String> updatedAt;
+  final Value<int> rowid;
+  const UserDailyActivityTableCompanion({
+    this.activityDate = const Value.absent(),
+    this.completedTaskId = const Value.absent(),
+    this.completedSunnahId = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  UserDailyActivityTableCompanion.insert({
+    required String activityDate,
+    this.completedTaskId = const Value.absent(),
+    this.completedSunnahId = const Value.absent(),
+    required String updatedAt,
+    this.rowid = const Value.absent(),
+  }) : activityDate = Value(activityDate),
+       updatedAt = Value(updatedAt);
+  static Insertable<UserDailyActivity> custom({
+    Expression<String>? activityDate,
+    Expression<String>? completedTaskId,
+    Expression<String>? completedSunnahId,
+    Expression<String>? updatedAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (activityDate != null) 'activity_date': activityDate,
+      if (completedTaskId != null) 'completed_task_id': completedTaskId,
+      if (completedSunnahId != null) 'completed_sunnah_id': completedSunnahId,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  UserDailyActivityTableCompanion copyWith({
+    Value<String>? activityDate,
+    Value<String?>? completedTaskId,
+    Value<String?>? completedSunnahId,
+    Value<String>? updatedAt,
+    Value<int>? rowid,
+  }) {
+    return UserDailyActivityTableCompanion(
+      activityDate: activityDate ?? this.activityDate,
+      completedTaskId: completedTaskId ?? this.completedTaskId,
+      completedSunnahId: completedSunnahId ?? this.completedSunnahId,
+      updatedAt: updatedAt ?? this.updatedAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (activityDate.present) {
+      map['activity_date'] = Variable<String>(activityDate.value);
+    }
+    if (completedTaskId.present) {
+      map['completed_task_id'] = Variable<String>(completedTaskId.value);
+    }
+    if (completedSunnahId.present) {
+      map['completed_sunnah_id'] = Variable<String>(completedSunnahId.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<String>(updatedAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('UserDailyActivityTableCompanion(')
+          ..write('activityDate: $activityDate, ')
+          ..write('completedTaskId: $completedTaskId, ')
+          ..write('completedSunnahId: $completedSunnahId, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 class $DailySunnahTableTable extends DailySunnahTable
     with TableInfo<$DailySunnahTableTable, DailySunnah> {
   @override
@@ -2527,12 +3446,848 @@ class MuhasabaEntryTableCompanion extends UpdateCompanion<MuhasabaEntry> {
   }
 }
 
-class $UserFavoriteTableTable extends UserFavoriteTable
-    with TableInfo<$UserFavoriteTableTable, UserFavorite> {
+class $ProgressRecordTableTable extends ProgressRecordTable
+    with TableInfo<$ProgressRecordTableTable, ProgressRecord> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $UserFavoriteTableTable(this.attachedDatabase, [this._alias]);
+  $ProgressRecordTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _dateMeta = const VerificationMeta('date');
+  @override
+  late final GeneratedColumn<String> date = GeneratedColumn<String>(
+    'date',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _pagesReadMeta = const VerificationMeta(
+    'pagesRead',
+  );
+  @override
+  late final GeneratedColumn<int> pagesRead = GeneratedColumn<int>(
+    'pages_read',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  static const VerificationMeta _readingSecondsMeta = const VerificationMeta(
+    'readingSeconds',
+  );
+  @override
+  late final GeneratedColumn<int> readingSeconds = GeneratedColumn<int>(
+    'reading_seconds',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  static const VerificationMeta _azkarCountMeta = const VerificationMeta(
+    'azkarCount',
+  );
+  @override
+  late final GeneratedColumn<int> azkarCount = GeneratedColumn<int>(
+    'azkar_count',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  static const VerificationMeta _hadithCountMeta = const VerificationMeta(
+    'hadithCount',
+  );
+  @override
+  late final GeneratedColumn<int> hadithCount = GeneratedColumn<int>(
+    'hadith_count',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  static const VerificationMeta _isMuhasabaDoneMeta = const VerificationMeta(
+    'isMuhasabaDone',
+  );
+  @override
+  late final GeneratedColumn<bool> isMuhasabaDone = GeneratedColumn<bool>(
+    'is_muhasaba_done',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("is_muhasaba_done" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    date,
+    pagesRead,
+    readingSeconds,
+    azkarCount,
+    hadithCount,
+    isMuhasabaDone,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'progress_record_table';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<ProgressRecord> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('date')) {
+      context.handle(
+        _dateMeta,
+        date.isAcceptableOrUnknown(data['date']!, _dateMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_dateMeta);
+    }
+    if (data.containsKey('pages_read')) {
+      context.handle(
+        _pagesReadMeta,
+        pagesRead.isAcceptableOrUnknown(data['pages_read']!, _pagesReadMeta),
+      );
+    }
+    if (data.containsKey('reading_seconds')) {
+      context.handle(
+        _readingSecondsMeta,
+        readingSeconds.isAcceptableOrUnknown(
+          data['reading_seconds']!,
+          _readingSecondsMeta,
+        ),
+      );
+    }
+    if (data.containsKey('azkar_count')) {
+      context.handle(
+        _azkarCountMeta,
+        azkarCount.isAcceptableOrUnknown(data['azkar_count']!, _azkarCountMeta),
+      );
+    }
+    if (data.containsKey('hadith_count')) {
+      context.handle(
+        _hadithCountMeta,
+        hadithCount.isAcceptableOrUnknown(
+          data['hadith_count']!,
+          _hadithCountMeta,
+        ),
+      );
+    }
+    if (data.containsKey('is_muhasaba_done')) {
+      context.handle(
+        _isMuhasabaDoneMeta,
+        isMuhasabaDone.isAcceptableOrUnknown(
+          data['is_muhasaba_done']!,
+          _isMuhasabaDoneMeta,
+        ),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {date};
+  @override
+  ProgressRecord map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ProgressRecord(
+      date: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}date'],
+      )!,
+      pagesRead: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}pages_read'],
+      )!,
+      readingSeconds: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}reading_seconds'],
+      )!,
+      azkarCount: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}azkar_count'],
+      )!,
+      hadithCount: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}hadith_count'],
+      )!,
+      isMuhasabaDone: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}is_muhasaba_done'],
+      )!,
+    );
+  }
+
+  @override
+  $ProgressRecordTableTable createAlias(String alias) {
+    return $ProgressRecordTableTable(attachedDatabase, alias);
+  }
+}
+
+class ProgressRecord extends DataClass implements Insertable<ProgressRecord> {
+  final String date;
+  final int pagesRead;
+  final int readingSeconds;
+  final int azkarCount;
+  final int hadithCount;
+  final bool isMuhasabaDone;
+  const ProgressRecord({
+    required this.date,
+    required this.pagesRead,
+    required this.readingSeconds,
+    required this.azkarCount,
+    required this.hadithCount,
+    required this.isMuhasabaDone,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['date'] = Variable<String>(date);
+    map['pages_read'] = Variable<int>(pagesRead);
+    map['reading_seconds'] = Variable<int>(readingSeconds);
+    map['azkar_count'] = Variable<int>(azkarCount);
+    map['hadith_count'] = Variable<int>(hadithCount);
+    map['is_muhasaba_done'] = Variable<bool>(isMuhasabaDone);
+    return map;
+  }
+
+  ProgressRecordTableCompanion toCompanion(bool nullToAbsent) {
+    return ProgressRecordTableCompanion(
+      date: Value(date),
+      pagesRead: Value(pagesRead),
+      readingSeconds: Value(readingSeconds),
+      azkarCount: Value(azkarCount),
+      hadithCount: Value(hadithCount),
+      isMuhasabaDone: Value(isMuhasabaDone),
+    );
+  }
+
+  factory ProgressRecord.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ProgressRecord(
+      date: serializer.fromJson<String>(json['date']),
+      pagesRead: serializer.fromJson<int>(json['pagesRead']),
+      readingSeconds: serializer.fromJson<int>(json['readingSeconds']),
+      azkarCount: serializer.fromJson<int>(json['azkarCount']),
+      hadithCount: serializer.fromJson<int>(json['hadithCount']),
+      isMuhasabaDone: serializer.fromJson<bool>(json['isMuhasabaDone']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'date': serializer.toJson<String>(date),
+      'pagesRead': serializer.toJson<int>(pagesRead),
+      'readingSeconds': serializer.toJson<int>(readingSeconds),
+      'azkarCount': serializer.toJson<int>(azkarCount),
+      'hadithCount': serializer.toJson<int>(hadithCount),
+      'isMuhasabaDone': serializer.toJson<bool>(isMuhasabaDone),
+    };
+  }
+
+  ProgressRecord copyWith({
+    String? date,
+    int? pagesRead,
+    int? readingSeconds,
+    int? azkarCount,
+    int? hadithCount,
+    bool? isMuhasabaDone,
+  }) => ProgressRecord(
+    date: date ?? this.date,
+    pagesRead: pagesRead ?? this.pagesRead,
+    readingSeconds: readingSeconds ?? this.readingSeconds,
+    azkarCount: azkarCount ?? this.azkarCount,
+    hadithCount: hadithCount ?? this.hadithCount,
+    isMuhasabaDone: isMuhasabaDone ?? this.isMuhasabaDone,
+  );
+  ProgressRecord copyWithCompanion(ProgressRecordTableCompanion data) {
+    return ProgressRecord(
+      date: data.date.present ? data.date.value : this.date,
+      pagesRead: data.pagesRead.present ? data.pagesRead.value : this.pagesRead,
+      readingSeconds: data.readingSeconds.present
+          ? data.readingSeconds.value
+          : this.readingSeconds,
+      azkarCount: data.azkarCount.present
+          ? data.azkarCount.value
+          : this.azkarCount,
+      hadithCount: data.hadithCount.present
+          ? data.hadithCount.value
+          : this.hadithCount,
+      isMuhasabaDone: data.isMuhasabaDone.present
+          ? data.isMuhasabaDone.value
+          : this.isMuhasabaDone,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ProgressRecord(')
+          ..write('date: $date, ')
+          ..write('pagesRead: $pagesRead, ')
+          ..write('readingSeconds: $readingSeconds, ')
+          ..write('azkarCount: $azkarCount, ')
+          ..write('hadithCount: $hadithCount, ')
+          ..write('isMuhasabaDone: $isMuhasabaDone')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    date,
+    pagesRead,
+    readingSeconds,
+    azkarCount,
+    hadithCount,
+    isMuhasabaDone,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ProgressRecord &&
+          other.date == this.date &&
+          other.pagesRead == this.pagesRead &&
+          other.readingSeconds == this.readingSeconds &&
+          other.azkarCount == this.azkarCount &&
+          other.hadithCount == this.hadithCount &&
+          other.isMuhasabaDone == this.isMuhasabaDone);
+}
+
+class ProgressRecordTableCompanion extends UpdateCompanion<ProgressRecord> {
+  final Value<String> date;
+  final Value<int> pagesRead;
+  final Value<int> readingSeconds;
+  final Value<int> azkarCount;
+  final Value<int> hadithCount;
+  final Value<bool> isMuhasabaDone;
+  final Value<int> rowid;
+  const ProgressRecordTableCompanion({
+    this.date = const Value.absent(),
+    this.pagesRead = const Value.absent(),
+    this.readingSeconds = const Value.absent(),
+    this.azkarCount = const Value.absent(),
+    this.hadithCount = const Value.absent(),
+    this.isMuhasabaDone = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  ProgressRecordTableCompanion.insert({
+    required String date,
+    this.pagesRead = const Value.absent(),
+    this.readingSeconds = const Value.absent(),
+    this.azkarCount = const Value.absent(),
+    this.hadithCount = const Value.absent(),
+    this.isMuhasabaDone = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : date = Value(date);
+  static Insertable<ProgressRecord> custom({
+    Expression<String>? date,
+    Expression<int>? pagesRead,
+    Expression<int>? readingSeconds,
+    Expression<int>? azkarCount,
+    Expression<int>? hadithCount,
+    Expression<bool>? isMuhasabaDone,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (date != null) 'date': date,
+      if (pagesRead != null) 'pages_read': pagesRead,
+      if (readingSeconds != null) 'reading_seconds': readingSeconds,
+      if (azkarCount != null) 'azkar_count': azkarCount,
+      if (hadithCount != null) 'hadith_count': hadithCount,
+      if (isMuhasabaDone != null) 'is_muhasaba_done': isMuhasabaDone,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  ProgressRecordTableCompanion copyWith({
+    Value<String>? date,
+    Value<int>? pagesRead,
+    Value<int>? readingSeconds,
+    Value<int>? azkarCount,
+    Value<int>? hadithCount,
+    Value<bool>? isMuhasabaDone,
+    Value<int>? rowid,
+  }) {
+    return ProgressRecordTableCompanion(
+      date: date ?? this.date,
+      pagesRead: pagesRead ?? this.pagesRead,
+      readingSeconds: readingSeconds ?? this.readingSeconds,
+      azkarCount: azkarCount ?? this.azkarCount,
+      hadithCount: hadithCount ?? this.hadithCount,
+      isMuhasabaDone: isMuhasabaDone ?? this.isMuhasabaDone,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (date.present) {
+      map['date'] = Variable<String>(date.value);
+    }
+    if (pagesRead.present) {
+      map['pages_read'] = Variable<int>(pagesRead.value);
+    }
+    if (readingSeconds.present) {
+      map['reading_seconds'] = Variable<int>(readingSeconds.value);
+    }
+    if (azkarCount.present) {
+      map['azkar_count'] = Variable<int>(azkarCount.value);
+    }
+    if (hadithCount.present) {
+      map['hadith_count'] = Variable<int>(hadithCount.value);
+    }
+    if (isMuhasabaDone.present) {
+      map['is_muhasaba_done'] = Variable<bool>(isMuhasabaDone.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ProgressRecordTableCompanion(')
+          ..write('date: $date, ')
+          ..write('pagesRead: $pagesRead, ')
+          ..write('readingSeconds: $readingSeconds, ')
+          ..write('azkarCount: $azkarCount, ')
+          ..write('hadithCount: $hadithCount, ')
+          ..write('isMuhasabaDone: $isMuhasabaDone, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $RecentActivityTableTable extends RecentActivityTable
+    with TableInfo<$RecentActivityTableTable, RecentActivity> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $RecentActivityTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _typeMeta = const VerificationMeta('type');
+  @override
+  late final GeneratedColumn<String> type = GeneratedColumn<String>(
+    'type',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _titleMeta = const VerificationMeta('title');
+  @override
+  late final GeneratedColumn<String> title = GeneratedColumn<String>(
+    'title',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _subtitleMeta = const VerificationMeta(
+    'subtitle',
+  );
+  @override
+  late final GeneratedColumn<String> subtitle = GeneratedColumn<String>(
+    'subtitle',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _routePathMeta = const VerificationMeta(
+    'routePath',
+  );
+  @override
+  late final GeneratedColumn<String> routePath = GeneratedColumn<String>(
+    'route_path',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _timestampMeta = const VerificationMeta(
+    'timestamp',
+  );
+  @override
+  late final GeneratedColumn<DateTime> timestamp = GeneratedColumn<DateTime>(
+    'timestamp',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    type,
+    title,
+    subtitle,
+    routePath,
+    timestamp,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'recent_activity_table';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<RecentActivity> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('type')) {
+      context.handle(
+        _typeMeta,
+        type.isAcceptableOrUnknown(data['type']!, _typeMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_typeMeta);
+    }
+    if (data.containsKey('title')) {
+      context.handle(
+        _titleMeta,
+        title.isAcceptableOrUnknown(data['title']!, _titleMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_titleMeta);
+    }
+    if (data.containsKey('subtitle')) {
+      context.handle(
+        _subtitleMeta,
+        subtitle.isAcceptableOrUnknown(data['subtitle']!, _subtitleMeta),
+      );
+    }
+    if (data.containsKey('route_path')) {
+      context.handle(
+        _routePathMeta,
+        routePath.isAcceptableOrUnknown(data['route_path']!, _routePathMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_routePathMeta);
+    }
+    if (data.containsKey('timestamp')) {
+      context.handle(
+        _timestampMeta,
+        timestamp.isAcceptableOrUnknown(data['timestamp']!, _timestampMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_timestampMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  RecentActivity map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return RecentActivity(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      type: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}type'],
+      )!,
+      title: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}title'],
+      )!,
+      subtitle: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}subtitle'],
+      ),
+      routePath: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}route_path'],
+      )!,
+      timestamp: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}timestamp'],
+      )!,
+    );
+  }
+
+  @override
+  $RecentActivityTableTable createAlias(String alias) {
+    return $RecentActivityTableTable(attachedDatabase, alias);
+  }
+}
+
+class RecentActivity extends DataClass implements Insertable<RecentActivity> {
+  final String id;
+  final String type;
+  final String title;
+  final String? subtitle;
+  final String routePath;
+  final DateTime timestamp;
+  const RecentActivity({
+    required this.id,
+    required this.type,
+    required this.title,
+    this.subtitle,
+    required this.routePath,
+    required this.timestamp,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['type'] = Variable<String>(type);
+    map['title'] = Variable<String>(title);
+    if (!nullToAbsent || subtitle != null) {
+      map['subtitle'] = Variable<String>(subtitle);
+    }
+    map['route_path'] = Variable<String>(routePath);
+    map['timestamp'] = Variable<DateTime>(timestamp);
+    return map;
+  }
+
+  RecentActivityTableCompanion toCompanion(bool nullToAbsent) {
+    return RecentActivityTableCompanion(
+      id: Value(id),
+      type: Value(type),
+      title: Value(title),
+      subtitle: subtitle == null && nullToAbsent
+          ? const Value.absent()
+          : Value(subtitle),
+      routePath: Value(routePath),
+      timestamp: Value(timestamp),
+    );
+  }
+
+  factory RecentActivity.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return RecentActivity(
+      id: serializer.fromJson<String>(json['id']),
+      type: serializer.fromJson<String>(json['type']),
+      title: serializer.fromJson<String>(json['title']),
+      subtitle: serializer.fromJson<String?>(json['subtitle']),
+      routePath: serializer.fromJson<String>(json['routePath']),
+      timestamp: serializer.fromJson<DateTime>(json['timestamp']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'type': serializer.toJson<String>(type),
+      'title': serializer.toJson<String>(title),
+      'subtitle': serializer.toJson<String?>(subtitle),
+      'routePath': serializer.toJson<String>(routePath),
+      'timestamp': serializer.toJson<DateTime>(timestamp),
+    };
+  }
+
+  RecentActivity copyWith({
+    String? id,
+    String? type,
+    String? title,
+    Value<String?> subtitle = const Value.absent(),
+    String? routePath,
+    DateTime? timestamp,
+  }) => RecentActivity(
+    id: id ?? this.id,
+    type: type ?? this.type,
+    title: title ?? this.title,
+    subtitle: subtitle.present ? subtitle.value : this.subtitle,
+    routePath: routePath ?? this.routePath,
+    timestamp: timestamp ?? this.timestamp,
+  );
+  RecentActivity copyWithCompanion(RecentActivityTableCompanion data) {
+    return RecentActivity(
+      id: data.id.present ? data.id.value : this.id,
+      type: data.type.present ? data.type.value : this.type,
+      title: data.title.present ? data.title.value : this.title,
+      subtitle: data.subtitle.present ? data.subtitle.value : this.subtitle,
+      routePath: data.routePath.present ? data.routePath.value : this.routePath,
+      timestamp: data.timestamp.present ? data.timestamp.value : this.timestamp,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('RecentActivity(')
+          ..write('id: $id, ')
+          ..write('type: $type, ')
+          ..write('title: $title, ')
+          ..write('subtitle: $subtitle, ')
+          ..write('routePath: $routePath, ')
+          ..write('timestamp: $timestamp')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(id, type, title, subtitle, routePath, timestamp);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is RecentActivity &&
+          other.id == this.id &&
+          other.type == this.type &&
+          other.title == this.title &&
+          other.subtitle == this.subtitle &&
+          other.routePath == this.routePath &&
+          other.timestamp == this.timestamp);
+}
+
+class RecentActivityTableCompanion extends UpdateCompanion<RecentActivity> {
+  final Value<String> id;
+  final Value<String> type;
+  final Value<String> title;
+  final Value<String?> subtitle;
+  final Value<String> routePath;
+  final Value<DateTime> timestamp;
+  final Value<int> rowid;
+  const RecentActivityTableCompanion({
+    this.id = const Value.absent(),
+    this.type = const Value.absent(),
+    this.title = const Value.absent(),
+    this.subtitle = const Value.absent(),
+    this.routePath = const Value.absent(),
+    this.timestamp = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  RecentActivityTableCompanion.insert({
+    required String id,
+    required String type,
+    required String title,
+    this.subtitle = const Value.absent(),
+    required String routePath,
+    required DateTime timestamp,
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       type = Value(type),
+       title = Value(title),
+       routePath = Value(routePath),
+       timestamp = Value(timestamp);
+  static Insertable<RecentActivity> custom({
+    Expression<String>? id,
+    Expression<String>? type,
+    Expression<String>? title,
+    Expression<String>? subtitle,
+    Expression<String>? routePath,
+    Expression<DateTime>? timestamp,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (type != null) 'type': type,
+      if (title != null) 'title': title,
+      if (subtitle != null) 'subtitle': subtitle,
+      if (routePath != null) 'route_path': routePath,
+      if (timestamp != null) 'timestamp': timestamp,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  RecentActivityTableCompanion copyWith({
+    Value<String>? id,
+    Value<String>? type,
+    Value<String>? title,
+    Value<String?>? subtitle,
+    Value<String>? routePath,
+    Value<DateTime>? timestamp,
+    Value<int>? rowid,
+  }) {
+    return RecentActivityTableCompanion(
+      id: id ?? this.id,
+      type: type ?? this.type,
+      title: title ?? this.title,
+      subtitle: subtitle ?? this.subtitle,
+      routePath: routePath ?? this.routePath,
+      timestamp: timestamp ?? this.timestamp,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (type.present) {
+      map['type'] = Variable<String>(type.value);
+    }
+    if (title.present) {
+      map['title'] = Variable<String>(title.value);
+    }
+    if (subtitle.present) {
+      map['subtitle'] = Variable<String>(subtitle.value);
+    }
+    if (routePath.present) {
+      map['route_path'] = Variable<String>(routePath.value);
+    }
+    if (timestamp.present) {
+      map['timestamp'] = Variable<DateTime>(timestamp.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('RecentActivityTableCompanion(')
+          ..write('id: $id, ')
+          ..write('type: $type, ')
+          ..write('title: $title, ')
+          ..write('subtitle: $subtitle, ')
+          ..write('routePath: $routePath, ')
+          ..write('timestamp: $timestamp, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $UserGoalsTableTable extends UserGoalsTable
+    with TableInfo<$UserGoalsTableTable, UserGoal> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $UserGoalsTableTable(this.attachedDatabase, [this._alias]);
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
@@ -2546,39 +4301,27 @@ class $UserFavoriteTableTable extends UserFavoriteTable
       'PRIMARY KEY AUTOINCREMENT',
     ),
   );
-  static const VerificationMeta _contentTypeMeta = const VerificationMeta(
-    'contentType',
+  static const VerificationMeta _goalTypeMeta = const VerificationMeta(
+    'goalType',
   );
   @override
-  late final GeneratedColumn<String> contentType = GeneratedColumn<String>(
-    'content_type',
+  late final GeneratedColumn<String> goalType = GeneratedColumn<String>(
+    'goal_type',
     aliasedName,
     false,
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
-  static const VerificationMeta _primaryReferenceMeta = const VerificationMeta(
-    'primaryReference',
-  );
+  static const VerificationMeta _metricMeta = const VerificationMeta('metric');
   @override
-  late final GeneratedColumn<String> primaryReference = GeneratedColumn<String>(
-    'primary_reference',
+  late final GeneratedColumn<String> metric = GeneratedColumn<String>(
+    'metric',
     aliasedName,
     false,
     type: DriftSqlType.string,
-    requiredDuringInsert: true,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('quran_pages'),
   );
-  static const VerificationMeta _secondaryReferenceMeta =
-      const VerificationMeta('secondaryReference');
-  @override
-  late final GeneratedColumn<String> secondaryReference =
-      GeneratedColumn<String>(
-        'secondary_reference',
-        aliasedName,
-        true,
-        type: DriftSqlType.string,
-        requiredDuringInsert: false,
-      );
   static const VerificationMeta _titleMeta = const VerificationMeta('title');
   @override
   late final GeneratedColumn<String> title = GeneratedColumn<String>(
@@ -2588,21 +4331,1201 @@ class $UserFavoriteTableTable extends UserFavoriteTable
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
-  static const VerificationMeta _contentTextMeta = const VerificationMeta(
-    'contentText',
-  );
+  static const VerificationMeta _iconMeta = const VerificationMeta('icon');
   @override
-  late final GeneratedColumn<String> contentText = GeneratedColumn<String>(
-    'content_text',
+  late final GeneratedColumn<String> icon = GeneratedColumn<String>(
+    'icon',
     aliasedName,
     false,
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
-  static const VerificationMeta _sourceMeta = const VerificationMeta('source');
+  static const VerificationMeta _targetValueMeta = const VerificationMeta(
+    'targetValue',
+  );
   @override
-  late final GeneratedColumn<String> source = GeneratedColumn<String>(
-    'source',
+  late final GeneratedColumn<int> targetValue = GeneratedColumn<int>(
+    'target_value',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _resetPolicyMeta = const VerificationMeta(
+    'resetPolicy',
+  );
+  @override
+  late final GeneratedColumn<String> resetPolicy = GeneratedColumn<String>(
+    'reset_policy',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('daily'),
+  );
+  static const VerificationMeta _metadataMeta = const VerificationMeta(
+    'metadata',
+  );
+  @override
+  late final GeneratedColumn<String> metadata = GeneratedColumn<String>(
+    'metadata',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<String> updatedAt = GeneratedColumn<String>(
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    goalType,
+    metric,
+    title,
+    icon,
+    targetValue,
+    resetPolicy,
+    metadata,
+    updatedAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'user_goals_table';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<UserGoal> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('goal_type')) {
+      context.handle(
+        _goalTypeMeta,
+        goalType.isAcceptableOrUnknown(data['goal_type']!, _goalTypeMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_goalTypeMeta);
+    }
+    if (data.containsKey('metric')) {
+      context.handle(
+        _metricMeta,
+        metric.isAcceptableOrUnknown(data['metric']!, _metricMeta),
+      );
+    }
+    if (data.containsKey('title')) {
+      context.handle(
+        _titleMeta,
+        title.isAcceptableOrUnknown(data['title']!, _titleMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_titleMeta);
+    }
+    if (data.containsKey('icon')) {
+      context.handle(
+        _iconMeta,
+        icon.isAcceptableOrUnknown(data['icon']!, _iconMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_iconMeta);
+    }
+    if (data.containsKey('target_value')) {
+      context.handle(
+        _targetValueMeta,
+        targetValue.isAcceptableOrUnknown(
+          data['target_value']!,
+          _targetValueMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_targetValueMeta);
+    }
+    if (data.containsKey('reset_policy')) {
+      context.handle(
+        _resetPolicyMeta,
+        resetPolicy.isAcceptableOrUnknown(
+          data['reset_policy']!,
+          _resetPolicyMeta,
+        ),
+      );
+    }
+    if (data.containsKey('metadata')) {
+      context.handle(
+        _metadataMeta,
+        metadata.isAcceptableOrUnknown(data['metadata']!, _metadataMeta),
+      );
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_updatedAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  UserGoal map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return UserGoal(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      goalType: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}goal_type'],
+      )!,
+      metric: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}metric'],
+      )!,
+      title: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}title'],
+      )!,
+      icon: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}icon'],
+      )!,
+      targetValue: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}target_value'],
+      )!,
+      resetPolicy: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}reset_policy'],
+      )!,
+      metadata: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}metadata'],
+      ),
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}updated_at'],
+      )!,
+    );
+  }
+
+  @override
+  $UserGoalsTableTable createAlias(String alias) {
+    return $UserGoalsTableTable(attachedDatabase, alias);
+  }
+}
+
+class UserGoal extends DataClass implements Insertable<UserGoal> {
+  final int id;
+  final String goalType;
+  final String metric;
+  final String title;
+  final String icon;
+  final int targetValue;
+  final String resetPolicy;
+  final String? metadata;
+  final String updatedAt;
+  const UserGoal({
+    required this.id,
+    required this.goalType,
+    required this.metric,
+    required this.title,
+    required this.icon,
+    required this.targetValue,
+    required this.resetPolicy,
+    this.metadata,
+    required this.updatedAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['goal_type'] = Variable<String>(goalType);
+    map['metric'] = Variable<String>(metric);
+    map['title'] = Variable<String>(title);
+    map['icon'] = Variable<String>(icon);
+    map['target_value'] = Variable<int>(targetValue);
+    map['reset_policy'] = Variable<String>(resetPolicy);
+    if (!nullToAbsent || metadata != null) {
+      map['metadata'] = Variable<String>(metadata);
+    }
+    map['updated_at'] = Variable<String>(updatedAt);
+    return map;
+  }
+
+  UserGoalsTableCompanion toCompanion(bool nullToAbsent) {
+    return UserGoalsTableCompanion(
+      id: Value(id),
+      goalType: Value(goalType),
+      metric: Value(metric),
+      title: Value(title),
+      icon: Value(icon),
+      targetValue: Value(targetValue),
+      resetPolicy: Value(resetPolicy),
+      metadata: metadata == null && nullToAbsent
+          ? const Value.absent()
+          : Value(metadata),
+      updatedAt: Value(updatedAt),
+    );
+  }
+
+  factory UserGoal.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return UserGoal(
+      id: serializer.fromJson<int>(json['id']),
+      goalType: serializer.fromJson<String>(json['goalType']),
+      metric: serializer.fromJson<String>(json['metric']),
+      title: serializer.fromJson<String>(json['title']),
+      icon: serializer.fromJson<String>(json['icon']),
+      targetValue: serializer.fromJson<int>(json['targetValue']),
+      resetPolicy: serializer.fromJson<String>(json['resetPolicy']),
+      metadata: serializer.fromJson<String?>(json['metadata']),
+      updatedAt: serializer.fromJson<String>(json['updatedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'goalType': serializer.toJson<String>(goalType),
+      'metric': serializer.toJson<String>(metric),
+      'title': serializer.toJson<String>(title),
+      'icon': serializer.toJson<String>(icon),
+      'targetValue': serializer.toJson<int>(targetValue),
+      'resetPolicy': serializer.toJson<String>(resetPolicy),
+      'metadata': serializer.toJson<String?>(metadata),
+      'updatedAt': serializer.toJson<String>(updatedAt),
+    };
+  }
+
+  UserGoal copyWith({
+    int? id,
+    String? goalType,
+    String? metric,
+    String? title,
+    String? icon,
+    int? targetValue,
+    String? resetPolicy,
+    Value<String?> metadata = const Value.absent(),
+    String? updatedAt,
+  }) => UserGoal(
+    id: id ?? this.id,
+    goalType: goalType ?? this.goalType,
+    metric: metric ?? this.metric,
+    title: title ?? this.title,
+    icon: icon ?? this.icon,
+    targetValue: targetValue ?? this.targetValue,
+    resetPolicy: resetPolicy ?? this.resetPolicy,
+    metadata: metadata.present ? metadata.value : this.metadata,
+    updatedAt: updatedAt ?? this.updatedAt,
+  );
+  UserGoal copyWithCompanion(UserGoalsTableCompanion data) {
+    return UserGoal(
+      id: data.id.present ? data.id.value : this.id,
+      goalType: data.goalType.present ? data.goalType.value : this.goalType,
+      metric: data.metric.present ? data.metric.value : this.metric,
+      title: data.title.present ? data.title.value : this.title,
+      icon: data.icon.present ? data.icon.value : this.icon,
+      targetValue: data.targetValue.present
+          ? data.targetValue.value
+          : this.targetValue,
+      resetPolicy: data.resetPolicy.present
+          ? data.resetPolicy.value
+          : this.resetPolicy,
+      metadata: data.metadata.present ? data.metadata.value : this.metadata,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('UserGoal(')
+          ..write('id: $id, ')
+          ..write('goalType: $goalType, ')
+          ..write('metric: $metric, ')
+          ..write('title: $title, ')
+          ..write('icon: $icon, ')
+          ..write('targetValue: $targetValue, ')
+          ..write('resetPolicy: $resetPolicy, ')
+          ..write('metadata: $metadata, ')
+          ..write('updatedAt: $updatedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    goalType,
+    metric,
+    title,
+    icon,
+    targetValue,
+    resetPolicy,
+    metadata,
+    updatedAt,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is UserGoal &&
+          other.id == this.id &&
+          other.goalType == this.goalType &&
+          other.metric == this.metric &&
+          other.title == this.title &&
+          other.icon == this.icon &&
+          other.targetValue == this.targetValue &&
+          other.resetPolicy == this.resetPolicy &&
+          other.metadata == this.metadata &&
+          other.updatedAt == this.updatedAt);
+}
+
+class UserGoalsTableCompanion extends UpdateCompanion<UserGoal> {
+  final Value<int> id;
+  final Value<String> goalType;
+  final Value<String> metric;
+  final Value<String> title;
+  final Value<String> icon;
+  final Value<int> targetValue;
+  final Value<String> resetPolicy;
+  final Value<String?> metadata;
+  final Value<String> updatedAt;
+  const UserGoalsTableCompanion({
+    this.id = const Value.absent(),
+    this.goalType = const Value.absent(),
+    this.metric = const Value.absent(),
+    this.title = const Value.absent(),
+    this.icon = const Value.absent(),
+    this.targetValue = const Value.absent(),
+    this.resetPolicy = const Value.absent(),
+    this.metadata = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+  });
+  UserGoalsTableCompanion.insert({
+    this.id = const Value.absent(),
+    required String goalType,
+    this.metric = const Value.absent(),
+    required String title,
+    required String icon,
+    required int targetValue,
+    this.resetPolicy = const Value.absent(),
+    this.metadata = const Value.absent(),
+    required String updatedAt,
+  }) : goalType = Value(goalType),
+       title = Value(title),
+       icon = Value(icon),
+       targetValue = Value(targetValue),
+       updatedAt = Value(updatedAt);
+  static Insertable<UserGoal> custom({
+    Expression<int>? id,
+    Expression<String>? goalType,
+    Expression<String>? metric,
+    Expression<String>? title,
+    Expression<String>? icon,
+    Expression<int>? targetValue,
+    Expression<String>? resetPolicy,
+    Expression<String>? metadata,
+    Expression<String>? updatedAt,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (goalType != null) 'goal_type': goalType,
+      if (metric != null) 'metric': metric,
+      if (title != null) 'title': title,
+      if (icon != null) 'icon': icon,
+      if (targetValue != null) 'target_value': targetValue,
+      if (resetPolicy != null) 'reset_policy': resetPolicy,
+      if (metadata != null) 'metadata': metadata,
+      if (updatedAt != null) 'updated_at': updatedAt,
+    });
+  }
+
+  UserGoalsTableCompanion copyWith({
+    Value<int>? id,
+    Value<String>? goalType,
+    Value<String>? metric,
+    Value<String>? title,
+    Value<String>? icon,
+    Value<int>? targetValue,
+    Value<String>? resetPolicy,
+    Value<String?>? metadata,
+    Value<String>? updatedAt,
+  }) {
+    return UserGoalsTableCompanion(
+      id: id ?? this.id,
+      goalType: goalType ?? this.goalType,
+      metric: metric ?? this.metric,
+      title: title ?? this.title,
+      icon: icon ?? this.icon,
+      targetValue: targetValue ?? this.targetValue,
+      resetPolicy: resetPolicy ?? this.resetPolicy,
+      metadata: metadata ?? this.metadata,
+      updatedAt: updatedAt ?? this.updatedAt,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (goalType.present) {
+      map['goal_type'] = Variable<String>(goalType.value);
+    }
+    if (metric.present) {
+      map['metric'] = Variable<String>(metric.value);
+    }
+    if (title.present) {
+      map['title'] = Variable<String>(title.value);
+    }
+    if (icon.present) {
+      map['icon'] = Variable<String>(icon.value);
+    }
+    if (targetValue.present) {
+      map['target_value'] = Variable<int>(targetValue.value);
+    }
+    if (resetPolicy.present) {
+      map['reset_policy'] = Variable<String>(resetPolicy.value);
+    }
+    if (metadata.present) {
+      map['metadata'] = Variable<String>(metadata.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<String>(updatedAt.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('UserGoalsTableCompanion(')
+          ..write('id: $id, ')
+          ..write('goalType: $goalType, ')
+          ..write('metric: $metric, ')
+          ..write('title: $title, ')
+          ..write('icon: $icon, ')
+          ..write('targetValue: $targetValue, ')
+          ..write('resetPolicy: $resetPolicy, ')
+          ..write('metadata: $metadata, ')
+          ..write('updatedAt: $updatedAt')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $ReadingSessionTableTable extends ReadingSessionTable
+    with TableInfo<$ReadingSessionTableTable, ReadingSession> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ReadingSessionTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _featureTypeMeta = const VerificationMeta(
+    'featureType',
+  );
+  @override
+  late final GeneratedColumn<String> featureType = GeneratedColumn<String>(
+    'feature_type',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('quran'),
+  );
+  static const VerificationMeta _bookIdMeta = const VerificationMeta('bookId');
+  @override
+  late final GeneratedColumn<int> bookId = GeneratedColumn<int>(
+    'book_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _surahIdMeta = const VerificationMeta(
+    'surahId',
+  );
+  @override
+  late final GeneratedColumn<int> surahId = GeneratedColumn<int>(
+    'surah_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _pageNumberMeta = const VerificationMeta(
+    'pageNumber',
+  );
+  @override
+  late final GeneratedColumn<int> pageNumber = GeneratedColumn<int>(
+    'page_number',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _verseNumberMeta = const VerificationMeta(
+    'verseNumber',
+  );
+  @override
+  late final GeneratedColumn<int> verseNumber = GeneratedColumn<int>(
+    'verse_number',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _scrollOffsetMeta = const VerificationMeta(
+    'scrollOffset',
+  );
+  @override
+  late final GeneratedColumn<double> scrollOffset = GeneratedColumn<double>(
+    'scroll_offset',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0.0),
+  );
+  static const VerificationMeta _themeIdMeta = const VerificationMeta(
+    'themeId',
+  );
+  @override
+  late final GeneratedColumn<String> themeId = GeneratedColumn<String>(
+    'theme_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _fontSizeMeta = const VerificationMeta(
+    'fontSize',
+  );
+  @override
+  late final GeneratedColumn<double> fontSize = GeneratedColumn<double>(
+    'font_size',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<String> updatedAt = GeneratedColumn<String>(
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    featureType,
+    bookId,
+    surahId,
+    pageNumber,
+    verseNumber,
+    scrollOffset,
+    themeId,
+    fontSize,
+    updatedAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'reading_session_table';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<ReadingSession> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('feature_type')) {
+      context.handle(
+        _featureTypeMeta,
+        featureType.isAcceptableOrUnknown(
+          data['feature_type']!,
+          _featureTypeMeta,
+        ),
+      );
+    }
+    if (data.containsKey('book_id')) {
+      context.handle(
+        _bookIdMeta,
+        bookId.isAcceptableOrUnknown(data['book_id']!, _bookIdMeta),
+      );
+    }
+    if (data.containsKey('surah_id')) {
+      context.handle(
+        _surahIdMeta,
+        surahId.isAcceptableOrUnknown(data['surah_id']!, _surahIdMeta),
+      );
+    }
+    if (data.containsKey('page_number')) {
+      context.handle(
+        _pageNumberMeta,
+        pageNumber.isAcceptableOrUnknown(data['page_number']!, _pageNumberMeta),
+      );
+    }
+    if (data.containsKey('verse_number')) {
+      context.handle(
+        _verseNumberMeta,
+        verseNumber.isAcceptableOrUnknown(
+          data['verse_number']!,
+          _verseNumberMeta,
+        ),
+      );
+    }
+    if (data.containsKey('scroll_offset')) {
+      context.handle(
+        _scrollOffsetMeta,
+        scrollOffset.isAcceptableOrUnknown(
+          data['scroll_offset']!,
+          _scrollOffsetMeta,
+        ),
+      );
+    }
+    if (data.containsKey('theme_id')) {
+      context.handle(
+        _themeIdMeta,
+        themeId.isAcceptableOrUnknown(data['theme_id']!, _themeIdMeta),
+      );
+    }
+    if (data.containsKey('font_size')) {
+      context.handle(
+        _fontSizeMeta,
+        fontSize.isAcceptableOrUnknown(data['font_size']!, _fontSizeMeta),
+      );
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_updatedAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  ReadingSession map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ReadingSession(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      featureType: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}feature_type'],
+      )!,
+      bookId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}book_id'],
+      ),
+      surahId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}surah_id'],
+      ),
+      pageNumber: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}page_number'],
+      ),
+      verseNumber: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}verse_number'],
+      ),
+      scrollOffset: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}scroll_offset'],
+      )!,
+      themeId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}theme_id'],
+      ),
+      fontSize: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}font_size'],
+      ),
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}updated_at'],
+      )!,
+    );
+  }
+
+  @override
+  $ReadingSessionTableTable createAlias(String alias) {
+    return $ReadingSessionTableTable(attachedDatabase, alias);
+  }
+}
+
+class ReadingSession extends DataClass implements Insertable<ReadingSession> {
+  final int id;
+  final String featureType;
+  final int? bookId;
+  final int? surahId;
+  final int? pageNumber;
+  final int? verseNumber;
+  final double scrollOffset;
+  final String? themeId;
+  final double? fontSize;
+  final String updatedAt;
+  const ReadingSession({
+    required this.id,
+    required this.featureType,
+    this.bookId,
+    this.surahId,
+    this.pageNumber,
+    this.verseNumber,
+    required this.scrollOffset,
+    this.themeId,
+    this.fontSize,
+    required this.updatedAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['feature_type'] = Variable<String>(featureType);
+    if (!nullToAbsent || bookId != null) {
+      map['book_id'] = Variable<int>(bookId);
+    }
+    if (!nullToAbsent || surahId != null) {
+      map['surah_id'] = Variable<int>(surahId);
+    }
+    if (!nullToAbsent || pageNumber != null) {
+      map['page_number'] = Variable<int>(pageNumber);
+    }
+    if (!nullToAbsent || verseNumber != null) {
+      map['verse_number'] = Variable<int>(verseNumber);
+    }
+    map['scroll_offset'] = Variable<double>(scrollOffset);
+    if (!nullToAbsent || themeId != null) {
+      map['theme_id'] = Variable<String>(themeId);
+    }
+    if (!nullToAbsent || fontSize != null) {
+      map['font_size'] = Variable<double>(fontSize);
+    }
+    map['updated_at'] = Variable<String>(updatedAt);
+    return map;
+  }
+
+  ReadingSessionTableCompanion toCompanion(bool nullToAbsent) {
+    return ReadingSessionTableCompanion(
+      id: Value(id),
+      featureType: Value(featureType),
+      bookId: bookId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(bookId),
+      surahId: surahId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(surahId),
+      pageNumber: pageNumber == null && nullToAbsent
+          ? const Value.absent()
+          : Value(pageNumber),
+      verseNumber: verseNumber == null && nullToAbsent
+          ? const Value.absent()
+          : Value(verseNumber),
+      scrollOffset: Value(scrollOffset),
+      themeId: themeId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(themeId),
+      fontSize: fontSize == null && nullToAbsent
+          ? const Value.absent()
+          : Value(fontSize),
+      updatedAt: Value(updatedAt),
+    );
+  }
+
+  factory ReadingSession.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ReadingSession(
+      id: serializer.fromJson<int>(json['id']),
+      featureType: serializer.fromJson<String>(json['featureType']),
+      bookId: serializer.fromJson<int?>(json['bookId']),
+      surahId: serializer.fromJson<int?>(json['surahId']),
+      pageNumber: serializer.fromJson<int?>(json['pageNumber']),
+      verseNumber: serializer.fromJson<int?>(json['verseNumber']),
+      scrollOffset: serializer.fromJson<double>(json['scrollOffset']),
+      themeId: serializer.fromJson<String?>(json['themeId']),
+      fontSize: serializer.fromJson<double?>(json['fontSize']),
+      updatedAt: serializer.fromJson<String>(json['updatedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'featureType': serializer.toJson<String>(featureType),
+      'bookId': serializer.toJson<int?>(bookId),
+      'surahId': serializer.toJson<int?>(surahId),
+      'pageNumber': serializer.toJson<int?>(pageNumber),
+      'verseNumber': serializer.toJson<int?>(verseNumber),
+      'scrollOffset': serializer.toJson<double>(scrollOffset),
+      'themeId': serializer.toJson<String?>(themeId),
+      'fontSize': serializer.toJson<double?>(fontSize),
+      'updatedAt': serializer.toJson<String>(updatedAt),
+    };
+  }
+
+  ReadingSession copyWith({
+    int? id,
+    String? featureType,
+    Value<int?> bookId = const Value.absent(),
+    Value<int?> surahId = const Value.absent(),
+    Value<int?> pageNumber = const Value.absent(),
+    Value<int?> verseNumber = const Value.absent(),
+    double? scrollOffset,
+    Value<String?> themeId = const Value.absent(),
+    Value<double?> fontSize = const Value.absent(),
+    String? updatedAt,
+  }) => ReadingSession(
+    id: id ?? this.id,
+    featureType: featureType ?? this.featureType,
+    bookId: bookId.present ? bookId.value : this.bookId,
+    surahId: surahId.present ? surahId.value : this.surahId,
+    pageNumber: pageNumber.present ? pageNumber.value : this.pageNumber,
+    verseNumber: verseNumber.present ? verseNumber.value : this.verseNumber,
+    scrollOffset: scrollOffset ?? this.scrollOffset,
+    themeId: themeId.present ? themeId.value : this.themeId,
+    fontSize: fontSize.present ? fontSize.value : this.fontSize,
+    updatedAt: updatedAt ?? this.updatedAt,
+  );
+  ReadingSession copyWithCompanion(ReadingSessionTableCompanion data) {
+    return ReadingSession(
+      id: data.id.present ? data.id.value : this.id,
+      featureType: data.featureType.present
+          ? data.featureType.value
+          : this.featureType,
+      bookId: data.bookId.present ? data.bookId.value : this.bookId,
+      surahId: data.surahId.present ? data.surahId.value : this.surahId,
+      pageNumber: data.pageNumber.present
+          ? data.pageNumber.value
+          : this.pageNumber,
+      verseNumber: data.verseNumber.present
+          ? data.verseNumber.value
+          : this.verseNumber,
+      scrollOffset: data.scrollOffset.present
+          ? data.scrollOffset.value
+          : this.scrollOffset,
+      themeId: data.themeId.present ? data.themeId.value : this.themeId,
+      fontSize: data.fontSize.present ? data.fontSize.value : this.fontSize,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ReadingSession(')
+          ..write('id: $id, ')
+          ..write('featureType: $featureType, ')
+          ..write('bookId: $bookId, ')
+          ..write('surahId: $surahId, ')
+          ..write('pageNumber: $pageNumber, ')
+          ..write('verseNumber: $verseNumber, ')
+          ..write('scrollOffset: $scrollOffset, ')
+          ..write('themeId: $themeId, ')
+          ..write('fontSize: $fontSize, ')
+          ..write('updatedAt: $updatedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    featureType,
+    bookId,
+    surahId,
+    pageNumber,
+    verseNumber,
+    scrollOffset,
+    themeId,
+    fontSize,
+    updatedAt,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ReadingSession &&
+          other.id == this.id &&
+          other.featureType == this.featureType &&
+          other.bookId == this.bookId &&
+          other.surahId == this.surahId &&
+          other.pageNumber == this.pageNumber &&
+          other.verseNumber == this.verseNumber &&
+          other.scrollOffset == this.scrollOffset &&
+          other.themeId == this.themeId &&
+          other.fontSize == this.fontSize &&
+          other.updatedAt == this.updatedAt);
+}
+
+class ReadingSessionTableCompanion extends UpdateCompanion<ReadingSession> {
+  final Value<int> id;
+  final Value<String> featureType;
+  final Value<int?> bookId;
+  final Value<int?> surahId;
+  final Value<int?> pageNumber;
+  final Value<int?> verseNumber;
+  final Value<double> scrollOffset;
+  final Value<String?> themeId;
+  final Value<double?> fontSize;
+  final Value<String> updatedAt;
+  const ReadingSessionTableCompanion({
+    this.id = const Value.absent(),
+    this.featureType = const Value.absent(),
+    this.bookId = const Value.absent(),
+    this.surahId = const Value.absent(),
+    this.pageNumber = const Value.absent(),
+    this.verseNumber = const Value.absent(),
+    this.scrollOffset = const Value.absent(),
+    this.themeId = const Value.absent(),
+    this.fontSize = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+  });
+  ReadingSessionTableCompanion.insert({
+    this.id = const Value.absent(),
+    this.featureType = const Value.absent(),
+    this.bookId = const Value.absent(),
+    this.surahId = const Value.absent(),
+    this.pageNumber = const Value.absent(),
+    this.verseNumber = const Value.absent(),
+    this.scrollOffset = const Value.absent(),
+    this.themeId = const Value.absent(),
+    this.fontSize = const Value.absent(),
+    required String updatedAt,
+  }) : updatedAt = Value(updatedAt);
+  static Insertable<ReadingSession> custom({
+    Expression<int>? id,
+    Expression<String>? featureType,
+    Expression<int>? bookId,
+    Expression<int>? surahId,
+    Expression<int>? pageNumber,
+    Expression<int>? verseNumber,
+    Expression<double>? scrollOffset,
+    Expression<String>? themeId,
+    Expression<double>? fontSize,
+    Expression<String>? updatedAt,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (featureType != null) 'feature_type': featureType,
+      if (bookId != null) 'book_id': bookId,
+      if (surahId != null) 'surah_id': surahId,
+      if (pageNumber != null) 'page_number': pageNumber,
+      if (verseNumber != null) 'verse_number': verseNumber,
+      if (scrollOffset != null) 'scroll_offset': scrollOffset,
+      if (themeId != null) 'theme_id': themeId,
+      if (fontSize != null) 'font_size': fontSize,
+      if (updatedAt != null) 'updated_at': updatedAt,
+    });
+  }
+
+  ReadingSessionTableCompanion copyWith({
+    Value<int>? id,
+    Value<String>? featureType,
+    Value<int?>? bookId,
+    Value<int?>? surahId,
+    Value<int?>? pageNumber,
+    Value<int?>? verseNumber,
+    Value<double>? scrollOffset,
+    Value<String?>? themeId,
+    Value<double?>? fontSize,
+    Value<String>? updatedAt,
+  }) {
+    return ReadingSessionTableCompanion(
+      id: id ?? this.id,
+      featureType: featureType ?? this.featureType,
+      bookId: bookId ?? this.bookId,
+      surahId: surahId ?? this.surahId,
+      pageNumber: pageNumber ?? this.pageNumber,
+      verseNumber: verseNumber ?? this.verseNumber,
+      scrollOffset: scrollOffset ?? this.scrollOffset,
+      themeId: themeId ?? this.themeId,
+      fontSize: fontSize ?? this.fontSize,
+      updatedAt: updatedAt ?? this.updatedAt,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (featureType.present) {
+      map['feature_type'] = Variable<String>(featureType.value);
+    }
+    if (bookId.present) {
+      map['book_id'] = Variable<int>(bookId.value);
+    }
+    if (surahId.present) {
+      map['surah_id'] = Variable<int>(surahId.value);
+    }
+    if (pageNumber.present) {
+      map['page_number'] = Variable<int>(pageNumber.value);
+    }
+    if (verseNumber.present) {
+      map['verse_number'] = Variable<int>(verseNumber.value);
+    }
+    if (scrollOffset.present) {
+      map['scroll_offset'] = Variable<double>(scrollOffset.value);
+    }
+    if (themeId.present) {
+      map['theme_id'] = Variable<String>(themeId.value);
+    }
+    if (fontSize.present) {
+      map['font_size'] = Variable<double>(fontSize.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<String>(updatedAt.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ReadingSessionTableCompanion(')
+          ..write('id: $id, ')
+          ..write('featureType: $featureType, ')
+          ..write('bookId: $bookId, ')
+          ..write('surahId: $surahId, ')
+          ..write('pageNumber: $pageNumber, ')
+          ..write('verseNumber: $verseNumber, ')
+          ..write('scrollOffset: $scrollOffset, ')
+          ..write('themeId: $themeId, ')
+          ..write('fontSize: $fontSize, ')
+          ..write('updatedAt: $updatedAt')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $SavedItemsTableTable extends SavedItemsTable
+    with TableInfo<$SavedItemsTableTable, SavedItem> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $SavedItemsTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _featureTypeMeta = const VerificationMeta(
+    'featureType',
+  );
+  @override
+  late final GeneratedColumn<String> featureType = GeneratedColumn<String>(
+    'feature_type',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _referenceIdMeta = const VerificationMeta(
+    'referenceId',
+  );
+  @override
+  late final GeneratedColumn<int> referenceId = GeneratedColumn<int>(
+    'reference_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _secondaryIdMeta = const VerificationMeta(
+    'secondaryId',
+  );
+  @override
+  late final GeneratedColumn<int> secondaryId = GeneratedColumn<int>(
+    'secondary_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _collectionIdMeta = const VerificationMeta(
+    'collectionId',
+  );
+  @override
+  late final GeneratedColumn<String> collectionId = GeneratedColumn<String>(
+    'collection_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _notesMeta = const VerificationMeta('notes');
+  @override
+  late final GeneratedColumn<String> notes = GeneratedColumn<String>(
+    'notes',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _previewTextMeta = const VerificationMeta(
+    'previewText',
+  );
+  @override
+  late final GeneratedColumn<String> previewText = GeneratedColumn<String>(
+    'preview_text',
     aliasedName,
     false,
     type: DriftSqlType.string,
@@ -2622,22 +5545,22 @@ class $UserFavoriteTableTable extends UserFavoriteTable
   @override
   List<GeneratedColumn> get $columns => [
     id,
-    contentType,
-    primaryReference,
-    secondaryReference,
-    title,
-    contentText,
-    source,
+    featureType,
+    referenceId,
+    secondaryId,
+    collectionId,
+    notes,
+    previewText,
     createdAt,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
-  static const String $name = 'user_favorite_table';
+  static const String $name = 'saved_items_table';
   @override
   VerificationContext validateIntegrity(
-    Insertable<UserFavorite> instance, {
+    Insertable<SavedItem> instance, {
     bool isInserting = false,
   }) {
     final context = VerificationContext();
@@ -2645,63 +5568,62 @@ class $UserFavoriteTableTable extends UserFavoriteTable
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
-    if (data.containsKey('content_type')) {
+    if (data.containsKey('feature_type')) {
       context.handle(
-        _contentTypeMeta,
-        contentType.isAcceptableOrUnknown(
-          data['content_type']!,
-          _contentTypeMeta,
+        _featureTypeMeta,
+        featureType.isAcceptableOrUnknown(
+          data['feature_type']!,
+          _featureTypeMeta,
         ),
       );
     } else if (isInserting) {
-      context.missing(_contentTypeMeta);
+      context.missing(_featureTypeMeta);
     }
-    if (data.containsKey('primary_reference')) {
+    if (data.containsKey('reference_id')) {
       context.handle(
-        _primaryReferenceMeta,
-        primaryReference.isAcceptableOrUnknown(
-          data['primary_reference']!,
-          _primaryReferenceMeta,
+        _referenceIdMeta,
+        referenceId.isAcceptableOrUnknown(
+          data['reference_id']!,
+          _referenceIdMeta,
         ),
       );
     } else if (isInserting) {
-      context.missing(_primaryReferenceMeta);
+      context.missing(_referenceIdMeta);
     }
-    if (data.containsKey('secondary_reference')) {
+    if (data.containsKey('secondary_id')) {
       context.handle(
-        _secondaryReferenceMeta,
-        secondaryReference.isAcceptableOrUnknown(
-          data['secondary_reference']!,
-          _secondaryReferenceMeta,
+        _secondaryIdMeta,
+        secondaryId.isAcceptableOrUnknown(
+          data['secondary_id']!,
+          _secondaryIdMeta,
         ),
       );
     }
-    if (data.containsKey('title')) {
+    if (data.containsKey('collection_id')) {
       context.handle(
-        _titleMeta,
-        title.isAcceptableOrUnknown(data['title']!, _titleMeta),
+        _collectionIdMeta,
+        collectionId.isAcceptableOrUnknown(
+          data['collection_id']!,
+          _collectionIdMeta,
+        ),
       );
-    } else if (isInserting) {
-      context.missing(_titleMeta);
     }
-    if (data.containsKey('content_text')) {
+    if (data.containsKey('notes')) {
       context.handle(
-        _contentTextMeta,
-        contentText.isAcceptableOrUnknown(
-          data['content_text']!,
-          _contentTextMeta,
+        _notesMeta,
+        notes.isAcceptableOrUnknown(data['notes']!, _notesMeta),
+      );
+    }
+    if (data.containsKey('preview_text')) {
+      context.handle(
+        _previewTextMeta,
+        previewText.isAcceptableOrUnknown(
+          data['preview_text']!,
+          _previewTextMeta,
         ),
       );
     } else if (isInserting) {
-      context.missing(_contentTextMeta);
-    }
-    if (data.containsKey('source')) {
-      context.handle(
-        _sourceMeta,
-        source.isAcceptableOrUnknown(data['source']!, _sourceMeta),
-      );
-    } else if (isInserting) {
-      context.missing(_sourceMeta);
+      context.missing(_previewTextMeta);
     }
     if (data.containsKey('created_at')) {
       context.handle(
@@ -2717,40 +5639,36 @@ class $UserFavoriteTableTable extends UserFavoriteTable
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  List<Set<GeneratedColumn>> get uniqueKeys => [
-    {contentType, primaryReference},
-  ];
-  @override
-  UserFavorite map(Map<String, dynamic> data, {String? tablePrefix}) {
+  SavedItem map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return UserFavorite(
+    return SavedItem(
       id: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}id'],
       )!,
-      contentType: attachedDatabase.typeMapping.read(
+      featureType: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
-        data['${effectivePrefix}content_type'],
+        data['${effectivePrefix}feature_type'],
       )!,
-      primaryReference: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}primary_reference'],
+      referenceId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}reference_id'],
       )!,
-      secondaryReference: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}secondary_reference'],
+      secondaryId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}secondary_id'],
       ),
-      title: attachedDatabase.typeMapping.read(
+      collectionId: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
-        data['${effectivePrefix}title'],
-      )!,
-      contentText: attachedDatabase.typeMapping.read(
+        data['${effectivePrefix}collection_id'],
+      ),
+      notes: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
-        data['${effectivePrefix}content_text'],
-      )!,
-      source: attachedDatabase.typeMapping.read(
+        data['${effectivePrefix}notes'],
+      ),
+      previewText: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
-        data['${effectivePrefix}source'],
+        data['${effectivePrefix}preview_text'],
       )!,
       createdAt: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
@@ -2760,76 +5678,82 @@ class $UserFavoriteTableTable extends UserFavoriteTable
   }
 
   @override
-  $UserFavoriteTableTable createAlias(String alias) {
-    return $UserFavoriteTableTable(attachedDatabase, alias);
+  $SavedItemsTableTable createAlias(String alias) {
+    return $SavedItemsTableTable(attachedDatabase, alias);
   }
 }
 
-class UserFavorite extends DataClass implements Insertable<UserFavorite> {
+class SavedItem extends DataClass implements Insertable<SavedItem> {
   final int id;
-  final String contentType;
-  final String primaryReference;
-  final String? secondaryReference;
-  final String title;
-  final String contentText;
-  final String source;
+  final String featureType;
+  final int referenceId;
+  final int? secondaryId;
+  final String? collectionId;
+  final String? notes;
+  final String previewText;
   final String createdAt;
-  const UserFavorite({
+  const SavedItem({
     required this.id,
-    required this.contentType,
-    required this.primaryReference,
-    this.secondaryReference,
-    required this.title,
-    required this.contentText,
-    required this.source,
+    required this.featureType,
+    required this.referenceId,
+    this.secondaryId,
+    this.collectionId,
+    this.notes,
+    required this.previewText,
     required this.createdAt,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
-    map['content_type'] = Variable<String>(contentType);
-    map['primary_reference'] = Variable<String>(primaryReference);
-    if (!nullToAbsent || secondaryReference != null) {
-      map['secondary_reference'] = Variable<String>(secondaryReference);
+    map['feature_type'] = Variable<String>(featureType);
+    map['reference_id'] = Variable<int>(referenceId);
+    if (!nullToAbsent || secondaryId != null) {
+      map['secondary_id'] = Variable<int>(secondaryId);
     }
-    map['title'] = Variable<String>(title);
-    map['content_text'] = Variable<String>(contentText);
-    map['source'] = Variable<String>(source);
+    if (!nullToAbsent || collectionId != null) {
+      map['collection_id'] = Variable<String>(collectionId);
+    }
+    if (!nullToAbsent || notes != null) {
+      map['notes'] = Variable<String>(notes);
+    }
+    map['preview_text'] = Variable<String>(previewText);
     map['created_at'] = Variable<String>(createdAt);
     return map;
   }
 
-  UserFavoriteTableCompanion toCompanion(bool nullToAbsent) {
-    return UserFavoriteTableCompanion(
+  SavedItemsTableCompanion toCompanion(bool nullToAbsent) {
+    return SavedItemsTableCompanion(
       id: Value(id),
-      contentType: Value(contentType),
-      primaryReference: Value(primaryReference),
-      secondaryReference: secondaryReference == null && nullToAbsent
+      featureType: Value(featureType),
+      referenceId: Value(referenceId),
+      secondaryId: secondaryId == null && nullToAbsent
           ? const Value.absent()
-          : Value(secondaryReference),
-      title: Value(title),
-      contentText: Value(contentText),
-      source: Value(source),
+          : Value(secondaryId),
+      collectionId: collectionId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(collectionId),
+      notes: notes == null && nullToAbsent
+          ? const Value.absent()
+          : Value(notes),
+      previewText: Value(previewText),
       createdAt: Value(createdAt),
     );
   }
 
-  factory UserFavorite.fromJson(
+  factory SavedItem.fromJson(
     Map<String, dynamic> json, {
     ValueSerializer? serializer,
   }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return UserFavorite(
+    return SavedItem(
       id: serializer.fromJson<int>(json['id']),
-      contentType: serializer.fromJson<String>(json['contentType']),
-      primaryReference: serializer.fromJson<String>(json['primaryReference']),
-      secondaryReference: serializer.fromJson<String?>(
-        json['secondaryReference'],
-      ),
-      title: serializer.fromJson<String>(json['title']),
-      contentText: serializer.fromJson<String>(json['contentText']),
-      source: serializer.fromJson<String>(json['source']),
+      featureType: serializer.fromJson<String>(json['featureType']),
+      referenceId: serializer.fromJson<int>(json['referenceId']),
+      secondaryId: serializer.fromJson<int?>(json['secondaryId']),
+      collectionId: serializer.fromJson<String?>(json['collectionId']),
+      notes: serializer.fromJson<String?>(json['notes']),
+      previewText: serializer.fromJson<String>(json['previewText']),
       createdAt: serializer.fromJson<String>(json['createdAt']),
     );
   }
@@ -2838,68 +5762,68 @@ class UserFavorite extends DataClass implements Insertable<UserFavorite> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
-      'contentType': serializer.toJson<String>(contentType),
-      'primaryReference': serializer.toJson<String>(primaryReference),
-      'secondaryReference': serializer.toJson<String?>(secondaryReference),
-      'title': serializer.toJson<String>(title),
-      'contentText': serializer.toJson<String>(contentText),
-      'source': serializer.toJson<String>(source),
+      'featureType': serializer.toJson<String>(featureType),
+      'referenceId': serializer.toJson<int>(referenceId),
+      'secondaryId': serializer.toJson<int?>(secondaryId),
+      'collectionId': serializer.toJson<String?>(collectionId),
+      'notes': serializer.toJson<String?>(notes),
+      'previewText': serializer.toJson<String>(previewText),
       'createdAt': serializer.toJson<String>(createdAt),
     };
   }
 
-  UserFavorite copyWith({
+  SavedItem copyWith({
     int? id,
-    String? contentType,
-    String? primaryReference,
-    Value<String?> secondaryReference = const Value.absent(),
-    String? title,
-    String? contentText,
-    String? source,
+    String? featureType,
+    int? referenceId,
+    Value<int?> secondaryId = const Value.absent(),
+    Value<String?> collectionId = const Value.absent(),
+    Value<String?> notes = const Value.absent(),
+    String? previewText,
     String? createdAt,
-  }) => UserFavorite(
+  }) => SavedItem(
     id: id ?? this.id,
-    contentType: contentType ?? this.contentType,
-    primaryReference: primaryReference ?? this.primaryReference,
-    secondaryReference: secondaryReference.present
-        ? secondaryReference.value
-        : this.secondaryReference,
-    title: title ?? this.title,
-    contentText: contentText ?? this.contentText,
-    source: source ?? this.source,
+    featureType: featureType ?? this.featureType,
+    referenceId: referenceId ?? this.referenceId,
+    secondaryId: secondaryId.present ? secondaryId.value : this.secondaryId,
+    collectionId: collectionId.present ? collectionId.value : this.collectionId,
+    notes: notes.present ? notes.value : this.notes,
+    previewText: previewText ?? this.previewText,
     createdAt: createdAt ?? this.createdAt,
   );
-  UserFavorite copyWithCompanion(UserFavoriteTableCompanion data) {
-    return UserFavorite(
+  SavedItem copyWithCompanion(SavedItemsTableCompanion data) {
+    return SavedItem(
       id: data.id.present ? data.id.value : this.id,
-      contentType: data.contentType.present
-          ? data.contentType.value
-          : this.contentType,
-      primaryReference: data.primaryReference.present
-          ? data.primaryReference.value
-          : this.primaryReference,
-      secondaryReference: data.secondaryReference.present
-          ? data.secondaryReference.value
-          : this.secondaryReference,
-      title: data.title.present ? data.title.value : this.title,
-      contentText: data.contentText.present
-          ? data.contentText.value
-          : this.contentText,
-      source: data.source.present ? data.source.value : this.source,
+      featureType: data.featureType.present
+          ? data.featureType.value
+          : this.featureType,
+      referenceId: data.referenceId.present
+          ? data.referenceId.value
+          : this.referenceId,
+      secondaryId: data.secondaryId.present
+          ? data.secondaryId.value
+          : this.secondaryId,
+      collectionId: data.collectionId.present
+          ? data.collectionId.value
+          : this.collectionId,
+      notes: data.notes.present ? data.notes.value : this.notes,
+      previewText: data.previewText.present
+          ? data.previewText.value
+          : this.previewText,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
     );
   }
 
   @override
   String toString() {
-    return (StringBuffer('UserFavorite(')
+    return (StringBuffer('SavedItem(')
           ..write('id: $id, ')
-          ..write('contentType: $contentType, ')
-          ..write('primaryReference: $primaryReference, ')
-          ..write('secondaryReference: $secondaryReference, ')
-          ..write('title: $title, ')
-          ..write('contentText: $contentText, ')
-          ..write('source: $source, ')
+          ..write('featureType: $featureType, ')
+          ..write('referenceId: $referenceId, ')
+          ..write('secondaryId: $secondaryId, ')
+          ..write('collectionId: $collectionId, ')
+          ..write('notes: $notes, ')
+          ..write('previewText: $previewText, ')
           ..write('createdAt: $createdAt')
           ..write(')'))
         .toString();
@@ -2908,102 +5832,100 @@ class UserFavorite extends DataClass implements Insertable<UserFavorite> {
   @override
   int get hashCode => Object.hash(
     id,
-    contentType,
-    primaryReference,
-    secondaryReference,
-    title,
-    contentText,
-    source,
+    featureType,
+    referenceId,
+    secondaryId,
+    collectionId,
+    notes,
+    previewText,
     createdAt,
   );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is UserFavorite &&
+      (other is SavedItem &&
           other.id == this.id &&
-          other.contentType == this.contentType &&
-          other.primaryReference == this.primaryReference &&
-          other.secondaryReference == this.secondaryReference &&
-          other.title == this.title &&
-          other.contentText == this.contentText &&
-          other.source == this.source &&
+          other.featureType == this.featureType &&
+          other.referenceId == this.referenceId &&
+          other.secondaryId == this.secondaryId &&
+          other.collectionId == this.collectionId &&
+          other.notes == this.notes &&
+          other.previewText == this.previewText &&
           other.createdAt == this.createdAt);
 }
 
-class UserFavoriteTableCompanion extends UpdateCompanion<UserFavorite> {
+class SavedItemsTableCompanion extends UpdateCompanion<SavedItem> {
   final Value<int> id;
-  final Value<String> contentType;
-  final Value<String> primaryReference;
-  final Value<String?> secondaryReference;
-  final Value<String> title;
-  final Value<String> contentText;
-  final Value<String> source;
+  final Value<String> featureType;
+  final Value<int> referenceId;
+  final Value<int?> secondaryId;
+  final Value<String?> collectionId;
+  final Value<String?> notes;
+  final Value<String> previewText;
   final Value<String> createdAt;
-  const UserFavoriteTableCompanion({
+  const SavedItemsTableCompanion({
     this.id = const Value.absent(),
-    this.contentType = const Value.absent(),
-    this.primaryReference = const Value.absent(),
-    this.secondaryReference = const Value.absent(),
-    this.title = const Value.absent(),
-    this.contentText = const Value.absent(),
-    this.source = const Value.absent(),
+    this.featureType = const Value.absent(),
+    this.referenceId = const Value.absent(),
+    this.secondaryId = const Value.absent(),
+    this.collectionId = const Value.absent(),
+    this.notes = const Value.absent(),
+    this.previewText = const Value.absent(),
     this.createdAt = const Value.absent(),
   });
-  UserFavoriteTableCompanion.insert({
+  SavedItemsTableCompanion.insert({
     this.id = const Value.absent(),
-    required String contentType,
-    required String primaryReference,
-    this.secondaryReference = const Value.absent(),
-    required String title,
-    required String contentText,
-    required String source,
+    required String featureType,
+    required int referenceId,
+    this.secondaryId = const Value.absent(),
+    this.collectionId = const Value.absent(),
+    this.notes = const Value.absent(),
+    required String previewText,
     required String createdAt,
-  }) : contentType = Value(contentType),
-       primaryReference = Value(primaryReference),
-       title = Value(title),
-       contentText = Value(contentText),
-       source = Value(source),
+  }) : featureType = Value(featureType),
+       referenceId = Value(referenceId),
+       previewText = Value(previewText),
        createdAt = Value(createdAt);
-  static Insertable<UserFavorite> custom({
+  static Insertable<SavedItem> custom({
     Expression<int>? id,
-    Expression<String>? contentType,
-    Expression<String>? primaryReference,
-    Expression<String>? secondaryReference,
-    Expression<String>? title,
-    Expression<String>? contentText,
-    Expression<String>? source,
+    Expression<String>? featureType,
+    Expression<int>? referenceId,
+    Expression<int>? secondaryId,
+    Expression<String>? collectionId,
+    Expression<String>? notes,
+    Expression<String>? previewText,
     Expression<String>? createdAt,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
-      if (contentType != null) 'content_type': contentType,
-      if (primaryReference != null) 'primary_reference': primaryReference,
-      if (secondaryReference != null) 'secondary_reference': secondaryReference,
-      if (title != null) 'title': title,
-      if (contentText != null) 'content_text': contentText,
-      if (source != null) 'source': source,
+      if (featureType != null) 'feature_type': featureType,
+      if (referenceId != null) 'reference_id': referenceId,
+      if (secondaryId != null) 'secondary_id': secondaryId,
+      if (collectionId != null) 'collection_id': collectionId,
+      if (notes != null) 'notes': notes,
+      if (previewText != null) 'preview_text': previewText,
       if (createdAt != null) 'created_at': createdAt,
     });
   }
 
-  UserFavoriteTableCompanion copyWith({
+  SavedItemsTableCompanion copyWith({
     Value<int>? id,
-    Value<String>? contentType,
-    Value<String>? primaryReference,
-    Value<String?>? secondaryReference,
-    Value<String>? title,
-    Value<String>? contentText,
-    Value<String>? source,
+    Value<String>? featureType,
+    Value<int>? referenceId,
+    Value<int?>? secondaryId,
+    Value<String?>? collectionId,
+    Value<String?>? notes,
+    Value<String>? previewText,
     Value<String>? createdAt,
   }) {
-    return UserFavoriteTableCompanion(
+    return SavedItemsTableCompanion(
       id: id ?? this.id,
-      contentType: contentType ?? this.contentType,
-      primaryReference: primaryReference ?? this.primaryReference,
-      secondaryReference: secondaryReference ?? this.secondaryReference,
-      title: title ?? this.title,
-      contentText: contentText ?? this.contentText,
-      source: source ?? this.source,
+      featureType: featureType ?? this.featureType,
+      referenceId: referenceId ?? this.referenceId,
+      secondaryId: secondaryId ?? this.secondaryId,
+      collectionId: collectionId ?? this.collectionId,
+      notes: notes ?? this.notes,
+      previewText: previewText ?? this.previewText,
       createdAt: createdAt ?? this.createdAt,
     );
   }
@@ -3014,23 +5936,23 @@ class UserFavoriteTableCompanion extends UpdateCompanion<UserFavorite> {
     if (id.present) {
       map['id'] = Variable<int>(id.value);
     }
-    if (contentType.present) {
-      map['content_type'] = Variable<String>(contentType.value);
+    if (featureType.present) {
+      map['feature_type'] = Variable<String>(featureType.value);
     }
-    if (primaryReference.present) {
-      map['primary_reference'] = Variable<String>(primaryReference.value);
+    if (referenceId.present) {
+      map['reference_id'] = Variable<int>(referenceId.value);
     }
-    if (secondaryReference.present) {
-      map['secondary_reference'] = Variable<String>(secondaryReference.value);
+    if (secondaryId.present) {
+      map['secondary_id'] = Variable<int>(secondaryId.value);
     }
-    if (title.present) {
-      map['title'] = Variable<String>(title.value);
+    if (collectionId.present) {
+      map['collection_id'] = Variable<String>(collectionId.value);
     }
-    if (contentText.present) {
-      map['content_text'] = Variable<String>(contentText.value);
+    if (notes.present) {
+      map['notes'] = Variable<String>(notes.value);
     }
-    if (source.present) {
-      map['source'] = Variable<String>(source.value);
+    if (previewText.present) {
+      map['preview_text'] = Variable<String>(previewText.value);
     }
     if (createdAt.present) {
       map['created_at'] = Variable<String>(createdAt.value);
@@ -3040,60 +5962,447 @@ class UserFavoriteTableCompanion extends UpdateCompanion<UserFavorite> {
 
   @override
   String toString() {
-    return (StringBuffer('UserFavoriteTableCompanion(')
+    return (StringBuffer('SavedItemsTableCompanion(')
           ..write('id: $id, ')
-          ..write('contentType: $contentType, ')
-          ..write('primaryReference: $primaryReference, ')
-          ..write('secondaryReference: $secondaryReference, ')
-          ..write('title: $title, ')
-          ..write('contentText: $contentText, ')
-          ..write('source: $source, ')
+          ..write('featureType: $featureType, ')
+          ..write('referenceId: $referenceId, ')
+          ..write('secondaryId: $secondaryId, ')
+          ..write('collectionId: $collectionId, ')
+          ..write('notes: $notes, ')
+          ..write('previewText: $previewText, ')
           ..write('createdAt: $createdAt')
           ..write(')'))
         .toString();
   }
 }
 
-class $UserDailyActivityTableTable extends UserDailyActivityTable
-    with TableInfo<$UserDailyActivityTableTable, UserDailyActivity> {
+class $CollectionsTableTable extends CollectionsTable
+    with TableInfo<$CollectionsTableTable, LibraryCollection> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $UserDailyActivityTableTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _activityDateMeta = const VerificationMeta(
-    'activityDate',
-  );
+  $CollectionsTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
-  late final GeneratedColumn<String> activityDate = GeneratedColumn<String>(
-    'activity_date',
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
     aliasedName,
     false,
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
-  static const VerificationMeta _completedTaskIdMeta = const VerificationMeta(
-    'completedTaskId',
-  );
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
-  late final GeneratedColumn<String> completedTaskId = GeneratedColumn<String>(
-    'completed_task_id',
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+    'name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _iconMeta = const VerificationMeta('icon');
+  @override
+  late final GeneratedColumn<String> icon = GeneratedColumn<String>(
+    'icon',
     aliasedName,
     true,
     type: DriftSqlType.string,
     requiredDuringInsert: false,
   );
-  static const VerificationMeta _completedSunnahIdMeta = const VerificationMeta(
-    'completedSunnahId',
+  static const VerificationMeta _colorHexMeta = const VerificationMeta(
+    'colorHex',
   );
   @override
-  late final GeneratedColumn<String> completedSunnahId =
-      GeneratedColumn<String>(
-        'completed_sunnah_id',
-        aliasedName,
-        true,
-        type: DriftSqlType.string,
-        requiredDuringInsert: false,
+  late final GeneratedColumn<String> colorHex = GeneratedColumn<String>(
+    'color_hex',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<String> createdAt = GeneratedColumn<String>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [id, name, icon, colorHex, createdAt];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'collections_table';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<LibraryCollection> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+        _nameMeta,
+        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
       );
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('icon')) {
+      context.handle(
+        _iconMeta,
+        icon.isAcceptableOrUnknown(data['icon']!, _iconMeta),
+      );
+    }
+    if (data.containsKey('color_hex')) {
+      context.handle(
+        _colorHexMeta,
+        colorHex.isAcceptableOrUnknown(data['color_hex']!, _colorHexMeta),
+      );
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  LibraryCollection map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return LibraryCollection(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      name: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}name'],
+      )!,
+      icon: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}icon'],
+      ),
+      colorHex: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}color_hex'],
+      ),
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}created_at'],
+      )!,
+    );
+  }
+
+  @override
+  $CollectionsTableTable createAlias(String alias) {
+    return $CollectionsTableTable(attachedDatabase, alias);
+  }
+}
+
+class LibraryCollection extends DataClass
+    implements Insertable<LibraryCollection> {
+  final String id;
+  final String name;
+  final String? icon;
+  final String? colorHex;
+  final String createdAt;
+  const LibraryCollection({
+    required this.id,
+    required this.name,
+    this.icon,
+    this.colorHex,
+    required this.createdAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['name'] = Variable<String>(name);
+    if (!nullToAbsent || icon != null) {
+      map['icon'] = Variable<String>(icon);
+    }
+    if (!nullToAbsent || colorHex != null) {
+      map['color_hex'] = Variable<String>(colorHex);
+    }
+    map['created_at'] = Variable<String>(createdAt);
+    return map;
+  }
+
+  CollectionsTableCompanion toCompanion(bool nullToAbsent) {
+    return CollectionsTableCompanion(
+      id: Value(id),
+      name: Value(name),
+      icon: icon == null && nullToAbsent ? const Value.absent() : Value(icon),
+      colorHex: colorHex == null && nullToAbsent
+          ? const Value.absent()
+          : Value(colorHex),
+      createdAt: Value(createdAt),
+    );
+  }
+
+  factory LibraryCollection.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return LibraryCollection(
+      id: serializer.fromJson<String>(json['id']),
+      name: serializer.fromJson<String>(json['name']),
+      icon: serializer.fromJson<String?>(json['icon']),
+      colorHex: serializer.fromJson<String?>(json['colorHex']),
+      createdAt: serializer.fromJson<String>(json['createdAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'name': serializer.toJson<String>(name),
+      'icon': serializer.toJson<String?>(icon),
+      'colorHex': serializer.toJson<String?>(colorHex),
+      'createdAt': serializer.toJson<String>(createdAt),
+    };
+  }
+
+  LibraryCollection copyWith({
+    String? id,
+    String? name,
+    Value<String?> icon = const Value.absent(),
+    Value<String?> colorHex = const Value.absent(),
+    String? createdAt,
+  }) => LibraryCollection(
+    id: id ?? this.id,
+    name: name ?? this.name,
+    icon: icon.present ? icon.value : this.icon,
+    colorHex: colorHex.present ? colorHex.value : this.colorHex,
+    createdAt: createdAt ?? this.createdAt,
+  );
+  LibraryCollection copyWithCompanion(CollectionsTableCompanion data) {
+    return LibraryCollection(
+      id: data.id.present ? data.id.value : this.id,
+      name: data.name.present ? data.name.value : this.name,
+      icon: data.icon.present ? data.icon.value : this.icon,
+      colorHex: data.colorHex.present ? data.colorHex.value : this.colorHex,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('LibraryCollection(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('icon: $icon, ')
+          ..write('colorHex: $colorHex, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, name, icon, colorHex, createdAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is LibraryCollection &&
+          other.id == this.id &&
+          other.name == this.name &&
+          other.icon == this.icon &&
+          other.colorHex == this.colorHex &&
+          other.createdAt == this.createdAt);
+}
+
+class CollectionsTableCompanion extends UpdateCompanion<LibraryCollection> {
+  final Value<String> id;
+  final Value<String> name;
+  final Value<String?> icon;
+  final Value<String?> colorHex;
+  final Value<String> createdAt;
+  final Value<int> rowid;
+  const CollectionsTableCompanion({
+    this.id = const Value.absent(),
+    this.name = const Value.absent(),
+    this.icon = const Value.absent(),
+    this.colorHex = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  CollectionsTableCompanion.insert({
+    required String id,
+    required String name,
+    this.icon = const Value.absent(),
+    this.colorHex = const Value.absent(),
+    required String createdAt,
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       name = Value(name),
+       createdAt = Value(createdAt);
+  static Insertable<LibraryCollection> custom({
+    Expression<String>? id,
+    Expression<String>? name,
+    Expression<String>? icon,
+    Expression<String>? colorHex,
+    Expression<String>? createdAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (name != null) 'name': name,
+      if (icon != null) 'icon': icon,
+      if (colorHex != null) 'color_hex': colorHex,
+      if (createdAt != null) 'created_at': createdAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  CollectionsTableCompanion copyWith({
+    Value<String>? id,
+    Value<String>? name,
+    Value<String?>? icon,
+    Value<String?>? colorHex,
+    Value<String>? createdAt,
+    Value<int>? rowid,
+  }) {
+    return CollectionsTableCompanion(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      icon: icon ?? this.icon,
+      colorHex: colorHex ?? this.colorHex,
+      createdAt: createdAt ?? this.createdAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (icon.present) {
+      map['icon'] = Variable<String>(icon.value);
+    }
+    if (colorHex.present) {
+      map['color_hex'] = Variable<String>(colorHex.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<String>(createdAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CollectionsTableCompanion(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('icon: $icon, ')
+          ..write('colorHex: $colorHex, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $NotesTableTable extends NotesTable
+    with TableInfo<$NotesTableTable, UserNote> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $NotesTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _featureTypeMeta = const VerificationMeta(
+    'featureType',
+  );
+  @override
+  late final GeneratedColumn<String> featureType = GeneratedColumn<String>(
+    'feature_type',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _referenceIdMeta = const VerificationMeta(
+    'referenceId',
+  );
+  @override
+  late final GeneratedColumn<int> referenceId = GeneratedColumn<int>(
+    'reference_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _secondaryIdMeta = const VerificationMeta(
+    'secondaryId',
+  );
+  @override
+  late final GeneratedColumn<int> secondaryId = GeneratedColumn<int>(
+    'secondary_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _contentMeta = const VerificationMeta(
+    'content',
+  );
+  @override
+  late final GeneratedColumn<String> content = GeneratedColumn<String>(
+    'content',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<String> createdAt = GeneratedColumn<String>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
   static const VerificationMeta _updatedAtMeta = const VerificationMeta(
     'updatedAt',
   );
@@ -3107,51 +6416,73 @@ class $UserDailyActivityTableTable extends UserDailyActivityTable
   );
   @override
   List<GeneratedColumn> get $columns => [
-    activityDate,
-    completedTaskId,
-    completedSunnahId,
+    id,
+    featureType,
+    referenceId,
+    secondaryId,
+    content,
+    createdAt,
     updatedAt,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
-  static const String $name = 'user_daily_activity_table';
+  static const String $name = 'notes_table';
   @override
   VerificationContext validateIntegrity(
-    Insertable<UserDailyActivity> instance, {
+    Insertable<UserNote> instance, {
     bool isInserting = false,
   }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
-    if (data.containsKey('activity_date')) {
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('feature_type')) {
       context.handle(
-        _activityDateMeta,
-        activityDate.isAcceptableOrUnknown(
-          data['activity_date']!,
-          _activityDateMeta,
+        _featureTypeMeta,
+        featureType.isAcceptableOrUnknown(
+          data['feature_type']!,
+          _featureTypeMeta,
         ),
       );
     } else if (isInserting) {
-      context.missing(_activityDateMeta);
+      context.missing(_featureTypeMeta);
     }
-    if (data.containsKey('completed_task_id')) {
+    if (data.containsKey('reference_id')) {
       context.handle(
-        _completedTaskIdMeta,
-        completedTaskId.isAcceptableOrUnknown(
-          data['completed_task_id']!,
-          _completedTaskIdMeta,
+        _referenceIdMeta,
+        referenceId.isAcceptableOrUnknown(
+          data['reference_id']!,
+          _referenceIdMeta,
         ),
       );
     }
-    if (data.containsKey('completed_sunnah_id')) {
+    if (data.containsKey('secondary_id')) {
       context.handle(
-        _completedSunnahIdMeta,
-        completedSunnahId.isAcceptableOrUnknown(
-          data['completed_sunnah_id']!,
-          _completedSunnahIdMeta,
+        _secondaryIdMeta,
+        secondaryId.isAcceptableOrUnknown(
+          data['secondary_id']!,
+          _secondaryIdMeta,
         ),
       );
+    }
+    if (data.containsKey('content')) {
+      context.handle(
+        _contentMeta,
+        content.isAcceptableOrUnknown(data['content']!, _contentMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_contentMeta);
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
     }
     if (data.containsKey('updated_at')) {
       context.handle(
@@ -3165,23 +6496,35 @@ class $UserDailyActivityTableTable extends UserDailyActivityTable
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => {activityDate};
+  Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  UserDailyActivity map(Map<String, dynamic> data, {String? tablePrefix}) {
+  UserNote map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return UserDailyActivity(
-      activityDate: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}activity_date'],
+    return UserNote(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
       )!,
-      completedTaskId: attachedDatabase.typeMapping.read(
+      featureType: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
-        data['${effectivePrefix}completed_task_id'],
+        data['${effectivePrefix}feature_type'],
+      )!,
+      referenceId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}reference_id'],
       ),
-      completedSunnahId: attachedDatabase.typeMapping.read(
+      secondaryId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}secondary_id'],
+      ),
+      content: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
-        data['${effectivePrefix}completed_sunnah_id'],
-      ),
+        data['${effectivePrefix}content'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}created_at'],
+      )!,
       updatedAt: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}updated_at'],
@@ -3190,61 +6533,73 @@ class $UserDailyActivityTableTable extends UserDailyActivityTable
   }
 
   @override
-  $UserDailyActivityTableTable createAlias(String alias) {
-    return $UserDailyActivityTableTable(attachedDatabase, alias);
+  $NotesTableTable createAlias(String alias) {
+    return $NotesTableTable(attachedDatabase, alias);
   }
 }
 
-class UserDailyActivity extends DataClass
-    implements Insertable<UserDailyActivity> {
-  final String activityDate;
-  final String? completedTaskId;
-  final String? completedSunnahId;
+class UserNote extends DataClass implements Insertable<UserNote> {
+  final int id;
+  final String featureType;
+  final int? referenceId;
+  final int? secondaryId;
+  final String content;
+  final String createdAt;
   final String updatedAt;
-  const UserDailyActivity({
-    required this.activityDate,
-    this.completedTaskId,
-    this.completedSunnahId,
+  const UserNote({
+    required this.id,
+    required this.featureType,
+    this.referenceId,
+    this.secondaryId,
+    required this.content,
+    required this.createdAt,
     required this.updatedAt,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    map['activity_date'] = Variable<String>(activityDate);
-    if (!nullToAbsent || completedTaskId != null) {
-      map['completed_task_id'] = Variable<String>(completedTaskId);
+    map['id'] = Variable<int>(id);
+    map['feature_type'] = Variable<String>(featureType);
+    if (!nullToAbsent || referenceId != null) {
+      map['reference_id'] = Variable<int>(referenceId);
     }
-    if (!nullToAbsent || completedSunnahId != null) {
-      map['completed_sunnah_id'] = Variable<String>(completedSunnahId);
+    if (!nullToAbsent || secondaryId != null) {
+      map['secondary_id'] = Variable<int>(secondaryId);
     }
+    map['content'] = Variable<String>(content);
+    map['created_at'] = Variable<String>(createdAt);
     map['updated_at'] = Variable<String>(updatedAt);
     return map;
   }
 
-  UserDailyActivityTableCompanion toCompanion(bool nullToAbsent) {
-    return UserDailyActivityTableCompanion(
-      activityDate: Value(activityDate),
-      completedTaskId: completedTaskId == null && nullToAbsent
+  NotesTableCompanion toCompanion(bool nullToAbsent) {
+    return NotesTableCompanion(
+      id: Value(id),
+      featureType: Value(featureType),
+      referenceId: referenceId == null && nullToAbsent
           ? const Value.absent()
-          : Value(completedTaskId),
-      completedSunnahId: completedSunnahId == null && nullToAbsent
+          : Value(referenceId),
+      secondaryId: secondaryId == null && nullToAbsent
           ? const Value.absent()
-          : Value(completedSunnahId),
+          : Value(secondaryId),
+      content: Value(content),
+      createdAt: Value(createdAt),
       updatedAt: Value(updatedAt),
     );
   }
 
-  factory UserDailyActivity.fromJson(
+  factory UserNote.fromJson(
     Map<String, dynamic> json, {
     ValueSerializer? serializer,
   }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return UserDailyActivity(
-      activityDate: serializer.fromJson<String>(json['activityDate']),
-      completedTaskId: serializer.fromJson<String?>(json['completedTaskId']),
-      completedSunnahId: serializer.fromJson<String?>(
-        json['completedSunnahId'],
-      ),
+    return UserNote(
+      id: serializer.fromJson<int>(json['id']),
+      featureType: serializer.fromJson<String>(json['featureType']),
+      referenceId: serializer.fromJson<int?>(json['referenceId']),
+      secondaryId: serializer.fromJson<int?>(json['secondaryId']),
+      content: serializer.fromJson<String>(json['content']),
+      createdAt: serializer.fromJson<String>(json['createdAt']),
       updatedAt: serializer.fromJson<String>(json['updatedAt']),
     );
   }
@@ -3252,150 +6607,927 @@ class UserDailyActivity extends DataClass
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
-      'activityDate': serializer.toJson<String>(activityDate),
-      'completedTaskId': serializer.toJson<String?>(completedTaskId),
-      'completedSunnahId': serializer.toJson<String?>(completedSunnahId),
+      'id': serializer.toJson<int>(id),
+      'featureType': serializer.toJson<String>(featureType),
+      'referenceId': serializer.toJson<int?>(referenceId),
+      'secondaryId': serializer.toJson<int?>(secondaryId),
+      'content': serializer.toJson<String>(content),
+      'createdAt': serializer.toJson<String>(createdAt),
       'updatedAt': serializer.toJson<String>(updatedAt),
     };
   }
 
-  UserDailyActivity copyWith({
-    String? activityDate,
-    Value<String?> completedTaskId = const Value.absent(),
-    Value<String?> completedSunnahId = const Value.absent(),
+  UserNote copyWith({
+    int? id,
+    String? featureType,
+    Value<int?> referenceId = const Value.absent(),
+    Value<int?> secondaryId = const Value.absent(),
+    String? content,
+    String? createdAt,
     String? updatedAt,
-  }) => UserDailyActivity(
-    activityDate: activityDate ?? this.activityDate,
-    completedTaskId: completedTaskId.present
-        ? completedTaskId.value
-        : this.completedTaskId,
-    completedSunnahId: completedSunnahId.present
-        ? completedSunnahId.value
-        : this.completedSunnahId,
+  }) => UserNote(
+    id: id ?? this.id,
+    featureType: featureType ?? this.featureType,
+    referenceId: referenceId.present ? referenceId.value : this.referenceId,
+    secondaryId: secondaryId.present ? secondaryId.value : this.secondaryId,
+    content: content ?? this.content,
+    createdAt: createdAt ?? this.createdAt,
     updatedAt: updatedAt ?? this.updatedAt,
   );
-  UserDailyActivity copyWithCompanion(UserDailyActivityTableCompanion data) {
-    return UserDailyActivity(
-      activityDate: data.activityDate.present
-          ? data.activityDate.value
-          : this.activityDate,
-      completedTaskId: data.completedTaskId.present
-          ? data.completedTaskId.value
-          : this.completedTaskId,
-      completedSunnahId: data.completedSunnahId.present
-          ? data.completedSunnahId.value
-          : this.completedSunnahId,
+  UserNote copyWithCompanion(NotesTableCompanion data) {
+    return UserNote(
+      id: data.id.present ? data.id.value : this.id,
+      featureType: data.featureType.present
+          ? data.featureType.value
+          : this.featureType,
+      referenceId: data.referenceId.present
+          ? data.referenceId.value
+          : this.referenceId,
+      secondaryId: data.secondaryId.present
+          ? data.secondaryId.value
+          : this.secondaryId,
+      content: data.content.present ? data.content.value : this.content,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
       updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
     );
   }
 
   @override
   String toString() {
-    return (StringBuffer('UserDailyActivity(')
-          ..write('activityDate: $activityDate, ')
-          ..write('completedTaskId: $completedTaskId, ')
-          ..write('completedSunnahId: $completedSunnahId, ')
+    return (StringBuffer('UserNote(')
+          ..write('id: $id, ')
+          ..write('featureType: $featureType, ')
+          ..write('referenceId: $referenceId, ')
+          ..write('secondaryId: $secondaryId, ')
+          ..write('content: $content, ')
+          ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode =>
-      Object.hash(activityDate, completedTaskId, completedSunnahId, updatedAt);
+  int get hashCode => Object.hash(
+    id,
+    featureType,
+    referenceId,
+    secondaryId,
+    content,
+    createdAt,
+    updatedAt,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is UserDailyActivity &&
-          other.activityDate == this.activityDate &&
-          other.completedTaskId == this.completedTaskId &&
-          other.completedSunnahId == this.completedSunnahId &&
+      (other is UserNote &&
+          other.id == this.id &&
+          other.featureType == this.featureType &&
+          other.referenceId == this.referenceId &&
+          other.secondaryId == this.secondaryId &&
+          other.content == this.content &&
+          other.createdAt == this.createdAt &&
           other.updatedAt == this.updatedAt);
 }
 
-class UserDailyActivityTableCompanion
-    extends UpdateCompanion<UserDailyActivity> {
-  final Value<String> activityDate;
-  final Value<String?> completedTaskId;
-  final Value<String?> completedSunnahId;
+class NotesTableCompanion extends UpdateCompanion<UserNote> {
+  final Value<int> id;
+  final Value<String> featureType;
+  final Value<int?> referenceId;
+  final Value<int?> secondaryId;
+  final Value<String> content;
+  final Value<String> createdAt;
   final Value<String> updatedAt;
-  final Value<int> rowid;
-  const UserDailyActivityTableCompanion({
-    this.activityDate = const Value.absent(),
-    this.completedTaskId = const Value.absent(),
-    this.completedSunnahId = const Value.absent(),
+  const NotesTableCompanion({
+    this.id = const Value.absent(),
+    this.featureType = const Value.absent(),
+    this.referenceId = const Value.absent(),
+    this.secondaryId = const Value.absent(),
+    this.content = const Value.absent(),
+    this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
-    this.rowid = const Value.absent(),
   });
-  UserDailyActivityTableCompanion.insert({
-    required String activityDate,
-    this.completedTaskId = const Value.absent(),
-    this.completedSunnahId = const Value.absent(),
+  NotesTableCompanion.insert({
+    this.id = const Value.absent(),
+    required String featureType,
+    this.referenceId = const Value.absent(),
+    this.secondaryId = const Value.absent(),
+    required String content,
+    required String createdAt,
     required String updatedAt,
-    this.rowid = const Value.absent(),
-  }) : activityDate = Value(activityDate),
+  }) : featureType = Value(featureType),
+       content = Value(content),
+       createdAt = Value(createdAt),
        updatedAt = Value(updatedAt);
-  static Insertable<UserDailyActivity> custom({
-    Expression<String>? activityDate,
-    Expression<String>? completedTaskId,
-    Expression<String>? completedSunnahId,
+  static Insertable<UserNote> custom({
+    Expression<int>? id,
+    Expression<String>? featureType,
+    Expression<int>? referenceId,
+    Expression<int>? secondaryId,
+    Expression<String>? content,
+    Expression<String>? createdAt,
     Expression<String>? updatedAt,
-    Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
-      if (activityDate != null) 'activity_date': activityDate,
-      if (completedTaskId != null) 'completed_task_id': completedTaskId,
-      if (completedSunnahId != null) 'completed_sunnah_id': completedSunnahId,
+      if (id != null) 'id': id,
+      if (featureType != null) 'feature_type': featureType,
+      if (referenceId != null) 'reference_id': referenceId,
+      if (secondaryId != null) 'secondary_id': secondaryId,
+      if (content != null) 'content': content,
+      if (createdAt != null) 'created_at': createdAt,
       if (updatedAt != null) 'updated_at': updatedAt,
-      if (rowid != null) 'rowid': rowid,
     });
   }
 
-  UserDailyActivityTableCompanion copyWith({
-    Value<String>? activityDate,
-    Value<String?>? completedTaskId,
-    Value<String?>? completedSunnahId,
+  NotesTableCompanion copyWith({
+    Value<int>? id,
+    Value<String>? featureType,
+    Value<int?>? referenceId,
+    Value<int?>? secondaryId,
+    Value<String>? content,
+    Value<String>? createdAt,
     Value<String>? updatedAt,
-    Value<int>? rowid,
   }) {
-    return UserDailyActivityTableCompanion(
-      activityDate: activityDate ?? this.activityDate,
-      completedTaskId: completedTaskId ?? this.completedTaskId,
-      completedSunnahId: completedSunnahId ?? this.completedSunnahId,
+    return NotesTableCompanion(
+      id: id ?? this.id,
+      featureType: featureType ?? this.featureType,
+      referenceId: referenceId ?? this.referenceId,
+      secondaryId: secondaryId ?? this.secondaryId,
+      content: content ?? this.content,
+      createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
-      rowid: rowid ?? this.rowid,
     );
   }
 
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    if (activityDate.present) {
-      map['activity_date'] = Variable<String>(activityDate.value);
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
     }
-    if (completedTaskId.present) {
-      map['completed_task_id'] = Variable<String>(completedTaskId.value);
+    if (featureType.present) {
+      map['feature_type'] = Variable<String>(featureType.value);
     }
-    if (completedSunnahId.present) {
-      map['completed_sunnah_id'] = Variable<String>(completedSunnahId.value);
+    if (referenceId.present) {
+      map['reference_id'] = Variable<int>(referenceId.value);
+    }
+    if (secondaryId.present) {
+      map['secondary_id'] = Variable<int>(secondaryId.value);
+    }
+    if (content.present) {
+      map['content'] = Variable<String>(content.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<String>(createdAt.value);
     }
     if (updatedAt.present) {
       map['updated_at'] = Variable<String>(updatedAt.value);
-    }
-    if (rowid.present) {
-      map['rowid'] = Variable<int>(rowid.value);
     }
     return map;
   }
 
   @override
   String toString() {
-    return (StringBuffer('UserDailyActivityTableCompanion(')
-          ..write('activityDate: $activityDate, ')
-          ..write('completedTaskId: $completedTaskId, ')
-          ..write('completedSunnahId: $completedSunnahId, ')
-          ..write('updatedAt: $updatedAt, ')
-          ..write('rowid: $rowid')
+    return (StringBuffer('NotesTableCompanion(')
+          ..write('id: $id, ')
+          ..write('featureType: $featureType, ')
+          ..write('referenceId: $referenceId, ')
+          ..write('secondaryId: $secondaryId, ')
+          ..write('content: $content, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $SearchableItemsTableTable extends SearchableItemsTable
+    with TableInfo<$SearchableItemsTableTable, SearchableItem> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $SearchableItemsTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _featureTypeMeta = const VerificationMeta(
+    'featureType',
+  );
+  @override
+  late final GeneratedColumn<String> featureType = GeneratedColumn<String>(
+    'feature_type',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _referenceIdMeta = const VerificationMeta(
+    'referenceId',
+  );
+  @override
+  late final GeneratedColumn<int> referenceId = GeneratedColumn<int>(
+    'reference_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _secondaryIdMeta = const VerificationMeta(
+    'secondaryId',
+  );
+  @override
+  late final GeneratedColumn<int> secondaryId = GeneratedColumn<int>(
+    'secondary_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _titleMeta = const VerificationMeta('title');
+  @override
+  late final GeneratedColumn<String> title = GeneratedColumn<String>(
+    'title',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _contentMeta = const VerificationMeta(
+    'content',
+  );
+  @override
+  late final GeneratedColumn<String> content = GeneratedColumn<String>(
+    'content',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _normalizedContentMeta = const VerificationMeta(
+    'normalizedContent',
+  );
+  @override
+  late final GeneratedColumn<String> normalizedContent =
+      GeneratedColumn<String>(
+        'normalized_content',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: true,
+      );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    featureType,
+    referenceId,
+    secondaryId,
+    title,
+    content,
+    normalizedContent,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'searchable_items_table';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<SearchableItem> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('feature_type')) {
+      context.handle(
+        _featureTypeMeta,
+        featureType.isAcceptableOrUnknown(
+          data['feature_type']!,
+          _featureTypeMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_featureTypeMeta);
+    }
+    if (data.containsKey('reference_id')) {
+      context.handle(
+        _referenceIdMeta,
+        referenceId.isAcceptableOrUnknown(
+          data['reference_id']!,
+          _referenceIdMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_referenceIdMeta);
+    }
+    if (data.containsKey('secondary_id')) {
+      context.handle(
+        _secondaryIdMeta,
+        secondaryId.isAcceptableOrUnknown(
+          data['secondary_id']!,
+          _secondaryIdMeta,
+        ),
+      );
+    }
+    if (data.containsKey('title')) {
+      context.handle(
+        _titleMeta,
+        title.isAcceptableOrUnknown(data['title']!, _titleMeta),
+      );
+    }
+    if (data.containsKey('content')) {
+      context.handle(
+        _contentMeta,
+        content.isAcceptableOrUnknown(data['content']!, _contentMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_contentMeta);
+    }
+    if (data.containsKey('normalized_content')) {
+      context.handle(
+        _normalizedContentMeta,
+        normalizedContent.isAcceptableOrUnknown(
+          data['normalized_content']!,
+          _normalizedContentMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_normalizedContentMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  SearchableItem map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return SearchableItem(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      featureType: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}feature_type'],
+      )!,
+      referenceId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}reference_id'],
+      )!,
+      secondaryId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}secondary_id'],
+      ),
+      title: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}title'],
+      ),
+      content: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}content'],
+      )!,
+      normalizedContent: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}normalized_content'],
+      )!,
+    );
+  }
+
+  @override
+  $SearchableItemsTableTable createAlias(String alias) {
+    return $SearchableItemsTableTable(attachedDatabase, alias);
+  }
+}
+
+class SearchableItem extends DataClass implements Insertable<SearchableItem> {
+  final int id;
+  final String featureType;
+  final int referenceId;
+  final int? secondaryId;
+  final String? title;
+  final String content;
+  final String normalizedContent;
+  const SearchableItem({
+    required this.id,
+    required this.featureType,
+    required this.referenceId,
+    this.secondaryId,
+    this.title,
+    required this.content,
+    required this.normalizedContent,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['feature_type'] = Variable<String>(featureType);
+    map['reference_id'] = Variable<int>(referenceId);
+    if (!nullToAbsent || secondaryId != null) {
+      map['secondary_id'] = Variable<int>(secondaryId);
+    }
+    if (!nullToAbsent || title != null) {
+      map['title'] = Variable<String>(title);
+    }
+    map['content'] = Variable<String>(content);
+    map['normalized_content'] = Variable<String>(normalizedContent);
+    return map;
+  }
+
+  SearchableItemsTableCompanion toCompanion(bool nullToAbsent) {
+    return SearchableItemsTableCompanion(
+      id: Value(id),
+      featureType: Value(featureType),
+      referenceId: Value(referenceId),
+      secondaryId: secondaryId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(secondaryId),
+      title: title == null && nullToAbsent
+          ? const Value.absent()
+          : Value(title),
+      content: Value(content),
+      normalizedContent: Value(normalizedContent),
+    );
+  }
+
+  factory SearchableItem.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return SearchableItem(
+      id: serializer.fromJson<int>(json['id']),
+      featureType: serializer.fromJson<String>(json['featureType']),
+      referenceId: serializer.fromJson<int>(json['referenceId']),
+      secondaryId: serializer.fromJson<int?>(json['secondaryId']),
+      title: serializer.fromJson<String?>(json['title']),
+      content: serializer.fromJson<String>(json['content']),
+      normalizedContent: serializer.fromJson<String>(json['normalizedContent']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'featureType': serializer.toJson<String>(featureType),
+      'referenceId': serializer.toJson<int>(referenceId),
+      'secondaryId': serializer.toJson<int?>(secondaryId),
+      'title': serializer.toJson<String?>(title),
+      'content': serializer.toJson<String>(content),
+      'normalizedContent': serializer.toJson<String>(normalizedContent),
+    };
+  }
+
+  SearchableItem copyWith({
+    int? id,
+    String? featureType,
+    int? referenceId,
+    Value<int?> secondaryId = const Value.absent(),
+    Value<String?> title = const Value.absent(),
+    String? content,
+    String? normalizedContent,
+  }) => SearchableItem(
+    id: id ?? this.id,
+    featureType: featureType ?? this.featureType,
+    referenceId: referenceId ?? this.referenceId,
+    secondaryId: secondaryId.present ? secondaryId.value : this.secondaryId,
+    title: title.present ? title.value : this.title,
+    content: content ?? this.content,
+    normalizedContent: normalizedContent ?? this.normalizedContent,
+  );
+  SearchableItem copyWithCompanion(SearchableItemsTableCompanion data) {
+    return SearchableItem(
+      id: data.id.present ? data.id.value : this.id,
+      featureType: data.featureType.present
+          ? data.featureType.value
+          : this.featureType,
+      referenceId: data.referenceId.present
+          ? data.referenceId.value
+          : this.referenceId,
+      secondaryId: data.secondaryId.present
+          ? data.secondaryId.value
+          : this.secondaryId,
+      title: data.title.present ? data.title.value : this.title,
+      content: data.content.present ? data.content.value : this.content,
+      normalizedContent: data.normalizedContent.present
+          ? data.normalizedContent.value
+          : this.normalizedContent,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SearchableItem(')
+          ..write('id: $id, ')
+          ..write('featureType: $featureType, ')
+          ..write('referenceId: $referenceId, ')
+          ..write('secondaryId: $secondaryId, ')
+          ..write('title: $title, ')
+          ..write('content: $content, ')
+          ..write('normalizedContent: $normalizedContent')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    featureType,
+    referenceId,
+    secondaryId,
+    title,
+    content,
+    normalizedContent,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is SearchableItem &&
+          other.id == this.id &&
+          other.featureType == this.featureType &&
+          other.referenceId == this.referenceId &&
+          other.secondaryId == this.secondaryId &&
+          other.title == this.title &&
+          other.content == this.content &&
+          other.normalizedContent == this.normalizedContent);
+}
+
+class SearchableItemsTableCompanion extends UpdateCompanion<SearchableItem> {
+  final Value<int> id;
+  final Value<String> featureType;
+  final Value<int> referenceId;
+  final Value<int?> secondaryId;
+  final Value<String?> title;
+  final Value<String> content;
+  final Value<String> normalizedContent;
+  const SearchableItemsTableCompanion({
+    this.id = const Value.absent(),
+    this.featureType = const Value.absent(),
+    this.referenceId = const Value.absent(),
+    this.secondaryId = const Value.absent(),
+    this.title = const Value.absent(),
+    this.content = const Value.absent(),
+    this.normalizedContent = const Value.absent(),
+  });
+  SearchableItemsTableCompanion.insert({
+    this.id = const Value.absent(),
+    required String featureType,
+    required int referenceId,
+    this.secondaryId = const Value.absent(),
+    this.title = const Value.absent(),
+    required String content,
+    required String normalizedContent,
+  }) : featureType = Value(featureType),
+       referenceId = Value(referenceId),
+       content = Value(content),
+       normalizedContent = Value(normalizedContent);
+  static Insertable<SearchableItem> custom({
+    Expression<int>? id,
+    Expression<String>? featureType,
+    Expression<int>? referenceId,
+    Expression<int>? secondaryId,
+    Expression<String>? title,
+    Expression<String>? content,
+    Expression<String>? normalizedContent,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (featureType != null) 'feature_type': featureType,
+      if (referenceId != null) 'reference_id': referenceId,
+      if (secondaryId != null) 'secondary_id': secondaryId,
+      if (title != null) 'title': title,
+      if (content != null) 'content': content,
+      if (normalizedContent != null) 'normalized_content': normalizedContent,
+    });
+  }
+
+  SearchableItemsTableCompanion copyWith({
+    Value<int>? id,
+    Value<String>? featureType,
+    Value<int>? referenceId,
+    Value<int?>? secondaryId,
+    Value<String?>? title,
+    Value<String>? content,
+    Value<String>? normalizedContent,
+  }) {
+    return SearchableItemsTableCompanion(
+      id: id ?? this.id,
+      featureType: featureType ?? this.featureType,
+      referenceId: referenceId ?? this.referenceId,
+      secondaryId: secondaryId ?? this.secondaryId,
+      title: title ?? this.title,
+      content: content ?? this.content,
+      normalizedContent: normalizedContent ?? this.normalizedContent,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (featureType.present) {
+      map['feature_type'] = Variable<String>(featureType.value);
+    }
+    if (referenceId.present) {
+      map['reference_id'] = Variable<int>(referenceId.value);
+    }
+    if (secondaryId.present) {
+      map['secondary_id'] = Variable<int>(secondaryId.value);
+    }
+    if (title.present) {
+      map['title'] = Variable<String>(title.value);
+    }
+    if (content.present) {
+      map['content'] = Variable<String>(content.value);
+    }
+    if (normalizedContent.present) {
+      map['normalized_content'] = Variable<String>(normalizedContent.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SearchableItemsTableCompanion(')
+          ..write('id: $id, ')
+          ..write('featureType: $featureType, ')
+          ..write('referenceId: $referenceId, ')
+          ..write('secondaryId: $secondaryId, ')
+          ..write('title: $title, ')
+          ..write('content: $content, ')
+          ..write('normalizedContent: $normalizedContent')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $SearchHistoryTableTable extends SearchHistoryTable
+    with TableInfo<$SearchHistoryTableTable, SearchHistoryTableData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $SearchHistoryTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _queryMeta = const VerificationMeta('query');
+  @override
+  late final GeneratedColumn<String> query = GeneratedColumn<String>(
+    'query',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _timestampMeta = const VerificationMeta(
+    'timestamp',
+  );
+  @override
+  late final GeneratedColumn<DateTime> timestamp = GeneratedColumn<DateTime>(
+    'timestamp',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [id, query, timestamp];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'search_history_table';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<SearchHistoryTableData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('query')) {
+      context.handle(
+        _queryMeta,
+        query.isAcceptableOrUnknown(data['query']!, _queryMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_queryMeta);
+    }
+    if (data.containsKey('timestamp')) {
+      context.handle(
+        _timestampMeta,
+        timestamp.isAcceptableOrUnknown(data['timestamp']!, _timestampMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_timestampMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  List<Set<GeneratedColumn>> get uniqueKeys => [
+    {query},
+  ];
+  @override
+  SearchHistoryTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return SearchHistoryTableData(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      query: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}query'],
+      )!,
+      timestamp: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}timestamp'],
+      )!,
+    );
+  }
+
+  @override
+  $SearchHistoryTableTable createAlias(String alias) {
+    return $SearchHistoryTableTable(attachedDatabase, alias);
+  }
+}
+
+class SearchHistoryTableData extends DataClass
+    implements Insertable<SearchHistoryTableData> {
+  final int id;
+  final String query;
+  final DateTime timestamp;
+  const SearchHistoryTableData({
+    required this.id,
+    required this.query,
+    required this.timestamp,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['query'] = Variable<String>(query);
+    map['timestamp'] = Variable<DateTime>(timestamp);
+    return map;
+  }
+
+  SearchHistoryTableCompanion toCompanion(bool nullToAbsent) {
+    return SearchHistoryTableCompanion(
+      id: Value(id),
+      query: Value(query),
+      timestamp: Value(timestamp),
+    );
+  }
+
+  factory SearchHistoryTableData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return SearchHistoryTableData(
+      id: serializer.fromJson<int>(json['id']),
+      query: serializer.fromJson<String>(json['query']),
+      timestamp: serializer.fromJson<DateTime>(json['timestamp']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'query': serializer.toJson<String>(query),
+      'timestamp': serializer.toJson<DateTime>(timestamp),
+    };
+  }
+
+  SearchHistoryTableData copyWith({
+    int? id,
+    String? query,
+    DateTime? timestamp,
+  }) => SearchHistoryTableData(
+    id: id ?? this.id,
+    query: query ?? this.query,
+    timestamp: timestamp ?? this.timestamp,
+  );
+  SearchHistoryTableData copyWithCompanion(SearchHistoryTableCompanion data) {
+    return SearchHistoryTableData(
+      id: data.id.present ? data.id.value : this.id,
+      query: data.query.present ? data.query.value : this.query,
+      timestamp: data.timestamp.present ? data.timestamp.value : this.timestamp,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SearchHistoryTableData(')
+          ..write('id: $id, ')
+          ..write('query: $query, ')
+          ..write('timestamp: $timestamp')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, query, timestamp);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is SearchHistoryTableData &&
+          other.id == this.id &&
+          other.query == this.query &&
+          other.timestamp == this.timestamp);
+}
+
+class SearchHistoryTableCompanion
+    extends UpdateCompanion<SearchHistoryTableData> {
+  final Value<int> id;
+  final Value<String> query;
+  final Value<DateTime> timestamp;
+  const SearchHistoryTableCompanion({
+    this.id = const Value.absent(),
+    this.query = const Value.absent(),
+    this.timestamp = const Value.absent(),
+  });
+  SearchHistoryTableCompanion.insert({
+    this.id = const Value.absent(),
+    required String query,
+    required DateTime timestamp,
+  }) : query = Value(query),
+       timestamp = Value(timestamp);
+  static Insertable<SearchHistoryTableData> custom({
+    Expression<int>? id,
+    Expression<String>? query,
+    Expression<DateTime>? timestamp,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (query != null) 'query': query,
+      if (timestamp != null) 'timestamp': timestamp,
+    });
+  }
+
+  SearchHistoryTableCompanion copyWith({
+    Value<int>? id,
+    Value<String>? query,
+    Value<DateTime>? timestamp,
+  }) {
+    return SearchHistoryTableCompanion(
+      id: id ?? this.id,
+      query: query ?? this.query,
+      timestamp: timestamp ?? this.timestamp,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (query.present) {
+      map['query'] = Variable<String>(query.value);
+    }
+    if (timestamp.present) {
+      map['timestamp'] = Variable<DateTime>(timestamp.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SearchHistoryTableCompanion(')
+          ..write('id: $id, ')
+          ..write('query: $query, ')
+          ..write('timestamp: $timestamp')
           ..write(')'))
         .toString();
   }
@@ -3408,16 +7540,34 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       $QuranTafseerTableTable(this);
   late final $HadithTableTable hadithTable = $HadithTableTable(this);
   late final $DuaTableTable duaTable = $DuaTableTable(this);
+  late final $UserFavoriteTableTable userFavoriteTable =
+      $UserFavoriteTableTable(this);
+  late final $UserDailyActivityTableTable userDailyActivityTable =
+      $UserDailyActivityTableTable(this);
   late final $DailySunnahTableTable dailySunnahTable = $DailySunnahTableTable(
     this,
   );
   late final $DailyTaskTableTable dailyTaskTable = $DailyTaskTableTable(this);
   late final $MuhasabaEntryTableTable muhasabaEntryTable =
       $MuhasabaEntryTableTable(this);
-  late final $UserFavoriteTableTable userFavoriteTable =
-      $UserFavoriteTableTable(this);
-  late final $UserDailyActivityTableTable userDailyActivityTable =
-      $UserDailyActivityTableTable(this);
+  late final $ProgressRecordTableTable progressRecordTable =
+      $ProgressRecordTableTable(this);
+  late final $RecentActivityTableTable recentActivityTable =
+      $RecentActivityTableTable(this);
+  late final $UserGoalsTableTable userGoalsTable = $UserGoalsTableTable(this);
+  late final $ReadingSessionTableTable readingSessionTable =
+      $ReadingSessionTableTable(this);
+  late final $SavedItemsTableTable savedItemsTable = $SavedItemsTableTable(
+    this,
+  );
+  late final $CollectionsTableTable collectionsTable = $CollectionsTableTable(
+    this,
+  );
+  late final $NotesTableTable notesTable = $NotesTableTable(this);
+  late final $SearchableItemsTableTable searchableItemsTable =
+      $SearchableItemsTableTable(this);
+  late final $SearchHistoryTableTable searchHistoryTable =
+      $SearchHistoryTableTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -3426,11 +7576,20 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     quranTafseerTable,
     hadithTable,
     duaTable,
+    userFavoriteTable,
+    userDailyActivityTable,
     dailySunnahTable,
     dailyTaskTable,
     muhasabaEntryTable,
-    userFavoriteTable,
-    userDailyActivityTable,
+    progressRecordTable,
+    recentActivityTable,
+    userGoalsTable,
+    readingSessionTable,
+    savedItemsTable,
+    collectionsTable,
+    notesTable,
+    searchableItemsTable,
+    searchHistoryTable,
   ];
 }
 
@@ -3939,6 +8098,412 @@ typedef $$DuaTableTableProcessedTableManager =
       $$DuaTableTableUpdateCompanionBuilder,
       (Dua, BaseReferences<_$AppDatabase, $DuaTableTable, Dua>),
       Dua,
+      PrefetchHooks Function()
+    >;
+typedef $$UserFavoriteTableTableCreateCompanionBuilder =
+    UserFavoriteTableCompanion Function({
+      Value<int> id,
+      required String contentType,
+      required String primaryReference,
+      Value<String?> secondaryReference,
+      required String title,
+      required String contentText,
+      required String source,
+      required String createdAt,
+      Value<String?> note,
+    });
+typedef $$UserFavoriteTableTableUpdateCompanionBuilder =
+    UserFavoriteTableCompanion Function({
+      Value<int> id,
+      Value<String> contentType,
+      Value<String> primaryReference,
+      Value<String?> secondaryReference,
+      Value<String> title,
+      Value<String> contentText,
+      Value<String> source,
+      Value<String> createdAt,
+      Value<String?> note,
+    });
+
+class $$UserFavoriteTableTableFilterComposer
+    extends FilterComposer<_$AppDatabase, $UserFavoriteTableTable> {
+  $$UserFavoriteTableTableFilterComposer(super.$state);
+  ColumnFilters<int> get id => $state.composableBuilder(
+    column: $state.table.id,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<String> get contentType => $state.composableBuilder(
+    column: $state.table.contentType,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<String> get primaryReference => $state.composableBuilder(
+    column: $state.table.primaryReference,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<String> get secondaryReference => $state.composableBuilder(
+    column: $state.table.secondaryReference,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<String> get title => $state.composableBuilder(
+    column: $state.table.title,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<String> get contentText => $state.composableBuilder(
+    column: $state.table.contentText,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<String> get source => $state.composableBuilder(
+    column: $state.table.source,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<String> get createdAt => $state.composableBuilder(
+    column: $state.table.createdAt,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<String> get note => $state.composableBuilder(
+    column: $state.table.note,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+}
+
+class $$UserFavoriteTableTableOrderingComposer
+    extends OrderingComposer<_$AppDatabase, $UserFavoriteTableTable> {
+  $$UserFavoriteTableTableOrderingComposer(super.$state);
+  ColumnOrderings<int> get id => $state.composableBuilder(
+    column: $state.table.id,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<String> get contentType => $state.composableBuilder(
+    column: $state.table.contentType,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<String> get primaryReference => $state.composableBuilder(
+    column: $state.table.primaryReference,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<String> get secondaryReference => $state.composableBuilder(
+    column: $state.table.secondaryReference,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<String> get title => $state.composableBuilder(
+    column: $state.table.title,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<String> get contentText => $state.composableBuilder(
+    column: $state.table.contentText,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<String> get source => $state.composableBuilder(
+    column: $state.table.source,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<String> get createdAt => $state.composableBuilder(
+    column: $state.table.createdAt,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<String> get note => $state.composableBuilder(
+    column: $state.table.note,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+}
+
+class $$UserFavoriteTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $UserFavoriteTableTable,
+          UserFavorite,
+          $$UserFavoriteTableTableFilterComposer,
+          $$UserFavoriteTableTableOrderingComposer,
+          $$UserFavoriteTableTableCreateCompanionBuilder,
+          $$UserFavoriteTableTableUpdateCompanionBuilder,
+          (
+            UserFavorite,
+            BaseReferences<
+              _$AppDatabase,
+              $UserFavoriteTableTable,
+              UserFavorite
+            >,
+          ),
+          UserFavorite,
+          PrefetchHooks Function()
+        > {
+  $$UserFavoriteTableTableTableManager(
+    _$AppDatabase db,
+    $UserFavoriteTableTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer: $$UserFavoriteTableTableFilterComposer(
+            ComposerState(db, table),
+          ),
+          orderingComposer: $$UserFavoriteTableTableOrderingComposer(
+            ComposerState(db, table),
+          ),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<String> contentType = const Value.absent(),
+                Value<String> primaryReference = const Value.absent(),
+                Value<String?> secondaryReference = const Value.absent(),
+                Value<String> title = const Value.absent(),
+                Value<String> contentText = const Value.absent(),
+                Value<String> source = const Value.absent(),
+                Value<String> createdAt = const Value.absent(),
+                Value<String?> note = const Value.absent(),
+              }) => UserFavoriteTableCompanion(
+                id: id,
+                contentType: contentType,
+                primaryReference: primaryReference,
+                secondaryReference: secondaryReference,
+                title: title,
+                contentText: contentText,
+                source: source,
+                createdAt: createdAt,
+                note: note,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required String contentType,
+                required String primaryReference,
+                Value<String?> secondaryReference = const Value.absent(),
+                required String title,
+                required String contentText,
+                required String source,
+                required String createdAt,
+                Value<String?> note = const Value.absent(),
+              }) => UserFavoriteTableCompanion.insert(
+                id: id,
+                contentType: contentType,
+                primaryReference: primaryReference,
+                secondaryReference: secondaryReference,
+                title: title,
+                contentText: contentText,
+                source: source,
+                createdAt: createdAt,
+                note: note,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$UserFavoriteTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $UserFavoriteTableTable,
+      UserFavorite,
+      $$UserFavoriteTableTableFilterComposer,
+      $$UserFavoriteTableTableOrderingComposer,
+      $$UserFavoriteTableTableCreateCompanionBuilder,
+      $$UserFavoriteTableTableUpdateCompanionBuilder,
+      (
+        UserFavorite,
+        BaseReferences<_$AppDatabase, $UserFavoriteTableTable, UserFavorite>,
+      ),
+      UserFavorite,
+      PrefetchHooks Function()
+    >;
+typedef $$UserDailyActivityTableTableCreateCompanionBuilder =
+    UserDailyActivityTableCompanion Function({
+      required String activityDate,
+      Value<String?> completedTaskId,
+      Value<String?> completedSunnahId,
+      required String updatedAt,
+      Value<int> rowid,
+    });
+typedef $$UserDailyActivityTableTableUpdateCompanionBuilder =
+    UserDailyActivityTableCompanion Function({
+      Value<String> activityDate,
+      Value<String?> completedTaskId,
+      Value<String?> completedSunnahId,
+      Value<String> updatedAt,
+      Value<int> rowid,
+    });
+
+class $$UserDailyActivityTableTableFilterComposer
+    extends FilterComposer<_$AppDatabase, $UserDailyActivityTableTable> {
+  $$UserDailyActivityTableTableFilterComposer(super.$state);
+  ColumnFilters<String> get activityDate => $state.composableBuilder(
+    column: $state.table.activityDate,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<String> get completedTaskId => $state.composableBuilder(
+    column: $state.table.completedTaskId,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<String> get completedSunnahId => $state.composableBuilder(
+    column: $state.table.completedSunnahId,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<String> get updatedAt => $state.composableBuilder(
+    column: $state.table.updatedAt,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+}
+
+class $$UserDailyActivityTableTableOrderingComposer
+    extends OrderingComposer<_$AppDatabase, $UserDailyActivityTableTable> {
+  $$UserDailyActivityTableTableOrderingComposer(super.$state);
+  ColumnOrderings<String> get activityDate => $state.composableBuilder(
+    column: $state.table.activityDate,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<String> get completedTaskId => $state.composableBuilder(
+    column: $state.table.completedTaskId,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<String> get completedSunnahId => $state.composableBuilder(
+    column: $state.table.completedSunnahId,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<String> get updatedAt => $state.composableBuilder(
+    column: $state.table.updatedAt,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+}
+
+class $$UserDailyActivityTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $UserDailyActivityTableTable,
+          UserDailyActivity,
+          $$UserDailyActivityTableTableFilterComposer,
+          $$UserDailyActivityTableTableOrderingComposer,
+          $$UserDailyActivityTableTableCreateCompanionBuilder,
+          $$UserDailyActivityTableTableUpdateCompanionBuilder,
+          (
+            UserDailyActivity,
+            BaseReferences<
+              _$AppDatabase,
+              $UserDailyActivityTableTable,
+              UserDailyActivity
+            >,
+          ),
+          UserDailyActivity,
+          PrefetchHooks Function()
+        > {
+  $$UserDailyActivityTableTableTableManager(
+    _$AppDatabase db,
+    $UserDailyActivityTableTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer: $$UserDailyActivityTableTableFilterComposer(
+            ComposerState(db, table),
+          ),
+          orderingComposer: $$UserDailyActivityTableTableOrderingComposer(
+            ComposerState(db, table),
+          ),
+          updateCompanionCallback:
+              ({
+                Value<String> activityDate = const Value.absent(),
+                Value<String?> completedTaskId = const Value.absent(),
+                Value<String?> completedSunnahId = const Value.absent(),
+                Value<String> updatedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => UserDailyActivityTableCompanion(
+                activityDate: activityDate,
+                completedTaskId: completedTaskId,
+                completedSunnahId: completedSunnahId,
+                updatedAt: updatedAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String activityDate,
+                Value<String?> completedTaskId = const Value.absent(),
+                Value<String?> completedSunnahId = const Value.absent(),
+                required String updatedAt,
+                Value<int> rowid = const Value.absent(),
+              }) => UserDailyActivityTableCompanion.insert(
+                activityDate: activityDate,
+                completedTaskId: completedTaskId,
+                completedSunnahId: completedSunnahId,
+                updatedAt: updatedAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$UserDailyActivityTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $UserDailyActivityTableTable,
+      UserDailyActivity,
+      $$UserDailyActivityTableTableFilterComposer,
+      $$UserDailyActivityTableTableOrderingComposer,
+      $$UserDailyActivityTableTableCreateCompanionBuilder,
+      $$UserDailyActivityTableTableUpdateCompanionBuilder,
+      (
+        UserDailyActivity,
+        BaseReferences<
+          _$AppDatabase,
+          $UserDailyActivityTableTable,
+          UserDailyActivity
+        >,
+      ),
+      UserDailyActivity,
       PrefetchHooks Function()
     >;
 typedef $$DailySunnahTableTableCreateCompanionBuilder =
@@ -4554,52 +9119,237 @@ typedef $$MuhasabaEntryTableTableProcessedTableManager =
       MuhasabaEntry,
       PrefetchHooks Function()
     >;
-typedef $$UserFavoriteTableTableCreateCompanionBuilder =
-    UserFavoriteTableCompanion Function({
-      Value<int> id,
-      required String contentType,
-      required String primaryReference,
-      Value<String?> secondaryReference,
-      required String title,
-      required String contentText,
-      required String source,
-      required String createdAt,
+typedef $$ProgressRecordTableTableCreateCompanionBuilder =
+    ProgressRecordTableCompanion Function({
+      required String date,
+      Value<int> pagesRead,
+      Value<int> readingSeconds,
+      Value<int> azkarCount,
+      Value<int> hadithCount,
+      Value<bool> isMuhasabaDone,
+      Value<int> rowid,
     });
-typedef $$UserFavoriteTableTableUpdateCompanionBuilder =
-    UserFavoriteTableCompanion Function({
-      Value<int> id,
-      Value<String> contentType,
-      Value<String> primaryReference,
-      Value<String?> secondaryReference,
-      Value<String> title,
-      Value<String> contentText,
-      Value<String> source,
-      Value<String> createdAt,
+typedef $$ProgressRecordTableTableUpdateCompanionBuilder =
+    ProgressRecordTableCompanion Function({
+      Value<String> date,
+      Value<int> pagesRead,
+      Value<int> readingSeconds,
+      Value<int> azkarCount,
+      Value<int> hadithCount,
+      Value<bool> isMuhasabaDone,
+      Value<int> rowid,
     });
 
-class $$UserFavoriteTableTableFilterComposer
-    extends FilterComposer<_$AppDatabase, $UserFavoriteTableTable> {
-  $$UserFavoriteTableTableFilterComposer(super.$state);
-  ColumnFilters<int> get id => $state.composableBuilder(
+class $$ProgressRecordTableTableFilterComposer
+    extends FilterComposer<_$AppDatabase, $ProgressRecordTableTable> {
+  $$ProgressRecordTableTableFilterComposer(super.$state);
+  ColumnFilters<String> get date => $state.composableBuilder(
+    column: $state.table.date,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<int> get pagesRead => $state.composableBuilder(
+    column: $state.table.pagesRead,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<int> get readingSeconds => $state.composableBuilder(
+    column: $state.table.readingSeconds,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<int> get azkarCount => $state.composableBuilder(
+    column: $state.table.azkarCount,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<int> get hadithCount => $state.composableBuilder(
+    column: $state.table.hadithCount,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<bool> get isMuhasabaDone => $state.composableBuilder(
+    column: $state.table.isMuhasabaDone,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+}
+
+class $$ProgressRecordTableTableOrderingComposer
+    extends OrderingComposer<_$AppDatabase, $ProgressRecordTableTable> {
+  $$ProgressRecordTableTableOrderingComposer(super.$state);
+  ColumnOrderings<String> get date => $state.composableBuilder(
+    column: $state.table.date,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<int> get pagesRead => $state.composableBuilder(
+    column: $state.table.pagesRead,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<int> get readingSeconds => $state.composableBuilder(
+    column: $state.table.readingSeconds,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<int> get azkarCount => $state.composableBuilder(
+    column: $state.table.azkarCount,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<int> get hadithCount => $state.composableBuilder(
+    column: $state.table.hadithCount,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<bool> get isMuhasabaDone => $state.composableBuilder(
+    column: $state.table.isMuhasabaDone,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+}
+
+class $$ProgressRecordTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $ProgressRecordTableTable,
+          ProgressRecord,
+          $$ProgressRecordTableTableFilterComposer,
+          $$ProgressRecordTableTableOrderingComposer,
+          $$ProgressRecordTableTableCreateCompanionBuilder,
+          $$ProgressRecordTableTableUpdateCompanionBuilder,
+          (
+            ProgressRecord,
+            BaseReferences<
+              _$AppDatabase,
+              $ProgressRecordTableTable,
+              ProgressRecord
+            >,
+          ),
+          ProgressRecord,
+          PrefetchHooks Function()
+        > {
+  $$ProgressRecordTableTableTableManager(
+    _$AppDatabase db,
+    $ProgressRecordTableTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer: $$ProgressRecordTableTableFilterComposer(
+            ComposerState(db, table),
+          ),
+          orderingComposer: $$ProgressRecordTableTableOrderingComposer(
+            ComposerState(db, table),
+          ),
+          updateCompanionCallback:
+              ({
+                Value<String> date = const Value.absent(),
+                Value<int> pagesRead = const Value.absent(),
+                Value<int> readingSeconds = const Value.absent(),
+                Value<int> azkarCount = const Value.absent(),
+                Value<int> hadithCount = const Value.absent(),
+                Value<bool> isMuhasabaDone = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => ProgressRecordTableCompanion(
+                date: date,
+                pagesRead: pagesRead,
+                readingSeconds: readingSeconds,
+                azkarCount: azkarCount,
+                hadithCount: hadithCount,
+                isMuhasabaDone: isMuhasabaDone,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String date,
+                Value<int> pagesRead = const Value.absent(),
+                Value<int> readingSeconds = const Value.absent(),
+                Value<int> azkarCount = const Value.absent(),
+                Value<int> hadithCount = const Value.absent(),
+                Value<bool> isMuhasabaDone = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => ProgressRecordTableCompanion.insert(
+                date: date,
+                pagesRead: pagesRead,
+                readingSeconds: readingSeconds,
+                azkarCount: azkarCount,
+                hadithCount: hadithCount,
+                isMuhasabaDone: isMuhasabaDone,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$ProgressRecordTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $ProgressRecordTableTable,
+      ProgressRecord,
+      $$ProgressRecordTableTableFilterComposer,
+      $$ProgressRecordTableTableOrderingComposer,
+      $$ProgressRecordTableTableCreateCompanionBuilder,
+      $$ProgressRecordTableTableUpdateCompanionBuilder,
+      (
+        ProgressRecord,
+        BaseReferences<
+          _$AppDatabase,
+          $ProgressRecordTableTable,
+          ProgressRecord
+        >,
+      ),
+      ProgressRecord,
+      PrefetchHooks Function()
+    >;
+typedef $$RecentActivityTableTableCreateCompanionBuilder =
+    RecentActivityTableCompanion Function({
+      required String id,
+      required String type,
+      required String title,
+      Value<String?> subtitle,
+      required String routePath,
+      required DateTime timestamp,
+      Value<int> rowid,
+    });
+typedef $$RecentActivityTableTableUpdateCompanionBuilder =
+    RecentActivityTableCompanion Function({
+      Value<String> id,
+      Value<String> type,
+      Value<String> title,
+      Value<String?> subtitle,
+      Value<String> routePath,
+      Value<DateTime> timestamp,
+      Value<int> rowid,
+    });
+
+class $$RecentActivityTableTableFilterComposer
+    extends FilterComposer<_$AppDatabase, $RecentActivityTableTable> {
+  $$RecentActivityTableTableFilterComposer(super.$state);
+  ColumnFilters<String> get id => $state.composableBuilder(
     column: $state.table.id,
     builder: (column, joinBuilders) =>
         ColumnFilters(column, joinBuilders: joinBuilders),
   );
 
-  ColumnFilters<String> get contentType => $state.composableBuilder(
-    column: $state.table.contentType,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
-
-  ColumnFilters<String> get primaryReference => $state.composableBuilder(
-    column: $state.table.primaryReference,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
-
-  ColumnFilters<String> get secondaryReference => $state.composableBuilder(
-    column: $state.table.secondaryReference,
+  ColumnFilters<String> get type => $state.composableBuilder(
+    column: $state.table.type,
     builder: (column, joinBuilders) =>
         ColumnFilters(column, joinBuilders: joinBuilders),
   );
@@ -4610,48 +9360,36 @@ class $$UserFavoriteTableTableFilterComposer
         ColumnFilters(column, joinBuilders: joinBuilders),
   );
 
-  ColumnFilters<String> get contentText => $state.composableBuilder(
-    column: $state.table.contentText,
+  ColumnFilters<String> get subtitle => $state.composableBuilder(
+    column: $state.table.subtitle,
     builder: (column, joinBuilders) =>
         ColumnFilters(column, joinBuilders: joinBuilders),
   );
 
-  ColumnFilters<String> get source => $state.composableBuilder(
-    column: $state.table.source,
+  ColumnFilters<String> get routePath => $state.composableBuilder(
+    column: $state.table.routePath,
     builder: (column, joinBuilders) =>
         ColumnFilters(column, joinBuilders: joinBuilders),
   );
 
-  ColumnFilters<String> get createdAt => $state.composableBuilder(
-    column: $state.table.createdAt,
+  ColumnFilters<DateTime> get timestamp => $state.composableBuilder(
+    column: $state.table.timestamp,
     builder: (column, joinBuilders) =>
         ColumnFilters(column, joinBuilders: joinBuilders),
   );
 }
 
-class $$UserFavoriteTableTableOrderingComposer
-    extends OrderingComposer<_$AppDatabase, $UserFavoriteTableTable> {
-  $$UserFavoriteTableTableOrderingComposer(super.$state);
-  ColumnOrderings<int> get id => $state.composableBuilder(
+class $$RecentActivityTableTableOrderingComposer
+    extends OrderingComposer<_$AppDatabase, $RecentActivityTableTable> {
+  $$RecentActivityTableTableOrderingComposer(super.$state);
+  ColumnOrderings<String> get id => $state.composableBuilder(
     column: $state.table.id,
     builder: (column, joinBuilders) =>
         ColumnOrderings(column, joinBuilders: joinBuilders),
   );
 
-  ColumnOrderings<String> get contentType => $state.composableBuilder(
-    column: $state.table.contentType,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
-
-  ColumnOrderings<String> get primaryReference => $state.composableBuilder(
-    column: $state.table.primaryReference,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
-
-  ColumnOrderings<String> get secondaryReference => $state.composableBuilder(
-    column: $state.table.secondaryReference,
+  ColumnOrderings<String> get type => $state.composableBuilder(
+    column: $state.table.type,
     builder: (column, joinBuilders) =>
         ColumnOrderings(column, joinBuilders: joinBuilders),
   );
@@ -4662,98 +9400,94 @@ class $$UserFavoriteTableTableOrderingComposer
         ColumnOrderings(column, joinBuilders: joinBuilders),
   );
 
-  ColumnOrderings<String> get contentText => $state.composableBuilder(
-    column: $state.table.contentText,
+  ColumnOrderings<String> get subtitle => $state.composableBuilder(
+    column: $state.table.subtitle,
     builder: (column, joinBuilders) =>
         ColumnOrderings(column, joinBuilders: joinBuilders),
   );
 
-  ColumnOrderings<String> get source => $state.composableBuilder(
-    column: $state.table.source,
+  ColumnOrderings<String> get routePath => $state.composableBuilder(
+    column: $state.table.routePath,
     builder: (column, joinBuilders) =>
         ColumnOrderings(column, joinBuilders: joinBuilders),
   );
 
-  ColumnOrderings<String> get createdAt => $state.composableBuilder(
-    column: $state.table.createdAt,
+  ColumnOrderings<DateTime> get timestamp => $state.composableBuilder(
+    column: $state.table.timestamp,
     builder: (column, joinBuilders) =>
         ColumnOrderings(column, joinBuilders: joinBuilders),
   );
 }
 
-class $$UserFavoriteTableTableTableManager
+class $$RecentActivityTableTableTableManager
     extends
         RootTableManager<
           _$AppDatabase,
-          $UserFavoriteTableTable,
-          UserFavorite,
-          $$UserFavoriteTableTableFilterComposer,
-          $$UserFavoriteTableTableOrderingComposer,
-          $$UserFavoriteTableTableCreateCompanionBuilder,
-          $$UserFavoriteTableTableUpdateCompanionBuilder,
+          $RecentActivityTableTable,
+          RecentActivity,
+          $$RecentActivityTableTableFilterComposer,
+          $$RecentActivityTableTableOrderingComposer,
+          $$RecentActivityTableTableCreateCompanionBuilder,
+          $$RecentActivityTableTableUpdateCompanionBuilder,
           (
-            UserFavorite,
+            RecentActivity,
             BaseReferences<
               _$AppDatabase,
-              $UserFavoriteTableTable,
-              UserFavorite
+              $RecentActivityTableTable,
+              RecentActivity
             >,
           ),
-          UserFavorite,
+          RecentActivity,
           PrefetchHooks Function()
         > {
-  $$UserFavoriteTableTableTableManager(
+  $$RecentActivityTableTableTableManager(
     _$AppDatabase db,
-    $UserFavoriteTableTable table,
+    $RecentActivityTableTable table,
   ) : super(
         TableManagerState(
           db: db,
           table: table,
-          filteringComposer: $$UserFavoriteTableTableFilterComposer(
+          filteringComposer: $$RecentActivityTableTableFilterComposer(
             ComposerState(db, table),
           ),
-          orderingComposer: $$UserFavoriteTableTableOrderingComposer(
+          orderingComposer: $$RecentActivityTableTableOrderingComposer(
             ComposerState(db, table),
           ),
           updateCompanionCallback:
               ({
-                Value<int> id = const Value.absent(),
-                Value<String> contentType = const Value.absent(),
-                Value<String> primaryReference = const Value.absent(),
-                Value<String?> secondaryReference = const Value.absent(),
+                Value<String> id = const Value.absent(),
+                Value<String> type = const Value.absent(),
                 Value<String> title = const Value.absent(),
-                Value<String> contentText = const Value.absent(),
-                Value<String> source = const Value.absent(),
-                Value<String> createdAt = const Value.absent(),
-              }) => UserFavoriteTableCompanion(
+                Value<String?> subtitle = const Value.absent(),
+                Value<String> routePath = const Value.absent(),
+                Value<DateTime> timestamp = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => RecentActivityTableCompanion(
                 id: id,
-                contentType: contentType,
-                primaryReference: primaryReference,
-                secondaryReference: secondaryReference,
+                type: type,
                 title: title,
-                contentText: contentText,
-                source: source,
-                createdAt: createdAt,
+                subtitle: subtitle,
+                routePath: routePath,
+                timestamp: timestamp,
+                rowid: rowid,
               ),
           createCompanionCallback:
               ({
-                Value<int> id = const Value.absent(),
-                required String contentType,
-                required String primaryReference,
-                Value<String?> secondaryReference = const Value.absent(),
+                required String id,
+                required String type,
                 required String title,
-                required String contentText,
-                required String source,
-                required String createdAt,
-              }) => UserFavoriteTableCompanion.insert(
+                Value<String?> subtitle = const Value.absent(),
+                required String routePath,
+                required DateTime timestamp,
+                Value<int> rowid = const Value.absent(),
+              }) => RecentActivityTableCompanion.insert(
                 id: id,
-                contentType: contentType,
-                primaryReference: primaryReference,
-                secondaryReference: secondaryReference,
+                type: type,
                 title: title,
-                contentText: contentText,
-                source: source,
-                createdAt: createdAt,
+                subtitle: subtitle,
+                routePath: routePath,
+                timestamp: timestamp,
+                rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
@@ -4763,56 +9497,98 @@ class $$UserFavoriteTableTableTableManager
       );
 }
 
-typedef $$UserFavoriteTableTableProcessedTableManager =
+typedef $$RecentActivityTableTableProcessedTableManager =
     ProcessedTableManager<
       _$AppDatabase,
-      $UserFavoriteTableTable,
-      UserFavorite,
-      $$UserFavoriteTableTableFilterComposer,
-      $$UserFavoriteTableTableOrderingComposer,
-      $$UserFavoriteTableTableCreateCompanionBuilder,
-      $$UserFavoriteTableTableUpdateCompanionBuilder,
+      $RecentActivityTableTable,
+      RecentActivity,
+      $$RecentActivityTableTableFilterComposer,
+      $$RecentActivityTableTableOrderingComposer,
+      $$RecentActivityTableTableCreateCompanionBuilder,
+      $$RecentActivityTableTableUpdateCompanionBuilder,
       (
-        UserFavorite,
-        BaseReferences<_$AppDatabase, $UserFavoriteTableTable, UserFavorite>,
+        RecentActivity,
+        BaseReferences<
+          _$AppDatabase,
+          $RecentActivityTableTable,
+          RecentActivity
+        >,
       ),
-      UserFavorite,
+      RecentActivity,
       PrefetchHooks Function()
     >;
-typedef $$UserDailyActivityTableTableCreateCompanionBuilder =
-    UserDailyActivityTableCompanion Function({
-      required String activityDate,
-      Value<String?> completedTaskId,
-      Value<String?> completedSunnahId,
+typedef $$UserGoalsTableTableCreateCompanionBuilder =
+    UserGoalsTableCompanion Function({
+      Value<int> id,
+      required String goalType,
+      Value<String> metric,
+      required String title,
+      required String icon,
+      required int targetValue,
+      Value<String> resetPolicy,
+      Value<String?> metadata,
       required String updatedAt,
-      Value<int> rowid,
     });
-typedef $$UserDailyActivityTableTableUpdateCompanionBuilder =
-    UserDailyActivityTableCompanion Function({
-      Value<String> activityDate,
-      Value<String?> completedTaskId,
-      Value<String?> completedSunnahId,
+typedef $$UserGoalsTableTableUpdateCompanionBuilder =
+    UserGoalsTableCompanion Function({
+      Value<int> id,
+      Value<String> goalType,
+      Value<String> metric,
+      Value<String> title,
+      Value<String> icon,
+      Value<int> targetValue,
+      Value<String> resetPolicy,
+      Value<String?> metadata,
       Value<String> updatedAt,
-      Value<int> rowid,
     });
 
-class $$UserDailyActivityTableTableFilterComposer
-    extends FilterComposer<_$AppDatabase, $UserDailyActivityTableTable> {
-  $$UserDailyActivityTableTableFilterComposer(super.$state);
-  ColumnFilters<String> get activityDate => $state.composableBuilder(
-    column: $state.table.activityDate,
+class $$UserGoalsTableTableFilterComposer
+    extends FilterComposer<_$AppDatabase, $UserGoalsTableTable> {
+  $$UserGoalsTableTableFilterComposer(super.$state);
+  ColumnFilters<int> get id => $state.composableBuilder(
+    column: $state.table.id,
     builder: (column, joinBuilders) =>
         ColumnFilters(column, joinBuilders: joinBuilders),
   );
 
-  ColumnFilters<String> get completedTaskId => $state.composableBuilder(
-    column: $state.table.completedTaskId,
+  ColumnFilters<String> get goalType => $state.composableBuilder(
+    column: $state.table.goalType,
     builder: (column, joinBuilders) =>
         ColumnFilters(column, joinBuilders: joinBuilders),
   );
 
-  ColumnFilters<String> get completedSunnahId => $state.composableBuilder(
-    column: $state.table.completedSunnahId,
+  ColumnFilters<String> get metric => $state.composableBuilder(
+    column: $state.table.metric,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<String> get title => $state.composableBuilder(
+    column: $state.table.title,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<String> get icon => $state.composableBuilder(
+    column: $state.table.icon,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<int> get targetValue => $state.composableBuilder(
+    column: $state.table.targetValue,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<String> get resetPolicy => $state.composableBuilder(
+    column: $state.table.resetPolicy,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<String> get metadata => $state.composableBuilder(
+    column: $state.table.metadata,
     builder: (column, joinBuilders) =>
         ColumnFilters(column, joinBuilders: joinBuilders),
   );
@@ -4824,23 +9600,53 @@ class $$UserDailyActivityTableTableFilterComposer
   );
 }
 
-class $$UserDailyActivityTableTableOrderingComposer
-    extends OrderingComposer<_$AppDatabase, $UserDailyActivityTableTable> {
-  $$UserDailyActivityTableTableOrderingComposer(super.$state);
-  ColumnOrderings<String> get activityDate => $state.composableBuilder(
-    column: $state.table.activityDate,
+class $$UserGoalsTableTableOrderingComposer
+    extends OrderingComposer<_$AppDatabase, $UserGoalsTableTable> {
+  $$UserGoalsTableTableOrderingComposer(super.$state);
+  ColumnOrderings<int> get id => $state.composableBuilder(
+    column: $state.table.id,
     builder: (column, joinBuilders) =>
         ColumnOrderings(column, joinBuilders: joinBuilders),
   );
 
-  ColumnOrderings<String> get completedTaskId => $state.composableBuilder(
-    column: $state.table.completedTaskId,
+  ColumnOrderings<String> get goalType => $state.composableBuilder(
+    column: $state.table.goalType,
     builder: (column, joinBuilders) =>
         ColumnOrderings(column, joinBuilders: joinBuilders),
   );
 
-  ColumnOrderings<String> get completedSunnahId => $state.composableBuilder(
-    column: $state.table.completedSunnahId,
+  ColumnOrderings<String> get metric => $state.composableBuilder(
+    column: $state.table.metric,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<String> get title => $state.composableBuilder(
+    column: $state.table.title,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<String> get icon => $state.composableBuilder(
+    column: $state.table.icon,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<int> get targetValue => $state.composableBuilder(
+    column: $state.table.targetValue,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<String> get resetPolicy => $state.composableBuilder(
+    column: $state.table.resetPolicy,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<String> get metadata => $state.composableBuilder(
+    column: $state.table.metadata,
     builder: (column, joinBuilders) =>
         ColumnOrderings(column, joinBuilders: joinBuilders),
   );
@@ -4852,66 +9658,738 @@ class $$UserDailyActivityTableTableOrderingComposer
   );
 }
 
-class $$UserDailyActivityTableTableTableManager
+class $$UserGoalsTableTableTableManager
     extends
         RootTableManager<
           _$AppDatabase,
-          $UserDailyActivityTableTable,
-          UserDailyActivity,
-          $$UserDailyActivityTableTableFilterComposer,
-          $$UserDailyActivityTableTableOrderingComposer,
-          $$UserDailyActivityTableTableCreateCompanionBuilder,
-          $$UserDailyActivityTableTableUpdateCompanionBuilder,
+          $UserGoalsTableTable,
+          UserGoal,
+          $$UserGoalsTableTableFilterComposer,
+          $$UserGoalsTableTableOrderingComposer,
+          $$UserGoalsTableTableCreateCompanionBuilder,
+          $$UserGoalsTableTableUpdateCompanionBuilder,
           (
-            UserDailyActivity,
-            BaseReferences<
-              _$AppDatabase,
-              $UserDailyActivityTableTable,
-              UserDailyActivity
-            >,
+            UserGoal,
+            BaseReferences<_$AppDatabase, $UserGoalsTableTable, UserGoal>,
           ),
-          UserDailyActivity,
+          UserGoal,
           PrefetchHooks Function()
         > {
-  $$UserDailyActivityTableTableTableManager(
+  $$UserGoalsTableTableTableManager(
     _$AppDatabase db,
-    $UserDailyActivityTableTable table,
+    $UserGoalsTableTable table,
   ) : super(
         TableManagerState(
           db: db,
           table: table,
-          filteringComposer: $$UserDailyActivityTableTableFilterComposer(
+          filteringComposer: $$UserGoalsTableTableFilterComposer(
             ComposerState(db, table),
           ),
-          orderingComposer: $$UserDailyActivityTableTableOrderingComposer(
+          orderingComposer: $$UserGoalsTableTableOrderingComposer(
             ComposerState(db, table),
           ),
           updateCompanionCallback:
               ({
-                Value<String> activityDate = const Value.absent(),
-                Value<String?> completedTaskId = const Value.absent(),
-                Value<String?> completedSunnahId = const Value.absent(),
+                Value<int> id = const Value.absent(),
+                Value<String> goalType = const Value.absent(),
+                Value<String> metric = const Value.absent(),
+                Value<String> title = const Value.absent(),
+                Value<String> icon = const Value.absent(),
+                Value<int> targetValue = const Value.absent(),
+                Value<String> resetPolicy = const Value.absent(),
+                Value<String?> metadata = const Value.absent(),
                 Value<String> updatedAt = const Value.absent(),
-                Value<int> rowid = const Value.absent(),
-              }) => UserDailyActivityTableCompanion(
-                activityDate: activityDate,
-                completedTaskId: completedTaskId,
-                completedSunnahId: completedSunnahId,
+              }) => UserGoalsTableCompanion(
+                id: id,
+                goalType: goalType,
+                metric: metric,
+                title: title,
+                icon: icon,
+                targetValue: targetValue,
+                resetPolicy: resetPolicy,
+                metadata: metadata,
                 updatedAt: updatedAt,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required String goalType,
+                Value<String> metric = const Value.absent(),
+                required String title,
+                required String icon,
+                required int targetValue,
+                Value<String> resetPolicy = const Value.absent(),
+                Value<String?> metadata = const Value.absent(),
+                required String updatedAt,
+              }) => UserGoalsTableCompanion.insert(
+                id: id,
+                goalType: goalType,
+                metric: metric,
+                title: title,
+                icon: icon,
+                targetValue: targetValue,
+                resetPolicy: resetPolicy,
+                metadata: metadata,
+                updatedAt: updatedAt,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$UserGoalsTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $UserGoalsTableTable,
+      UserGoal,
+      $$UserGoalsTableTableFilterComposer,
+      $$UserGoalsTableTableOrderingComposer,
+      $$UserGoalsTableTableCreateCompanionBuilder,
+      $$UserGoalsTableTableUpdateCompanionBuilder,
+      (UserGoal, BaseReferences<_$AppDatabase, $UserGoalsTableTable, UserGoal>),
+      UserGoal,
+      PrefetchHooks Function()
+    >;
+typedef $$ReadingSessionTableTableCreateCompanionBuilder =
+    ReadingSessionTableCompanion Function({
+      Value<int> id,
+      Value<String> featureType,
+      Value<int?> bookId,
+      Value<int?> surahId,
+      Value<int?> pageNumber,
+      Value<int?> verseNumber,
+      Value<double> scrollOffset,
+      Value<String?> themeId,
+      Value<double?> fontSize,
+      required String updatedAt,
+    });
+typedef $$ReadingSessionTableTableUpdateCompanionBuilder =
+    ReadingSessionTableCompanion Function({
+      Value<int> id,
+      Value<String> featureType,
+      Value<int?> bookId,
+      Value<int?> surahId,
+      Value<int?> pageNumber,
+      Value<int?> verseNumber,
+      Value<double> scrollOffset,
+      Value<String?> themeId,
+      Value<double?> fontSize,
+      Value<String> updatedAt,
+    });
+
+class $$ReadingSessionTableTableFilterComposer
+    extends FilterComposer<_$AppDatabase, $ReadingSessionTableTable> {
+  $$ReadingSessionTableTableFilterComposer(super.$state);
+  ColumnFilters<int> get id => $state.composableBuilder(
+    column: $state.table.id,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<String> get featureType => $state.composableBuilder(
+    column: $state.table.featureType,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<int> get bookId => $state.composableBuilder(
+    column: $state.table.bookId,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<int> get surahId => $state.composableBuilder(
+    column: $state.table.surahId,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<int> get pageNumber => $state.composableBuilder(
+    column: $state.table.pageNumber,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<int> get verseNumber => $state.composableBuilder(
+    column: $state.table.verseNumber,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<double> get scrollOffset => $state.composableBuilder(
+    column: $state.table.scrollOffset,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<String> get themeId => $state.composableBuilder(
+    column: $state.table.themeId,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<double> get fontSize => $state.composableBuilder(
+    column: $state.table.fontSize,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<String> get updatedAt => $state.composableBuilder(
+    column: $state.table.updatedAt,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+}
+
+class $$ReadingSessionTableTableOrderingComposer
+    extends OrderingComposer<_$AppDatabase, $ReadingSessionTableTable> {
+  $$ReadingSessionTableTableOrderingComposer(super.$state);
+  ColumnOrderings<int> get id => $state.composableBuilder(
+    column: $state.table.id,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<String> get featureType => $state.composableBuilder(
+    column: $state.table.featureType,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<int> get bookId => $state.composableBuilder(
+    column: $state.table.bookId,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<int> get surahId => $state.composableBuilder(
+    column: $state.table.surahId,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<int> get pageNumber => $state.composableBuilder(
+    column: $state.table.pageNumber,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<int> get verseNumber => $state.composableBuilder(
+    column: $state.table.verseNumber,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<double> get scrollOffset => $state.composableBuilder(
+    column: $state.table.scrollOffset,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<String> get themeId => $state.composableBuilder(
+    column: $state.table.themeId,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<double> get fontSize => $state.composableBuilder(
+    column: $state.table.fontSize,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<String> get updatedAt => $state.composableBuilder(
+    column: $state.table.updatedAt,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+}
+
+class $$ReadingSessionTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $ReadingSessionTableTable,
+          ReadingSession,
+          $$ReadingSessionTableTableFilterComposer,
+          $$ReadingSessionTableTableOrderingComposer,
+          $$ReadingSessionTableTableCreateCompanionBuilder,
+          $$ReadingSessionTableTableUpdateCompanionBuilder,
+          (
+            ReadingSession,
+            BaseReferences<
+              _$AppDatabase,
+              $ReadingSessionTableTable,
+              ReadingSession
+            >,
+          ),
+          ReadingSession,
+          PrefetchHooks Function()
+        > {
+  $$ReadingSessionTableTableTableManager(
+    _$AppDatabase db,
+    $ReadingSessionTableTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer: $$ReadingSessionTableTableFilterComposer(
+            ComposerState(db, table),
+          ),
+          orderingComposer: $$ReadingSessionTableTableOrderingComposer(
+            ComposerState(db, table),
+          ),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<String> featureType = const Value.absent(),
+                Value<int?> bookId = const Value.absent(),
+                Value<int?> surahId = const Value.absent(),
+                Value<int?> pageNumber = const Value.absent(),
+                Value<int?> verseNumber = const Value.absent(),
+                Value<double> scrollOffset = const Value.absent(),
+                Value<String?> themeId = const Value.absent(),
+                Value<double?> fontSize = const Value.absent(),
+                Value<String> updatedAt = const Value.absent(),
+              }) => ReadingSessionTableCompanion(
+                id: id,
+                featureType: featureType,
+                bookId: bookId,
+                surahId: surahId,
+                pageNumber: pageNumber,
+                verseNumber: verseNumber,
+                scrollOffset: scrollOffset,
+                themeId: themeId,
+                fontSize: fontSize,
+                updatedAt: updatedAt,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<String> featureType = const Value.absent(),
+                Value<int?> bookId = const Value.absent(),
+                Value<int?> surahId = const Value.absent(),
+                Value<int?> pageNumber = const Value.absent(),
+                Value<int?> verseNumber = const Value.absent(),
+                Value<double> scrollOffset = const Value.absent(),
+                Value<String?> themeId = const Value.absent(),
+                Value<double?> fontSize = const Value.absent(),
+                required String updatedAt,
+              }) => ReadingSessionTableCompanion.insert(
+                id: id,
+                featureType: featureType,
+                bookId: bookId,
+                surahId: surahId,
+                pageNumber: pageNumber,
+                verseNumber: verseNumber,
+                scrollOffset: scrollOffset,
+                themeId: themeId,
+                fontSize: fontSize,
+                updatedAt: updatedAt,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$ReadingSessionTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $ReadingSessionTableTable,
+      ReadingSession,
+      $$ReadingSessionTableTableFilterComposer,
+      $$ReadingSessionTableTableOrderingComposer,
+      $$ReadingSessionTableTableCreateCompanionBuilder,
+      $$ReadingSessionTableTableUpdateCompanionBuilder,
+      (
+        ReadingSession,
+        BaseReferences<
+          _$AppDatabase,
+          $ReadingSessionTableTable,
+          ReadingSession
+        >,
+      ),
+      ReadingSession,
+      PrefetchHooks Function()
+    >;
+typedef $$SavedItemsTableTableCreateCompanionBuilder =
+    SavedItemsTableCompanion Function({
+      Value<int> id,
+      required String featureType,
+      required int referenceId,
+      Value<int?> secondaryId,
+      Value<String?> collectionId,
+      Value<String?> notes,
+      required String previewText,
+      required String createdAt,
+    });
+typedef $$SavedItemsTableTableUpdateCompanionBuilder =
+    SavedItemsTableCompanion Function({
+      Value<int> id,
+      Value<String> featureType,
+      Value<int> referenceId,
+      Value<int?> secondaryId,
+      Value<String?> collectionId,
+      Value<String?> notes,
+      Value<String> previewText,
+      Value<String> createdAt,
+    });
+
+class $$SavedItemsTableTableFilterComposer
+    extends FilterComposer<_$AppDatabase, $SavedItemsTableTable> {
+  $$SavedItemsTableTableFilterComposer(super.$state);
+  ColumnFilters<int> get id => $state.composableBuilder(
+    column: $state.table.id,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<String> get featureType => $state.composableBuilder(
+    column: $state.table.featureType,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<int> get referenceId => $state.composableBuilder(
+    column: $state.table.referenceId,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<int> get secondaryId => $state.composableBuilder(
+    column: $state.table.secondaryId,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<String> get collectionId => $state.composableBuilder(
+    column: $state.table.collectionId,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<String> get notes => $state.composableBuilder(
+    column: $state.table.notes,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<String> get previewText => $state.composableBuilder(
+    column: $state.table.previewText,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<String> get createdAt => $state.composableBuilder(
+    column: $state.table.createdAt,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+}
+
+class $$SavedItemsTableTableOrderingComposer
+    extends OrderingComposer<_$AppDatabase, $SavedItemsTableTable> {
+  $$SavedItemsTableTableOrderingComposer(super.$state);
+  ColumnOrderings<int> get id => $state.composableBuilder(
+    column: $state.table.id,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<String> get featureType => $state.composableBuilder(
+    column: $state.table.featureType,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<int> get referenceId => $state.composableBuilder(
+    column: $state.table.referenceId,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<int> get secondaryId => $state.composableBuilder(
+    column: $state.table.secondaryId,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<String> get collectionId => $state.composableBuilder(
+    column: $state.table.collectionId,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<String> get notes => $state.composableBuilder(
+    column: $state.table.notes,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<String> get previewText => $state.composableBuilder(
+    column: $state.table.previewText,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<String> get createdAt => $state.composableBuilder(
+    column: $state.table.createdAt,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+}
+
+class $$SavedItemsTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $SavedItemsTableTable,
+          SavedItem,
+          $$SavedItemsTableTableFilterComposer,
+          $$SavedItemsTableTableOrderingComposer,
+          $$SavedItemsTableTableCreateCompanionBuilder,
+          $$SavedItemsTableTableUpdateCompanionBuilder,
+          (
+            SavedItem,
+            BaseReferences<_$AppDatabase, $SavedItemsTableTable, SavedItem>,
+          ),
+          SavedItem,
+          PrefetchHooks Function()
+        > {
+  $$SavedItemsTableTableTableManager(
+    _$AppDatabase db,
+    $SavedItemsTableTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer: $$SavedItemsTableTableFilterComposer(
+            ComposerState(db, table),
+          ),
+          orderingComposer: $$SavedItemsTableTableOrderingComposer(
+            ComposerState(db, table),
+          ),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<String> featureType = const Value.absent(),
+                Value<int> referenceId = const Value.absent(),
+                Value<int?> secondaryId = const Value.absent(),
+                Value<String?> collectionId = const Value.absent(),
+                Value<String?> notes = const Value.absent(),
+                Value<String> previewText = const Value.absent(),
+                Value<String> createdAt = const Value.absent(),
+              }) => SavedItemsTableCompanion(
+                id: id,
+                featureType: featureType,
+                referenceId: referenceId,
+                secondaryId: secondaryId,
+                collectionId: collectionId,
+                notes: notes,
+                previewText: previewText,
+                createdAt: createdAt,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required String featureType,
+                required int referenceId,
+                Value<int?> secondaryId = const Value.absent(),
+                Value<String?> collectionId = const Value.absent(),
+                Value<String?> notes = const Value.absent(),
+                required String previewText,
+                required String createdAt,
+              }) => SavedItemsTableCompanion.insert(
+                id: id,
+                featureType: featureType,
+                referenceId: referenceId,
+                secondaryId: secondaryId,
+                collectionId: collectionId,
+                notes: notes,
+                previewText: previewText,
+                createdAt: createdAt,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$SavedItemsTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $SavedItemsTableTable,
+      SavedItem,
+      $$SavedItemsTableTableFilterComposer,
+      $$SavedItemsTableTableOrderingComposer,
+      $$SavedItemsTableTableCreateCompanionBuilder,
+      $$SavedItemsTableTableUpdateCompanionBuilder,
+      (
+        SavedItem,
+        BaseReferences<_$AppDatabase, $SavedItemsTableTable, SavedItem>,
+      ),
+      SavedItem,
+      PrefetchHooks Function()
+    >;
+typedef $$CollectionsTableTableCreateCompanionBuilder =
+    CollectionsTableCompanion Function({
+      required String id,
+      required String name,
+      Value<String?> icon,
+      Value<String?> colorHex,
+      required String createdAt,
+      Value<int> rowid,
+    });
+typedef $$CollectionsTableTableUpdateCompanionBuilder =
+    CollectionsTableCompanion Function({
+      Value<String> id,
+      Value<String> name,
+      Value<String?> icon,
+      Value<String?> colorHex,
+      Value<String> createdAt,
+      Value<int> rowid,
+    });
+
+class $$CollectionsTableTableFilterComposer
+    extends FilterComposer<_$AppDatabase, $CollectionsTableTable> {
+  $$CollectionsTableTableFilterComposer(super.$state);
+  ColumnFilters<String> get id => $state.composableBuilder(
+    column: $state.table.id,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<String> get name => $state.composableBuilder(
+    column: $state.table.name,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<String> get icon => $state.composableBuilder(
+    column: $state.table.icon,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<String> get colorHex => $state.composableBuilder(
+    column: $state.table.colorHex,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<String> get createdAt => $state.composableBuilder(
+    column: $state.table.createdAt,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+}
+
+class $$CollectionsTableTableOrderingComposer
+    extends OrderingComposer<_$AppDatabase, $CollectionsTableTable> {
+  $$CollectionsTableTableOrderingComposer(super.$state);
+  ColumnOrderings<String> get id => $state.composableBuilder(
+    column: $state.table.id,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<String> get name => $state.composableBuilder(
+    column: $state.table.name,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<String> get icon => $state.composableBuilder(
+    column: $state.table.icon,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<String> get colorHex => $state.composableBuilder(
+    column: $state.table.colorHex,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<String> get createdAt => $state.composableBuilder(
+    column: $state.table.createdAt,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+}
+
+class $$CollectionsTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $CollectionsTableTable,
+          LibraryCollection,
+          $$CollectionsTableTableFilterComposer,
+          $$CollectionsTableTableOrderingComposer,
+          $$CollectionsTableTableCreateCompanionBuilder,
+          $$CollectionsTableTableUpdateCompanionBuilder,
+          (
+            LibraryCollection,
+            BaseReferences<
+              _$AppDatabase,
+              $CollectionsTableTable,
+              LibraryCollection
+            >,
+          ),
+          LibraryCollection,
+          PrefetchHooks Function()
+        > {
+  $$CollectionsTableTableTableManager(
+    _$AppDatabase db,
+    $CollectionsTableTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer: $$CollectionsTableTableFilterComposer(
+            ComposerState(db, table),
+          ),
+          orderingComposer: $$CollectionsTableTableOrderingComposer(
+            ComposerState(db, table),
+          ),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> name = const Value.absent(),
+                Value<String?> icon = const Value.absent(),
+                Value<String?> colorHex = const Value.absent(),
+                Value<String> createdAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => CollectionsTableCompanion(
+                id: id,
+                name: name,
+                icon: icon,
+                colorHex: colorHex,
+                createdAt: createdAt,
                 rowid: rowid,
               ),
           createCompanionCallback:
               ({
-                required String activityDate,
-                Value<String?> completedTaskId = const Value.absent(),
-                Value<String?> completedSunnahId = const Value.absent(),
-                required String updatedAt,
+                required String id,
+                required String name,
+                Value<String?> icon = const Value.absent(),
+                Value<String?> colorHex = const Value.absent(),
+                required String createdAt,
                 Value<int> rowid = const Value.absent(),
-              }) => UserDailyActivityTableCompanion.insert(
-                activityDate: activityDate,
-                completedTaskId: completedTaskId,
-                completedSunnahId: completedSunnahId,
-                updatedAt: updatedAt,
+              }) => CollectionsTableCompanion.insert(
+                id: id,
+                name: name,
+                icon: icon,
+                colorHex: colorHex,
+                createdAt: createdAt,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
@@ -4922,24 +10400,569 @@ class $$UserDailyActivityTableTableTableManager
       );
 }
 
-typedef $$UserDailyActivityTableTableProcessedTableManager =
+typedef $$CollectionsTableTableProcessedTableManager =
     ProcessedTableManager<
       _$AppDatabase,
-      $UserDailyActivityTableTable,
-      UserDailyActivity,
-      $$UserDailyActivityTableTableFilterComposer,
-      $$UserDailyActivityTableTableOrderingComposer,
-      $$UserDailyActivityTableTableCreateCompanionBuilder,
-      $$UserDailyActivityTableTableUpdateCompanionBuilder,
+      $CollectionsTableTable,
+      LibraryCollection,
+      $$CollectionsTableTableFilterComposer,
+      $$CollectionsTableTableOrderingComposer,
+      $$CollectionsTableTableCreateCompanionBuilder,
+      $$CollectionsTableTableUpdateCompanionBuilder,
       (
-        UserDailyActivity,
+        LibraryCollection,
         BaseReferences<
           _$AppDatabase,
-          $UserDailyActivityTableTable,
-          UserDailyActivity
+          $CollectionsTableTable,
+          LibraryCollection
         >,
       ),
-      UserDailyActivity,
+      LibraryCollection,
+      PrefetchHooks Function()
+    >;
+typedef $$NotesTableTableCreateCompanionBuilder =
+    NotesTableCompanion Function({
+      Value<int> id,
+      required String featureType,
+      Value<int?> referenceId,
+      Value<int?> secondaryId,
+      required String content,
+      required String createdAt,
+      required String updatedAt,
+    });
+typedef $$NotesTableTableUpdateCompanionBuilder =
+    NotesTableCompanion Function({
+      Value<int> id,
+      Value<String> featureType,
+      Value<int?> referenceId,
+      Value<int?> secondaryId,
+      Value<String> content,
+      Value<String> createdAt,
+      Value<String> updatedAt,
+    });
+
+class $$NotesTableTableFilterComposer
+    extends FilterComposer<_$AppDatabase, $NotesTableTable> {
+  $$NotesTableTableFilterComposer(super.$state);
+  ColumnFilters<int> get id => $state.composableBuilder(
+    column: $state.table.id,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<String> get featureType => $state.composableBuilder(
+    column: $state.table.featureType,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<int> get referenceId => $state.composableBuilder(
+    column: $state.table.referenceId,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<int> get secondaryId => $state.composableBuilder(
+    column: $state.table.secondaryId,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<String> get content => $state.composableBuilder(
+    column: $state.table.content,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<String> get createdAt => $state.composableBuilder(
+    column: $state.table.createdAt,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<String> get updatedAt => $state.composableBuilder(
+    column: $state.table.updatedAt,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+}
+
+class $$NotesTableTableOrderingComposer
+    extends OrderingComposer<_$AppDatabase, $NotesTableTable> {
+  $$NotesTableTableOrderingComposer(super.$state);
+  ColumnOrderings<int> get id => $state.composableBuilder(
+    column: $state.table.id,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<String> get featureType => $state.composableBuilder(
+    column: $state.table.featureType,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<int> get referenceId => $state.composableBuilder(
+    column: $state.table.referenceId,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<int> get secondaryId => $state.composableBuilder(
+    column: $state.table.secondaryId,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<String> get content => $state.composableBuilder(
+    column: $state.table.content,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<String> get createdAt => $state.composableBuilder(
+    column: $state.table.createdAt,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<String> get updatedAt => $state.composableBuilder(
+    column: $state.table.updatedAt,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+}
+
+class $$NotesTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $NotesTableTable,
+          UserNote,
+          $$NotesTableTableFilterComposer,
+          $$NotesTableTableOrderingComposer,
+          $$NotesTableTableCreateCompanionBuilder,
+          $$NotesTableTableUpdateCompanionBuilder,
+          (UserNote, BaseReferences<_$AppDatabase, $NotesTableTable, UserNote>),
+          UserNote,
+          PrefetchHooks Function()
+        > {
+  $$NotesTableTableTableManager(_$AppDatabase db, $NotesTableTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer: $$NotesTableTableFilterComposer(
+            ComposerState(db, table),
+          ),
+          orderingComposer: $$NotesTableTableOrderingComposer(
+            ComposerState(db, table),
+          ),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<String> featureType = const Value.absent(),
+                Value<int?> referenceId = const Value.absent(),
+                Value<int?> secondaryId = const Value.absent(),
+                Value<String> content = const Value.absent(),
+                Value<String> createdAt = const Value.absent(),
+                Value<String> updatedAt = const Value.absent(),
+              }) => NotesTableCompanion(
+                id: id,
+                featureType: featureType,
+                referenceId: referenceId,
+                secondaryId: secondaryId,
+                content: content,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required String featureType,
+                Value<int?> referenceId = const Value.absent(),
+                Value<int?> secondaryId = const Value.absent(),
+                required String content,
+                required String createdAt,
+                required String updatedAt,
+              }) => NotesTableCompanion.insert(
+                id: id,
+                featureType: featureType,
+                referenceId: referenceId,
+                secondaryId: secondaryId,
+                content: content,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$NotesTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $NotesTableTable,
+      UserNote,
+      $$NotesTableTableFilterComposer,
+      $$NotesTableTableOrderingComposer,
+      $$NotesTableTableCreateCompanionBuilder,
+      $$NotesTableTableUpdateCompanionBuilder,
+      (UserNote, BaseReferences<_$AppDatabase, $NotesTableTable, UserNote>),
+      UserNote,
+      PrefetchHooks Function()
+    >;
+typedef $$SearchableItemsTableTableCreateCompanionBuilder =
+    SearchableItemsTableCompanion Function({
+      Value<int> id,
+      required String featureType,
+      required int referenceId,
+      Value<int?> secondaryId,
+      Value<String?> title,
+      required String content,
+      required String normalizedContent,
+    });
+typedef $$SearchableItemsTableTableUpdateCompanionBuilder =
+    SearchableItemsTableCompanion Function({
+      Value<int> id,
+      Value<String> featureType,
+      Value<int> referenceId,
+      Value<int?> secondaryId,
+      Value<String?> title,
+      Value<String> content,
+      Value<String> normalizedContent,
+    });
+
+class $$SearchableItemsTableTableFilterComposer
+    extends FilterComposer<_$AppDatabase, $SearchableItemsTableTable> {
+  $$SearchableItemsTableTableFilterComposer(super.$state);
+  ColumnFilters<int> get id => $state.composableBuilder(
+    column: $state.table.id,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<String> get featureType => $state.composableBuilder(
+    column: $state.table.featureType,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<int> get referenceId => $state.composableBuilder(
+    column: $state.table.referenceId,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<int> get secondaryId => $state.composableBuilder(
+    column: $state.table.secondaryId,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<String> get title => $state.composableBuilder(
+    column: $state.table.title,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<String> get content => $state.composableBuilder(
+    column: $state.table.content,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<String> get normalizedContent => $state.composableBuilder(
+    column: $state.table.normalizedContent,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+}
+
+class $$SearchableItemsTableTableOrderingComposer
+    extends OrderingComposer<_$AppDatabase, $SearchableItemsTableTable> {
+  $$SearchableItemsTableTableOrderingComposer(super.$state);
+  ColumnOrderings<int> get id => $state.composableBuilder(
+    column: $state.table.id,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<String> get featureType => $state.composableBuilder(
+    column: $state.table.featureType,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<int> get referenceId => $state.composableBuilder(
+    column: $state.table.referenceId,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<int> get secondaryId => $state.composableBuilder(
+    column: $state.table.secondaryId,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<String> get title => $state.composableBuilder(
+    column: $state.table.title,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<String> get content => $state.composableBuilder(
+    column: $state.table.content,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<String> get normalizedContent => $state.composableBuilder(
+    column: $state.table.normalizedContent,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+}
+
+class $$SearchableItemsTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $SearchableItemsTableTable,
+          SearchableItem,
+          $$SearchableItemsTableTableFilterComposer,
+          $$SearchableItemsTableTableOrderingComposer,
+          $$SearchableItemsTableTableCreateCompanionBuilder,
+          $$SearchableItemsTableTableUpdateCompanionBuilder,
+          (
+            SearchableItem,
+            BaseReferences<
+              _$AppDatabase,
+              $SearchableItemsTableTable,
+              SearchableItem
+            >,
+          ),
+          SearchableItem,
+          PrefetchHooks Function()
+        > {
+  $$SearchableItemsTableTableTableManager(
+    _$AppDatabase db,
+    $SearchableItemsTableTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer: $$SearchableItemsTableTableFilterComposer(
+            ComposerState(db, table),
+          ),
+          orderingComposer: $$SearchableItemsTableTableOrderingComposer(
+            ComposerState(db, table),
+          ),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<String> featureType = const Value.absent(),
+                Value<int> referenceId = const Value.absent(),
+                Value<int?> secondaryId = const Value.absent(),
+                Value<String?> title = const Value.absent(),
+                Value<String> content = const Value.absent(),
+                Value<String> normalizedContent = const Value.absent(),
+              }) => SearchableItemsTableCompanion(
+                id: id,
+                featureType: featureType,
+                referenceId: referenceId,
+                secondaryId: secondaryId,
+                title: title,
+                content: content,
+                normalizedContent: normalizedContent,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required String featureType,
+                required int referenceId,
+                Value<int?> secondaryId = const Value.absent(),
+                Value<String?> title = const Value.absent(),
+                required String content,
+                required String normalizedContent,
+              }) => SearchableItemsTableCompanion.insert(
+                id: id,
+                featureType: featureType,
+                referenceId: referenceId,
+                secondaryId: secondaryId,
+                title: title,
+                content: content,
+                normalizedContent: normalizedContent,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$SearchableItemsTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $SearchableItemsTableTable,
+      SearchableItem,
+      $$SearchableItemsTableTableFilterComposer,
+      $$SearchableItemsTableTableOrderingComposer,
+      $$SearchableItemsTableTableCreateCompanionBuilder,
+      $$SearchableItemsTableTableUpdateCompanionBuilder,
+      (
+        SearchableItem,
+        BaseReferences<
+          _$AppDatabase,
+          $SearchableItemsTableTable,
+          SearchableItem
+        >,
+      ),
+      SearchableItem,
+      PrefetchHooks Function()
+    >;
+typedef $$SearchHistoryTableTableCreateCompanionBuilder =
+    SearchHistoryTableCompanion Function({
+      Value<int> id,
+      required String query,
+      required DateTime timestamp,
+    });
+typedef $$SearchHistoryTableTableUpdateCompanionBuilder =
+    SearchHistoryTableCompanion Function({
+      Value<int> id,
+      Value<String> query,
+      Value<DateTime> timestamp,
+    });
+
+class $$SearchHistoryTableTableFilterComposer
+    extends FilterComposer<_$AppDatabase, $SearchHistoryTableTable> {
+  $$SearchHistoryTableTableFilterComposer(super.$state);
+  ColumnFilters<int> get id => $state.composableBuilder(
+    column: $state.table.id,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<String> get query => $state.composableBuilder(
+    column: $state.table.query,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<DateTime> get timestamp => $state.composableBuilder(
+    column: $state.table.timestamp,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+}
+
+class $$SearchHistoryTableTableOrderingComposer
+    extends OrderingComposer<_$AppDatabase, $SearchHistoryTableTable> {
+  $$SearchHistoryTableTableOrderingComposer(super.$state);
+  ColumnOrderings<int> get id => $state.composableBuilder(
+    column: $state.table.id,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<String> get query => $state.composableBuilder(
+    column: $state.table.query,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<DateTime> get timestamp => $state.composableBuilder(
+    column: $state.table.timestamp,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+}
+
+class $$SearchHistoryTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $SearchHistoryTableTable,
+          SearchHistoryTableData,
+          $$SearchHistoryTableTableFilterComposer,
+          $$SearchHistoryTableTableOrderingComposer,
+          $$SearchHistoryTableTableCreateCompanionBuilder,
+          $$SearchHistoryTableTableUpdateCompanionBuilder,
+          (
+            SearchHistoryTableData,
+            BaseReferences<
+              _$AppDatabase,
+              $SearchHistoryTableTable,
+              SearchHistoryTableData
+            >,
+          ),
+          SearchHistoryTableData,
+          PrefetchHooks Function()
+        > {
+  $$SearchHistoryTableTableTableManager(
+    _$AppDatabase db,
+    $SearchHistoryTableTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer: $$SearchHistoryTableTableFilterComposer(
+            ComposerState(db, table),
+          ),
+          orderingComposer: $$SearchHistoryTableTableOrderingComposer(
+            ComposerState(db, table),
+          ),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<String> query = const Value.absent(),
+                Value<DateTime> timestamp = const Value.absent(),
+              }) => SearchHistoryTableCompanion(
+                id: id,
+                query: query,
+                timestamp: timestamp,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required String query,
+                required DateTime timestamp,
+              }) => SearchHistoryTableCompanion.insert(
+                id: id,
+                query: query,
+                timestamp: timestamp,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$SearchHistoryTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $SearchHistoryTableTable,
+      SearchHistoryTableData,
+      $$SearchHistoryTableTableFilterComposer,
+      $$SearchHistoryTableTableOrderingComposer,
+      $$SearchHistoryTableTableCreateCompanionBuilder,
+      $$SearchHistoryTableTableUpdateCompanionBuilder,
+      (
+        SearchHistoryTableData,
+        BaseReferences<
+          _$AppDatabase,
+          $SearchHistoryTableTable,
+          SearchHistoryTableData
+        >,
+      ),
+      SearchHistoryTableData,
       PrefetchHooks Function()
     >;
 
@@ -4952,12 +10975,6 @@ class $AppDatabaseManager {
       $$HadithTableTableTableManager(_db, _db.hadithTable);
   $$DuaTableTableTableManager get duaTable =>
       $$DuaTableTableTableManager(_db, _db.duaTable);
-  $$DailySunnahTableTableTableManager get dailySunnahTable =>
-      $$DailySunnahTableTableTableManager(_db, _db.dailySunnahTable);
-  $$DailyTaskTableTableTableManager get dailyTaskTable =>
-      $$DailyTaskTableTableTableManager(_db, _db.dailyTaskTable);
-  $$MuhasabaEntryTableTableTableManager get muhasabaEntryTable =>
-      $$MuhasabaEntryTableTableTableManager(_db, _db.muhasabaEntryTable);
   $$UserFavoriteTableTableTableManager get userFavoriteTable =>
       $$UserFavoriteTableTableTableManager(_db, _db.userFavoriteTable);
   $$UserDailyActivityTableTableTableManager get userDailyActivityTable =>
@@ -4965,4 +10982,28 @@ class $AppDatabaseManager {
         _db,
         _db.userDailyActivityTable,
       );
+  $$DailySunnahTableTableTableManager get dailySunnahTable =>
+      $$DailySunnahTableTableTableManager(_db, _db.dailySunnahTable);
+  $$DailyTaskTableTableTableManager get dailyTaskTable =>
+      $$DailyTaskTableTableTableManager(_db, _db.dailyTaskTable);
+  $$MuhasabaEntryTableTableTableManager get muhasabaEntryTable =>
+      $$MuhasabaEntryTableTableTableManager(_db, _db.muhasabaEntryTable);
+  $$ProgressRecordTableTableTableManager get progressRecordTable =>
+      $$ProgressRecordTableTableTableManager(_db, _db.progressRecordTable);
+  $$RecentActivityTableTableTableManager get recentActivityTable =>
+      $$RecentActivityTableTableTableManager(_db, _db.recentActivityTable);
+  $$UserGoalsTableTableTableManager get userGoalsTable =>
+      $$UserGoalsTableTableTableManager(_db, _db.userGoalsTable);
+  $$ReadingSessionTableTableTableManager get readingSessionTable =>
+      $$ReadingSessionTableTableTableManager(_db, _db.readingSessionTable);
+  $$SavedItemsTableTableTableManager get savedItemsTable =>
+      $$SavedItemsTableTableTableManager(_db, _db.savedItemsTable);
+  $$CollectionsTableTableTableManager get collectionsTable =>
+      $$CollectionsTableTableTableManager(_db, _db.collectionsTable);
+  $$NotesTableTableTableManager get notesTable =>
+      $$NotesTableTableTableManager(_db, _db.notesTable);
+  $$SearchableItemsTableTableTableManager get searchableItemsTable =>
+      $$SearchableItemsTableTableTableManager(_db, _db.searchableItemsTable);
+  $$SearchHistoryTableTableTableManager get searchHistoryTable =>
+      $$SearchHistoryTableTableTableManager(_db, _db.searchHistoryTable);
 }

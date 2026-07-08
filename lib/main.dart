@@ -35,13 +35,29 @@ class AthrApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(appRouterProvider);
-    final themeMode = ref.watch(themeModeProvider);
+    final readingMode = ref.watch(readingModeProvider);
+
+    ThemeMode themeMode;
+    ThemeData lightTheme = AppTheme.lightTheme;
+    ThemeData darkTheme = AppTheme.darkTheme;
+
+    switch (readingMode) {
+      case ReadingMode.light:
+        themeMode = ThemeMode.light;
+        break;
+      case ReadingMode.dark:
+        themeMode = ThemeMode.dark;
+        break;
+    }
 
     return MaterialApp.router(
       title: 'Athr',
+      restorationScopeId: 'athr_app',
       themeMode: themeMode,
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
+      theme: lightTheme,
+      darkTheme: darkTheme,
+      highContrastTheme: lightTheme, // High contrast fallback
+      highContrastDarkTheme: darkTheme, // High contrast fallback
       debugShowCheckedModeBanner: false,
       routerConfig: router,
       // Enforce Arabic RTL globally

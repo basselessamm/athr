@@ -2,10 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:quran_flutter/quran.dart';
+import 'dart:async';
 
 import 'package:athr/features/quran/presentation/widgets/book_page_widget.dart';
-import 'package:athr/core/widgets/premium_quran_flip_widget.dart';
 import 'package:athr/features/quran/presentation/widgets/verse_bottom_sheet.dart';
+import 'package:athr/features/library/modules/recent_activity/providers/recent_activity_providers.dart';
+import 'package:athr/features/progress/providers/progress_providers.dart';
+import 'package:athr/features/settings/providers/settings_providers.dart';
+import 'package:athr/features/reading_session/data/reading_session_repository.dart';
+import 'package:athr/core/theme/reading_theme_extension.dart';
 
 class QuranPageModel {
   final int pageNumber;
@@ -21,26 +26,115 @@ class QuranPageModel {
 
 class QuranReadingScreen extends ConsumerStatefulWidget {
   final int surahNumber;
+  final int? initialPage;
 
-  const QuranReadingScreen({super.key, required this.surahNumber});
+  const QuranReadingScreen({
+    super.key,
+    required this.surahNumber,
+    this.initialPage,
+  });
 
   @override
   ConsumerState<QuranReadingScreen> createState() => _QuranReadingScreenState();
 }
 
-class _QuranReadingScreenState extends ConsumerState<QuranReadingScreen> {
+class _QuranReadingScreenState extends ConsumerState<QuranReadingScreen>
+    with WidgetsBindingObserver {
   late List<QuranPageModel> _pages;
   late PageController _pageController;
+  Timer? _readingTimer;
+  int _secondsRead = 0;
+  int _currentPageIndex = 0;
+  final Set<int> _readPages = {};
 
   @override
   void initState() {
     super.initState();
-    _pageController = PageController();
+    WidgetsBinding.instance.addObserver(this);
     _calculatePages();
+
+    if (widget.initialPage != null) {
+      final idx = _pages.indexWhere((p) => p.pageNumber == widget.initialPage);
+      if (idx != -1) {
+        _currentPageIndex = idx;
+      }
+    }
+
+    _pageController = PageController(initialPage: _currentPageIndex);
+
+    _startTimer();
+    if (_pages.isNotEmpty) {
+      _readPages.add(_pages[_currentPageIndex].pageNumber);
+    }
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.paused ||
+        state == AppLifecycleState.inactive ||
+        state == AppLifecycleState.hidden) {
+      _readingTimer?.cancel();
+      _saveProgress();
+    } else if (state == AppLifecycleState.resumed) {
+      _startTimer();
+    }
+  }
+
+  void _startTimer() {
+    _readingTimer?.cancel();
+    _readingTimer = Timer.periodic(const Duration(seconds: 1), (_) {
+      _secondsRead++;
+    });
+  }
+
+  void _saveProgress() {
+    final lastPageModel = _pages[_currentPageIndex];
+
+    // Save state restoration
+    final currentFontSize = ref.read(quranFontSizeProvider);
+    final currentTheme = ref.read(readingModeProvider);
+
+    ref
+        .read(readingSessionRepositoryProvider)
+        .saveSession(
+          featureType: 'quran',
+          surahId: widget.surahNumber,
+          pageNumber: lastPageModel.pageNumber,
+          fontSize: currentFontSize,
+          themeId: currentTheme.name,
+        );
+
+    if (_secondsRead > 10 || _readPages.isNotEmpty) {
+      ref
+          .read(progressRepositoryProvider)
+          .updateProgress(
+            pagesRead: _readPages.length,
+            readingSeconds: _secondsRead,
+          );
+
+      // Save to recent activities
+      ref
+          .read(recentActivityRepositoryProvider)
+          .addRecentActivity(
+            type: 'quran',
+            title: 'سورة ${Quran.getSurahName(widget.surahNumber)}',
+            subtitle: 'الصفحة ${lastPageModel.pageNumber}',
+            routePath: '/quran/${widget.surahNumber}',
+          );
+
+      // Reset after saving to prevent duplicate tracking
+      _secondsRead = 0;
+      _readPages.clear();
+      _readPages.add(lastPageModel.pageNumber);
+    }
   }
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _readingTimer?.cancel();
+    _saveProgress();
     _pageController.dispose();
     super.dispose();
   }
@@ -84,81 +178,95 @@ class _QuranReadingScreenState extends ConsumerState<QuranReadingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final quranFontSize = ref.watch(quranFontSizeProvider);
+
+    final readingTheme = Theme.of(context).extension<ReadingThemeExtension>();
+
     return Scaffold(
-      extendBodyBehindAppBar: true,
+      backgroundColor: readingTheme?.pageTextureColor,
       appBar: AppBar(
         title: Text('سورة ${Quran.getSurahName(widget.surahNumber)}'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios),
           onPressed: () => context.pop(),
         ),
-        backgroundColor: Colors.transparent,
+        backgroundColor: readingTheme?.pageTextureColor,
         elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.white),
-        titleTextStyle: const TextStyle(color: Colors.white, fontSize: 20),
       ),
       body: SafeArea(
-        child: PremiumQuranFlipWidget(
-          initialIndex: 0,
-          itemCount: _pages.length,
-          endPage: Container(
-            color: const Color(0xFFFDF7EF),
-            alignment: Alignment.center,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(
-                  Icons.check_circle_outline,
-                  size: 80,
-                  color: Color(0xFFC7A87D),
-                ),
-                const SizedBox(height: 24),
-                const Text(
-                  'نهاية السورة',
-                  style: TextStyle(
-                    fontSize: 32,
-                    color: Color(0xFF5A4328),
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  'سورة ${Quran.getSurahName(widget.surahNumber)}',
-                  style: const TextStyle(
-                    fontSize: 22,
-                    color: Color(0xFF8B6F4E),
-                  ),
-                ),
-                const SizedBox(height: 48),
-                ElevatedButton(
-                  onPressed: () => context.pop(),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFC7A87D),
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 40,
-                      vertical: 12,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                  ),
-                  child: const Text(
-                    'العودة للقرآن',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                ),
-              ],
-            ),
-          ),
+        child: PageView.builder(
+          controller: _pageController,
+          itemCount: _pages.length + 1, // +1 for the end page
+          onPageChanged: (index) {
+            if (index < _pages.length) {
+              _currentPageIndex = index;
+              _readPages.add(_pages[index].pageNumber);
+              _saveProgress();
+            }
+          },
           itemBuilder: (context, index) {
-            final model = _pages[index];
+            if (index == _pages.length) {
+              return Container(
+                color: Theme.of(context).scaffoldBackgroundColor,
+                alignment: Alignment.center,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.check_circle_outline,
+                      size: 80,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                    const SizedBox(height: 24),
+                    Text(
+                      'نهاية السورة',
+                      style: TextStyle(
+                        fontSize: 32,
+                        color: Theme.of(context).colorScheme.onSurface,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      'سورة ${Quran.getSurahName(widget.surahNumber)}',
+                      style: TextStyle(
+                        fontSize: 22,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                    const SizedBox(height: 48),
+                    ElevatedButton(
+                      onPressed: () => context.pop(),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Theme.of(context).colorScheme.primary,
+                        foregroundColor: Theme.of(
+                          context,
+                        ).colorScheme.onPrimary,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 40,
+                          vertical: 12,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                      ),
+                      child: const Text(
+                        'العودة للقرآن',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }
 
+            final model = _pages[index];
             return BookPageWidget(
               pageNumber: model.pageNumber,
               headerTitle: 'سورة ${Quran.getSurahName(widget.surahNumber)}',
               headerSubtitle: 'الجزء ${model.juzNum}',
               verses: model.verses,
+              fontSize: quranFontSize,
               onAyahTapped: (surah, ayah) {
                 showModalBottomSheet(
                   context: context,

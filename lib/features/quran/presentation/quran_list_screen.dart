@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:quran_flutter/quran.dart';
+import 'package:athr/core/theme/app_spacing.dart';
+import 'package:athr/core/theme/app_radius.dart';
+import 'package:athr/core/theme/app_shadows.dart';
+import 'package:athr/core/theme/app_typography.dart';
 import 'package:athr/core/widgets/athr_scaffold.dart';
 import 'package:athr/core/widgets/main_navigation_bar.dart';
 import 'package:athr/features/quran/presentation/widgets/surah_list_tile.dart';
@@ -12,81 +16,163 @@ class QuranListScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final theme = Theme.of(context);
     final bookmark = ref.watch(bookmarkProvider);
 
     return AthrScaffold(
       title: 'القرآن الكريم',
-      body: Column(
-        children: [
-          if (bookmark != null)
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Material(
-                color: Theme.of(context).colorScheme.primaryContainer,
-                borderRadius: BorderRadius.circular(16),
-                clipBehavior: Clip.antiAlias,
-                child: InkWell(
-                  onTap: () {
-                    context.push('/quran/${bookmark.surah}');
-                  },
-                  child: Padding(
+      extendBody: true,
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              const Color(0xFF3E6B5B).withValues(alpha: 0.1),
+              theme.colorScheme.surface,
+              theme.colorScheme.surface,
+            ],
+            stops: const [0.0, 0.25, 1.0],
+          ),
+        ),
+        child: CustomScrollView(
+          physics: const BouncingScrollPhysics(),
+          slivers: [
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.all(AppSpacing.md),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (bookmark != null) ...[
+                      _ContinueReadingHero(
+                        surahNumber: bookmark.surah,
+                        onTap: () => context.push('/quran/${bookmark.surah}'),
+                      ),
+                      const SizedBox(height: AppSpacing.xl),
+                    ],
+                    Text(
+                      'فهرس السور',
+                      style: AppTypography.cairoTextTheme().titleLarge
+                          ?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: theme.colorScheme.onSurface,
+                          ),
+                    ),
+                    const SizedBox(height: AppSpacing.md),
+                  ],
+                ),
+              ),
+            ),
+            SliverPadding(
+              padding: const EdgeInsets.only(
+                left: AppSpacing.md,
+                right: AppSpacing.md,
+                bottom: 120, // Padding for nav bar
+              ),
+              sliver: SliverList(
+                delegate: SliverChildBuilderDelegate((context, index) {
+                  final surahNumber = index + 1;
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: AppSpacing.md),
+                    child: SurahListTile(surahNumber: surahNumber),
+                  );
+                }, childCount: 114),
+              ),
+            ),
+          ],
+        ),
+      ),
+      bottomNavigationBar: const MainNavigationBar(selectedIndex: 1),
+    );
+  }
+}
+
+class _ContinueReadingHero extends StatelessWidget {
+  final int surahNumber;
+  final VoidCallback onTap;
+
+  const _ContinueReadingHero({required this.surahNumber, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(AppRadius.lg),
+      child: Container(
+        padding: const EdgeInsets.all(AppSpacing.lg),
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            begin: Alignment.topRight,
+            end: Alignment.bottomLeft,
+            colors: [Color(0xFF2C5E4A), Color(0xFF3E6B5B)],
+          ),
+          borderRadius: BorderRadius.circular(AppRadius.lg),
+          boxShadow: AppShadows.card,
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 24.0,
-                      vertical: 16.0,
+                      horizontal: AppSpacing.sm,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.15),
+                      borderRadius: BorderRadius.circular(AppRadius.round),
                     ),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'إكمال القراءة',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onPrimaryContainer
-                                    .withValues(alpha: 0.8),
-                              ),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              'سورة ${Quran.getSurahName(bookmark.surah)}',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Theme.of(
-                                  context,
-                                ).colorScheme.onPrimaryContainer,
-                              ),
-                            ),
-                          ],
+                        const Icon(
+                          Icons.bookmark_rounded,
+                          size: 14,
+                          color: Colors.white,
                         ),
-                        Icon(
-                          Icons.bookmark,
-                          color: Theme.of(context).colorScheme.primary,
-                          size: 32,
+                        const SizedBox(width: 4),
+                        Text(
+                          'إكمال القراءة',
+                          style: AppTypography.cairoTextTheme().labelMedium
+                              ?.copyWith(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
                         ),
                       ],
                     ),
                   ),
-                ),
+                  const SizedBox(height: AppSpacing.md),
+                  Text(
+                    'سورة ${Quran.getSurahName(surahNumber)}',
+                    style: AppTypography.cairoTextTheme().headlineMedium
+                        ?.copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                ],
               ),
             ),
-          Expanded(
-            child: ListView.separated(
-              itemCount: 114,
-              separatorBuilder: (context, index) => const Divider(height: 1),
-              itemBuilder: (context, index) {
-                final surahNumber = index + 1;
-                return SurahListTile(surahNumber: surahNumber);
-              },
+            Container(
+              width: 72,
+              height: 72,
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.1),
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Icons.menu_book_rounded,
+                size: 32,
+                color: Colors.white,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
-      bottomNavigationBar: const MainNavigationBar(selectedIndex: 1),
     );
   }
 }

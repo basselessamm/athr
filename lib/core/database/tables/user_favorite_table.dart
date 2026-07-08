@@ -10,6 +10,7 @@ class UserFavoriteTable extends Table {
   TextColumn get contentText => text()();
   TextColumn get source => text()();
   TextColumn get createdAt => text()();
+  TextColumn get note => text().nullable()();
 
   @override
   List<Set<Column>> get uniqueKeys => [

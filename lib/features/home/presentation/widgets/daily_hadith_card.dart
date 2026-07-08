@@ -65,7 +65,10 @@ class DailyHadithCard extends ConsumerWidget {
                         children: [
                           TextButton(
                             onPressed: () {
-                              context.pushNamed('hadithReading', pathParameters: {'bookName': hadith.bookName});
+                              context.pushNamed(
+                                'hadithReading',
+                                pathParameters: {'bookName': hadith.bookName},
+                              );
                             },
                             child: const Text('فتح الكتاب'),
                           ),

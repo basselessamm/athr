@@ -6,6 +6,7 @@ class PremiumQuranFlipWidget extends StatefulWidget {
   final Widget Function(BuildContext context, int index) itemBuilder;
   final Widget endPage;
   final int initialIndex;
+  final ValueChanged<int>? onPageChanged;
 
   const PremiumQuranFlipWidget({
     super.key,
@@ -13,6 +14,7 @@ class PremiumQuranFlipWidget extends StatefulWidget {
     required this.itemBuilder,
     required this.endPage,
     this.initialIndex = 0,
+    this.onPageChanged,
   });
 
   @override
@@ -47,6 +49,7 @@ class _PremiumQuranFlipWidgetState extends State<PremiumQuranFlipWidget> {
       controller: _controller,
       physics: const BouncingScrollPhysics(),
       itemCount: widget.itemCount + 1,
+      onPageChanged: widget.onPageChanged,
       itemBuilder: (context, index) {
         if (index == widget.itemCount) {
           return widget.endPage;
@@ -54,7 +57,7 @@ class _PremiumQuranFlipWidgetState extends State<PremiumQuranFlipWidget> {
 
         // Calculate how far this page is from the current view
         final difference = index - _currentPageValue;
-        
+
         // If the page is completely out of view, don't render its heavy flip logic
         if (difference <= -1.0 || difference >= 1.0) {
           return const SizedBox.shrink(); // Lazy load optimization
@@ -76,12 +79,12 @@ class _PremiumQuranFlipWidgetState extends State<PremiumQuranFlipWidget> {
   Widget _buildPage(int index, double difference) {
     // Add page curl/shadow details dynamically based on difference
     final shadowOpacity = (difference.abs() * 0.5).clamp(0.0, 0.5);
-    
+
     return Stack(
       fit: StackFit.expand,
       children: [
         widget.itemBuilder(context, index),
-        
+
         // Shadow overlay during flip
         if (difference != 0)
           Container(

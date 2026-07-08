@@ -15,7 +15,9 @@ import 'package:athr/features/challenges/presentation/challenges_list_screen.dar
 import 'package:athr/features/favorites/presentation/favorites_screen.dart';
 import 'package:athr/features/muhasaba/presentation/muhasaba_screen.dart';
 import 'package:athr/features/progress/presentation/progress_screen.dart';
-import 'package:athr/features/search/presentation/search_screen.dart';
+import 'package:athr/features/progress/presentation/goal_setting_screen.dart';
+import 'package:athr/features/library/presentation/library_screen.dart';
+import 'package:athr/features/search/presentation/global_search_screen.dart';
 import 'package:athr/core/router/error_screen.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
@@ -35,8 +37,16 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/quran/:surahId',
         builder: (context, state) {
-          final surahId = int.parse(state.pathParameters['surahId']!);
-          return QuranReadingScreen(surahNumber: surahId);
+          final surahId =
+              int.tryParse(state.pathParameters['surahId'] ?? '1') ?? 1;
+          final pageParam = state.uri.queryParameters['page'];
+          final initialPage = pageParam != null
+              ? int.tryParse(pageParam)
+              : null;
+          return QuranReadingScreen(
+            surahNumber: surahId,
+            initialPage: initialPage,
+          );
         },
       ),
       GoRoute(
@@ -76,6 +86,14 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const ProgressScreen(),
       ),
       GoRoute(
+        path: '/goal_setting',
+        builder: (context, state) => const GoalSettingScreen(),
+      ),
+      GoRoute(
+        path: '/library',
+        builder: (context, state) => const LibraryScreen(),
+      ),
+      GoRoute(
         path: '/muhasaba',
         builder: (context, state) => const MuhasabaScreen(),
       ),
@@ -96,7 +114,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/search',
-        builder: (context, state) => const SearchScreen(),
+        builder: (context, state) => const GlobalSearchScreen(),
       ),
     ],
   );

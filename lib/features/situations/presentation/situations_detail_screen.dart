@@ -4,6 +4,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:quran_flutter/quran.dart';
 
 import 'package:athr/core/database/app_database.dart';
+import 'package:athr/core/theme/app_spacing.dart';
+import 'package:athr/core/theme/app_radius.dart';
+import 'package:athr/core/theme/app_shadows.dart';
+import 'package:athr/core/theme/app_typography.dart';
 import 'package:athr/core/widgets/athr_scaffold.dart';
 import 'package:athr/features/azkar/providers/azkar_providers.dart';
 import 'package:athr/features/settings/providers/settings_providers.dart';
@@ -16,176 +20,262 @@ class SituationDetailScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final theme = Theme.of(context);
     final situation = ref.watch(situationByIdProvider(id));
     final content = ref.watch(situationContentProvider(id));
     final duasAsync = ref.watch(azkarByCategoryProvider(situation.duaCategory));
     final hadithsAsync = ref.watch(situationHadithProvider(id));
-    final fontSize = ref.watch(fontSizeProvider);
+    final fontSize = ref.watch(quranFontSizeProvider);
 
     return AthrScaffold(
       title: situation.title,
-      body: ListView(
-        padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
-        children: [
-          _IntroCard(
-            emoji: situation.emoji,
-            title: situation.title,
-            description: content.intro,
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              theme.colorScheme.primary.withValues(alpha: 0.1),
+              theme.colorScheme.surface,
+              theme.colorScheme.surface,
+            ],
+            stops: const [0.0, 0.3, 1.0],
           ),
-          const SizedBox(height: 16),
-          _SectionCard(
-            title: 'خطوات عملية الآن',
-            child: Column(
-              children: content.actionSteps
-                  .map(
-                    (step) => Padding(
-                      padding: const EdgeInsets.only(bottom: 12),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.only(top: 3),
-                            child: Icon(Icons.check_circle_outline, size: 18),
-                          ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: Text(
-                              step,
-                              style: const TextStyle(height: 1.6),
+        ),
+        child: ListView(
+          physics: const BouncingScrollPhysics(),
+          padding: const EdgeInsets.all(AppSpacing.lg),
+          children: [
+            _IntroCard(
+              emoji: situation.emoji,
+              title: situation.title,
+              description: content.intro,
+            ),
+            const SizedBox(height: AppSpacing.lg),
+            _SectionCard(
+              title: 'خطوات عملية الآن',
+              icon: Icons.checklist_rtl_rounded,
+              child: Column(
+                children: content.actionSteps
+                    .map(
+                      (step) => Padding(
+                        padding: const EdgeInsets.only(bottom: AppSpacing.md),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(4),
+                              decoration: BoxDecoration(
+                                color: theme.colorScheme.primary.withValues(
+                                  alpha: 0.1,
+                                ),
+                                shape: BoxShape.circle,
+                              ),
+                              child: Icon(
+                                Icons.check_circle_rounded,
+                                size: 20,
+                                color: theme.colorScheme.primary,
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  )
-                  .toList(),
-            ),
-          ),
-          const SizedBox(height: 16),
-          _SectionCard(
-            title: 'آيات مناسبة لهذا الموقف',
-            child: Column(
-              children: content.verses.map((verseRef) {
-                final verse = Quran.getVerse(
-                  surahNumber: verseRef.surahNumber,
-                  verseNumber: verseRef.ayahNumber,
-                ).text;
-
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 18),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Text(
-                        verse,
-                        style: GoogleFonts.amiri(
-                          fontSize: fontSize,
-                          height: 1.9,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        verseRef.sourceLabel,
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                );
-              }).toList(),
-            ),
-          ),
-          const SizedBox(height: 16),
-          _SectionCard(
-            title: 'أذكار وأدعية',
-            child: duasAsync.when(
-              data: (duas) {
-                if (duas.isEmpty) {
-                  return const Text('لا توجد أدعية متاحة لهذا الموقف الآن.');
-                }
-
-                return Column(
-                  children: duas.take(3).map((dua) {
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 18),
-                      child: Column(
-                        children: [
-                          Text(
-                            dua.duaText,
-                            style: TextStyle(fontSize: fontSize, height: 1.8),
-                            textAlign: TextAlign.center,
-                          ),
-                          if (dua.reference != null &&
-                              dua.reference!.isNotEmpty) ...[
-                            const SizedBox(height: 8),
-                            Text(
-                              dua.reference!,
-                              style: Theme.of(context).textTheme.bodySmall
-                                  ?.copyWith(
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.onSurfaceVariant,
-                                  ),
-                              textAlign: TextAlign.center,
+                            const SizedBox(width: AppSpacing.md),
+                            Expanded(
+                              child: Text(
+                                step,
+                                style: AppTypography.cairoTextTheme().bodyMedium
+                                    ?.copyWith(
+                                      height: 1.6,
+                                      color: theme.colorScheme.onSurface,
+                                    ),
+                              ),
                             ),
                           ],
-                        ],
+                        ),
                       ),
-                    );
-                  }).toList(),
-                );
-              },
-              loading: () => const Center(child: CircularProgressIndicator()),
-              error: (error, stackTrace) => Text('تعذر تحميل الأدعية: $error'),
+                    )
+                    .toList(),
+              ),
             ),
-          ),
-          const SizedBox(height: 16),
-          _SectionCard(
-            title: 'حديث يساند هذا المعنى',
-            child: hadithsAsync.when(
-              data: (hadiths) {
-                if (hadiths.isEmpty) {
-                  return const Text(
-                    'لا يوجد حديث مطابق محفوظ محليًا لهذا الموقف حتى الآن.',
-                  );
-                }
+            const SizedBox(height: AppSpacing.lg),
+            _SectionCard(
+              title: 'آيات مناسبة لهذا الموقف',
+              icon: Icons.menu_book_rounded,
+              child: Column(
+                children: content.verses.map((verseRef) {
+                  final verse = Quran.getVerse(
+                    surahNumber: verseRef.surahNumber,
+                    verseNumber: verseRef.ayahNumber,
+                  ).text;
 
-                final typedHadiths = hadiths.cast<Hadith>();
-
-                return Column(
-                  children: typedHadiths.map<Widget>((hadith) {
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 18),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Text(
-                            hadith.hadithTextAr,
-                            style: const TextStyle(fontSize: 17, height: 1.8),
-                            textAlign: TextAlign.justify,
+                  return Container(
+                    padding: const EdgeInsets.all(AppSpacing.lg),
+                    margin: const EdgeInsets.only(bottom: AppSpacing.md),
+                    decoration: BoxDecoration(
+                      color: theme.colorScheme.surfaceContainerHighest
+                          .withValues(alpha: 0.3),
+                      borderRadius: BorderRadius.circular(AppRadius.lg),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text(
+                          verse,
+                          style: GoogleFonts.amiri(
+                            fontSize: fontSize,
+                            height: 2.2,
+                            color: theme.colorScheme.onSurface,
                           ),
-                          const SizedBox(height: 8),
-                          Text(
-                            hadith.reference ?? hadith.bookName,
-                            style: Theme.of(context).textTheme.bodySmall
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: AppSpacing.md),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: AppSpacing.md,
+                            vertical: 4,
+                          ),
+                          decoration: BoxDecoration(
+                            color: theme.colorScheme.primary.withValues(
+                              alpha: 0.1,
+                            ),
+                            borderRadius: BorderRadius.circular(
+                              AppRadius.round,
+                            ),
+                          ),
+                          child: Text(
+                            verseRef.sourceLabel,
+                            style: AppTypography.cairoTextTheme().labelMedium
                                 ?.copyWith(
-                                  color: Theme.of(context).colorScheme.primary,
+                                  color: theme.colorScheme.primary,
+                                  fontWeight: FontWeight.bold,
                                 ),
+                            textAlign: TextAlign.center,
                           ),
-                        ],
-                      ),
-                    );
-                  }).toList(),
-                );
-              },
-              loading: () => const Center(child: CircularProgressIndicator()),
-              error: (error, stackTrace) => Text('تعذر تحميل الأحاديث: $error'),
+                        ),
+                      ],
+                    ),
+                  );
+                }).toList(),
+              ),
             ),
-          ),
-        ],
+            const SizedBox(height: AppSpacing.lg),
+            _SectionCard(
+              title: 'أذكار وأدعية',
+              icon: Icons.volunteer_activism_rounded,
+              child: duasAsync.when(
+                data: (duas) {
+                  if (duas.isEmpty) {
+                    return Text(
+                      'لا توجد أدعية متاحة لهذا الموقف الآن.',
+                      style: AppTypography.cairoTextTheme().bodyMedium
+                          ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                    );
+                  }
+
+                  return Column(
+                    children: duas.take(3).map((dua) {
+                      return Container(
+                        padding: const EdgeInsets.all(AppSpacing.lg),
+                        margin: const EdgeInsets.only(bottom: AppSpacing.md),
+                        decoration: BoxDecoration(
+                          color: theme.colorScheme.surfaceContainerHighest
+                              .withValues(alpha: 0.3),
+                          borderRadius: BorderRadius.circular(AppRadius.lg),
+                        ),
+                        child: Column(
+                          children: [
+                            Text(
+                              dua.duaText,
+                              style: TextStyle(
+                                fontSize: fontSize,
+                                height: 2.0,
+                                color: theme.colorScheme.onSurface,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            if (dua.reference != null &&
+                                dua.reference!.isNotEmpty) ...[
+                              const SizedBox(height: AppSpacing.md),
+                              Text(
+                                dua.reference!,
+                                style: AppTypography.cairoTextTheme().bodySmall
+                                    ?.copyWith(
+                                      color: theme.colorScheme.primary,
+                                    ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ],
+                        ),
+                      );
+                    }).toList(),
+                  );
+                },
+                loading: () => const Center(child: CircularProgressIndicator()),
+                error: (error, stackTrace) =>
+                    Text('تعذر تحميل الأدعية: $error'),
+              ),
+            ),
+            const SizedBox(height: AppSpacing.lg),
+            _SectionCard(
+              title: 'حديث يساند هذا المعنى',
+              icon: Icons.format_quote_rounded,
+              child: hadithsAsync.when(
+                data: (hadiths) {
+                  if (hadiths.isEmpty) {
+                    return Text(
+                      'لا يوجد حديث مطابق محفوظ محليًا لهذا الموقف حتى الآن.',
+                      style: AppTypography.cairoTextTheme().bodyMedium
+                          ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                    );
+                  }
+
+                  final typedHadiths = hadiths.cast<Hadith>();
+
+                  return Column(
+                    children: typedHadiths.map<Widget>((hadith) {
+                      return Container(
+                        padding: const EdgeInsets.all(AppSpacing.lg),
+                        margin: const EdgeInsets.only(bottom: AppSpacing.md),
+                        decoration: BoxDecoration(
+                          color: theme.colorScheme.surfaceContainerHighest
+                              .withValues(alpha: 0.3),
+                          borderRadius: BorderRadius.circular(AppRadius.lg),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Text(
+                              hadith.hadithTextAr,
+                              style: TextStyle(
+                                fontSize: fontSize - 2,
+                                height: 2.0,
+                                color: theme.colorScheme.onSurface,
+                              ),
+                              textAlign: TextAlign.justify,
+                            ),
+                            const SizedBox(height: AppSpacing.md),
+                            Text(
+                              hadith.reference ?? hadith.bookName,
+                              style: AppTypography.cairoTextTheme().labelMedium
+                                  ?.copyWith(
+                                    color: theme.colorScheme.primary,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                              textAlign: TextAlign.left,
+                            ),
+                          ],
+                        ),
+                      );
+                    }).toList(),
+                  );
+                },
+                loading: () => const Center(child: CircularProgressIndicator()),
+                error: (error, stackTrace) =>
+                    Text('تعذر تحميل الأحاديث: $error'),
+              ),
+            ),
+            const SizedBox(height: AppSpacing.xxl),
+          ],
+        ),
       ),
     );
   }
@@ -204,29 +294,44 @@ class _IntroCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(AppSpacing.xl),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.primaryContainer,
-        borderRadius: BorderRadius.circular(24),
+        color: theme.colorScheme.surface,
+        borderRadius: BorderRadius.circular(AppRadius.xl),
+        boxShadow: AppShadows.card,
+        border: Border.all(
+          color: theme.colorScheme.outlineVariant.withValues(alpha: 0.3),
+        ),
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text(emoji, style: const TextStyle(fontSize: 34)),
-          const SizedBox(height: 8),
+          Container(
+            padding: const EdgeInsets.all(AppSpacing.lg),
+            decoration: BoxDecoration(
+              color: theme.colorScheme.primary.withValues(alpha: 0.1),
+              shape: BoxShape.circle,
+            ),
+            child: Text(emoji, style: const TextStyle(fontSize: 48)),
+          ),
+          const SizedBox(height: AppSpacing.lg),
           Text(
             title,
-            style: Theme.of(
-              context,
-            ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+            style: AppTypography.cairoTextTheme().headlineSmall?.copyWith(
+              fontWeight: FontWeight.bold,
+              color: theme.colorScheme.onSurface,
+            ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: AppSpacing.md),
           Text(
             description,
-            style: Theme.of(
-              context,
-            ).textTheme.bodyMedium?.copyWith(height: 1.7),
+            style: AppTypography.cairoTextTheme().bodyMedium?.copyWith(
+              height: 1.8,
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
+            textAlign: TextAlign.center,
           ),
         ],
       ),
@@ -236,30 +341,46 @@ class _IntroCard extends StatelessWidget {
 
 class _SectionCard extends StatelessWidget {
   final String title;
+  final IconData icon;
   final Widget child;
 
-  const _SectionCard({required this.title, required this.child});
+  const _SectionCard({
+    required this.title,
+    required this.icon,
+    required this.child,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-        side: BorderSide(color: Theme.of(context).colorScheme.outlineVariant),
+    final theme = Theme.of(context);
+    return Container(
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surface,
+        borderRadius: BorderRadius.circular(AppRadius.xl),
+        boxShadow: AppShadows.minimal,
+        border: Border.all(
+          color: theme.colorScheme.outlineVariant.withValues(alpha: 0.2),
+        ),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(18),
+        padding: const EdgeInsets.all(AppSpacing.lg),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text(
-              title,
-              style: Theme.of(
-                context,
-              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+            Row(
+              children: [
+                Icon(icon, color: theme.colorScheme.primary, size: 24),
+                const SizedBox(width: AppSpacing.sm),
+                Text(
+                  title,
+                  style: AppTypography.cairoTextTheme().titleMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: theme.colorScheme.primary,
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(height: 14),
+            const SizedBox(height: AppSpacing.lg),
             child,
           ],
         ),

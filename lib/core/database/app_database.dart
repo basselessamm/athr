@@ -10,11 +10,19 @@ import 'package:sqlite3/sqlite3.dart';
 import 'tables/quran_tafseer_table.dart';
 import 'tables/hadith_table.dart';
 import 'tables/dua_table.dart';
-import 'tables/daily_sunnah_table.dart';
-import 'tables/daily_task_table.dart';
-import 'tables/muhasaba_entry_table.dart';
-import 'tables/user_daily_activity_table.dart';
-import 'tables/user_favorite_table.dart';
+import 'package:athr/core/database/tables/daily_sunnah_table.dart';
+import 'package:athr/core/database/tables/daily_task_table.dart';
+import 'package:athr/core/database/tables/muhasaba_entry_table.dart';
+import 'package:athr/core/database/tables/progress_record_table.dart';
+import 'package:athr/core/database/tables/recent_activity_table.dart';
+import 'package:athr/core/database/tables/user_goals_table.dart';
+import 'package:athr/core/database/tables/reading_session_table.dart';
+import 'package:athr/core/database/tables/user_favorite_table.dart';
+
+import 'tables/library_tables.dart';
+import 'tables/search_tables.dart';
+import 'tables/search_history_table.dart';
+import 'package:athr/core/database/tables/user_daily_activity_table.dart';
 
 part 'app_database.g.dart';
 
@@ -23,19 +31,29 @@ part 'app_database.g.dart';
     QuranTafseerTable,
     HadithTable,
     DuaTable,
+    UserFavoriteTable,
+    UserDailyActivityTable,
     DailySunnahTable,
     DailyTaskTable,
     MuhasabaEntryTable,
-    UserFavoriteTable,
-    UserDailyActivityTable,
+    ProgressRecordTable,
+    RecentActivityTable,
+    UserGoalsTable,
+    ReadingSessionTable,
+    SavedItemsTable,
+    CollectionsTable,
+    NotesTable,
+    SearchableItemsTable,
+    SearchHistoryTable,
   ],
 )
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
+
   AppDatabase.forTesting(super.executor);
 
   @override
-  int get schemaVersion => 4;
+  int get schemaVersion => 12;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -60,6 +78,139 @@ class AppDatabase extends _$AppDatabase {
         await customStatement(
           "UPDATE hadith_table SET book_name = 'صحيح مسلم' WHERE book_name = 'Sahih Muslim'",
         );
+      }
+      if (from < 5) {
+        await m.createTable(progressRecordTable);
+        await m.createTable(recentActivityTable);
+      }
+      if (from < 6) {
+        await m.createTable(userGoalsTable);
+        try {
+          await m.addColumn(userFavoriteTable, userFavoriteTable.note);
+        } catch (_) {}
+      }
+      if (from < 7) {
+        try {
+          await m.addColumn(userGoalsTable, userGoalsTable.title);
+        } catch (_) {}
+        try {
+          await m.addColumn(userGoalsTable, userGoalsTable.icon);
+        } catch (_) {}
+      }
+      if (from < 8) {
+        try {
+          await m.addColumn(userGoalsTable, userGoalsTable.metric);
+        } catch (_) {}
+        try {
+          await m.addColumn(userGoalsTable, userGoalsTable.resetPolicy);
+        } catch (_) {}
+        try {
+          await m.addColumn(userGoalsTable, userGoalsTable.metadata);
+        } catch (_) {}
+
+        // Migrate old goalTypes to new metric logic implicitly
+        try {
+          await customStatement(
+            "UPDATE user_goals_table SET metric = 'quran_pages' WHERE goal_type = 'pages'",
+          );
+          await customStatement(
+            "UPDATE user_goals_table SET metric = 'quran_minutes' WHERE goal_type = 'minutes'",
+          );
+          await customStatement(
+            "UPDATE user_goals_table SET metric = 'azkar_count' WHERE goal_type = 'azkar'",
+          );
+          await customStatement(
+            "UPDATE user_goals_table SET metric = 'hadith_count' WHERE goal_type = 'hadith'",
+          );
+          await customStatement(
+            "UPDATE user_goals_table SET metric = 'muhasaba_done' WHERE goal_type = 'muhasaba'",
+          );
+        } catch (_) {}
+      }
+      if (from < 10) {
+        await m.createTable(savedItemsTable);
+        await m.createTable(collectionsTable);
+        await m.createTable(notesTable);
+        await m.createTable(searchableItemsTable);
+
+        await customStatement('''
+          CREATE VIRTUAL TABLE IF NOT EXISTS search_index USING fts5(
+            title,
+            content,
+            normalized_content,
+            feature_type UNINDEXED,
+            reference_id UNINDEXED,
+            secondary_id UNINDEXED,
+            content='searchable_items_table',
+            content_rowid='id'
+          )
+        ''');
+
+        // Create triggers to keep FTS index synced
+        await customStatement('''
+          CREATE TRIGGER searchable_items_ai AFTER INSERT ON searchable_items_table BEGIN
+            INSERT INTO search_index(rowid, title, content, normalized_content, feature_type, reference_id, secondary_id)
+            VALUES (new.id, new.title, new.content, new.normalized_content, new.feature_type, new.reference_id, new.secondary_id);
+          END;
+        ''');
+        await customStatement('''
+          CREATE TRIGGER searchable_items_ad AFTER DELETE ON searchable_items_table BEGIN
+            INSERT INTO search_index(search_index, rowid, title, content, normalized_content, feature_type, reference_id, secondary_id)
+            VALUES('delete', old.id, old.title, old.content, old.normalized_content, old.feature_type, old.reference_id, old.secondary_id);
+          END;
+        ''');
+        await customStatement('''
+          CREATE TRIGGER searchable_items_au AFTER UPDATE ON searchable_items_table BEGIN
+            INSERT INTO search_index(search_index, rowid, title, content, normalized_content, feature_type, reference_id, secondary_id)
+            VALUES('delete', old.id, old.title, old.content, old.normalized_content, old.feature_type, old.reference_id, old.secondary_id);
+            INSERT INTO search_index(rowid, title, content, normalized_content, feature_type, reference_id, secondary_id)
+            VALUES (new.id, new.title, new.content, new.normalized_content, new.feature_type, new.reference_id, new.secondary_id);
+          END;
+        ''');
+      }
+      if (from < 11) {
+        await m.createTable(searchHistoryTable);
+      }
+      if (from < 12) {
+        // Fix FTS triggers that were created with camelCase column names which SQLite rejected during execution
+        await customStatement('DROP TABLE IF EXISTS search_index');
+        await customStatement('DROP TRIGGER IF EXISTS searchable_items_ai');
+        await customStatement('DROP TRIGGER IF EXISTS searchable_items_ad');
+        await customStatement('DROP TRIGGER IF EXISTS searchable_items_au');
+
+        await customStatement('''
+          CREATE VIRTUAL TABLE IF NOT EXISTS search_index USING fts5(
+            title,
+            content,
+            normalized_content,
+            feature_type UNINDEXED,
+            reference_id UNINDEXED,
+            secondary_id UNINDEXED,
+            content='searchable_items_table',
+            content_rowid='id'
+          )
+        ''');
+
+        await customStatement('''
+          CREATE TRIGGER searchable_items_ai AFTER INSERT ON searchable_items_table BEGIN
+            INSERT INTO search_index(rowid, title, content, normalized_content, feature_type, reference_id, secondary_id)
+            VALUES (new.id, new.title, new.content, new.normalized_content, new.feature_type, new.reference_id, new.secondary_id);
+          END;
+        ''');
+        await customStatement('''
+          CREATE TRIGGER searchable_items_ad AFTER DELETE ON searchable_items_table BEGIN
+            INSERT INTO search_index(search_index, rowid, title, content, normalized_content, feature_type, reference_id, secondary_id)
+            VALUES('delete', old.id, old.title, old.content, old.normalized_content, old.feature_type, old.reference_id, old.secondary_id);
+          END;
+        ''');
+        await customStatement('''
+          CREATE TRIGGER searchable_items_au AFTER UPDATE ON searchable_items_table BEGIN
+            INSERT INTO search_index(search_index, rowid, title, content, normalized_content, feature_type, reference_id, secondary_id)
+            VALUES('delete', old.id, old.title, old.content, old.normalized_content, old.feature_type, old.reference_id, old.secondary_id);
+            INSERT INTO search_index(rowid, title, content, normalized_content, feature_type, reference_id, secondary_id)
+            VALUES (new.id, new.title, new.content, new.normalized_content, new.feature_type, new.reference_id, new.secondary_id);
+          END;
+        ''');
       }
     },
     beforeOpen: (details) async {

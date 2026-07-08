@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:athr/core/widgets/premium_quran_flip_widget.dart';
+import 'dart:async';
+
 import 'package:athr/features/hadith/providers/hadith_providers.dart';
 import 'package:athr/features/settings/providers/settings_providers.dart';
 import 'package:athr/features/hadith/presentation/widgets/hadith_page_widget.dart';
+import 'package:athr/features/progress/providers/progress_providers.dart';
+import 'package:athr/features/library/modules/recent_activity/providers/recent_activity_providers.dart';
 
 class HadithReadingScreen extends ConsumerStatefulWidget {
   final String bookName;
@@ -16,17 +19,71 @@ class HadithReadingScreen extends ConsumerStatefulWidget {
       _HadithReadingScreenState();
 }
 
-class _HadithReadingScreenState extends ConsumerState<HadithReadingScreen> {
+class _HadithReadingScreenState extends ConsumerState<HadithReadingScreen>
+    with WidgetsBindingObserver {
   late PageController _pageController;
+  Timer? _readingTimer;
+  int _secondsRead = 0;
+  int _currentPageIndex = 0;
+  final Set<int> _readHadiths = {0};
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _pageController = PageController();
+    _startTimer();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.paused ||
+        state == AppLifecycleState.inactive ||
+        state == AppLifecycleState.hidden) {
+      _readingTimer?.cancel();
+      _saveProgress();
+    } else if (state == AppLifecycleState.resumed) {
+      _startTimer();
+    }
+  }
+
+  void _startTimer() {
+    _readingTimer?.cancel();
+    _readingTimer = Timer.periodic(const Duration(seconds: 1), (_) {
+      _secondsRead++;
+    });
+  }
+
+  void _saveProgress() {
+    if (_secondsRead > 10 || _readHadiths.length > 1) {
+      ref
+          .read(progressRepositoryProvider)
+          .updateProgress(
+            hadithCount: _readHadiths.length,
+            readingSeconds: _secondsRead,
+          );
+
+      ref
+          .read(recentActivityRepositoryProvider)
+          .addRecentActivity(
+            type: 'hadith',
+            title: widget.bookName,
+            subtitle: 'الحديث رقم ${_currentPageIndex + 1}',
+            routePath: '/hadith/${Uri.encodeComponent(widget.bookName)}',
+          );
+
+      _secondsRead = 0;
+      _readHadiths.clear();
+      _readHadiths.add(_currentPageIndex);
+    }
   }
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _readingTimer?.cancel();
+    _saveProgress();
     _pageController.dispose();
     super.dispose();
   }
@@ -34,110 +91,106 @@ class _HadithReadingScreenState extends ConsumerState<HadithReadingScreen> {
   @override
   Widget build(BuildContext context) {
     final hadithsAsync = ref.watch(allHadithsProvider(widget.bookName));
-    final fontSize = ref.watch(fontSizeProvider);
+    final fontSize = ref.watch(hadithFontSizeProvider);
 
     return Scaffold(
-      backgroundColor: Colors.black, // Dark background outside the book
       appBar: AppBar(
         title: Text(
           widget.bookName,
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Colors.transparent,
         elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.white),
-        titleTextStyle: const TextStyle(color: Colors.white, fontSize: 20),
       ),
-      extendBodyBehindAppBar: true,
       body: SafeArea(
-        child: Center(
-          child: hadithsAsync.when(
-            data: (hadiths) {
-              if (hadiths.isEmpty) {
-                return const Center(
-                  child: Text(
-                    'لا توجد أحاديث في هذا الكتاب.',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                );
-              }
+        child: hadithsAsync.when(
+          data: (hadiths) {
+            if (hadiths.isEmpty) {
+              return const Center(child: Text('لا توجد أحاديث في هذا الكتاب.'));
+            }
 
-              return PremiumQuranFlipWidget(
-                initialIndex: 0,
-                itemCount: hadiths.length,
-                endPage: Container(
-                  color: const Color(0xFFFDF7EF),
-                  alignment: Alignment.center,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(
-                        Icons.menu_book_rounded,
-                        size: 80,
-                        color: Color(0xFFC7A87D),
-                      ),
-                      const SizedBox(height: 24),
-                      const Text(
-                        'نهاية الكتاب',
-                        style: TextStyle(
-                          fontSize: 32,
-                          color: Color(0xFF5A4328),
-                          fontWeight: FontWeight.bold,
+            return PageView.builder(
+              controller: _pageController,
+              itemCount: hadiths.length + 1,
+              onPageChanged: (index) {
+                if (index < hadiths.length) {
+                  _currentPageIndex = index;
+                  _readHadiths.add(index);
+                }
+              },
+              itemBuilder: (context, index) {
+                if (index == hadiths.length) {
+                  return Container(
+                    color: Theme.of(context).scaffoldBackgroundColor,
+                    alignment: Alignment.center,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.menu_book_rounded,
+                          size: 80,
+                          color: Theme.of(context).colorScheme.primary,
                         ),
-                      ),
-                      const SizedBox(height: 12),
-                      Text(
-                        widget.bookName,
-                        style: const TextStyle(
-                          fontSize: 22,
-                          color: Color(0xFF8B6F4E),
-                        ),
-                      ),
-                      const SizedBox(height: 48),
-                      ElevatedButton(
-                        onPressed: () => context.pop(),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFFC7A87D),
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 40,
-                            vertical: 12,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
+                        const SizedBox(height: 24),
+                        Text(
+                          'نهاية الكتاب',
+                          style: TextStyle(
+                            fontSize: 32,
+                            color: Theme.of(context).colorScheme.onSurface,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                        child: const Text(
-                          'عودة للكتب',
-                          style: TextStyle(fontSize: 18),
+                        const SizedBox(height: 12),
+                        Text(
+                          widget.bookName,
+                          style: TextStyle(
+                            fontSize: 22,
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onSurfaceVariant,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-                itemBuilder: (context, index) {
-                  final hadith = hadiths[index];
-                  return HadithPageWidget(
-                    pageNumber: index + 1,
-                    headerTitle: widget.bookName,
-                    headerSubtitle: hadith.chapterName ?? 'بدون باب',
-                    hadithText: hadith.hadithTextAr,
-                    reference: hadith.reference ?? '',
-                    fontSize: fontSize,
+                        const SizedBox(height: 48),
+                        ElevatedButton(
+                          onPressed: () => context.pop(),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Theme.of(
+                              context,
+                            ).colorScheme.primary,
+                            foregroundColor: Theme.of(
+                              context,
+                            ).colorScheme.onPrimary,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 40,
+                              vertical: 12,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                          ),
+                          child: const Text(
+                            'عودة للكتب',
+                            style: TextStyle(fontSize: 18),
+                          ),
+                        ),
+                      ],
+                    ),
                   );
-                },
-              );
-            },
-            loading: () => const Center(
-              child: CircularProgressIndicator(color: Colors.white),
-            ),
-            error: (err, st) => Center(
-              child: Text(
-                'حدث خطأ: $err',
-                style: const TextStyle(color: Colors.white),
-              ),
-            ),
-          ),
+                }
+
+                final hadith = hadiths[index];
+                return HadithPageWidget(
+                  pageNumber: index + 1,
+                  headerTitle: widget.bookName,
+                  headerSubtitle: hadith.chapterName ?? 'بدون باب',
+                  hadithText: hadith.hadithTextAr,
+                  reference: hadith.reference ?? '',
+                  fontSize: fontSize,
+                );
+              },
+            );
+          },
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (err, st) => Center(child: Text('حدث خطأ: $err')),
         ),
       ),
     );

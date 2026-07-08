@@ -33,7 +33,7 @@ class MainNavigationBar extends StatelessWidget {
               context.go('/hadith');
               break;
             case 4:
-              context.go('/favorites');
+              context.go('/library');
               break;
           }
         },
@@ -59,9 +59,9 @@ class MainNavigationBar extends StatelessWidget {
             label: 'الحديث',
           ),
           NavigationDestination(
-            icon: Icon(Icons.favorite_border),
-            selectedIcon: Icon(Icons.favorite),
-            label: 'المفضلة',
+            icon: Icon(Icons.person_outline),
+            selectedIcon: Icon(Icons.person),
+            label: 'مكتبتي',
           ),
         ],
       ),

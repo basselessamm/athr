@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import '../../../../core/theme/reading_theme_extension.dart';
+import '../../../../core/theme/app_typography.dart';
 
 class HadithPageWidget extends StatelessWidget {
   final int pageNumber;
@@ -24,13 +25,15 @@ class HadithPageWidget extends StatelessWidget {
     // In Arabic, odd pages are on the right (spine on the left)
     // Even pages are on the left (spine on the right)
     final bool isRightPage = pageNumber % 2 != 0;
+    final theme = Theme.of(context);
+    final readingTheme = theme.extension<ReadingThemeExtension>()!;
 
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Container(
         width: double.infinity,
         height: double.infinity,
-        color: const Color(0xFFFDF7EF), // Base paper color
+        color: readingTheme.pageBackgroundColor, // Base paper color
         child: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
@@ -38,20 +41,16 @@ class HadithPageWidget extends StatelessWidget {
               end: Alignment.centerRight,
               colors: isRightPage
                   ? [
-                      Colors.black.withValues(
-                        alpha: 0.08,
-                      ), // Spine shadow on left
+                      readingTheme.spineShadowColor, // Spine shadow on left
                       Colors.transparent,
                       Colors.transparent,
-                      Colors.black.withValues(alpha: 0.02),
+                      readingTheme.pageEdgeHighlightColor,
                     ]
                   : [
-                      Colors.black.withValues(alpha: 0.02),
+                      readingTheme.pageEdgeHighlightColor,
                       Colors.transparent,
                       Colors.transparent,
-                      Colors.black.withValues(
-                        alpha: 0.08,
-                      ), // Spine shadow on right
+                      readingTheme.spineShadowColor, // Spine shadow on right
                     ],
               stops: const [0.0, 0.05, 0.95, 1.0],
             ),
@@ -64,15 +63,14 @@ class HadithPageWidget extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
                 border: Border.all(
-                  color: const Color(
-                    0xFFC7A87D,
-                  ), // Golden/Brownish elegant border
+                  color: readingTheme
+                      .borderColor, // Golden/Brownish elegant border
                   width: 2.0,
                 ),
               ),
               child: Column(
                 children: [
-                  _buildHeader(),
+                  _buildHeader(theme, readingTheme),
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
@@ -86,30 +84,30 @@ class HadithPageWidget extends StatelessWidget {
                           children: [
                             Text(
                               hadithText,
-                              style: GoogleFonts.amiri(
+                              style: AppTypography.readingAmiri(
                                 fontSize: fontSize,
-                                color: const Color(0xFF2C1E16),
-                                height: 1.9,
+                                color: readingTheme.textColor,
                               ),
                               textAlign: TextAlign.justify,
                             ),
-                            const SizedBox(height: 24),
-                            if (reference != null && reference!.isNotEmpty)
+                            if (reference != null && reference!.isNotEmpty) ...[
+                              const SizedBox(height: 24),
                               Text(
                                 reference!,
-                                style: GoogleFonts.amiri(
-                                  fontSize: fontSize * 0.7,
-                                  color: const Color(0xFF5A4328),
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                textAlign: TextAlign.center,
+                                style: AppTypography.cairoTextTheme().labelSmall
+                                    ?.copyWith(
+                                      color: theme.colorScheme.primary,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                textAlign: TextAlign.left,
                               ),
+                            ],
                           ],
                         ),
                       ),
                     ),
                   ),
-                  _buildFooter(),
+                  _buildFooter(theme, readingTheme),
                 ],
               ),
             ),
@@ -119,12 +117,12 @@ class HadithPageWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader(ThemeData theme, ReadingThemeExtension readingTheme) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         border: Border(
-          bottom: BorderSide(color: Color(0xFFC7A87D), width: 1.5),
+          bottom: BorderSide(color: readingTheme.borderColor, width: 1.0),
         ),
       ),
       child: Row(
@@ -132,23 +130,20 @@ class HadithPageWidget extends StatelessWidget {
         children: [
           Expanded(
             child: Text(
-              headerSubtitle, // e.g. "كتاب الإيمان"
-              style: GoogleFonts.amiri(
-                color: const Color(0xFF5A4328),
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
+              headerTitle,
+              style: AppTypography.cairoTextTheme().titleSmall?.copyWith(
+                color: readingTheme.borderColor,
+                fontWeight: FontWeight.bold,
               ),
-              maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
           ),
           const SizedBox(width: 8),
           Text(
-            headerTitle, // e.g. "صحيح البخاري"
-            style: GoogleFonts.amiri(
-              color: const Color(0xFF5A4328),
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
+            headerSubtitle,
+            style: AppTypography.cairoTextTheme().labelMedium?.copyWith(
+              color: readingTheme.borderColor,
+              fontWeight: FontWeight.w600,
             ),
           ),
         ],
@@ -156,18 +151,19 @@ class HadithPageWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildFooter() {
+  Widget _buildFooter(ThemeData theme, ReadingThemeExtension readingTheme) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 8),
-      decoration: const BoxDecoration(
-        border: Border(top: BorderSide(color: Color(0xFFC7A87D), width: 1.5)),
+      decoration: BoxDecoration(
+        border: Border(
+          top: BorderSide(color: readingTheme.borderColor, width: 1.0),
+        ),
       ),
       child: Center(
         child: Text(
           _toArabicNumerals(pageNumber),
-          style: GoogleFonts.amiri(
-            color: const Color(0xFF5A4328),
-            fontSize: 16,
+          style: AppTypography.cairoTextTheme().titleSmall?.copyWith(
+            color: readingTheme.borderColor,
             fontWeight: FontWeight.bold,
           ),
         ),

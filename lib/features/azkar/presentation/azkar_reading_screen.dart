@@ -1,12 +1,14 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:athr/core/widgets/premium_quran_flip_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:athr/core/database/app_database.dart';
+import 'package:athr/features/library/modules/recent_activity/providers/recent_activity_providers.dart';
 import 'package:athr/features/azkar/providers/azkar_providers.dart';
 import 'package:athr/features/settings/providers/settings_providers.dart';
+import 'package:athr/features/progress/providers/progress_providers.dart';
 
 class AzkarReadingScreen extends ConsumerStatefulWidget {
   final String category;
@@ -17,17 +19,71 @@ class AzkarReadingScreen extends ConsumerStatefulWidget {
   ConsumerState<AzkarReadingScreen> createState() => _AzkarReadingScreenState();
 }
 
-class _AzkarReadingScreenState extends ConsumerState<AzkarReadingScreen> {
+class _AzkarReadingScreenState extends ConsumerState<AzkarReadingScreen>
+    with WidgetsBindingObserver {
   late PageController _pageController;
+  Timer? _readingTimer;
+  int _secondsRead = 0;
+  int _currentPageIndex = 0;
+  final Set<int> _readAzkar = {0};
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _pageController = PageController();
+    _startTimer();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.paused ||
+        state == AppLifecycleState.inactive ||
+        state == AppLifecycleState.hidden) {
+      _readingTimer?.cancel();
+      _saveProgress();
+    } else if (state == AppLifecycleState.resumed) {
+      _startTimer();
+    }
+  }
+
+  void _startTimer() {
+    _readingTimer?.cancel();
+    _readingTimer = Timer.periodic(const Duration(seconds: 1), (_) {
+      _secondsRead++;
+    });
+  }
+
+  void _saveProgress() {
+    if (_secondsRead > 10 || _readAzkar.length > 1) {
+      ref
+          .read(progressRepositoryProvider)
+          .updateProgress(
+            azkarCount: _readAzkar.length,
+            readingSeconds: _secondsRead,
+          );
+
+      ref
+          .read(recentActivityRepositoryProvider)
+          .addRecentActivity(
+            type: 'azkar',
+            title: widget.category,
+            subtitle: 'الذكر رقم ${_currentPageIndex + 1}',
+            routePath: '/azkar/${Uri.encodeComponent(widget.category)}',
+          );
+
+      _secondsRead = 0;
+      _readAzkar.clear();
+      _readAzkar.add(_currentPageIndex);
+    }
   }
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _readingTimer?.cancel();
+    _saveProgress();
     _pageController.dispose();
     super.dispose();
   }
@@ -35,110 +91,106 @@ class _AzkarReadingScreenState extends ConsumerState<AzkarReadingScreen> {
   @override
   Widget build(BuildContext context) {
     final azkarAsync = ref.watch(azkarByCategoryProvider(widget.category));
-    final fontSize = ref.watch(fontSizeProvider);
+    final fontSize = ref.watch(azkarFontSizeProvider);
 
     return Scaffold(
-      backgroundColor: Colors.black, // Dark background outside the book
       appBar: AppBar(
         title: Text(
           widget.category,
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Colors.transparent,
         elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.white),
-        titleTextStyle: const TextStyle(color: Colors.white, fontSize: 20),
       ),
-      extendBodyBehindAppBar: true,
       body: SafeArea(
-        child: Center(
-          child: azkarAsync.when(
-            data: (azkar) {
-              if (azkar.isEmpty) {
-                return const Center(
-                  child: Text(
-                    'لا توجد أذكار في هذا التصنيف.',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                );
-              }
+        child: azkarAsync.when(
+          data: (azkar) {
+            if (azkar.isEmpty) {
+              return const Center(child: Text('لا توجد أذكار في هذا التصنيف.'));
+            }
 
-              return PremiumQuranFlipWidget(
-                initialIndex: 0,
-                itemCount: azkar.length,
-                endPage: Container(
-                  color: const Color(0xFFFDF7EF),
-                  alignment: Alignment.center,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(
-                        Icons.verified,
-                        size: 80,
-                        color: Color(0xFFC7A87D),
-                      ),
-                      const SizedBox(height: 24),
-                      const Text(
-                        'تم بحمد الله',
-                        style: TextStyle(
-                          fontSize: 32,
-                          color: Color(0xFF5A4328),
-                          fontWeight: FontWeight.bold,
+            return PageView.builder(
+              controller: _pageController,
+              itemCount: azkar.length + 1,
+              onPageChanged: (index) {
+                if (index < azkar.length) {
+                  _currentPageIndex = index;
+                  _readAzkar.add(index);
+                }
+              },
+              itemBuilder: (context, index) {
+                if (index == azkar.length) {
+                  return Container(
+                    color: Theme.of(context).scaffoldBackgroundColor,
+                    alignment: Alignment.center,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.verified,
+                          size: 80,
+                          color: Theme.of(context).colorScheme.primary,
                         ),
-                      ),
-                      const SizedBox(height: 12),
-                      Text(
-                        widget.category,
-                        style: const TextStyle(
-                          fontSize: 22,
-                          color: Color(0xFF8B6F4E),
-                        ),
-                      ),
-                      const SizedBox(height: 48),
-                      ElevatedButton(
-                        onPressed: () => context.pop(),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFFC7A87D),
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 40,
-                            vertical: 12,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
+                        const SizedBox(height: 24),
+                        Text(
+                          'تم بحمد الله',
+                          style: TextStyle(
+                            fontSize: 32,
+                            color: Theme.of(context).colorScheme.onSurface,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                        child: const Text(
-                          'عودة للأذكار',
-                          style: TextStyle(fontSize: 18),
+                        const SizedBox(height: 12),
+                        Text(
+                          widget.category,
+                          style: TextStyle(
+                            fontSize: 22,
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onSurfaceVariant,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-                itemBuilder: (context, index) {
-                  final zikr = azkar[index];
-                  return _PremiumZikrPage(
-                    key: ValueKey(zikr.id),
-                    zikr: zikr,
-                    pageNumber: index + 1,
-                    totalCount: azkar.length,
-                    category: widget.category,
-                    fontSize: fontSize,
+                        const SizedBox(height: 48),
+                        ElevatedButton(
+                          onPressed: () => context.pop(),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Theme.of(
+                              context,
+                            ).colorScheme.primary,
+                            foregroundColor: Theme.of(
+                              context,
+                            ).colorScheme.onPrimary,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 40,
+                              vertical: 12,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                          ),
+                          child: const Text(
+                            'عودة للأذكار',
+                            style: TextStyle(fontSize: 18),
+                          ),
+                        ),
+                      ],
+                    ),
                   );
-                },
-              );
-            },
-            loading: () => const Center(
-              child: CircularProgressIndicator(color: Colors.white),
-            ),
-            error: (err, st) => Center(
-              child: Text(
-                'حدث خطأ: $err',
-                style: const TextStyle(color: Colors.white),
-              ),
-            ),
-          ),
+                }
+
+                final zikr = azkar[index];
+                return _PremiumZikrPage(
+                  key: ValueKey(zikr.id),
+                  zikr: zikr,
+                  pageNumber: index + 1,
+                  totalCount: azkar.length,
+                  category: widget.category,
+                  fontSize: fontSize,
+                );
+              },
+            );
+          },
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (err, st) => Center(child: Text('حدث خطأ: $err')),
         ),
       ),
     );

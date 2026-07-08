@@ -1,6 +1,8 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
+import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final notificationServiceProvider = Provider<NotificationService>((ref) {
@@ -19,6 +21,12 @@ class NotificationService {
 
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
+
+    // On Windows, local notifications might require additional setup or can be skipped
+    if (!kIsWeb && Platform.isWindows) {
+      _isInitialized = true;
+      return;
+    }
 
     const InitializationSettings initializationSettings =
         InitializationSettings(android: initializationSettingsAndroid);

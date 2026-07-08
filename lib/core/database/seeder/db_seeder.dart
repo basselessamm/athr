@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:drift/drift.dart';
 import 'package:flutter/services.dart';
 import 'package:athr/core/database/app_database.dart';
+import 'package:quran_flutter/quran.dart';
+import 'package:athr/features/search/domain/search_normalizer.dart';
 
 import 'seed_daily_content.dart';
 
@@ -30,6 +32,79 @@ class DatabaseSeeder {
 
     final taskCount = await (db.select(db.dailyTaskTable)..limit(1)).get();
     if (taskCount.isEmpty) await _seedDailyTasks();
+
+    final searchCount = await (db.select(
+      db.searchableItemsTable,
+    )..limit(1)).get();
+    if (searchCount.isEmpty) await _seedSearchableItems();
+  }
+
+  Future<void> _seedSearchableItems() async {
+    final inserts = <SearchableItemsTableCompanion>[];
+
+    // Seed Quran
+    for (int surah = 1; surah <= 114; surah++) {
+      final surahName = Quran.getSurahName(surah);
+      final count = Quran.getTotalVersesInSurah(surah);
+
+      // Index Surah Name
+      inserts.add(
+        SearchableItemsTableCompanion.insert(
+          featureType: 'quran_surah',
+          referenceId: surah,
+          title: Value('سورة $surahName'),
+          content: surahName,
+          normalizedContent: SearchNormalizer.normalize(surahName),
+        ),
+      );
+
+      // Index Verses
+      for (int ayah = 1; ayah <= count; ayah++) {
+        final verse = Quran.getVerse(surahNumber: surah, verseNumber: ayah);
+        inserts.add(
+          SearchableItemsTableCompanion.insert(
+            featureType: 'quran',
+            referenceId: surah,
+            secondaryId: Value(ayah),
+            title: Value('سورة $surahName - آية $ayah'),
+            content: verse.text,
+            normalizedContent: SearchNormalizer.normalize(verse.text),
+          ),
+        );
+      }
+    }
+
+    // Seed Duas
+    final allDuas = await db.select(db.duaTable).get();
+    for (final dua in allDuas) {
+      inserts.add(
+        SearchableItemsTableCompanion.insert(
+          featureType: 'azkar',
+          referenceId: dua.id,
+          title: Value(dua.category),
+          content: dua.duaText,
+          normalizedContent: SearchNormalizer.normalize(dua.duaText),
+        ),
+      );
+    }
+
+    // Seed Hadiths
+    final allHadiths = await db.select(db.hadithTable).get();
+    for (final hadith in allHadiths) {
+      inserts.add(
+        SearchableItemsTableCompanion.insert(
+          featureType: 'hadith',
+          referenceId: hadith.id,
+          title: Value('${hadith.bookName} - ${hadith.chapterName ?? ""}'),
+          content: hadith.hadithTextAr,
+          normalizedContent: SearchNormalizer.normalize(hadith.hadithTextAr),
+        ),
+      );
+    }
+
+    await db.batch((batch) {
+      batch.insertAll(db.searchableItemsTable, inserts);
+    });
   }
 
   Future<void> _seedDailySunnah() async {

@@ -76,10 +76,13 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.asset(
-                      'assets/images/logo.png',
-                      width: 250,
-                      height: 250,
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(48),
+                      child: Image.asset(
+                        'assets/images/app_icon.png',
+                        width: 250,
+                        height: 250,
+                      ),
                     ),
                     const SizedBox(height: 24),
                     const Text(
