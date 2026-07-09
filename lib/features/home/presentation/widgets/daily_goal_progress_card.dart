@@ -14,7 +14,7 @@ class DailyGoalProgressCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final goalProgressAsync = ref.watch(primaryGoalProgressProvider);
+    final goalSummaryAsync = ref.watch(goalSummaryProvider);
 
     return Container(
       padding: const EdgeInsets.all(AppSpacing.lg),
@@ -44,7 +44,7 @@ class DailyGoalProgressCard extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'الهدف اليومي',
+                      'ملخص أهداف اليوم',
                       style: AppTypography.cairoTextTheme().titleLarge
                           ?.copyWith(
                             fontWeight: FontWeight.bold,
@@ -53,7 +53,7 @@ class DailyGoalProgressCard extends ConsumerWidget {
                     ),
                     const SizedBox(height: AppSpacing.xs),
                     Text(
-                      'بطاقة مركزة للهدف الأقرب لإنجازك اليوم.',
+                      'صورة دقيقة لحالة أهدافك مع إبراز الهدف الأقرب للإنجاز.',
                       style: AppTypography.cairoTextTheme().bodyMedium
                           ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
                     ),
@@ -69,8 +69,10 @@ class DailyGoalProgressCard extends ConsumerWidget {
             ],
           ),
           const SizedBox(height: AppSpacing.md),
-          goalProgressAsync.when(
-            data: (goalProgress) {
+          goalSummaryAsync.when(
+            data: (summary) {
+              final goalProgress = summary.primaryGoal;
+
               if (goalProgress == null) {
                 return Container(
                   padding: const EdgeInsets.all(AppSpacing.md),
@@ -117,6 +119,33 @@ class DailyGoalProgressCard extends ConsumerWidget {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Wrap(
+                    spacing: AppSpacing.sm,
+                    runSpacing: AppSpacing.sm,
+                    children: [
+                      _SummaryChip(
+                        label: '${summary.totalGoals} أهداف',
+                        backgroundColor: theme.colorScheme.surface.withValues(
+                          alpha: 0.88,
+                        ),
+                        foregroundColor: theme.colorScheme.onSurface,
+                      ),
+                      _SummaryChip(
+                        label: '${summary.completedGoals} مكتمل',
+                        backgroundColor: theme.colorScheme.primaryContainer
+                            .withValues(alpha: 0.9),
+                        foregroundColor: theme.colorScheme.primary,
+                      ),
+                      _SummaryChip(
+                        label:
+                            '${_formatPercent(summary.averagePercent)} متوسط الإنجاز',
+                        backgroundColor: theme.colorScheme.secondaryContainer
+                            .withValues(alpha: 0.72),
+                        foregroundColor: theme.colorScheme.secondary,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: AppSpacing.md),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -159,7 +188,7 @@ class DailyGoalProgressCard extends ConsumerWidget {
                             Text(
                               completed
                                   ? 'أحسنت، أنجزت الهدف بالكامل.'
-                                  : '${goalProgress.currentValue} من ${goalProgress.goal.targetValue}',
+                                  : '${goalProgress.currentValue} من ${goalProgress.goal.targetValue} في الهدف الأقرب الآن',
                               style: AppTypography.cairoTextTheme().bodyMedium
                                   ?.copyWith(
                                     color: theme.colorScheme.onSurfaceVariant,
@@ -207,7 +236,7 @@ class DailyGoalProgressCard extends ConsumerWidget {
                           borderRadius: BorderRadius.circular(AppRadius.round),
                         ),
                         child: Text(
-                          '${(percent * 100).toInt()}%',
+                          _formatPercent(percent),
                           style: AppTypography.cairoTextTheme().labelLarge
                               ?.copyWith(
                                 color: completed
@@ -233,7 +262,7 @@ class DailyGoalProgressCard extends ConsumerWidget {
                             ),
                       ),
                       Text(
-                        '${goalProgress.currentValue} / ${goalProgress.goal.targetValue}',
+                        '${goalProgress.currentValue} من ${goalProgress.goal.targetValue}',
                         style: AppTypography.cairoTextTheme().labelMedium
                             ?.copyWith(
                               color: theme.colorScheme.onSurfaceVariant,
@@ -279,4 +308,41 @@ class DailyGoalProgressCard extends ConsumerWidget {
       ),
     );
   }
+}
+
+class _SummaryChip extends StatelessWidget {
+  final String label;
+  final Color backgroundColor;
+  final Color foregroundColor;
+
+  const _SummaryChip({
+    required this.label,
+    required this.backgroundColor,
+    required this.foregroundColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.sm,
+        vertical: AppSpacing.xs,
+      ),
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        borderRadius: BorderRadius.circular(AppRadius.round),
+      ),
+      child: Text(
+        label,
+        style: AppTypography.cairoTextTheme().labelMedium?.copyWith(
+          color: foregroundColor,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+  }
+}
+
+String _formatPercent(double value) {
+  return '${(value * 100).round()}%';
 }

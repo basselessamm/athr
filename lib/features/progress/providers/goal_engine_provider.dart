@@ -3,6 +3,7 @@ import 'package:athr/core/database/app_database.dart';
 import 'package:athr/core/database/database_providers.dart';
 import 'package:athr/features/progress/data/user_goals_repository.dart';
 import 'package:athr/features/progress/providers/metric_registry_provider.dart';
+import 'package:athr/features/progress/providers/progress_providers.dart';
 
 final userGoalsRepositoryProvider = Provider<UserGoalsRepository>((ref) {
   final db = ref.watch(appDatabaseProvider);
@@ -33,14 +34,22 @@ class GoalProgress {
 // The core Goal Engine that cross-references goals with today's progress via the registry
 final goalEngineProvider = Provider<AsyncValue<List<GoalProgress>>>((ref) {
   final goalsAsync = ref.watch(userGoalsProvider);
+  final dailyProgressAsync = ref.watch(dailyProgressProvider);
   final registry = ref.watch(metricRegistryProvider);
 
-  if (goalsAsync is AsyncLoading) {
+  if (goalsAsync is AsyncLoading || dailyProgressAsync is AsyncLoading) {
     return const AsyncValue.loading();
   }
 
   if (goalsAsync is AsyncError) {
     return AsyncValue.error(goalsAsync.error!, goalsAsync.stackTrace!);
+  }
+
+  if (dailyProgressAsync is AsyncError) {
+    return AsyncValue.error(
+      dailyProgressAsync.error!,
+      dailyProgressAsync.stackTrace!,
+    );
   }
 
   final goals = goalsAsync.value ?? [];

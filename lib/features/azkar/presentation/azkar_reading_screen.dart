@@ -481,7 +481,7 @@ class _PremiumZikrPageState extends ConsumerState<_PremiumZikrPage>
             ],
           ),
           Text(
-            '${_toArabicNumerals(widget.pageNumber)} / ${_toArabicNumerals(widget.totalCount)}',
+            '${_toArabicNumerals(widget.pageNumber)} من ${_toArabicNumerals(widget.totalCount)}',
             style: GoogleFonts.amiri(
               color: const Color(0xFF5A4328),
               fontSize: 16,

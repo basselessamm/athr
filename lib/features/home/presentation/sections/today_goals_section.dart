@@ -6,6 +6,7 @@ import 'package:athr/core/theme/app_radius.dart';
 import 'package:athr/core/theme/app_spacing.dart';
 import 'package:athr/core/theme/app_shadows.dart';
 import 'package:athr/features/progress/providers/goal_engine_provider.dart';
+import 'package:athr/features/progress/providers/goal_wiring_providers.dart';
 
 class TodayGoalsSection extends ConsumerWidget {
   const TodayGoalsSection({super.key});
@@ -14,6 +15,7 @@ class TodayGoalsSection extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final goalsAsync = ref.watch(goalEngineProvider);
+    final summaryAsync = ref.watch(goalSummaryProvider);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
@@ -45,14 +47,29 @@ class TodayGoalsSection extends ConsumerWidget {
                 ),
               ),
               const SizedBox(width: AppSpacing.md),
-              goalsAsync.maybeWhen(
-                data: (goalProgressList) =>
-                    _SectionCountPill(count: goalProgressList.length),
+              summaryAsync.maybeWhen(
+                data: (summary) => _SectionCountPill(
+                  totalGoals: summary.totalGoals,
+                  completedGoals: summary.completedGoals,
+                ),
                 orElse: () => const SizedBox.shrink(),
               ),
             ],
           ),
           const SizedBox(height: AppSpacing.md),
+          summaryAsync.maybeWhen(
+            data: (summary) {
+              if (summary.totalGoals == 0) {
+                return const SizedBox.shrink();
+              }
+
+              return Padding(
+                padding: const EdgeInsets.only(bottom: AppSpacing.md),
+                child: _GoalsSummaryStrip(summary: summary),
+              );
+            },
+            orElse: () => const SizedBox.shrink(),
+          ),
           goalsAsync.when(
             data: (goalProgressList) {
               if (goalProgressList.isEmpty) {
@@ -141,6 +158,8 @@ class _GoalCard extends StatelessWidget {
           return Icons.repeat_rounded;
         case 'favorite':
           return Icons.favorite_rounded;
+        case 'shield':
+          return Icons.shield_rounded;
         case 'self_improvement':
           return Icons.self_improvement_rounded;
         default:
@@ -260,7 +279,7 @@ class _GoalCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      '${(percent * 100).toInt()}%',
+                      _formatPercent(percent),
                       style: AppTypography.cairoTextTheme().labelLarge
                           ?.copyWith(
                             color: isDone
@@ -270,7 +289,7 @@ class _GoalCard extends StatelessWidget {
                           ),
                     ),
                     Text(
-                      '${goalProgress.currentValue} / ${goalProgress.goal.targetValue}',
+                      '${goalProgress.currentValue} من ${goalProgress.goal.targetValue}',
                       style: AppTypography.cairoTextTheme().labelMedium
                           ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
                     ),
@@ -459,13 +478,17 @@ class _GoalsErrorState extends StatelessWidget {
 }
 
 class _SectionCountPill extends StatelessWidget {
-  final int count;
+  final int totalGoals;
+  final int completedGoals;
 
-  const _SectionCountPill({required this.count});
+  const _SectionCountPill({
+    required this.totalGoals,
+    required this.completedGoals,
+  });
 
   @override
   Widget build(BuildContext context) {
-    if (count == 0) {
+    if (totalGoals == 0) {
       return const SizedBox.shrink();
     }
 
@@ -483,11 +506,73 @@ class _SectionCountPill extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppRadius.round),
       ),
       child: Text(
-        '$count أهداف',
+        '$completedGoals / $totalGoals مكتمل',
         style: AppTypography.cairoTextTheme().labelMedium?.copyWith(
           color: theme.colorScheme.onSurfaceVariant,
         ),
       ),
     );
   }
+}
+
+class _GoalsSummaryStrip extends StatelessWidget {
+  final GoalSummary summary;
+
+  const _GoalsSummaryStrip({required this.summary});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Container(
+      padding: const EdgeInsets.all(AppSpacing.md),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surface.withValues(alpha: 0.92),
+        borderRadius: BorderRadius.circular(AppRadius.md),
+        border: Border.all(
+          color: theme.colorScheme.outlineVariant.withValues(alpha: 0.28),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'أنجزت ${summary.completedGoals} من ${summary.totalGoals} أهداف',
+                style: AppTypography.cairoTextTheme().titleSmall?.copyWith(
+                  color: theme.colorScheme.onSurface,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                _formatPercent(summary.averagePercent),
+                style: AppTypography.cairoTextTheme().labelLarge?.copyWith(
+                  color: theme.colorScheme.primary,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: AppSpacing.sm),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(AppSpacing.sm),
+            child: LinearProgressIndicator(
+              value: summary.averagePercent,
+              minHeight: 8,
+              backgroundColor: theme.colorScheme.surfaceContainerHighest,
+              valueColor: AlwaysStoppedAnimation<Color>(
+                theme.colorScheme.primary,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+String _formatPercent(double value) {
+  return '${(value * 100).round()}%';
 }
