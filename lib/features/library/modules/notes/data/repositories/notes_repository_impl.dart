@@ -34,4 +34,15 @@ class NotesRepositoryImpl implements NotesRepository {
           ),
         );
   }
+
+  @override
+  Future<void> updateNote(int id, String newContent) async {
+    final now = DateTime.now().toIso8601String();
+    await (_db.update(_db.notesTable)..where((t) => t.id.equals(id))).write(
+      NotesTableCompanion(
+        content: Value(newContent),
+        updatedAt: Value(now),
+      ),
+    );
+  }
 }

@@ -3,6 +3,7 @@ import 'package:drift/drift.dart';
 import 'package:flutter/services.dart';
 import 'package:athr/core/database/app_database.dart';
 import 'package:quran_flutter/quran.dart';
+import 'package:flutter/foundation.dart';
 import 'package:athr/features/search/domain/search_normalizer.dart';
 
 import 'seed_daily_content.dart';
@@ -153,7 +154,7 @@ class DatabaseSeeder {
     final quranTextString = await rootBundle.loadString(
       'assets/json/quran_text.json',
     );
-    final List<dynamic> quranTextJson = jsonDecode(quranTextString);
+    final List<dynamic> quranTextJson = await compute(jsonDecode, quranTextString);
 
     Map<int, Map<String, int>> ayahMapping = {};
     for (var item in quranTextJson) {
@@ -171,7 +172,7 @@ class DatabaseSeeder {
     final tafseerString = await rootBundle.loadString(
       'assets/json/tafseer.json',
     );
-    final List<dynamic> tafseerJson = jsonDecode(tafseerString);
+    final List<dynamic> tafseerJson = await compute(jsonDecode, tafseerString);
 
     List<QuranTafseerTableCompanion> inserts = [];
     for (var item in tafseerJson) {
@@ -203,7 +204,7 @@ class DatabaseSeeder {
 
   Future<void> _seedDuas() async {
     final duasString = await rootBundle.loadString('assets/json/duas.json');
-    final Map<String, dynamic> duasJson = jsonDecode(duasString);
+    final Map<String, dynamic> duasJson = await compute(jsonDecode, duasString);
 
     List<DuaTableCompanion> inserts = [];
 
@@ -227,7 +228,7 @@ class DatabaseSeeder {
   Future<void> _seedHadith(String fileName, String bookName) async {
     try {
       final hadithString = await rootBundle.loadString('assets/json/$fileName');
-      final Map<String, dynamic> hadithJson = jsonDecode(hadithString);
+      final Map<String, dynamic> hadithJson = await compute(jsonDecode, hadithString);
 
       final chaptersList = hadithJson['chapters'] as List<dynamic>? ?? [];
       final Map<int, String> chapterMap = {};

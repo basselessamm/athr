@@ -243,7 +243,7 @@ class LibraryScreen extends ConsumerWidget {
                       onAction: () => _showAddNoteDialog(context, ref),
                       child: NotesSection(
                         onNotePressed: (note) =>
-                            _showNoteDetails(context, note),
+                            _showNoteDetails(context, ref, note),
                         onCreatePressed: () => _showAddNoteDialog(context, ref),
                       ),
                     ),
@@ -325,7 +325,7 @@ class LibraryScreen extends ConsumerWidget {
     );
   }
 
-  void _showNoteDetails(BuildContext context, dynamic note) {
+  void _showNoteDetails(BuildContext context, WidgetRef ref, dynamic note) {
     showDialog(
       context: context,
       builder: (context) {
@@ -337,8 +337,62 @@ class LibraryScreen extends ConsumerWidget {
           content: SingleChildScrollView(child: Text(note.content)),
           actions: [
             TextButton(
+              onPressed: () {
+                context.pop();
+                _showEditNoteDialog(context, ref, note);
+              },
+              child: const Text('تعديل'),
+            ),
+            TextButton(
               onPressed: () => context.pop(),
               child: const Text('إغلاق'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showEditNoteDialog(BuildContext context, WidgetRef ref, dynamic note) {
+    final textController = TextEditingController(text: note.content);
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppRadius.lg),
+          ),
+          title: const Text('تعديل الملاحظة'),
+          content: SizedBox(
+            width: double.maxFinite,
+            child: TextField(
+              controller: textController,
+              maxLines: 5,
+              decoration: const InputDecoration(
+                hintText: 'اكتب ملاحظتك هنا...',
+                border: OutlineInputBorder(),
+              ),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => context.pop(),
+              child: const Text('إلغاء'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                if (textController.text.trim().isNotEmpty) {
+                  ref
+                      .read(notesRepositoryProvider)
+                      .updateNote(note.id, textController.text.trim());
+                  context.pop();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('تم تعديل الملاحظة بنجاح')),
+                  );
+                }
+              },
+              child: const Text('حفظ'),
             ),
           ],
         );
