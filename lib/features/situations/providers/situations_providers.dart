@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:drift/drift.dart';
 
 import 'package:athr/core/database/app_database.dart';
 import 'package:athr/core/database/database_providers.dart';
@@ -105,16 +106,13 @@ final situationHadithProvider = FutureProvider.family<List<Hadith>, String>((
   final items = <Hadith>[];
 
   for (final reference in content.hadiths) {
-    final candidates =
-        await (db.select(db.hadithTable)
-              ..where((t) => t.bookName.equals(reference.bookName))
-              ..limit(120))
-            .get();
-
-    final hadith = candidates.cast<Hadith?>().firstWhere(
-      (item) => item?.chapterName?.contains(reference.chapterKeyword) ?? false,
-      orElse: () => null,
-    );
+    final hadith = await (db.select(db.hadithTable)
+          ..where((t) => 
+            t.bookName.equals(reference.bookName) & 
+            t.chapterName.like('%${reference.chapterKeyword}%')
+          )
+          ..limit(1))
+        .getSingleOrNull();
 
     if (hadith != null) {
       items.add(hadith);

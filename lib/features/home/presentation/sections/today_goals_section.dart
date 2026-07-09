@@ -74,7 +74,7 @@ class TodayGoalsSection extends ConsumerWidget {
                       crossAxisCount: crossAxisCount,
                       crossAxisSpacing: AppSpacing.md,
                       mainAxisSpacing: AppSpacing.md,
-                      childAspectRatio: crossAxisCount == 1 ? 1.85 : 1.12,
+                      childAspectRatio: crossAxisCount == 1 ? 1.55 : 1.05,
                     ),
                     itemCount: goalProgressList.length,
                     itemBuilder: (context, index) {
@@ -100,7 +100,7 @@ class TodayGoalsSection extends ConsumerWidget {
                     crossAxisCount: crossAxisCount,
                     crossAxisSpacing: AppSpacing.md,
                     mainAxisSpacing: AppSpacing.md,
-                    childAspectRatio: crossAxisCount == 1 ? 1.85 : 1.12,
+                    childAspectRatio: crossAxisCount == 1 ? 1.55 : 1.05,
                   ),
                   itemCount: crossAxisCount == 1 ? 2 : 4,
                   itemBuilder: (context, index) => const _ShimmerGoalCard(),

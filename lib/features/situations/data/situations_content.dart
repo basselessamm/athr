@@ -115,8 +115,8 @@ const situationsContent = <String, SituationContentBlock>{
     hadiths: [
       SituationHadithReference(
         bookName: 'صحيح مسلم',
-        chapterKeyword: 'التوكل',
-        sourceLabel: 'صحيح مسلم - أبواب التوكل',
+        chapterKeyword: 'القدر',
+        sourceLabel: 'صحيح مسلم - كتاب القدر',
       ),
     ],
   ),
