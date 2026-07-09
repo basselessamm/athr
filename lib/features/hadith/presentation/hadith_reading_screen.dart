@@ -56,21 +56,22 @@ class _HadithReadingScreenState extends ConsumerState<HadithReadingScreen>
   }
 
   void _saveProgress() {
+    // Save to recent activities unconditionally
+    ref
+        .read(recentActivityRepositoryProvider)
+        .addRecentActivity(
+          type: 'hadith',
+          title: widget.bookName,
+          subtitle: 'الحديث رقم ${_currentPageIndex + 1}',
+          routePath: '/hadith/${Uri.encodeComponent(widget.bookName)}',
+        );
+
     if (_secondsRead > 10 || _readHadiths.length > 1) {
       ref
           .read(progressRepositoryProvider)
           .updateProgress(
             hadithCount: _readHadiths.length,
             readingSeconds: _secondsRead,
-          );
-
-      ref
-          .read(recentActivityRepositoryProvider)
-          .addRecentActivity(
-            type: 'hadith',
-            title: widget.bookName,
-            subtitle: 'الحديث رقم ${_currentPageIndex + 1}',
-            routePath: '/hadith/${Uri.encodeComponent(widget.bookName)}',
           );
 
       _secondsRead = 0;

@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:athr/core/services/notification_service.dart';
+import 'package:go_router/go_router.dart';
+import 'package:athr/core/notifications/notification_providers.dart';
 import 'package:athr/core/router/app_router.dart';
 import 'package:athr/core/theme/app_theme.dart';
 import 'package:athr/features/settings/providers/settings_providers.dart';
+import 'package:athr/features/settings/providers/settings_provider.dart';
 import 'package:quran_flutter/quran.dart';
 
 void main() async {
@@ -13,20 +15,57 @@ void main() async {
 
   final prefs = await SharedPreferences.getInstance();
 
-  final container = ProviderContainer(
+  final initialContainer = ProviderContainer(
     overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
   );
 
-  // Initialize notifications
-  final notificationService = container.read(notificationServiceProvider);
+  // Setup notification listener before init
+  final notificationService = initialContainer.read(notificationServiceProvider);
+  notificationService.selectNotificationStream.stream.listen((String? payload) {
+    if (payload != null) {
+      // Use finalContainer if possible, but in listener it will use the router instance
+      _handleNotificationNavigation(initialContainer.read(appRouterProvider), payload);
+    }
+  });
+
   await notificationService.init();
+  final initialPayload = await notificationService.getInitialPayload();
+
+  // Create a new container with the initial payload override
+  final finalContainer = ProviderContainer(
+    overrides: [
+      sharedPreferencesProvider.overrideWithValue(prefs),
+      initialPayloadProvider.overrideWithValue(initialPayload),
+    ],
+  );
 
   // Initialize Quran package
   await Quran.initialize();
+  
+  // Prime the settings provider and eagerly reschedule notifications
+  final settingsNotifier = finalContainer.read(settingsProvider.notifier);
+  await settingsNotifier.rescheduleAll();
 
   runApp(
-    UncontrolledProviderScope(container: container, child: const AthrApp()),
+    UncontrolledProviderScope(container: finalContainer, child: const AthrApp()),
   );
+}
+
+void _handleNotificationNavigation(GoRouter router, String payload) {
+  switch (payload) {
+    case 'morning_azkar':
+      router.go('/azkar/morning');
+      break;
+    case 'evening_azkar':
+      router.go('/azkar/evening');
+      break;
+    case 'quran':
+      router.go('/quran');
+      break;
+    case 'athr':
+      router.go('/');
+      break;
+  }
 }
 
 class AthrApp extends ConsumerWidget {

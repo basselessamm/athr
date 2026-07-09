@@ -75,24 +75,32 @@ class SmartGreetingSection extends ConsumerWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Wrap(
-                  spacing: AppSpacing.sm,
-                  runSpacing: AppSpacing.sm,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _ContextPill(
-                      icon: Icons.waving_hand_rounded,
-                      label: 'السلام عليكم',
-                      foregroundColor: theme.colorScheme.primary,
-                      backgroundColor: theme.colorScheme.surface.withValues(
-                        alpha: 0.72,
-                      ),
-                    ),
-                    _ContextPill(
-                      icon: Icons.calendar_month_rounded,
-                      label: _formatHijriDate(dashboardContext),
-                      foregroundColor: theme.colorScheme.onSurface,
-                      backgroundColor: theme.colorScheme.surface.withValues(
-                        alpha: 0.72,
+                    Expanded(
+                      child: Wrap(
+                        spacing: AppSpacing.sm,
+                        runSpacing: AppSpacing.sm,
+                        children: [
+                          _ContextPill(
+                            icon: Icons.waving_hand_rounded,
+                            label: 'السلام عليكم',
+                            foregroundColor: theme.colorScheme.primary,
+                            backgroundColor: theme.colorScheme.surface.withValues(
+                              alpha: 0.72,
+                            ),
+                          ),
+                          _ContextPill(
+                            icon: Icons.calendar_month_rounded,
+                            label: _formatHijriDate(dashboardContext),
+                            foregroundColor: theme.colorScheme.onSurface,
+                            backgroundColor: theme.colorScheme.surface.withValues(
+                              alpha: 0.72,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],

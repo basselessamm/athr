@@ -19,12 +19,19 @@ import 'package:athr/features/progress/presentation/goal_setting_screen.dart';
 import 'package:athr/features/library/presentation/library_screen.dart';
 import 'package:athr/features/search/presentation/global_search_screen.dart';
 import 'package:athr/core/router/error_screen.dart';
+import 'package:athr/features/progress/presentation/quran_monthly_report_screen.dart';
+
+final initialPayloadProvider = Provider<String?>((ref) => null);
 
 final appRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     initialLocation: '/splash',
     errorBuilder: (context, state) => ErrorScreen(error: state.error),
     routes: [
+      GoRoute(
+        path: '/settings',
+        builder: (context, state) => const SettingsScreen(),
+      ),
       GoRoute(path: '/', builder: (context, state) => const HomeScreen()),
       GoRoute(
         path: '/splash',
@@ -89,6 +96,12 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/progress',
         builder: (context, state) => const ProgressScreen(),
+        routes: [
+          GoRoute(
+            path: 'quran-monthly',
+            builder: (context, state) => const QuranMonthlyReportScreen(),
+          ),
+        ],
       ),
       GoRoute(
         path: '/goal_setting',

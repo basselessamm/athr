@@ -7,7 +7,7 @@ import 'package:athr/core/theme/app_shadows.dart';
 import 'package:athr/core/theme/app_typography.dart';
 import 'package:athr/core/widgets/athr_scaffold.dart';
 import 'package:athr/features/settings/providers/settings_providers.dart';
-import 'package:athr/core/services/notification_service.dart';
+import 'package:athr/features/settings/providers/settings_provider.dart';
 import 'package:quran_flutter/quran.dart';
 
 class SettingsScreen extends ConsumerWidget {
@@ -21,6 +21,8 @@ class SettingsScreen extends ConsumerWidget {
     final hadithFontSize = ref.watch(hadithFontSizeProvider);
     final azkarFontSize = ref.watch(azkarFontSizeProvider);
     final reduceMotion = ref.watch(reduceMotionProvider);
+    final settings = ref.watch(settingsProvider);
+    final settingsNotifier = ref.read(settingsProvider.notifier);
 
     return AthrScaffold(
       title: 'الإعدادات',
@@ -183,96 +185,62 @@ class SettingsScreen extends ConsumerWidget {
             const SizedBox(height: AppSpacing.lg),
 
             // Notifications Settings
+            // Notifications Settings
             _SettingsCard(
-              title: 'الإشعارات والتذكير',
-              subtitle: 'تفعيل تنبيه المحاسبة اليومية (9 مساءً)',
+              title: 'إشعارات الأذكار',
+              subtitle: 'تخصيص أوقات الأذكار',
               icon: Icons.notifications_active_rounded,
-              child: Consumer(
-                builder: (context, ref, child) {
-                  final notificationsEnabled = ref.watch(
-                    notificationsEnabledProvider,
-                  );
-                  return Container(
-                    decoration: BoxDecoration(
-                      color: theme.colorScheme.surfaceContainerHighest
-                          .withValues(alpha: 0.3),
-                      borderRadius: BorderRadius.circular(AppRadius.lg),
-                    ),
-                    child: SwitchListTile(
-                      title: Text(
-                        'تنبيه المحاسبة اليومية',
-                        style: AppTypography.cairoTextTheme().bodyLarge
-                            ?.copyWith(fontWeight: FontWeight.bold),
-                      ),
-                      value: notificationsEnabled,
-                      activeThumbColor: theme.colorScheme.primary,
-                      onChanged: (val) async {
-                        final notifier = ref.read(
-                          notificationsEnabledProvider.notifier,
-                        );
-                        final service = ref.read(notificationServiceProvider);
-
-                        if (val) {
-                          final granted = await service.requestPermission();
-                          if (granted) {
-                            notifier.setEnabled(true);
-                            await service.scheduleDailyMuhasaba(
-                              21,
-                              0,
-                            ); // 9:00 PM
-                            if (context.mounted) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    'تم تفعيل التنبيه بنجاح.',
-                                    style: AppTypography.cairoTextTheme()
-                                        .bodyMedium
-                                        ?.copyWith(
-                                          color: theme
-                                              .colorScheme
-                                              .onInverseSurface,
-                                        ),
-                                  ),
-                                  behavior: SnackBarBehavior.floating,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(
-                                      AppRadius.lg,
-                                    ),
-                                  ),
-                                ),
-                              );
-                            }
-                          } else {
-                            if (context.mounted) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    'عذراً، يجب إعطاء صلاحية الإشعارات أولاً.',
-                                    style: AppTypography.cairoTextTheme()
-                                        .bodyMedium
-                                        ?.copyWith(
-                                          color: theme.colorScheme.onError,
-                                        ),
-                                  ),
-                                  backgroundColor: theme.colorScheme.error,
-                                  behavior: SnackBarBehavior.floating,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(
-                                      AppRadius.lg,
-                                    ),
-                                  ),
-                                ),
-                              );
-                            }
-                          }
-                        } else {
-                          notifier.setEnabled(false);
-                          await service.cancelDailyMuhasaba();
-                        }
-                      },
-                    ),
-                  );
-                },
+              child: Column(
+                children: [
+                  _buildSettingTile(
+                    context: context,
+                    title: 'أذكار الصباح',
+                    subtitle: 'سيتم تذكيرك يومياً',
+                    icon: Icons.wb_sunny_rounded,
+                    enabled: settings.morningAzkarEnabled,
+                    time: settings.morningAzkarTime,
+                    onToggle: (val) => settingsNotifier.updateMorningAzkar(val),
+                    onTimeChanged: (time) =>
+                        settingsNotifier.updateMorningAzkar(settings.morningAzkarEnabled, time),
+                  ),
+                  const Divider(),
+                  _buildSettingTile(
+                    context: context,
+                    title: 'أذكار المساء',
+                    subtitle: 'سيتم تذكيرك يومياً',
+                    icon: Icons.nights_stay_rounded,
+                    enabled: settings.eveningAzkarEnabled,
+                    time: settings.eveningAzkarTime,
+                    onToggle: (val) => settingsNotifier.updateEveningAzkar(val),
+                    onTimeChanged: (time) =>
+                        settingsNotifier.updateEveningAzkar(settings.eveningAzkarEnabled, time),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: AppSpacing.lg),
+            _SettingsCard(
+              title: 'إشعارات القرآن والتأمل',
+              subtitle: 'تنبيهات ورد القرآن ورسائل أثر',
+              icon: Icons.menu_book_rounded,
+              child: Column(
+                children: [
+                  SwitchListTile(
+                    title: const Text('تنبيهات ورد القرآن', style: TextStyle(fontWeight: FontWeight.bold)),
+                    subtitle: const Text('عدة تذكيرات متفرقة خلال اليوم تتوقف فور قراءتك للورد.'),
+                    value: settings.quranRemindersEnabled,
+                    activeThumbColor: theme.colorScheme.primary,
+                    onChanged: (val) => settingsNotifier.updateQuranReminders(val),
+                  ),
+                  const Divider(),
+                  SwitchListTile(
+                    title: const Text('رسالة أثر اليومية', style: TextStyle(fontWeight: FontWeight.bold)),
+                    subtitle: const Text('رسالة إيمانية ملهمة تصلك في منتصف اليوم.'),
+                    value: settings.athrMessageEnabled,
+                    activeThumbColor: theme.colorScheme.primary,
+                    onChanged: (val) => settingsNotifier.updateAthrMessage(val),
+                  ),
+                ],
               ),
             ),
             const SizedBox(height: AppSpacing.xxl),
@@ -307,6 +275,49 @@ class SettingsScreen extends ConsumerWidget {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildSettingTile({
+    required BuildContext context,
+    required String title,
+    required String subtitle,
+    required IconData icon,
+    required bool enabled,
+    required TimeOfDay time,
+    required Function(bool) onToggle,
+    required Function(TimeOfDay) onTimeChanged,
+  }) {
+    final theme = Theme.of(context);
+    return Column(
+      children: [
+        SwitchListTile(
+          title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
+          subtitle: Text(subtitle),
+          secondary: Icon(icon, color: theme.colorScheme.primary),
+          value: enabled,
+          activeThumbColor: theme.colorScheme.primary,
+          onChanged: onToggle,
+        ),
+        if (enabled)
+          ListTile(
+            contentPadding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
+            title: const Text('وقت التذكير'),
+            trailing: TextButton.icon(
+              icon: const Icon(Icons.access_time_rounded),
+              label: Text(time.format(context)),
+              onPressed: () async {
+                final newTime = await showTimePicker(
+                  context: context,
+                  initialTime: time,
+                );
+                if (newTime != null) {
+                  onTimeChanged(newTime);
+                }
+              },
+            ),
+          ),
+      ],
     );
   }
 

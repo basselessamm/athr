@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:athr/core/theme/app_spacing.dart';
 import 'package:athr/core/theme/app_radius.dart';
 import 'package:athr/core/theme/app_shadows.dart';
@@ -153,6 +154,15 @@ class ProgressScreen extends ConsumerWidget {
                     child: Center(child: CircularProgressIndicator()),
                   ),
                   error: (err, stack) => const Text('حدث خطأ في الإحصائيات'),
+                ),
+                const SizedBox(height: AppSpacing.xl),
+                ElevatedButton.icon(
+                  onPressed: () => context.push('/progress/quran-monthly'),
+                  icon: const Icon(Icons.calendar_month),
+                  label: const Text('تقرير ورد القرآن الشهري', style: TextStyle(fontWeight: FontWeight.bold)),
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                  ),
                 ),
                 const SizedBox(height: AppSpacing.xxl),
               ],

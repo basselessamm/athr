@@ -1,12 +1,16 @@
 import 'dart:convert';
 import 'package:drift/drift.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:athr/core/database/app_database.dart';
 import 'package:quran_flutter/quran.dart';
 import 'package:flutter/foundation.dart';
 import 'package:athr/features/search/domain/search_normalizer.dart';
 
 import 'seed_daily_content.dart';
+
+List<dynamic> _decodeList(String source) => jsonDecode(source) as List<dynamic>;
+Map<String, dynamic> _decodeMap(String source) => jsonDecode(source) as Map<String, dynamic>;
 
 class DatabaseSeeder {
   final AppDatabase db;
@@ -154,7 +158,7 @@ class DatabaseSeeder {
     final quranTextString = await rootBundle.loadString(
       'assets/json/quran_text.json',
     );
-    final List<dynamic> quranTextJson = await compute(jsonDecode, quranTextString);
+    final List<dynamic> quranTextJson = await compute(_decodeList, quranTextString);
 
     Map<int, Map<String, int>> ayahMapping = {};
     for (var item in quranTextJson) {
@@ -172,7 +176,7 @@ class DatabaseSeeder {
     final tafseerString = await rootBundle.loadString(
       'assets/json/tafseer.json',
     );
-    final List<dynamic> tafseerJson = await compute(jsonDecode, tafseerString);
+    final List<dynamic> tafseerJson = await compute(_decodeList, tafseerString);
 
     List<QuranTafseerTableCompanion> inserts = [];
     for (var item in tafseerJson) {
@@ -203,8 +207,10 @@ class DatabaseSeeder {
   }
 
   Future<void> _seedDuas() async {
-    final duasString = await rootBundle.loadString('assets/json/duas.json');
-    final Map<String, dynamic> duasJson = await compute(jsonDecode, duasString);
+    final duasString = await rootBundle.loadString(
+      'assets/json/duas.json',
+    );
+    final Map<String, dynamic> duasJson = await compute(_decodeMap, duasString);
 
     List<DuaTableCompanion> inserts = [];
 
@@ -227,8 +233,10 @@ class DatabaseSeeder {
 
   Future<void> _seedHadith(String fileName, String bookName) async {
     try {
-      final hadithString = await rootBundle.loadString('assets/json/$fileName');
-      final Map<String, dynamic> hadithJson = await compute(jsonDecode, hadithString);
+      final hadithString = await rootBundle.loadString(
+        'assets/json/$fileName',
+      );
+      final Map<String, dynamic> hadithJson = await compute(_decodeMap, hadithString);
 
       final chaptersList = hadithJson['chapters'] as List<dynamic>? ?? [];
       final Map<int, String> chapterMap = {};

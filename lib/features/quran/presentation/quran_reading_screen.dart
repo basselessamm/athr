@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:quran_flutter/quran.dart';
 import 'package:athr/core/database/database_providers.dart';
+import 'package:athr/core/notifications/notification_providers.dart';
 import 'dart:async';
 
 import 'package:athr/features/quran/presentation/widgets/book_page_widget.dart';
@@ -147,6 +148,16 @@ class _QuranReadingScreenState extends ConsumerState<QuranReadingScreen>
           themeId: currentTheme.name,
         );
 
+    // Save to recent activities unconditionally
+    ref
+        .read(recentActivityRepositoryProvider)
+        .addRecentActivity(
+          type: 'quran',
+          title: 'سورة ${Quran.getSurahName(widget.surahNumber)}',
+          subtitle: 'الصفحة ${lastPageModel.pageNumber}',
+          routePath: '/quran/${widget.surahNumber}',
+        );
+
     if (_secondsRead > 10 || _readPages.isNotEmpty) {
       ref
           .read(progressRepositoryProvider)
@@ -154,16 +165,9 @@ class _QuranReadingScreenState extends ConsumerState<QuranReadingScreen>
             pagesRead: _readPages.length,
             readingSeconds: _secondsRead,
           );
-
-      // Save to recent activities
-      ref
-          .read(recentActivityRepositoryProvider)
-          .addRecentActivity(
-            type: 'quran',
-            title: 'سورة ${Quran.getSurahName(widget.surahNumber)}',
-            subtitle: 'الصفحة ${lastPageModel.pageNumber}',
-            routePath: '/quran/${widget.surahNumber}',
-          );
+      
+      // Cancel today's reminders since the user has read
+      ref.read(notificationServiceProvider).markQuranAsReadForToday();
 
       // Reset after saving to prevent duplicate tracking
       _secondsRead = 0;

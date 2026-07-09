@@ -58,21 +58,22 @@ class _AzkarReadingScreenState extends ConsumerState<AzkarReadingScreen>
   }
 
   void _saveProgress() {
+    // Save to recent activities unconditionally
+    ref
+        .read(recentActivityRepositoryProvider)
+        .addRecentActivity(
+          type: 'azkar',
+          title: widget.category,
+          subtitle: 'الذكر رقم ${_currentPageIndex + 1}',
+          routePath: '/azkar/${Uri.encodeComponent(widget.category)}',
+        );
+
     if (_secondsRead > 10 || _readAzkar.length > 1) {
       ref
           .read(progressRepositoryProvider)
           .updateProgress(
             azkarCount: _readAzkar.length,
             readingSeconds: _secondsRead,
-          );
-
-      ref
-          .read(recentActivityRepositoryProvider)
-          .addRecentActivity(
-            type: 'azkar',
-            title: widget.category,
-            subtitle: 'الذكر رقم ${_currentPageIndex + 1}',
-            routePath: '/azkar/${Uri.encodeComponent(widget.category)}',
           );
 
       _secondsRead = 0;

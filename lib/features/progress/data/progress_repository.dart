@@ -67,6 +67,22 @@ class ProgressRepository {
         .get();
   }
 
+  Future<List<ProgressRecord>> getMonthlyProgress(int year, int month) async {
+    final startOfMonth = DateTime(year, month, 1);
+    // End of month is the first day of the NEXT month, minus 1 millisecond
+    final endOfMonth = DateTime(year, month + 1, 1).subtract(const Duration(milliseconds: 1));
+    
+    final startDateStr = DateFormat('yyyy-MM-dd').format(startOfMonth);
+    final endDateStr = DateFormat('yyyy-MM-dd').format(endOfMonth);
+
+    return await (_db.select(_db.progressRecordTable)
+          ..where((t) => t.date.isBiggerOrEqualValue(startDateStr) & t.date.isSmallerOrEqualValue(endDateStr))
+          ..orderBy([
+            (t) => OrderingTerm(expression: t.date, mode: OrderingMode.asc),
+          ]))
+        .get();
+  }
+
   Future<Map<String, dynamic>> getMonthlyStats() async {
     final thirtyDaysAgo = DateFormat(
       'yyyy-MM-dd',

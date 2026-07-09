@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:athr/core/database/database_providers.dart';
 import 'package:athr/core/database/seeder/db_seeder.dart';
+import 'package:athr/core/router/app_router.dart';
 
 final seederProvider = FutureProvider<void>((ref) async {
   final db = ref.watch(appDatabaseProvider);
@@ -60,7 +61,27 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
       if (!state.isLoading && !state.hasError) {
         await _controller.reverse();
         if (context.mounted) {
-          context.go('/');
+          final payload = ref.read(initialPayloadProvider);
+          if (payload != null) {
+            switch (payload) {
+              case 'morning_azkar':
+                context.go('/azkar/morning');
+                break;
+              case 'evening_azkar':
+                context.go('/azkar/evening');
+                break;
+              case 'quran':
+                context.go('/quran');
+                break;
+              case 'athr':
+                context.go('/');
+                break;
+              default:
+                context.go('/');
+            }
+          } else {
+            context.go('/');
+          }
         }
       }
     });
