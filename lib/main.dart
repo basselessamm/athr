@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:timezone/data/latest_all.dart' as tz_data;
 import 'package:timezone/timezone.dart' as tz;
 import 'package:athr/core/notifications/notification_providers.dart';
+import 'package:athr/core/notifications/notification_router.dart';
 import 'package:athr/core/router/app_router.dart';
 import 'package:athr/core/theme/app_theme.dart';
 import 'package:athr/features/prayer/providers/prayer_providers.dart';
@@ -25,12 +26,14 @@ void main() async {
     overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
   );
 
-  // Setup notification listener before init
+  // Create router early so the notification listener always uses the same instance
+  final router = initialContainer.read(appRouterProvider);
+
+  // Setup notification listener before init, using the same router instance
   final notificationService = initialContainer.read(notificationServiceProvider);
   notificationService.selectNotificationStream.stream.listen((String? payload) {
     if (payload != null) {
-      // Use finalContainer if possible, but in listener it will use the router instance
-      _handleNotificationNavigation(initialContainer.read(appRouterProvider), payload);
+      NotificationRouter.navigate(router, payload);
     }
   });
 
@@ -66,23 +69,6 @@ Future<void> _initializeLocalTimezone() async {
     tz.setLocalLocation(location);
   } catch (_) {
     tz.setLocalLocation(tz.getLocation('UTC'));
-  }
-}
-
-void _handleNotificationNavigation(GoRouter router, String payload) {
-  switch (payload) {
-    case 'morning_azkar':
-      router.go('/azkar/morning');
-      break;
-    case 'evening_azkar':
-      router.go('/azkar/evening');
-      break;
-    case 'quran':
-      router.go('/quran');
-      break;
-    case 'athr':
-      router.go('/');
-      break;
   }
 }
 
