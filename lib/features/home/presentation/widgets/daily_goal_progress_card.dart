@@ -3,9 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:athr/core/theme/app_radius.dart';
-import 'package:athr/core/theme/app_shadows.dart';
 import 'package:athr/core/theme/app_spacing.dart';
 import 'package:athr/core/theme/app_typography.dart';
+import 'package:athr/core/widgets/athr_glass_card.dart';
 import 'package:athr/features/progress/providers/goal_wiring_providers.dart';
 
 class DailyGoalProgressCard extends ConsumerWidget {
@@ -16,23 +16,10 @@ class DailyGoalProgressCard extends ConsumerWidget {
     final theme = Theme.of(context);
     final goalSummaryAsync = ref.watch(goalSummaryProvider);
 
-    return Container(
+    return AthrGlassCard(
+      blur: 18,
+      opacity: 0.10,
       padding: const EdgeInsets.all(AppSpacing.lg),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topRight,
-          end: Alignment.bottomLeft,
-          colors: [
-            theme.colorScheme.surface,
-            theme.colorScheme.primaryContainer.withValues(alpha: 0.18),
-          ],
-        ),
-        borderRadius: BorderRadius.circular(AppRadius.lg),
-        boxShadow: AppShadows.card,
-        border: Border.all(
-          color: theme.colorScheme.outlineVariant.withValues(alpha: 0.35),
-        ),
-      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -77,8 +64,11 @@ class DailyGoalProgressCard extends ConsumerWidget {
                 return Container(
                   padding: const EdgeInsets.all(AppSpacing.md),
                   decoration: BoxDecoration(
-                    color: theme.colorScheme.surface.withValues(alpha: 0.85),
+                    color: theme.colorScheme.surface.withValues(alpha: 0.45),
                     borderRadius: BorderRadius.circular(AppRadius.md),
+                    border: Border.all(
+                      color: theme.colorScheme.outlineVariant.withValues(alpha: 0.15),
+                    ),
                   ),
                   child: Row(
                     children: [
@@ -86,7 +76,7 @@ class DailyGoalProgressCard extends ConsumerWidget {
                         width: 48,
                         height: 48,
                         decoration: BoxDecoration(
-                          color: theme.colorScheme.primaryContainer,
+                          color: theme.colorScheme.primaryContainer.withValues(alpha: 0.5),
                           borderRadius: BorderRadius.circular(AppRadius.md),
                         ),
                         child: Icon(
@@ -126,21 +116,21 @@ class DailyGoalProgressCard extends ConsumerWidget {
                       _SummaryChip(
                         label: '${summary.totalGoals} أهداف',
                         backgroundColor: theme.colorScheme.surface.withValues(
-                          alpha: 0.88,
+                          alpha: 0.55,
                         ),
                         foregroundColor: theme.colorScheme.onSurface,
                       ),
                       _SummaryChip(
                         label: '${summary.completedGoals} مكتمل',
                         backgroundColor: theme.colorScheme.primaryContainer
-                            .withValues(alpha: 0.9),
+                            .withValues(alpha: 0.55),
                         foregroundColor: theme.colorScheme.primary,
                       ),
                       _SummaryChip(
                         label:
                             '${_formatPercent(summary.averagePercent)} متوسط الإنجاز',
                         backgroundColor: theme.colorScheme.secondaryContainer
-                            .withValues(alpha: 0.72),
+                            .withValues(alpha: 0.45),
                         foregroundColor: theme.colorScheme.secondary,
                       ),
                     ],
@@ -154,13 +144,19 @@ class DailyGoalProgressCard extends ConsumerWidget {
                         height: 56,
                         decoration: BoxDecoration(
                           color: completed
-                              ? theme.colorScheme.primary.withValues(
-                                  alpha: 0.12,
-                                )
-                              : theme.colorScheme.secondaryContainer.withValues(
-                                  alpha: 0.5,
-                                ),
+                              ? theme.colorScheme.primary.withValues(alpha: 0.14)
+                              : theme.colorScheme.secondaryContainer.withValues(alpha: 0.35),
                           borderRadius: BorderRadius.circular(AppRadius.md),
+                          boxShadow: [
+                            BoxShadow(
+                              color: (completed
+                                      ? theme.colorScheme.primary
+                                      : theme.colorScheme.secondary)
+                                  .withValues(alpha: 0.18),
+                              blurRadius: 12,
+                              spreadRadius: 1,
+                            ),
+                          ],
                         ),
                         child: Icon(
                           completed
@@ -202,7 +198,7 @@ class DailyGoalProgressCard extends ConsumerWidget {
                               ),
                               decoration: BoxDecoration(
                                 color: theme.colorScheme.surface.withValues(
-                                  alpha: 0.88,
+                                  alpha: 0.55,
                                 ),
                                 borderRadius: BorderRadius.circular(
                                   AppRadius.round,
@@ -231,8 +227,8 @@ class DailyGoalProgressCard extends ConsumerWidget {
                         ),
                         decoration: BoxDecoration(
                           color: completed
-                              ? theme.colorScheme.primaryContainer
-                              : theme.colorScheme.surfaceContainerHighest,
+                              ? theme.colorScheme.primaryContainer.withValues(alpha: 0.55)
+                              : theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.55),
                           borderRadius: BorderRadius.circular(AppRadius.round),
                         ),
                         child: Text(
@@ -273,14 +269,21 @@ class DailyGoalProgressCard extends ConsumerWidget {
                   const SizedBox(height: AppSpacing.sm),
                   ClipRRect(
                     borderRadius: BorderRadius.circular(AppRadius.round),
-                    child: LinearProgressIndicator(
-                      value: percent,
-                      minHeight: 14,
-                      backgroundColor:
-                          theme.colorScheme.surfaceContainerHighest,
-                      color: completed
-                          ? theme.colorScheme.primary
-                          : theme.colorScheme.secondary,
+                    child: TweenAnimationBuilder<double>(
+                      tween: Tween(begin: 0, end: percent),
+                      duration: const Duration(milliseconds: 800),
+                      curve: Curves.easeOutCubic,
+                      builder: (context, value, _) {
+                        return LinearProgressIndicator(
+                          value: value,
+                          minHeight: 14,
+                          backgroundColor:
+                              theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.45),
+                          color: completed
+                              ? theme.colorScheme.primary
+                              : theme.colorScheme.secondary,
+                        );
+                      },
                     ),
                   ),
                 ],
@@ -331,6 +334,9 @@ class _SummaryChip extends StatelessWidget {
       decoration: BoxDecoration(
         color: backgroundColor,
         borderRadius: BorderRadius.circular(AppRadius.round),
+        border: Border.all(
+          color: foregroundColor.withValues(alpha: 0.1),
+        ),
       ),
       child: Text(
         label,

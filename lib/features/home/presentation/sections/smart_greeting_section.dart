@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:athr/core/theme/app_typography.dart';
 import 'package:athr/core/theme/app_radius.dart';
 import 'package:athr/core/theme/app_spacing.dart';
-import 'package:athr/core/theme/app_shadows.dart';
+import 'package:athr/core/widgets/athr_glass_card.dart';
 
 import 'package:athr/features/home/providers/dashboard_context_provider.dart';
 
@@ -19,33 +19,34 @@ class SmartGreetingSection extends ConsumerWidget {
     final subGreeting = dashboardContext.subGreeting;
     final focusLabel = dashboardContext.focusLabel;
     final focusRoute = dashboardContext.focusRoute;
+    final hour = DateTime.now().hour;
+
+    // Time-based icon
+    final IconData timeIcon;
+    final Color iconGlowColor;
+    if (hour >= 5 && hour < 12) {
+      timeIcon = Icons.wb_sunny_rounded;
+      iconGlowColor = const Color(0xFFFFA726);
+    } else if (hour >= 12 && hour < 17) {
+      timeIcon = Icons.wb_cloudy_rounded;
+      iconGlowColor = const Color(0xFF42A5F5);
+    } else if (hour >= 17 && hour < 20) {
+      timeIcon = Icons.wb_twilight_rounded;
+      iconGlowColor = const Color(0xFFEF5350);
+    } else {
+      timeIcon = Icons.nightlight_round;
+      iconGlowColor = const Color(0xFF7E57C2);
+    }
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
-      child: Container(
+      child: AthrGlassCard(
+        blur: 22,
+        opacity: 0.08,
         padding: const EdgeInsets.all(AppSpacing.lg),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topRight,
-            end: Alignment.bottomLeft,
-            colors: [
-              theme.colorScheme.primaryContainer,
-              Color.lerp(
-                    theme.colorScheme.secondaryContainer,
-                    theme.colorScheme.surface,
-                    0.25,
-                  ) ??
-                  theme.colorScheme.secondaryContainer,
-            ],
-          ),
-          borderRadius: BorderRadius.circular(AppRadius.lg),
-          boxShadow: AppShadows.card,
-          border: Border.all(
-            color: theme.colorScheme.outlineVariant.withValues(alpha: 0.3),
-          ),
-        ),
         child: Stack(
           children: [
+            // ── Decorative circles behind content ──
             Positioned(
               top: -48,
               left: -12,
@@ -54,9 +55,7 @@ class SmartGreetingSection extends ConsumerWidget {
                 height: 140,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: theme.colorScheme.onPrimaryContainer.withValues(
-                    alpha: 0.06,
-                  ),
+                  color: theme.colorScheme.primary.withValues(alpha: 0.06),
                 ),
               ),
             ),
@@ -68,7 +67,7 @@ class SmartGreetingSection extends ConsumerWidget {
                 height: 170,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: theme.colorScheme.primary.withValues(alpha: 0.08),
+                  color: iconGlowColor.withValues(alpha: 0.06),
                 ),
               ),
             ),
@@ -89,7 +88,7 @@ class SmartGreetingSection extends ConsumerWidget {
                             label: 'السلام عليكم',
                             foregroundColor: theme.colorScheme.primary,
                             backgroundColor: theme.colorScheme.surface.withValues(
-                              alpha: 0.72,
+                              alpha: 0.55,
                             ),
                           ),
                           _ContextPill(
@@ -97,10 +96,32 @@ class SmartGreetingSection extends ConsumerWidget {
                             label: _formatHijriDate(dashboardContext),
                             foregroundColor: theme.colorScheme.onSurface,
                             backgroundColor: theme.colorScheme.surface.withValues(
-                              alpha: 0.72,
+                              alpha: 0.55,
                             ),
                           ),
                         ],
+                      ),
+                    ),
+                    const SizedBox(width: AppSpacing.sm),
+                    // ── Glowing time icon ──
+                    Container(
+                      width: 48,
+                      height: 48,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: iconGlowColor.withValues(alpha: 0.12),
+                        boxShadow: [
+                          BoxShadow(
+                            color: iconGlowColor.withValues(alpha: 0.25),
+                            blurRadius: 16,
+                            spreadRadius: 2,
+                          ),
+                        ],
+                      ),
+                      child: Icon(
+                        timeIcon,
+                        color: iconGlowColor,
+                        size: 26,
                       ),
                     ),
                   ],
@@ -112,6 +133,7 @@ class SmartGreetingSection extends ConsumerWidget {
                       ?.copyWith(
                         color: theme.colorScheme.onSurface,
                         height: 1.25,
+                        fontWeight: FontWeight.w700,
                       ),
                 ),
                 const SizedBox(height: AppSpacing.sm),
@@ -130,8 +152,11 @@ class SmartGreetingSection extends ConsumerWidget {
                       vertical: AppSpacing.sm,
                     ),
                     decoration: BoxDecoration(
-                      color: theme.colorScheme.surface.withValues(alpha: 0.76),
+                      color: theme.colorScheme.surface.withValues(alpha: 0.45),
                       borderRadius: BorderRadius.circular(AppRadius.md),
+                      border: Border.all(
+                        color: theme.colorScheme.primary.withValues(alpha: 0.15),
+                      ),
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
@@ -158,17 +183,11 @@ class SmartGreetingSection extends ConsumerWidget {
                 ],
                 if (focusLabel != null && focusRoute != null) ...[
                   const SizedBox(height: AppSpacing.lg),
-                  Container(
+                  AthrGlassCard(
+                    blur: 12,
+                    opacity: 0.06,
                     padding: const EdgeInsets.all(AppSpacing.md),
-                    decoration: BoxDecoration(
-                      color: theme.colorScheme.surface.withValues(alpha: 0.78),
-                      borderRadius: BorderRadius.circular(AppRadius.md),
-                      border: Border.all(
-                        color: theme.colorScheme.outlineVariant.withValues(
-                          alpha: 0.25,
-                        ),
-                      ),
-                    ),
+                    borderRadius: BorderRadius.circular(AppRadius.md),
                     child: Row(
                       children: [
                         Container(
@@ -176,9 +195,18 @@ class SmartGreetingSection extends ConsumerWidget {
                           height: 46,
                           decoration: BoxDecoration(
                             color: theme.colorScheme.primary.withValues(
-                              alpha: 0.12,
+                              alpha: 0.14,
                             ),
                             shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                color: theme.colorScheme.primary.withValues(
+                                  alpha: 0.15,
+                                ),
+                                blurRadius: 10,
+                                spreadRadius: 1,
+                              ),
+                            ],
                           ),
                           child: Icon(
                             Icons.flag_circle_rounded,
@@ -268,6 +296,9 @@ class _ContextPill extends StatelessWidget {
       decoration: BoxDecoration(
         color: backgroundColor,
         borderRadius: BorderRadius.circular(AppRadius.round),
+        border: Border.all(
+          color: foregroundColor.withValues(alpha: 0.12),
+        ),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,

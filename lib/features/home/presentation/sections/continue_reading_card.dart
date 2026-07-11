@@ -3,9 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:quran_flutter/quran.dart';
 import 'package:athr/core/theme/app_typography.dart';
-import 'package:athr/core/theme/app_radius.dart';
 import 'package:athr/core/theme/app_spacing.dart';
-import 'package:athr/core/theme/app_shadows.dart';
+import 'package:athr/core/widgets/athr_glass_card.dart';
 import 'package:athr/features/reading_session/data/reading_session_repository.dart';
 
 final lastQuranSessionProvider = StreamProvider((ref) {
@@ -24,7 +23,7 @@ class ContinueReadingCard extends ConsumerWidget {
     return sessionAsync.when(
       data: (session) {
         if (session == null || session.surahId == null) {
-          return const SizedBox.shrink(); // Hide if no reading history
+          return const SizedBox.shrink();
         }
 
         final surahId = session.surahId!;
@@ -34,41 +33,42 @@ class ContinueReadingCard extends ConsumerWidget {
         final juzNum = Quran.getJuzNumber(
           surahNumber: surahId,
           verseNumber: 1,
-        ); // rough approximation
+        );
 
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
-          child: InkWell(
+          child: _AnimatedTapCard(
             onTap: () {
               context.push('/quran/$surahId?page=$pageNum');
             },
-            borderRadius: AppRadius.card,
-            child: Container(
+            child: AthrGlassCard(
+              blur: 18,
+              opacity: 0.10,
               padding: const EdgeInsets.all(AppSpacing.lg),
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.secondaryContainer,
-                borderRadius: AppRadius.card,
-                boxShadow: AppShadows.minimal,
-                border: Border.all(
-                  color: Theme.of(
-                    context,
-                  ).colorScheme.outlineVariant.withValues(alpha: 0.3),
-                  width: 1,
-                ),
-              ),
               child: Row(
                 children: [
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          'متابعة القراءة',
-                          style: AppTypography.cairoTextTheme().labelMedium
-                              ?.copyWith(
-                                color: theme.colorScheme.onSurfaceVariant,
-                                letterSpacing: 1.2,
-                              ),
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.auto_stories_rounded,
+                              size: 16,
+                              color: theme.colorScheme.primary,
+                            ),
+                            const SizedBox(width: AppSpacing.xs),
+                            Text(
+                              'متابعة القراءة',
+                              style: AppTypography.cairoTextTheme().labelMedium
+                                  ?.copyWith(
+                                    color: theme.colorScheme.primary,
+                                    letterSpacing: 1.2,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                            ),
+                          ],
                         ),
                         const SizedBox(height: AppSpacing.sm),
                         Text(
@@ -89,15 +89,25 @@ class ContinueReadingCard extends ConsumerWidget {
                     ),
                   ),
                   Container(
-                    width: 48,
-                    height: 48,
+                    width: 52,
+                    height: 52,
                     decoration: BoxDecoration(
-                      color: theme.colorScheme.primary.withValues(alpha: 0.1),
+                      color: theme.colorScheme.primary.withValues(alpha: 0.12),
                       shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: theme.colorScheme.primary.withValues(
+                            alpha: 0.2,
+                          ),
+                          blurRadius: 14,
+                          spreadRadius: 1,
+                        ),
+                      ],
                     ),
                     child: Icon(
                       Icons.menu_book_rounded,
                       color: theme.colorScheme.primary,
+                      size: 26,
                     ),
                   ),
                 ],
@@ -108,6 +118,57 @@ class ContinueReadingCard extends ConsumerWidget {
       },
       loading: () => const SizedBox.shrink(),
       error: (err, stack) => const SizedBox.shrink(),
+    );
+  }
+}
+
+/// Wraps a child in a scale animation on tap for premium micro-interactions.
+class _AnimatedTapCard extends StatefulWidget {
+  final Widget child;
+  final VoidCallback onTap;
+
+  const _AnimatedTapCard({required this.child, required this.onTap});
+
+  @override
+  State<_AnimatedTapCard> createState() => _AnimatedTapCardState();
+}
+
+class _AnimatedTapCardState extends State<_AnimatedTapCard>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+  late final Animation<double> _scaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 120),
+      vsync: this,
+    );
+    _scaleAnimation = Tween<double>(begin: 1.0, end: 0.97).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTapDown: (_) => _controller.forward(),
+      onTapUp: (_) {
+        _controller.reverse();
+        widget.onTap();
+      },
+      onTapCancel: () => _controller.reverse(),
+      child: ScaleTransition(
+        scale: _scaleAnimation,
+        child: widget.child,
+      ),
     );
   }
 }

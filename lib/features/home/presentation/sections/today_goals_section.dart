@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:athr/core/theme/app_typography.dart';
 import 'package:athr/core/theme/app_radius.dart';
 import 'package:athr/core/theme/app_spacing.dart';
-import 'package:athr/core/theme/app_shadows.dart';
+import 'package:athr/core/widgets/athr_glass_card.dart';
 import 'package:athr/features/progress/providers/goal_engine_provider.dart';
 import 'package:athr/features/progress/providers/goal_wiring_providers.dart';
 
@@ -132,20 +132,46 @@ class TodayGoalsSection extends ConsumerWidget {
   }
 }
 
-class _GoalCard extends StatelessWidget {
+class _GoalCard extends StatefulWidget {
   final GoalProgress goalProgress;
 
   const _GoalCard({required this.goalProgress});
 
   @override
+  State<_GoalCard> createState() => _GoalCardState();
+}
+
+class _GoalCardState extends State<_GoalCard> with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+  late final Animation<double> _scaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 120),
+      vsync: this,
+    );
+    _scaleAnimation = Tween<double>(begin: 1.0, end: 0.96).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final percent = goalProgress.percent;
-    final isDone = goalProgress.isCompleted;
+    final percent = widget.goalProgress.percent;
+    final isDone = widget.goalProgress.isCompleted;
     final remaining =
-        (goalProgress.goal.targetValue - goalProgress.currentValue).clamp(
+        (widget.goalProgress.goal.targetValue - widget.goalProgress.currentValue).clamp(
           0,
-          goalProgress.goal.targetValue,
+          widget.goalProgress.goal.targetValue,
         );
 
     IconData getIconData(String iconName) {
@@ -167,162 +193,178 @@ class _GoalCard extends StatelessWidget {
       }
     }
 
-    return InkWell(
-      onTap: () => context.push('/progress'),
-      borderRadius: AppRadius.card,
-      child: Container(
-        padding: const EdgeInsets.all(AppSpacing.md),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topRight,
-            end: Alignment.bottomLeft,
-            colors: [
-              isDone
-                  ? theme.colorScheme.primaryContainer.withValues(alpha: 0.95)
-                  : theme.colorScheme.surface,
-              isDone
-                  ? theme.colorScheme.primaryContainer.withValues(alpha: 0.58)
-                  : theme.colorScheme.secondaryContainer.withValues(alpha: 0.2),
-            ],
-          ),
-          borderRadius: BorderRadius.circular(AppRadius.lg),
-          boxShadow: AppShadows.minimal,
-          border: Border.all(
-            color: isDone
-                ? theme.colorScheme.primary.withValues(alpha: 0.4)
-                : theme.colorScheme.outlineVariant.withValues(alpha: 0.35),
-            width: isDone ? 1.4 : 1,
-          ),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  width: 44,
-                  height: 44,
-                  decoration: BoxDecoration(
-                    color: isDone
-                        ? theme.colorScheme.primary.withValues(alpha: 0.12)
-                        : theme.colorScheme.surfaceContainerHighest.withValues(
-                            alpha: 0.7,
-                          ),
-                    borderRadius: BorderRadius.circular(AppRadius.md),
-                  ),
-                  child: Icon(
-                    getIconData(goalProgress.goal.icon),
-                    color: isDone
-                        ? theme.colorScheme.primary
-                        : theme.colorScheme.onSurfaceVariant,
-                    size: 22,
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: AppSpacing.sm,
-                    vertical: AppSpacing.xs,
-                  ),
-                  decoration: BoxDecoration(
-                    color: isDone
-                        ? theme.colorScheme.primary.withValues(alpha: 0.12)
-                        : theme.colorScheme.surface.withValues(alpha: 0.85),
-                    borderRadius: BorderRadius.circular(AppRadius.round),
-                  ),
-                  child: Text(
-                    isDone ? 'اكتمل' : '$remaining متبق',
-                    style: AppTypography.cairoTextTheme().labelMedium?.copyWith(
+    final cardColor = isDone
+        ? theme.colorScheme.primaryContainer.withValues(alpha: 0.45)
+        : theme.colorScheme.secondaryContainer.withValues(alpha: 0.15);
+
+    final borderColor = isDone
+        ? theme.colorScheme.primary.withValues(alpha: 0.35)
+        : theme.colorScheme.outlineVariant.withValues(alpha: 0.25);
+
+    return GestureDetector(
+      onTapDown: (_) => _controller.forward(),
+      onTapUp: (_) {
+        _controller.reverse();
+        context.push('/progress');
+      },
+      onTapCancel: () => _controller.reverse(),
+      child: ScaleTransition(
+        scale: _scaleAnimation,
+        child: AthrGlassCard(
+          blur: 16,
+          opacity: 0.08,
+          color: cardColor,
+          border: Border.all(color: borderColor, width: isDone ? 1.4 : 1.0),
+          padding: const EdgeInsets.all(AppSpacing.md),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    width: 44,
+                    height: 44,
+                    decoration: BoxDecoration(
+                      color: isDone
+                          ? theme.colorScheme.primary.withValues(alpha: 0.12)
+                          : theme.colorScheme.surfaceContainerHighest.withValues(
+                              alpha: 0.5,
+                            ),
+                      borderRadius: BorderRadius.circular(AppRadius.md),
+                      boxShadow: isDone
+                          ? [
+                              BoxShadow(
+                                color: theme.colorScheme.primary.withValues(
+                                  alpha: 0.18,
+                                ),
+                                blurRadius: 10,
+                                spreadRadius: 1,
+                              ),
+                            ]
+                          : null,
+                    ),
+                    child: Icon(
+                      getIconData(widget.goalProgress.goal.icon),
                       color: isDone
                           ? theme.colorScheme.primary
                           : theme.colorScheme.onSurfaceVariant,
+                      size: 22,
                     ),
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(height: AppSpacing.md),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  goalProgress.goal.title,
-                  style: AppTypography.cairoTextTheme().titleSmall?.copyWith(
-                    color: isDone
-                        ? theme.colorScheme.primary
-                        : theme.colorScheme.onSurface,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: AppSpacing.xs),
-                Text(
-                  _getMotivationalMessage(),
-                  style: AppTypography.cairoTextTheme().bodySmall?.copyWith(
-                    color: isDone
-                        ? theme.colorScheme.primary.withValues(alpha: 0.84)
-                        : theme.colorScheme.onSurfaceVariant,
-                    height: 1.5,
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
-            ),
-            const SizedBox(height: AppSpacing.md),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      _formatPercent(percent),
-                      style: AppTypography.cairoTextTheme().labelLarge
-                          ?.copyWith(
-                            color: isDone
-                                ? theme.colorScheme.primary
-                                : theme.colorScheme.onSurface,
-                            fontWeight: FontWeight.bold,
-                          ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppSpacing.sm,
+                      vertical: AppSpacing.xs,
                     ),
-                    Text(
-                      '${goalProgress.currentValue} من ${goalProgress.goal.targetValue}',
-                      style: AppTypography.cairoTextTheme().labelMedium
-                          ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                    decoration: BoxDecoration(
+                      color: isDone
+                          ? theme.colorScheme.primary.withValues(alpha: 0.12)
+                          : theme.colorScheme.surface.withValues(alpha: 0.55),
+                      borderRadius: BorderRadius.circular(AppRadius.round),
                     ),
-                  ],
-                ),
-                const SizedBox(height: AppSpacing.sm),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(AppSpacing.sm),
-                  child: LinearProgressIndicator(
-                    value: percent,
-                    minHeight: 8,
-                    backgroundColor: theme.colorScheme.surfaceContainerHighest,
-                    valueColor: AlwaysStoppedAnimation<Color>(
-                      isDone
+                    child: Text(
+                      isDone ? 'اكتمل' : '$remaining متبق',
+                      style: AppTypography.cairoTextTheme().labelMedium?.copyWith(
+                        color: isDone
+                            ? theme.colorScheme.primary
+                            : theme.colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: AppSpacing.md),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.goalProgress.goal.title,
+                    style: AppTypography.cairoTextTheme().titleSmall?.copyWith(
+                      color: isDone
                           ? theme.colorScheme.primary
-                          : theme.colorScheme.secondary,
+                          : theme.colorScheme.onSurface,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: AppSpacing.xs),
+                  Text(
+                    _getMotivationalMessage(),
+                    style: AppTypography.cairoTextTheme().bodySmall?.copyWith(
+                      color: isDone
+                          ? theme.colorScheme.primary.withValues(alpha: 0.84)
+                          : theme.colorScheme.onSurfaceVariant,
+                      height: 1.5,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ),
+              const SizedBox(height: AppSpacing.md),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        _formatPercent(percent),
+                        style: AppTypography.cairoTextTheme().labelLarge
+                            ?.copyWith(
+                              color: isDone
+                                  ? theme.colorScheme.primary
+                                  : theme.colorScheme.onSurface,
+                              fontWeight: FontWeight.bold,
+                            ),
+                      ),
+                      Text(
+                        '${widget.goalProgress.currentValue} من ${widget.goalProgress.goal.targetValue}',
+                        style: AppTypography.cairoTextTheme().labelMedium
+                            ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: AppSpacing.sm),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(AppSpacing.sm),
+                    child: TweenAnimationBuilder<double>(
+                      tween: Tween(begin: 0, end: percent),
+                      duration: const Duration(milliseconds: 600),
+                      curve: Curves.easeOutCubic,
+                      builder: (context, value, _) {
+                        return LinearProgressIndicator(
+                          value: value,
+                          minHeight: 8,
+                          backgroundColor:
+                              theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.45),
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            isDone
+                                ? theme.colorScheme.primary
+                                : theme.colorScheme.secondary,
+                          ),
+                        );
+                      },
                     ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
   String _getMotivationalMessage() {
-    if (goalProgress.isCompleted) return 'رائع! لقد أنجزت الهدف.';
-    final remaining = goalProgress.goal.targetValue - goalProgress.currentValue;
-    if (goalProgress.percent >= 0.8) return 'اقتربت جداً، تبقى $remaining فقط!';
-    if (goalProgress.percent >= 0.5) return 'لقد قطعت نصف الطريق.';
-    if (goalProgress.currentValue > 0) return 'بداية جيدة، واصل!';
+    if (widget.goalProgress.isCompleted) return 'رائع! لقد أنجزت الهدف.';
+    final remaining = widget.goalProgress.goal.targetValue - widget.goalProgress.currentValue;
+    if (widget.goalProgress.percent >= 0.8) return 'اقتربت جداً، تبقى $remaining فقط!';
+    if (widget.goalProgress.percent >= 0.5) return 'لقد قطعت نصف الطريق.';
+    if (widget.goalProgress.currentValue > 0) return 'بداية جيدة، واصل!';
     return 'ابدأ الآن.';
   }
 }
@@ -332,21 +374,8 @@ class _ShimmerGoalCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return AthrGlassCard(
       padding: const EdgeInsets.all(AppSpacing.md),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topRight,
-          end: Alignment.bottomLeft,
-          colors: [
-            Theme.of(
-              context,
-            ).colorScheme.surfaceContainerHighest.withValues(alpha: 0.45),
-            Theme.of(context).colorScheme.surface.withValues(alpha: 0.85),
-          ],
-        ),
-        borderRadius: BorderRadius.circular(AppRadius.lg),
-      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -393,22 +422,15 @@ class _GoalsEmptyState extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Container(
+    return AthrGlassCard(
       padding: const EdgeInsets.all(AppSpacing.lg),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
-        borderRadius: BorderRadius.circular(AppRadius.lg),
-        border: Border.all(
-          color: theme.colorScheme.outlineVariant.withValues(alpha: 0.35),
-        ),
-      ),
       child: Row(
         children: [
           Container(
             width: 52,
             height: 52,
             decoration: BoxDecoration(
-              color: theme.colorScheme.primaryContainer.withValues(alpha: 0.7),
+              color: theme.colorScheme.primaryContainer.withValues(alpha: 0.45),
               borderRadius: BorderRadius.circular(AppRadius.md),
             ),
             child: Icon(Icons.flag_outlined, color: theme.colorScheme.primary),
@@ -451,12 +473,10 @@ class _GoalsErrorState extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Container(
+    return AthrGlassCard(
+      color: theme.colorScheme.errorContainer.withValues(alpha: 0.15),
+      border: Border.all(color: theme.colorScheme.error.withValues(alpha: 0.3)),
       padding: const EdgeInsets.all(AppSpacing.lg),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.errorContainer.withValues(alpha: 0.45),
-        borderRadius: BorderRadius.circular(AppRadius.lg),
-      ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -524,15 +544,8 @@ class _GoalsSummaryStrip extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Container(
+    return AthrGlassCard(
       padding: const EdgeInsets.all(AppSpacing.md),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surface.withValues(alpha: 0.92),
-        borderRadius: BorderRadius.circular(AppRadius.md),
-        border: Border.all(
-          color: theme.colorScheme.outlineVariant.withValues(alpha: 0.28),
-        ),
-      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -558,13 +571,20 @@ class _GoalsSummaryStrip extends StatelessWidget {
           const SizedBox(height: AppSpacing.sm),
           ClipRRect(
             borderRadius: BorderRadius.circular(AppSpacing.sm),
-            child: LinearProgressIndicator(
-              value: summary.averagePercent,
-              minHeight: 8,
-              backgroundColor: theme.colorScheme.surfaceContainerHighest,
-              valueColor: AlwaysStoppedAnimation<Color>(
-                theme.colorScheme.primary,
-              ),
+            child: TweenAnimationBuilder<double>(
+              tween: Tween(begin: 0, end: summary.averagePercent),
+              duration: const Duration(milliseconds: 600),
+              curve: Curves.easeOutCubic,
+              builder: (context, value, _) {
+                return LinearProgressIndicator(
+                  value: value,
+                  minHeight: 8,
+                  backgroundColor: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.45),
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                    theme.colorScheme.primary,
+                  ),
+                );
+              },
             ),
           ),
         ],
