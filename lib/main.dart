@@ -1,17 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:go_router/go_router.dart';
+import 'package:timezone/data/latest_all.dart' as tz_data;
+import 'package:timezone/timezone.dart' as tz;
 import 'package:athr/core/notifications/notification_providers.dart';
 import 'package:athr/core/router/app_router.dart';
 import 'package:athr/core/theme/app_theme.dart';
+import 'package:athr/features/prayer/providers/prayer_providers.dart';
 import 'package:athr/features/settings/providers/settings_providers.dart';
 import 'package:athr/features/settings/providers/settings_provider.dart';
 import 'package:quran_flutter/quran.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  tz_data.initializeTimeZones();
+  await _initializeLocalTimezone();
 
   final prefs = await SharedPreferences.getInstance();
 
@@ -44,11 +50,23 @@ void main() async {
   
   // Prime the settings provider and eagerly reschedule notifications
   final settingsNotifier = finalContainer.read(settingsProvider.notifier);
+  finalContainer.read(prayerSettingsProvider);
+  finalContainer.read(prayerLocationControllerProvider);
   await settingsNotifier.rescheduleAll();
 
   runApp(
     UncontrolledProviderScope(container: finalContainer, child: const AthrApp()),
   );
+}
+
+Future<void> _initializeLocalTimezone() async {
+  try {
+    final timeZoneInfo = await FlutterTimezone.getLocalTimezone();
+    final location = tz.getLocation(timeZoneInfo.identifier);
+    tz.setLocalLocation(location);
+  } catch (_) {
+    tz.setLocalLocation(tz.getLocation('UTC'));
+  }
 }
 
 void _handleNotificationNavigation(GoRouter router, String payload) {

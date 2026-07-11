@@ -6,6 +6,7 @@ import 'package:athr/core/theme/app_radius.dart';
 import 'package:athr/core/theme/app_shadows.dart';
 import 'package:athr/core/theme/app_typography.dart';
 import 'package:athr/core/widgets/athr_scaffold.dart';
+import 'package:athr/features/prayer/presentation/widgets/prayer_settings_card.dart';
 import 'package:athr/features/settings/providers/settings_providers.dart';
 import 'package:athr/features/settings/providers/settings_provider.dart';
 import 'package:quran_flutter/quran.dart';
@@ -182,6 +183,9 @@ class SettingsScreen extends ConsumerWidget {
                 ],
               ),
             ),
+            const SizedBox(height: AppSpacing.lg),
+
+            const PrayerSettingsCard(),
             const SizedBox(height: AppSpacing.lg),
 
             // Notifications Settings

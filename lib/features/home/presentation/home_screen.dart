@@ -13,6 +13,7 @@ import 'package:athr/features/home/presentation/sections/continue_reading_card.d
 import 'package:athr/features/home/presentation/sections/today_goals_section.dart';
 import 'package:athr/features/home/presentation/sections/quick_actions_grid.dart';
 import 'package:athr/features/home/presentation/widgets/daily_goal_progress_card.dart';
+import 'package:athr/features/prayer/presentation/sections/prayer_times_section.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -160,11 +161,13 @@ class HomeScreen extends ConsumerWidget {
                     children: [
                       const SmartGreetingSection(),
                       const SizedBox(height: AppSpacing.lg),
-                      const ContinueReadingCard(),
-                      const SizedBox(height: AppSpacing.xl),
-                      const _SectionIntro(
-                        eyebrow: 'نظرة اليوم',
-                        title: 'تابع هدفك بخطوات واضحة',
+                       const ContinueReadingCard(),
+                       const SizedBox(height: AppSpacing.xl),
+                       const PrayerTimesSection(),
+                       const SizedBox(height: AppSpacing.xl),
+                       const _SectionIntro(
+                         eyebrow: 'نظرة اليوم',
+                         title: 'تابع هدفك بخطوات واضحة',
                         subtitle:
                             'راقب التقدم الحالي ثم انتقل مباشرة إلى الأهداف اليومية الأقرب للإنجاز.',
                       ),
