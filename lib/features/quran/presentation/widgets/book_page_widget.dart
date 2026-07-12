@@ -1,3 +1,5 @@
+import 'dart:math' show cos, sin;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -192,30 +194,11 @@ class _BookPageWidgetState extends State<BookPageWidget> {
                   alignment: PlaceholderAlignment.middle,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        Text(
-                          '\u06DD', // ۝ End of Ayah marker
-                          style: GoogleFonts.amiri(
-                            fontSize: 34,
-                            color: readingTheme.borderColor,
-                            height: 1.0,
-                            textBaseline: TextBaseline.alphabetic,
-                          ),
-                        ),
-                        Text(
-                          _toArabicNumerals(verse.verseNumber),
-                          style: GoogleFonts.amiri(
-                            fontSize: 13,
-                            color: readingTheme.textColor.withValues(
-                              alpha: 0.8,
-                            ),
-                            fontWeight: FontWeight.bold,
-                            textBaseline: TextBaseline.alphabetic,
-                          ),
-                        ),
-                      ],
+                    child: _AyahNumberMarker(
+                      number: verse.verseNumber,
+                      size: 36,
+                      color: readingTheme.borderColor,
+                      textColor: readingTheme.textColor,
                     ),
                   ),
                 ),
@@ -263,4 +246,122 @@ class _BookPageWidgetState extends State<BookPageWidget> {
     }
     return result;
   }
+}
+
+/// A custom ornate circular marker for Ayah numbers,
+/// designed to mimic the traditional markers found in printed Qurans.
+class _AyahNumberMarker extends StatelessWidget {
+  final int number;
+  final double size;
+  final Color color;
+  final Color textColor;
+
+  const _AyahNumberMarker({
+    required this.number,
+    required this.size,
+    required this.color,
+    required this.textColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: size,
+      height: size,
+      child: CustomPaint(
+        painter: _AyahMarkerPainter(color: color),
+        child: Center(
+          child: Text(
+            _toArabicNumerals(number),
+            style: GoogleFonts.amiri(
+              fontSize: size * 0.36,
+              color: textColor,
+              fontWeight: FontWeight.bold,
+              height: 1.0,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  String _toArabicNumerals(int number) {
+    const english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+    const arabic = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+    String result = number.toString();
+    for (int i = 0; i < english.length; i++) {
+      result = result.replaceAll(english[i], arabic[i]);
+    }
+    return result;
+  }
+}
+
+class _AyahMarkerPainter extends CustomPainter {
+  final Color color;
+
+  _AyahMarkerPainter({required this.color});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final center = Offset(size.width / 2, size.height / 2);
+    final radius = size.width / 2;
+
+    final paint = Paint()
+      ..color = color
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.2;
+
+    // Draw main ornate hexagram (Star of David style outline)
+    // This mimics the classic printed Quran ayah symbol
+    final path = Path();
+    final points = <Offset>[];
+    const triangleCount = 6;
+
+    for (int i = 0; i < triangleCount * 2; i++) {
+      final angle = (i * 30 - 90) * 3.141592653589793 / 180;
+      final r = i.isEven ? radius * 0.92 : radius * 0.5;
+      points.add(Offset(
+        center.dx + r * cos(angle),
+        center.dy + r * sin(angle),
+      ));
+    }
+
+    // Connect outer points to create the ornate flower/star shape
+    for (int i = 0; i < triangleCount; i++) {
+      final outer = points[i * 2];
+      final nextOuter = points[((i + 1) % triangleCount) * 2];
+      final inner = points[i * 2 + 1];
+
+      if (i == 0) {
+        path.moveTo(outer.dx, outer.dy);
+      }
+      path.lineTo(inner.dx, inner.dy);
+      path.lineTo(nextOuter.dx, nextOuter.dy);
+    }
+    path.close();
+    canvas.drawPath(path, paint);
+
+    // Draw inner circle for extra detail
+    final innerCirclePaint = Paint()
+      ..color = color.withValues(alpha: 0.3)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 0.8;
+    canvas.drawCircle(center, radius * 0.35, innerCirclePaint);
+
+    // Draw small decorative dots at each outer vertex
+    final dotPaint = Paint()
+      ..color = color
+      ..style = PaintingStyle.fill;
+    for (int i = 0; i < triangleCount; i++) {
+      final angle = (i * 60 - 90) * 3.141592653589793 / 180;
+      final dotCenter = Offset(
+        center.dx + radius * 0.92 * cos(angle),
+        center.dy + radius * 0.92 * sin(angle),
+      );
+      canvas.drawCircle(dotCenter, 1.2, dotPaint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
