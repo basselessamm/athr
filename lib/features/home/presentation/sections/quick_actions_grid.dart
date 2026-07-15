@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:athr/core/theme/app_typography.dart';
 import 'package:athr/core/theme/app_radius.dart';
@@ -150,7 +151,10 @@ class _QuickActionCard extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: onTap,
+          onTap: () {
+            HapticFeedback.lightImpact();
+            onTap();
+          },
           child: Padding(
             padding: const EdgeInsets.all(AppSpacing.md),
             child: Container(

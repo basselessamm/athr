@@ -184,6 +184,7 @@ class HomeScreen extends ConsumerWidget {
           ),
         ],
       ),
+      extendBody: true,
       bottomNavigationBar: const MainNavigationBar(selectedIndex: 0),
     );
   }

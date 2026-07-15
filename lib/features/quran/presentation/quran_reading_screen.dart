@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:quran_flutter/quran.dart';
@@ -243,17 +244,70 @@ class _QuranReadingScreenState extends ConsumerState<QuranReadingScreen>
 
     return Scaffold(
       backgroundColor: readingTheme?.pageTextureColor,
-      appBar: AppBar(
-        title: Text('سورة ${Quran.getSurahName(widget.surahNumber)}'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios),
-          onPressed: () => context.pop(),
-        ),
-        backgroundColor: readingTheme?.pageTextureColor,
-        elevation: 0,
-      ),
-      body: SafeArea(
-        child: PageView.builder(
+      body: NestedScrollView(
+        headerSliverBuilder: (context, innerBoxIsScrolled) {
+          return [
+            SliverAppBar(
+              title: Text(
+                'سورة ${Quran.getSurahName(widget.surahNumber)}',
+                style: AppTypography.cairoTextTheme().titleLarge?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
+              ),
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back_ios_new_rounded),
+                onPressed: () => context.pop(),
+              ),
+              backgroundColor: readingTheme?.pageTextureColor,
+              elevation: 0,
+              floating: true,
+              snap: true,
+              expandedHeight: 140,
+              flexibleSpace: FlexibleSpaceBar(
+                background: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            Theme.of(context).colorScheme.primary.withValues(alpha: 0.12),
+                            readingTheme?.pageTextureColor ?? Colors.transparent,
+                          ],
+                          stops: const [0.0, 1.0],
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      right: -30,
+                      top: -10,
+                      child: Icon(
+                        Icons.star_border_purple500_rounded,
+                        size: 160,
+                        color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.06),
+                      ),
+                    ),
+                    Positioned(
+                      left: -20,
+                      top: 20,
+                      child: Icon(
+                        Icons.auto_awesome_rounded,
+                        size: 100,
+                        color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.04),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ];
+        },
+        body: SafeArea(
+          top: false,
+          child: PageView.builder(
           controller: _pageController,
           itemCount: _pages.length + 1, // +1 for the end page
           onPageChanged: (index) {
@@ -330,6 +384,7 @@ class _QuranReadingScreenState extends ConsumerState<QuranReadingScreen>
               highlightSurah: _activeHighlightSurah,
               highlightAyah: _activeHighlightAyah,
               onAyahTapped: (surah, ayah) async {
+                HapticFeedback.selectionClick();
                 await showModalBottomSheet(
                   context: context,
                   isScrollControlled: true,
@@ -372,6 +427,7 @@ class _QuranReadingScreenState extends ConsumerState<QuranReadingScreen>
           },
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 }
