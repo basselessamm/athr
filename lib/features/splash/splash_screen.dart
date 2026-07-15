@@ -5,6 +5,7 @@ import 'package:athr/core/database/database_providers.dart';
 import 'package:athr/core/database/seeder/db_seeder.dart';
 import 'package:athr/core/notifications/notification_router.dart';
 import 'package:athr/core/router/app_router.dart';
+import 'package:athr/core/theme/app_typography.dart';
 
 final seederProvider = FutureProvider<void>((ref) async {
   final db = ref.watch(appDatabaseProvider);
@@ -100,20 +101,18 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                       ),
                     ),
                     const SizedBox(height: 24),
-                    const Text(
+                    Text(
                       'أَثَر',
-                      style: TextStyle(
-                        fontSize: 48,
+                      style: AppTypography.cairoTextTheme().displayMedium?.copyWith(
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFF333333), // Charcoal
+                        color: const Color(0xFF333333), // Charcoal
                       ),
                     ),
                     const SizedBox(height: 8),
-                    const Text(
+                    Text(
                       'تَعَلَّم... اعْمَل... واستَمِرّ',
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Color(0xFF5A7B72), // Sage green
+                      style: AppTypography.cairoTextTheme().titleMedium?.copyWith(
+                        color: const Color(0xFF5A7B72), // Sage green
                       ),
                     ),
                     const SizedBox(height: 48),
@@ -140,23 +139,21 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
               opacity: _fadeAnimation,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
-                children: const [
+                children: [
                   Text(
                     'DEVELOPED BY',
-                    style: TextStyle(
-                      fontSize: 10,
+                    style: AppTypography.cairoTextTheme().labelSmall?.copyWith(
                       letterSpacing: 3.0,
-                      color: Color(0xFF999999),
+                      color: const Color(0xFF999999),
                       fontWeight: FontWeight.w400,
                     ),
                   ),
-                  SizedBox(height: 4),
+                  const SizedBox(height: 4),
                   Text(
                     'BASSEL ESSAM',
-                    style: TextStyle(
-                      fontSize: 14,
+                    style: AppTypography.cairoTextTheme().labelLarge?.copyWith(
                       letterSpacing: 4.0,
-                      color: Color(0xFF5A7B72),
+                      color: const Color(0xFF5A7B72),
                       fontWeight: FontWeight.w600,
                     ),
                   ),

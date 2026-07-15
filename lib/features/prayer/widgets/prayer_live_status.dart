@@ -29,13 +29,24 @@ class PrayerLiveStatus extends ConsumerWidget {
 
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(AppSpacing.md),
+      padding: const EdgeInsets.all(AppSpacing.lg),
       decoration: BoxDecoration(
-        color: theme.colorScheme.primaryContainer.withValues(alpha: 0.28),
-        borderRadius: BorderRadius.circular(AppRadius.md),
-        border: Border.all(
-          color: theme.colorScheme.primary.withValues(alpha: 0.18),
+        gradient: LinearGradient(
+          colors: [
+            theme.colorScheme.primary,
+            theme.colorScheme.primary.withValues(alpha: 0.8),
+          ],
+          begin: Alignment.topRight,
+          end: Alignment.bottomLeft,
         ),
+        borderRadius: BorderRadius.circular(AppRadius.lg),
+        boxShadow: [
+          BoxShadow(
+            color: theme.colorScheme.primary.withValues(alpha: 0.3),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -43,7 +54,7 @@ class PrayerLiveStatus extends ConsumerWidget {
           Text(
             snapshot.headline,
             style: AppTypography.cairoTextTheme().titleLarge?.copyWith(
-              color: theme.colorScheme.onSurface,
+              color: theme.colorScheme.onPrimary,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -51,7 +62,7 @@ class PrayerLiveStatus extends ConsumerWidget {
           Text(
             snapshot.supportingText,
             style: AppTypography.cairoTextTheme().bodyMedium?.copyWith(
-              color: theme.colorScheme.onSurfaceVariant,
+              color: theme.colorScheme.onPrimary.withValues(alpha: 0.8),
               height: 1.5,
             ),
           ),
@@ -95,10 +106,10 @@ class _MetricTile extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: AppSpacing.sm,
-        vertical: AppSpacing.sm,
+        vertical: AppSpacing.md,
       ),
       decoration: BoxDecoration(
-        color: theme.colorScheme.surface.withValues(alpha: 0.55),
+        color: Colors.white.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(AppRadius.md),
       ),
       child: Column(
@@ -107,14 +118,14 @@ class _MetricTile extends StatelessWidget {
           Text(
             label,
             style: AppTypography.cairoTextTheme().labelMedium?.copyWith(
-              color: theme.colorScheme.onSurfaceVariant,
+              color: theme.colorScheme.onPrimary.withValues(alpha: 0.8),
             ),
           ),
           const SizedBox(height: AppSpacing.xs),
           Text(
             value,
             style: AppTypography.cairoTextTheme().titleMedium?.copyWith(
-              color: theme.colorScheme.onSurface,
+              color: theme.colorScheme.onPrimary,
               fontWeight: FontWeight.bold,
             ),
           ),

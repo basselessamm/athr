@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:athr/core/theme/app_typography.dart';
 import 'package:athr/core/database/app_database.dart';
 import 'package:athr/features/library/modules/recent_activity/providers/recent_activity_providers.dart';
 import 'package:athr/features/azkar/providers/azkar_providers.dart';
@@ -100,7 +100,7 @@ class _AzkarReadingScreenState extends ConsumerState<AzkarReadingScreen>
       appBar: AppBar(
         title: Text(
           widget.category,
-          style: const TextStyle(fontWeight: FontWeight.bold),
+          style: AppTypography.cairoTextTheme().titleLarge?.copyWith(fontWeight: FontWeight.bold),
         ),
         elevation: 0,
       ),
@@ -136,8 +136,7 @@ class _AzkarReadingScreenState extends ConsumerState<AzkarReadingScreen>
                         const SizedBox(height: 24),
                         Text(
                           'تم بحمد الله',
-                          style: TextStyle(
-                            fontSize: 32,
+                          style: AppTypography.cairoTextTheme().headlineMedium?.copyWith(
                             color: Theme.of(context).colorScheme.onSurface,
                             fontWeight: FontWeight.bold,
                           ),
@@ -145,8 +144,7 @@ class _AzkarReadingScreenState extends ConsumerState<AzkarReadingScreen>
                         const SizedBox(height: 12),
                         Text(
                           widget.category,
-                          style: TextStyle(
-                            fontSize: 22,
+                          style: AppTypography.cairoTextTheme().titleLarge?.copyWith(
                             color: Theme.of(
                               context,
                             ).colorScheme.onSurfaceVariant,
@@ -170,9 +168,11 @@ class _AzkarReadingScreenState extends ConsumerState<AzkarReadingScreen>
                               borderRadius: BorderRadius.circular(30),
                             ),
                           ),
-                          child: const Text(
+                          child: Text(
                             'عودة للأذكار',
-                            style: TextStyle(fontSize: 18),
+                            style: AppTypography.cairoTextTheme().titleMedium?.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ],
@@ -321,7 +321,7 @@ class _PremiumZikrPageState extends ConsumerState<_PremiumZikrPage>
                               children: [
                                 Text(
                                   widget.zikr.duaText,
-                                  style: GoogleFonts.amiri(
+                                  style: AppTypography.readingAmiri(
                                     fontSize: widget.fontSize,
                                     color: isDone
                                         ? const Color(0xFF8B7355)
@@ -335,10 +335,9 @@ class _PremiumZikrPageState extends ConsumerState<_PremiumZikrPage>
                                     widget.zikr.reference!.isNotEmpty)
                                   Text(
                                     widget.zikr.reference!,
-                                    style: GoogleFonts.amiri(
+                                    style: AppTypography.readingAmiriBold(
                                       fontSize: widget.fontSize * 0.7,
                                       color: const Color(0xFF5A4328),
-                                      fontWeight: FontWeight.bold,
                                     ),
                                     textAlign: TextAlign.center,
                                   ),
@@ -374,20 +373,18 @@ class _PremiumZikrPageState extends ConsumerState<_PremiumZikrPage>
           Expanded(
             child: Text(
               'الذكر ${_toArabicNumerals(widget.pageNumber)}',
-              style: GoogleFonts.amiri(
+              style: AppTypography.readingAmiriBold(
                 color: const Color(0xFF5A4328),
                 fontSize: 16,
-                fontWeight: FontWeight.w600,
               ),
             ),
           ),
           const SizedBox(width: 8),
           Text(
             widget.category,
-            style: GoogleFonts.amiri(
+            style: AppTypography.readingAmiriBold(
               color: const Color(0xFF5A4328),
               fontSize: 16,
-              fontWeight: FontWeight.bold,
             ),
           ),
         ],
@@ -422,9 +419,8 @@ class _PremiumZikrPageState extends ConsumerState<_PremiumZikrPage>
         alignment: Alignment.center,
         child: Text(
           isDone ? 'تم' : _toArabicNumerals(_remainingCount),
-          style: GoogleFonts.amiri(
+          style: AppTypography.readingAmiriBold(
             fontSize: 32,
-            fontWeight: FontWeight.bold,
             color: isDone ? const Color(0xFF8B7355) : const Color(0xFFFDF7EF),
           ),
         ),
@@ -483,10 +479,9 @@ class _PremiumZikrPageState extends ConsumerState<_PremiumZikrPage>
           ),
           Text(
             '${_toArabicNumerals(widget.pageNumber)} من ${_toArabicNumerals(widget.totalCount)}',
-            style: GoogleFonts.amiri(
+            style: AppTypography.readingAmiriBold(
               color: const Color(0xFF5A4328),
               fontSize: 16,
-              fontWeight: FontWeight.bold,
             ),
           ),
         ],

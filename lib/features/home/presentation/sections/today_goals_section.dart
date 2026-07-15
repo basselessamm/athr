@@ -132,46 +132,20 @@ class TodayGoalsSection extends ConsumerWidget {
   }
 }
 
-class _GoalCard extends StatefulWidget {
+class _GoalCard extends StatelessWidget {
   final GoalProgress goalProgress;
 
   const _GoalCard({required this.goalProgress});
 
   @override
-  State<_GoalCard> createState() => _GoalCardState();
-}
-
-class _GoalCardState extends State<_GoalCard> with SingleTickerProviderStateMixin {
-  late final AnimationController _controller;
-  late final Animation<double> _scaleAnimation;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      duration: const Duration(milliseconds: 120),
-      vsync: this,
-    );
-    _scaleAnimation = Tween<double>(begin: 1.0, end: 0.96).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
-    );
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final percent = widget.goalProgress.percent;
-    final isDone = widget.goalProgress.isCompleted;
+    final percent = goalProgress.percent;
+    final isDone = goalProgress.isCompleted;
     final remaining =
-        (widget.goalProgress.goal.targetValue - widget.goalProgress.currentValue).clamp(
+        (goalProgress.goal.targetValue - goalProgress.currentValue).clamp(
           0,
-          widget.goalProgress.goal.targetValue,
+          goalProgress.goal.targetValue,
         );
 
     IconData getIconData(String iconName) {
@@ -201,158 +175,156 @@ class _GoalCardState extends State<_GoalCard> with SingleTickerProviderStateMixi
         ? theme.colorScheme.primary.withValues(alpha: 0.35)
         : theme.colorScheme.outlineVariant.withValues(alpha: 0.25);
 
-    return GestureDetector(
-      onTapDown: (_) => _controller.forward(),
-      onTapUp: (_) {
-        _controller.reverse();
-        context.push('/progress');
-      },
-      onTapCancel: () => _controller.reverse(),
-      child: ScaleTransition(
-        scale: _scaleAnimation,
-        child: AthrGlassCard(
-          blur: 16,
-          opacity: 0.08,
-          color: cardColor,
-          border: Border.all(color: borderColor, width: isDone ? 1.4 : 1.0),
-          padding: const EdgeInsets.all(AppSpacing.md),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    width: 44,
-                    height: 44,
-                    decoration: BoxDecoration(
-                      color: isDone
-                          ? theme.colorScheme.primary.withValues(alpha: 0.12)
-                          : theme.colorScheme.surfaceContainerHighest.withValues(
-                              alpha: 0.5,
-                            ),
-                      borderRadius: BorderRadius.circular(AppRadius.md),
-                      boxShadow: isDone
-                          ? [
-                              BoxShadow(
-                                color: theme.colorScheme.primary.withValues(
-                                  alpha: 0.18,
-                                ),
-                                blurRadius: 10,
-                                spreadRadius: 1,
+    return AthrGlassCard(
+      blur: 16,
+      opacity: 0.08,
+      color: cardColor,
+      border: Border.all(color: borderColor, width: isDone ? 1.4 : 1.0),
+      padding: EdgeInsets.zero, // Padding moves to inside InkWell
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () => context.push('/progress'),
+          child: Padding(
+            padding: const EdgeInsets.all(AppSpacing.md),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      width: 44,
+                      height: 44,
+                      decoration: BoxDecoration(
+                        color: isDone
+                            ? theme.colorScheme.primary.withValues(alpha: 0.12)
+                            : theme.colorScheme.surfaceContainerHighest.withValues(
+                                alpha: 0.5,
                               ),
-                            ]
-                          : null,
-                    ),
-                    child: Icon(
-                      getIconData(widget.goalProgress.goal.icon),
-                      color: isDone
-                          ? theme.colorScheme.primary
-                          : theme.colorScheme.onSurfaceVariant,
-                      size: 22,
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: AppSpacing.sm,
-                      vertical: AppSpacing.xs,
-                    ),
-                    decoration: BoxDecoration(
-                      color: isDone
-                          ? theme.colorScheme.primary.withValues(alpha: 0.12)
-                          : theme.colorScheme.surface.withValues(alpha: 0.55),
-                      borderRadius: BorderRadius.circular(AppRadius.round),
-                    ),
-                    child: Text(
-                      isDone ? 'اكتمل' : '$remaining متبق',
-                      style: AppTypography.cairoTextTheme().labelMedium?.copyWith(
+                        borderRadius: BorderRadius.circular(AppRadius.md),
+                        boxShadow: isDone
+                            ? [
+                                BoxShadow(
+                                  color: theme.colorScheme.primary.withValues(
+                                    alpha: 0.18,
+                                  ),
+                                  blurRadius: 10,
+                                  spreadRadius: 1,
+                                ),
+                              ]
+                            : null,
+                      ),
+                      child: Icon(
+                        getIconData(goalProgress.goal.icon),
                         color: isDone
                             ? theme.colorScheme.primary
                             : theme.colorScheme.onSurfaceVariant,
+                        size: 22,
                       ),
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: AppSpacing.md),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    widget.goalProgress.goal.title,
-                    style: AppTypography.cairoTextTheme().titleSmall?.copyWith(
-                      color: isDone
-                          ? theme.colorScheme.primary
-                          : theme.colorScheme.onSurface,
-                      fontWeight: FontWeight.bold,
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppSpacing.sm,
+                        vertical: AppSpacing.xs,
+                      ),
+                      decoration: BoxDecoration(
+                        color: isDone
+                            ? theme.colorScheme.primary.withValues(alpha: 0.12)
+                            : theme.colorScheme.surface.withValues(alpha: 0.55),
+                        borderRadius: BorderRadius.circular(AppRadius.round),
+                      ),
+                      child: Text(
+                        isDone ? 'اكتمل' : '$remaining متبق',
+                        style: AppTypography.cairoTextTheme().labelMedium?.copyWith(
+                          color: isDone
+                              ? theme.colorScheme.primary
+                              : theme.colorScheme.onSurfaceVariant,
+                        ),
+                      ),
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: AppSpacing.xs),
-                  Text(
-                    _getMotivationalMessage(),
-                    style: AppTypography.cairoTextTheme().bodySmall?.copyWith(
-                      color: isDone
-                          ? theme.colorScheme.primary.withValues(alpha: 0.84)
-                          : theme.colorScheme.onSurfaceVariant,
-                      height: 1.5,
+                  ],
+                ),
+                const SizedBox(height: AppSpacing.md),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      goalProgress.goal.title,
+                      style: AppTypography.cairoTextTheme().titleSmall?.copyWith(
+                        color: isDone
+                            ? theme.colorScheme.primary
+                            : theme.colorScheme.onSurface,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              ),
-              const SizedBox(height: AppSpacing.md),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        _formatPercent(percent),
-                        style: AppTypography.cairoTextTheme().labelLarge
-                            ?.copyWith(
-                              color: isDone
+                    const SizedBox(height: AppSpacing.xs),
+                    Text(
+                      _getMotivationalMessage(),
+                      style: AppTypography.cairoTextTheme().bodySmall?.copyWith(
+                        color: isDone
+                            ? theme.colorScheme.primary.withValues(alpha: 0.84)
+                            : theme.colorScheme.onSurfaceVariant,
+                        height: 1.5,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: AppSpacing.md),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          _formatPercent(percent),
+                          style: AppTypography.cairoTextTheme().labelLarge
+                              ?.copyWith(
+                                color: isDone
+                                    ? theme.colorScheme.primary
+                                    : theme.colorScheme.onSurface,
+                                fontWeight: FontWeight.bold,
+                              ),
+                        ),
+                        Text(
+                          '${goalProgress.currentValue} من ${goalProgress.goal.targetValue}',
+                          style: AppTypography.cairoTextTheme().labelMedium
+                              ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: AppSpacing.sm),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(AppSpacing.sm),
+                      child: TweenAnimationBuilder<double>(
+                        tween: Tween(begin: 0, end: percent),
+                        duration: const Duration(milliseconds: 600),
+                        curve: Curves.easeOutCubic,
+                        builder: (context, value, _) {
+                          return LinearProgressIndicator(
+                            value: value,
+                            minHeight: 8,
+                            backgroundColor:
+                                theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.45),
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              isDone
                                   ? theme.colorScheme.primary
-                                  : theme.colorScheme.onSurface,
-                              fontWeight: FontWeight.bold,
+                                  : theme.colorScheme.secondary,
                             ),
+                          );
+                        },
                       ),
-                      Text(
-                        '${widget.goalProgress.currentValue} من ${widget.goalProgress.goal.targetValue}',
-                        style: AppTypography.cairoTextTheme().labelMedium
-                            ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: AppSpacing.sm),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(AppSpacing.sm),
-                    child: TweenAnimationBuilder<double>(
-                      tween: Tween(begin: 0, end: percent),
-                      duration: const Duration(milliseconds: 600),
-                      curve: Curves.easeOutCubic,
-                      builder: (context, value, _) {
-                        return LinearProgressIndicator(
-                          value: value,
-                          minHeight: 8,
-                          backgroundColor:
-                              theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.45),
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                            isDone
-                                ? theme.colorScheme.primary
-                                : theme.colorScheme.secondary,
-                          ),
-                        );
-                      },
                     ),
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -360,11 +332,11 @@ class _GoalCardState extends State<_GoalCard> with SingleTickerProviderStateMixi
   }
 
   String _getMotivationalMessage() {
-    if (widget.goalProgress.isCompleted) return 'رائع! لقد أنجزت الهدف.';
-    final remaining = widget.goalProgress.goal.targetValue - widget.goalProgress.currentValue;
-    if (widget.goalProgress.percent >= 0.8) return 'اقتربت جداً، تبقى $remaining فقط!';
-    if (widget.goalProgress.percent >= 0.5) return 'لقد قطعت نصف الطريق.';
-    if (widget.goalProgress.currentValue > 0) return 'بداية جيدة، واصل!';
+    if (goalProgress.isCompleted) return 'رائع! لقد أنجزت الهدف.';
+    final remaining = goalProgress.goal.targetValue - goalProgress.currentValue;
+    if (goalProgress.percent >= 0.8) return 'اقتربت جداً، تبقى $remaining فقط!';
+    if (goalProgress.percent >= 0.5) return 'لقد قطعت نصف الطريق.';
+    if (goalProgress.currentValue > 0) return 'بداية جيدة، واصل!';
     return 'ابدأ الآن.';
   }
 }

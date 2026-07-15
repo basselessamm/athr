@@ -27,7 +27,7 @@ class PrayerSettings {
       calculationMethod: PrayerCalculationMethod.ummAlQura,
       madhab: PrayerMadhab.shafi,
       locationMode: PrayerLocationMode.auto,
-      timeFormat: PrayerTimeFormat.twentyFourHour,
+      timeFormat: PrayerTimeFormat.twelveHour,
       showSunrise: true,
       showHijriDate: true,
       manualLocation: null,
@@ -86,7 +86,7 @@ class PrayerSettings {
       ),
       timeFormat: PrayerTimeFormat.values.firstWhere(
         (value) => value.name == map['timeFormat'],
-        orElse: () => PrayerTimeFormat.twentyFourHour,
+        orElse: () => PrayerTimeFormat.twelveHour,
       ),
       showSunrise: map['showSunrise'] as bool? ?? true,
       showHijriDate: map['showHijriDate'] as bool? ?? true,

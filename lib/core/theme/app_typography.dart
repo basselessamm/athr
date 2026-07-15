@@ -112,12 +112,13 @@ class AppTypography {
     double fontSize = 24.0,
     Color? color,
     FontWeight fontWeight = FontWeight.normal,
+    double height = 2.2, // Generous line height for Harakat clearance
   }) {
     return GoogleFonts.amiri(
       fontSize: fontSize,
       color: color,
       fontWeight: fontWeight,
-      height: 2.2, // Generous line height for Harakat clearance
+      height: height,
       textBaseline: TextBaseline.alphabetic,
     );
   }

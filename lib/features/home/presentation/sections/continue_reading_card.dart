@@ -37,80 +37,86 @@ class ContinueReadingCard extends ConsumerWidget {
 
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
-          child: _AnimatedTapCard(
-            onTap: () {
-              context.push('/quran/$surahId?page=$pageNum');
-            },
-            child: AthrGlassCard(
-              blur: 18,
-              opacity: 0.10,
-              padding: const EdgeInsets.all(AppSpacing.lg),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
+          child: AthrGlassCard(
+            blur: 18,
+            opacity: 0.10,
+            padding: EdgeInsets.zero,
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                onTap: () {
+                  context.push('/quran/$surahId?page=$pageNum');
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(AppSpacing.lg),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Icon(
-                              Icons.auto_stories_rounded,
-                              size: 16,
-                              color: theme.colorScheme.primary,
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.auto_stories_rounded,
+                                  size: 16,
+                                  color: theme.colorScheme.primary,
+                                ),
+                                const SizedBox(width: AppSpacing.xs),
+                                Text(
+                                  'متابعة القراءة',
+                                  style: AppTypography.cairoTextTheme().labelMedium
+                                      ?.copyWith(
+                                        color: theme.colorScheme.primary,
+                                        letterSpacing: 1.2,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                ),
+                              ],
                             ),
-                            const SizedBox(width: AppSpacing.xs),
+                            const SizedBox(height: AppSpacing.sm),
                             Text(
-                              'متابعة القراءة',
-                              style: AppTypography.cairoTextTheme().labelMedium
+                              'سورة ${Quran.getSurahName(surahId)}',
+                              style: AppTypography.readingAmiriBold(
+                                fontSize: 28,
+                                color: theme.colorScheme.onSurface,
+                              ),
+                            ),
+                            Text(
+                              'الجزء $juzNum • صفحة $pageNum',
+                              style: AppTypography.cairoTextTheme().bodyMedium
                                   ?.copyWith(
-                                    color: theme.colorScheme.primary,
-                                    letterSpacing: 1.2,
-                                    fontWeight: FontWeight.w600,
+                                    color: theme.colorScheme.onSurfaceVariant,
                                   ),
                             ),
                           ],
                         ),
-                        const SizedBox(height: AppSpacing.sm),
-                        Text(
-                          'سورة ${Quran.getSurahName(surahId)}',
-                          style: AppTypography.readingAmiriBold(
-                            fontSize: 28,
-                            color: theme.colorScheme.onSurface,
-                          ),
-                        ),
-                        Text(
-                          'الجزء $juzNum • صفحة $pageNum',
-                          style: AppTypography.cairoTextTheme().bodyMedium
-                              ?.copyWith(
-                                color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                      Container(
+                        width: 52,
+                        height: 52,
+                        decoration: BoxDecoration(
+                          color: theme.colorScheme.primary.withValues(alpha: 0.12),
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: theme.colorScheme.primary.withValues(
+                                alpha: 0.2,
                               ),
+                              blurRadius: 14,
+                              spreadRadius: 1,
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    width: 52,
-                    height: 52,
-                    decoration: BoxDecoration(
-                      color: theme.colorScheme.primary.withValues(alpha: 0.12),
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          color: theme.colorScheme.primary.withValues(
-                            alpha: 0.2,
-                          ),
-                          blurRadius: 14,
-                          spreadRadius: 1,
+                        child: Icon(
+                          Icons.menu_book_rounded,
+                          color: theme.colorScheme.primary,
+                          size: 26,
                         ),
-                      ],
-                    ),
-                    child: Icon(
-                      Icons.menu_book_rounded,
-                      color: theme.colorScheme.primary,
-                      size: 26,
-                    ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
           ),
@@ -118,57 +124,6 @@ class ContinueReadingCard extends ConsumerWidget {
       },
       loading: () => const SizedBox.shrink(),
       error: (err, stack) => const SizedBox.shrink(),
-    );
-  }
-}
-
-/// Wraps a child in a scale animation on tap for premium micro-interactions.
-class _AnimatedTapCard extends StatefulWidget {
-  final Widget child;
-  final VoidCallback onTap;
-
-  const _AnimatedTapCard({required this.child, required this.onTap});
-
-  @override
-  State<_AnimatedTapCard> createState() => _AnimatedTapCardState();
-}
-
-class _AnimatedTapCardState extends State<_AnimatedTapCard>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _controller;
-  late final Animation<double> _scaleAnimation;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      duration: const Duration(milliseconds: 120),
-      vsync: this,
-    );
-    _scaleAnimation = Tween<double>(begin: 1.0, end: 0.97).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
-    );
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTapDown: (_) => _controller.forward(),
-      onTapUp: (_) {
-        _controller.reverse();
-        widget.onTap();
-      },
-      onTapCancel: () => _controller.reverse(),
-      child: ScaleTransition(
-        scale: _scaleAnimation,
-        child: widget.child,
-      ),
     );
   }
 }

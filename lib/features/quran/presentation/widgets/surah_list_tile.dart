@@ -17,16 +17,18 @@ class SurahListTile extends StatelessWidget {
 
     return InkWell(
       onTap: () => context.push('/quran/$surahNumber'),
-      borderRadius: BorderRadius.circular(AppRadius.md),
+      borderRadius: AppRadius.list,
       child: Ink(
         padding: const EdgeInsets.all(AppSpacing.md),
         decoration: BoxDecoration(
           color: theme.colorScheme.surface,
-          borderRadius: BorderRadius.circular(AppRadius.md),
-          border: Border.all(
-            color: theme.colorScheme.outlineVariant.withValues(alpha: 0.3),
+          borderRadius: AppRadius.list,
+          border: Border(
+            bottom: BorderSide(
+              color: theme.colorScheme.outlineVariant.withValues(alpha: 0.2),
+              width: 1,
+            ),
           ),
-          boxShadow: AppShadows.minimal,
         ),
         child: Row(
           children: [

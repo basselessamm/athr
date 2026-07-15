@@ -12,6 +12,8 @@ import 'package:athr/features/prayer/providers/prayer_providers.dart';
 import 'package:athr/features/prayer/widgets/prayer_live_status.dart';
 import 'package:athr/features/prayer/widgets/prayer_time_tile.dart';
 
+import 'package:geolocator/geolocator.dart';
+
 class PrayerTimesCard extends ConsumerWidget {
   const PrayerTimesCard({super.key});
 
@@ -21,6 +23,9 @@ class PrayerTimesCard extends ConsumerWidget {
     final settings = ref.watch(prayerSettingsProvider);
     final locationAsync = ref.watch(prayerLocationControllerProvider);
     final scheduleAsync = ref.watch(prayerScheduleProvider);
+    
+    // We get the current time and snapshot to highlight the next prayer in the list
+    final now = ref.watch(prayerSecondTickerProvider).valueOrNull ?? DateTime.now();
 
     return AthrGlassCard(
       blur: 20,
@@ -35,13 +40,43 @@ class PrayerTimesCard extends ConsumerWidget {
           final visibleEntries = settings.showSunrise
               ? schedule.entries
               : schedule.entries.where((entry) => entry.isObligatory).toList();
+              
+          final snapshot = ref.read(prayerRepositoryProvider).resolveStatus(schedule: schedule, now: now);
 
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'مواقيت الصلاة',
+                    style: AppTypography.cairoTextTheme().headlineSmall?.copyWith(
+                      color: theme.colorScheme.onSurface,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  if (settings.showHijriDate)
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: theme.colorScheme.primary.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(AppRadius.round),
+                      ),
+                      child: Text(
+                        PrayerFormatters.formatHijriDate(schedule.hijriDate),
+                        style: AppTypography.cairoTextTheme().labelMedium?.copyWith(
+                          color: theme.colorScheme.primary,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+              const SizedBox(height: AppSpacing.sm),
               Wrap(
-                spacing: AppSpacing.sm,
-                runSpacing: AppSpacing.sm,
+                spacing: AppSpacing.xs,
+                runSpacing: AppSpacing.xs,
                 children: [
                   _InfoPill(
                     label: schedule.location.displayLabel,
@@ -51,74 +86,90 @@ class PrayerTimesCard extends ConsumerWidget {
                     label: schedule.method.label,
                     icon: Icons.calculate_rounded,
                   ),
-                  _InfoPill(
-                    label: schedule.madhab.label,
-                    icon: Icons.balance_rounded,
-                  ),
                 ],
               ),
-              const SizedBox(height: AppSpacing.md),
-              Text(
-                'مواقيت الصلاة',
-                style: AppTypography.cairoTextTheme().headlineSmall?.copyWith(
-                  color: theme.colorScheme.onSurface,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: AppSpacing.xs),
-              Text(
-                'عرض محلي دقيق ومخزن على الجهاز، مع حسابات قابلة للتخصيص بحسب طريقتك الفقهية والموقع النشط.',
-                style: AppTypography.cairoTextTheme().bodyMedium?.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant,
-                  height: 1.6,
-                ),
-              ),
-              if (settings.showHijriDate) ...[
-                const SizedBox(height: AppSpacing.md),
-                Text(
-                  PrayerFormatters.formatHijriDate(schedule.hijriDate),
-                  style: AppTypography.cairoTextTheme().labelLarge?.copyWith(
-                    color: theme.colorScheme.primary,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
               const SizedBox(height: AppSpacing.md),
               PrayerLiveStatus(
                 schedule: schedule,
                 timeFormat: settings.timeFormat,
               ),
               const SizedBox(height: AppSpacing.md),
-              Wrap(
-                spacing: AppSpacing.sm,
-                runSpacing: AppSpacing.sm,
-                children: [
-                  for (final entry in visibleEntries)
-                    PrayerTimeTile(
+              SizedBox(
+                height: 95,
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  physics: const BouncingScrollPhysics(),
+                  itemCount: visibleEntries.length,
+                  separatorBuilder: (context, index) => const SizedBox(width: AppSpacing.sm),
+                  itemBuilder: (context, index) {
+                    final entry = visibleEntries[index];
+                    // We consider the "active" tile to be the next prayer
+                    final isActive = entry.type == snapshot.nextPrayer;
+                    return PrayerTimeTile(
                       entry: entry,
                       timeFormat: settings.timeFormat,
-                    ),
-                ],
+                      isActive: isActive,
+                    );
+                  },
+                ),
               ),
               const SizedBox(height: AppSpacing.md),
-              Wrap(
-                spacing: AppSpacing.sm,
-                runSpacing: AppSpacing.sm,
+              Row(
                 children: [
-                  if (settings.locationMode == PrayerLocationMode.auto)
-                    OutlinedButton.icon(
-                      onPressed: () {
-                        ref
-                            .read(prayerLocationControllerProvider.notifier)
-                            .activateAutoLocation(forceRefresh: true);
-                      },
-                      icon: const Icon(Icons.refresh_rounded),
-                      label: const Text('تحديث الموقع'),
+                  if (settings.locationMode == PrayerLocationMode.auto) ...[
+                    Expanded(
+                      child: OutlinedButton.icon(
+                        onPressed: () async {
+                          final isEnabled = await Geolocator.isLocationServiceEnabled();
+                          if (!isEnabled) {
+                            if (context.mounted) {
+                              showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  title: const Text('الموقع الجغرافي مغلق'),
+                                  content: const Text(
+                                    'الرجاء تفعيل خدمة الموقع (GPS) لتحديث أوقات الصلاة بشكل دقيق.',
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () => Navigator.pop(context),
+                                      child: const Text('إلغاء'),
+                                    ),
+                                    FilledButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                        Geolocator.openLocationSettings();
+                                      },
+                                      child: const Text('فتح الإعدادات'),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }
+                            return;
+                          }
+                          if (context.mounted) {
+                            ref.read(prayerLocationControllerProvider.notifier).activateAutoLocation(forceRefresh: true);
+                          }
+                        },
+                        icon: const Icon(Icons.refresh_rounded, size: 18),
+                        label: const Text('تحديث الموقع'),
+                        style: OutlinedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                        ),
+                      ),
                     ),
-                  FilledButton.tonalIcon(
-                    onPressed: () => context.push('/settings'),
-                    icon: const Icon(Icons.tune_rounded),
-                    label: const Text('إعدادات الصلاة'),
+                    const SizedBox(width: AppSpacing.sm),
+                  ],
+                  Expanded(
+                    child: FilledButton.tonalIcon(
+                      onPressed: () => context.push('/settings'),
+                      icon: const Icon(Icons.tune_rounded, size: 18),
+                      label: const Text('الإعدادات'),
+                      style: FilledButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                      ),
+                    ),
                   ),
                 ],
               ),

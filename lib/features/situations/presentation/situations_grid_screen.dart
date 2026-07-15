@@ -62,10 +62,10 @@ class _SituationCard extends StatelessWidget {
     final theme = Theme.of(context);
     // Subtle alternating colors for the cards to make the grid pop
     final colorAccent = index % 3 == 0
-        ? const Color(0xFFD97736) // Warm Orange
+        ? theme.colorScheme.primary
         : index % 3 == 1
-        ? const Color(0xFF3E6B5B) // Earthy Green
-        : const Color(0xFF6B3E6A); // Deep Purple
+        ? theme.colorScheme.secondary
+        : theme.colorScheme.tertiary;
 
     return Container(
       decoration: BoxDecoration(

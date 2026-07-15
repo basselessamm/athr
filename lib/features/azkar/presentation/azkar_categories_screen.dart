@@ -26,7 +26,7 @@ class AzkarCategoriesScreen extends ConsumerWidget {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              const Color(0xFF8C6D2D).withValues(alpha: 0.1),
+              theme.colorScheme.primary.withValues(alpha: 0.1),
               theme.colorScheme.surface,
               theme.colorScheme.surface,
             ],
@@ -117,28 +117,28 @@ class _AzkarCategoryCard extends StatelessWidget {
 
     // Determine icon and colors based on category name
     IconData icon = Icons.shield_rounded;
-    Color accentColor = const Color(0xFF8C6D2D); // Default gold
+    Color accentColor = theme.colorScheme.primary;
     String subtitle = 'حصن يومي ومناجاة';
 
     if (category.contains('صباح')) {
       icon = Icons.wb_sunny_rounded;
-      accentColor = const Color(0xFFD4A373); // Morning orange/gold
+      accentColor = theme.colorScheme.secondary;
       subtitle = 'لبداية يوم مبارك في حفظ الله';
     } else if (category.contains('مساء')) {
       icon = Icons.nights_stay_rounded;
-      accentColor = const Color(0xFF4A4E69); // Evening dark purple/blue
+      accentColor = theme.colorScheme.tertiary;
       subtitle = 'ختام يومك بسكينة وطمأنينة';
     } else if (category.contains('نوم')) {
       icon = Icons.bedtime_rounded;
-      accentColor = const Color(0xFF22223B); // Deep night
+      accentColor = theme.colorScheme.primary;
       subtitle = 'لراحة البال وحفظ النفس أثناء النوم';
     } else if (category.contains('صلاة')) {
       icon = Icons.mosque_rounded;
-      accentColor = const Color(0xFF3E6B5B); // Green
+      accentColor = theme.colorScheme.secondary;
       subtitle = 'أذكار ما بعد الصلوات المكتوبة';
     } else if (category.contains('استيقاظ')) {
       icon = Icons.wb_twilight_rounded;
-      accentColor = const Color(0xFFE07A5F);
+      accentColor = theme.colorScheme.tertiary;
       subtitle = 'شكر لله على نعمة الحياة بعد الممات';
     }
 

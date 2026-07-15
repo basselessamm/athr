@@ -311,32 +311,23 @@ class _AyahMarkerPainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.2;
 
-    // Draw main ornate hexagram (Star of David style outline)
-    // This mimics the classic printed Quran ayah symbol
+    // Draw 8-pointed star (Rub el Hizb)
     final path = Path();
     final points = <Offset>[];
-    const triangleCount = 6;
+    const pointCount = 8;
 
-    for (int i = 0; i < triangleCount * 2; i++) {
-      final angle = (i * 30 - 90) * 3.141592653589793 / 180;
-      final r = i.isEven ? radius * 0.92 : radius * 0.5;
+    for (int i = 0; i < pointCount * 2; i++) {
+      final angle = (i * 22.5 - 90) * 3.141592653589793 / 180;
+      final r = i.isEven ? radius * 0.95 : radius * 0.765;
       points.add(Offset(
         center.dx + r * cos(angle),
         center.dy + r * sin(angle),
       ));
     }
 
-    // Connect outer points to create the ornate flower/star shape
-    for (int i = 0; i < triangleCount; i++) {
-      final outer = points[i * 2];
-      final nextOuter = points[((i + 1) % triangleCount) * 2];
-      final inner = points[i * 2 + 1];
-
-      if (i == 0) {
-        path.moveTo(outer.dx, outer.dy);
-      }
-      path.lineTo(inner.dx, inner.dy);
-      path.lineTo(nextOuter.dx, nextOuter.dy);
+    path.moveTo(points[0].dx, points[0].dy);
+    for (int i = 1; i < points.length; i++) {
+      path.lineTo(points[i].dx, points[i].dy);
     }
     path.close();
     canvas.drawPath(path, paint);
@@ -346,17 +337,17 @@ class _AyahMarkerPainter extends CustomPainter {
       ..color = color.withValues(alpha: 0.3)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 0.8;
-    canvas.drawCircle(center, radius * 0.35, innerCirclePaint);
+    canvas.drawCircle(center, radius * 0.45, innerCirclePaint);
 
     // Draw small decorative dots at each outer vertex
     final dotPaint = Paint()
       ..color = color
       ..style = PaintingStyle.fill;
-    for (int i = 0; i < triangleCount; i++) {
-      final angle = (i * 60 - 90) * 3.141592653589793 / 180;
+    for (int i = 0; i < pointCount; i++) {
+      final angle = (i * 45 - 90) * 3.141592653589793 / 180;
       final dotCenter = Offset(
-        center.dx + radius * 0.92 * cos(angle),
-        center.dy + radius * 0.92 * sin(angle),
+        center.dx + radius * 0.95 * cos(angle),
+        center.dy + radius * 0.95 * sin(angle),
       );
       canvas.drawCircle(dotCenter, 1.2, dotPaint);
     }

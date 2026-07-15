@@ -13,7 +13,7 @@ class MainNavigationBar extends StatelessWidget {
       child: NavigationBar(
         height: 68,
         selectedIndex: selectedIndex,
-        labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
+        labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
         onDestinationSelected: (index) {
           if (index == selectedIndex) {
             return;

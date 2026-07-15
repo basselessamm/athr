@@ -24,7 +24,16 @@ class PrayerCalculationService {
     _ensureTimeZonesInitialized();
 
     final timeZone = tz.getLocation(location.timeZoneId);
-    final localNow = tz.TZDateTime.from(now, timeZone);
+    // Use wall clock time from device to avoid DST/UTC mismatch if user manually changed clock
+    final localNow = tz.TZDateTime(
+      timeZone,
+      now.year,
+      now.month,
+      now.day,
+      now.hour,
+      now.minute,
+      now.second,
+    );
     final today = tz.TZDateTime(
       timeZone,
       localNow.year,
@@ -116,9 +125,16 @@ class PrayerCalculationService {
   }) {
     _ensureTimeZonesInitialized();
 
-    final localNow = tz.TZDateTime.from(
-      now,
-      tz.getLocation(schedule.location.timeZoneId),
+    final timeZone = tz.getLocation(schedule.location.timeZoneId);
+    // Use wall clock time from device to avoid DST/UTC mismatch
+    final localNow = tz.TZDateTime(
+      timeZone,
+      now.year,
+      now.month,
+      now.day,
+      now.hour,
+      now.minute,
+      now.second,
     );
     final requiredPrayers = schedule.entries
         .where((entry) => entry.isObligatory)

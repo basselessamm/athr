@@ -53,7 +53,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase.forTesting(super.executor);
 
   @override
-  int get schemaVersion => 12;
+  int get schemaVersion => 14;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -211,6 +211,21 @@ class AppDatabase extends _$AppDatabase {
             VALUES (new.id, new.title, new.content, new.normalized_content, new.feature_type, new.reference_id, new.secondary_id);
           END;
         ''');
+      }
+      if (from < 13) {
+        // Delete all rows in duaTable so it re-seeds the new split morning/evening azkar
+        await customStatement('DELETE FROM dua_table');
+      }
+      if (from < 14) {
+        // Fix data integrity issue: 
+        // 1. Delete orphaned user favorites for azkar.
+        await customStatement("DELETE FROM user_favorite_table WHERE content_type = 'azkar'");
+        
+        // 2. Clear searchable items to force a full re-index of everything including new azkar IDs.
+        await customStatement('DELETE FROM searchable_items_table');
+        
+        // 3. Clear dua table again just in case the user missed v13 or to ensure clean re-seeding.
+        await customStatement('DELETE FROM dua_table');
       }
     },
     beforeOpen: (details) async {

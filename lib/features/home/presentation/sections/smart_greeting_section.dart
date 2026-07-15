@@ -7,6 +7,7 @@ import 'package:athr/core/theme/app_spacing.dart';
 import 'package:athr/core/widgets/athr_glass_card.dart';
 
 import 'package:athr/features/home/providers/dashboard_context_provider.dart';
+import 'package:athr/features/settings/providers/settings_providers.dart';
 
 class SmartGreetingSection extends ConsumerWidget {
   const SmartGreetingSection({super.key});
@@ -14,6 +15,7 @@ class SmartGreetingSection extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final dashboardContext = ref.watch(dashboardContextProvider);
+    final reduceMotion = ref.watch(reduceMotionProvider);
     final theme = Theme.of(context);
     final greeting = dashboardContext.greeting;
     final subGreeting = dashboardContext.subGreeting;
@@ -47,30 +49,32 @@ class SmartGreetingSection extends ConsumerWidget {
         child: Stack(
           children: [
             // ── Decorative circles behind content ──
-            Positioned(
-              top: -48,
-              left: -12,
-              child: Container(
-                width: 140,
-                height: 140,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: theme.colorScheme.primary.withValues(alpha: 0.06),
+            if (!reduceMotion) ...[
+              Positioned(
+                top: -48,
+                left: -12,
+                child: Container(
+                  width: 140,
+                  height: 140,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: theme.colorScheme.primary.withValues(alpha: 0.06),
+                  ),
                 ),
               ),
-            ),
-            Positioned(
-              bottom: -64,
-              right: -28,
-              child: Container(
-                width: 170,
-                height: 170,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: iconGlowColor.withValues(alpha: 0.06),
+              Positioned(
+                bottom: -64,
+                right: -28,
+                child: Container(
+                  width: 170,
+                  height: 170,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: iconGlowColor.withValues(alpha: 0.06),
+                  ),
                 ),
               ),
-            ),
+            ],
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -110,7 +114,7 @@ class SmartGreetingSection extends ConsumerWidget {
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         color: iconGlowColor.withValues(alpha: 0.12),
-                        boxShadow: [
+                        boxShadow: reduceMotion ? [] : [
                           BoxShadow(
                             color: iconGlowColor.withValues(alpha: 0.25),
                             blurRadius: 16,

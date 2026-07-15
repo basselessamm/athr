@@ -13,6 +13,7 @@ import 'package:athr/features/progress/providers/progress_providers.dart';
 import 'package:athr/features/settings/providers/settings_providers.dart';
 import 'package:athr/features/reading_session/data/reading_session_repository.dart';
 import 'package:athr/core/theme/reading_theme_extension.dart';
+import 'package:athr/core/theme/app_typography.dart';
 
 class QuranPageModel {
   final int pageNumber;
@@ -89,11 +90,11 @@ class _QuranReadingScreenState extends ConsumerState<QuranReadingScreen>
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Text(
+            content: Text(
               '💡 تلميح: اضغط على أي آية لعرض تفسيرها',
-              style: TextStyle(
-                fontFamily: 'Cairo',
+              style: AppTypography.cairoTextTheme().labelLarge?.copyWith(
                 fontWeight: FontWeight.bold,
+                color: Colors.white,
               ),
               textAlign: TextAlign.center,
             ),
@@ -278,8 +279,7 @@ class _QuranReadingScreenState extends ConsumerState<QuranReadingScreen>
                     const SizedBox(height: 24),
                     Text(
                       'نهاية السورة',
-                      style: TextStyle(
-                        fontSize: 32,
+                      style: AppTypography.cairoTextTheme().headlineMedium?.copyWith(
                         color: Theme.of(context).colorScheme.onSurface,
                         fontWeight: FontWeight.bold,
                       ),
@@ -287,8 +287,7 @@ class _QuranReadingScreenState extends ConsumerState<QuranReadingScreen>
                     const SizedBox(height: 12),
                     Text(
                       'سورة ${Quran.getSurahName(widget.surahNumber)}',
-                      style: TextStyle(
-                        fontSize: 22,
+                      style: AppTypography.cairoTextTheme().titleLarge?.copyWith(
                         color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
                     ),
@@ -308,9 +307,12 @@ class _QuranReadingScreenState extends ConsumerState<QuranReadingScreen>
                           borderRadius: BorderRadius.circular(30),
                         ),
                       ),
-                      child: const Text(
+                      child: Text(
                         'العودة للقرآن',
-                        style: TextStyle(fontSize: 18),
+                        style: AppTypography.cairoTextTheme().titleMedium?.copyWith(
+                          color: Theme.of(context).colorScheme.onPrimary,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ],
