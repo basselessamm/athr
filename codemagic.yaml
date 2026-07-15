@@ -1,0 +1,21 @@
+workflows:
+  ios-release:
+    name: iOS Release Build
+    max_build_duration: 120
+    instance_type: mac_mini_m1
+    environment:
+      flutter: default
+      xcode: latest
+      cocoapods: default
+    scripts:
+      - name: Install dependencies
+        script: |
+          flutter packages pub get
+      - name: Build iOS 
+        script: |
+          # The --no-codesign flag is used here so the build succeeds without Apple Developer Certificates.
+          # To build a signed IPA ready for the App Store, you'll need to set up code signing in Codemagic UI.
+          flutter build ios --release --no-codesign
+    artifacts:
+      - build/ios/iphoneos/*.app
+      - build/ios/archive/*.xcarchive
