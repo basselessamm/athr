@@ -1,89 +1,115 @@
-# ATHR
+# 🌙 أثر (ATHR)
 
-`ATHR` is an offline-first Flutter application for Arabic Islamic daily practice.
-It is designed around a simple idea: help the user do something meaningful today,
-not just browse content.
+**أثر (ATHR)** هو تطبيق إسلامي مبني باستخدام إطار عمل Flutter يهدف إلى مساعدة المسلم في ممارساته اليومية وتزكية نفسه.
+فكرة التطبيق الأساسية لا تقتصر على تصفح المحتوى فقط، بل تشجيع المستخدم على القيام بعمل ذي معنى اليوم، من خلال مهام عملية ومحاسبة يومية.
 
-## Product Direction
+---
 
-- Offline only during normal runtime
-- No sign-in, no cloud sync, no ads, no analytics SDKs
-- Arabic-first and RTL-first experience
-- Quran, tafseer, azkar, hadith, life situations, favorites, and daily actions
-- Private-by-default: user data remains on-device
+## ✨ المميزات الرئيسية للتطبيق (Features)
 
-## Current Stack
+- **استخدام بدون إنترنت (Offline-First):** التطبيق يعمل بالكامل بدون إنترنت، مما يجعله متاحًا في أي وقت وأي مكان.
+- **الخصوصية أولاً (Private-by-default):** لا يوجد تسجيل دخول، لا مزامنة سحابية، لا إعلانات، ولا تتبع للمستخدم (Analytics). بياناتك محفوظة محلياً على جهازك فقط.
+- **تجربة مستخدم عربية (Arabic & RTL First):** مصمم خصيصاً للمستخدم العربي ليوفر تجربة سلسة وأصيلة.
+- **القرآن الكريم والتفسير:** تصفح القرآن الكريم مع إمكانية حفظ علامات القراءة (Bookmarks) وعرض التفسير في نافذة سفلية منبثقة.
+- **الأذكار والأدعية:** تصفح وقراءة الأذكار مقسمة إلى فئات مع تصميم مريح للقراءة.
+- **الحديث الشريف:** قراءة الأحاديث النبوية من مصادر معتمدة (مثل صحيحي البخاري ومسلم) مع تصفح سلس وتقسيم بالأبواب.
+- **مواقف الحياة (Life Situations):** قسم خاص يعرض آيات وأحاديث وأدعية وخطوات عملية للتعامل مع مختلف مواقف ومشاعر الحياة.
+- **مواقيت الصلاة والتاريخ الهجري:** حساب وعرض مواقيت الصلاة الدقيقة والتاريخ الهجري مع الإشعارات.
+- **الورد والمهام اليومية:** واجهة رئيسية تقدم آية، حديث، دعاء، سُنة يومية، ومهمة عملية قابلة للتطبيق.
+- **لوحة متابعة الإنجاز والمحاسبة (Muhasaba):** شاشة يومية لمحاسبة النفس مع حفظ السجل محلياً لمتابعة التقدم اليومي والمفضلات.
+- **المفضلة:** حفظ الآيات، الأحاديث، والأدعية للرجوع إليها لاحقاً بسهولة.
+- **التخصيص والإعدادات:** دعم الوضع المظلم (Dark Mode)، تغيير حجم الخط، وإعدادات التنبيهات والإشعارات المحلية.
 
-- Flutter + Dart
-- Riverpod for state management
-- go_router for navigation
-- Drift + SQLite for local persistence
-- shared_preferences for lightweight settings
-- flutter_local_notifications for reminders
-- quran_flutter for Quran text and metadata
-- google_fonts for Arabic typography
+---
 
-## Main App Structure
+## 🛠️ التقنيات المستخدمة (Tech Stack)
+
+تم بناء التطبيق بأحدث تقنيات تطوير تطبيقات الهواتف الذكية لضمان السرعة والكفاءة:
+
+- **إطار العمل:** [Flutter](https://flutter.dev/) + Dart
+- **إدارة الحالة (State Management):** [Riverpod](https://riverpod.dev/)
+- **التنقل (Routing):** `go_router`
+- **قواعد البيانات المحلية:** `Drift` + `SQLite` (لحفظ البيانات بدون إنترنت)
+- **الإعدادات الخفيفة:** `shared_preferences`
+- **الإشعارات:** `flutter_local_notifications` (للتنبيهات والأذكار)
+- **الخطوط:** `google_fonts` (لخطوط عربية أصيلة وجميلة)
+- **القرآن الكريم:** حزمة `quran_flutter`
+- **مواقيت الصلاة والموقع:** `adhan_dart`, `geolocator`, `flutter_timezone`
+- **التاريخ الهجري:** `hijri`
+- **تأثيرات الواجهة:** `page_flip_builder` (لتقليب الصفحات)
+
+---
+
+## 📂 هيكل المشروع (Project Structure)
+
+يعتمد التطبيق على هيكلة مرتبة ونظيفة لتسهيل التطوير والصيانة:
 
 ```text
 lib/
   core/
-    database/
-    router/
-    services/
-    theme/
-    widgets/
+    database/      # إعدادات قاعدة البيانات المحلية (Drift)
+    router/        # إدارة التنقل بين الشاشات
+    services/      # الخدمات الأساسية كالموقع والإشعارات
+    theme/         # ألوان وتصميم التطبيق
+    widgets/       # مكونات الواجهة المشتركة (UI Components)
   features/
-    azkar/
-    challenges/
-    favorites/
-    hadith/
-    home/
-    quran/
-    settings/
-    situations/
-    splash/
+    azkar/         # شاشات الأذكار
+    challenges/    # التحديات والمهام اليومية
+    favorites/     # العناصر المفضلة
+    hadith/        # قسم الحديث الشريف
+    home/          # الواجهة الرئيسية
+    quran/         # تصفح القرآن والتفسير
+    settings/      # إعدادات التطبيق
+    situations/    # مواقف الحياة
+    splash/        # شاشة البداية
 ```
 
-## Key Features Implemented
+---
 
-- Daily home flow with verse, hadith, dua, database-backed sunnah, and actionable task
-- Quran browsing with reading progress bookmark and tafseer bottom sheet
-- Azkar category browsing and reading flow
-- Hadith books and paginated hadith reading
-- Favorites saved locally for verses, hadiths, and duas
-- Life situations screen with practical steps, verses, duas, and supporting hadith
-- Progress dashboard for daily completions, favorites, and muhasaba history
-- Daily muhasaba screen with local persistence and notes
-- Theme mode, font size, and daily reminder settings
+## 📚 مصادر المحتوى (Content Sources)
 
-## Content Sources
+لضمان موثوقية المحتوى، تم الاعتماد على مصادر معتمدة ومراجعة:
+- **نص القرآن الكريم:** `quran_flutter`
+- **بيانات وخرائط القرآن:** `assets/json/quran_text.json`
+- **التفسير:** مُدمج محلياً من `assets/json/tafseer.json`
+- **الأحاديث الشريفة:** مُدمجة محلياً من `assets/json/bukhari.json` و `assets/json/muslim.json`
+- **الأدعية والأذكار:** `assets/json/duas.json`
 
-- Quran text: `quran_flutter`
-- Tafseer: seeded from `assets/json/tafseer.json`
-- Quran mapping data: `assets/json/quran_text.json`
-- Hadith: seeded from `assets/json/bukhari.json` and `assets/json/muslim.json`
-- Duas and azkar: seeded from `assets/json/duas.json`
+> **تنبيه هام للمطورين:** لا يجب إضافة أي محتوى ديني مُولد بواسطة الذكاء الاصطناعي (AI). كل النصوص الدينية يجب أن تعتمد حصرياً على المصادر المرفقة الموثوقة.
 
-Important: no AI-generated religious content should be added to the app. All
-religious text must come from the approved bundled sources.
+---
 
-## Getting Started
+## 🚀 دليل التشغيل للمطورين (Getting Started)
 
-1. Install Flutter stable.
-2. Run `flutter pub get`.
-3. Generate Drift code with `dart run build_runner build --delete-conflicting-outputs`.
-4. Start the app with `flutter run`.
+لتشغيل المشروع على بيئتك المحلية، اتبع الخطوات التالية:
 
-## Quality Commands
+1. تأكد من تثبيت النسخة المستقرة من **Flutter**.
+2. قم بتثبيت الحزم البرمجية:
+   ```bash
+   flutter pub get
+   ```
+3. قم بتوليد أكواد قاعدة البيانات (Drift):
+   ```bash
+   dart run build_runner build --delete-conflicting-outputs
+   ```
+4. قم بتشغيل التطبيق:
+   ```bash
+   flutter run
+   ```
 
-- Static analysis: `flutter analyze`
-- Tests: `flutter test`
-- Regenerate database code: `dart run build_runner build --delete-conflicting-outputs`
+---
 
-## Notes For Development
+## ✅ أوامر فحص الجودة (Quality Commands)
 
-- If Drift schema changes, regenerate `lib/core/database/app_database.g.dart`.
-- The database seeds itself from bundled JSON on first launch.
-- Top-level navigation is available from home, Quran, azkar, hadith, and favorites.
-- Keep religious source attribution visible in the UI whenever content is shown.
+- فحص الكود (Static analysis): `flutter analyze`
+- تشغيل الاختبارات (Tests): `flutter test`
+- إعادة توليد أكواد قاعدة البيانات: `dart run build_runner build --delete-conflicting-outputs`
+
+---
+
+## 💡 ملاحظات هامة للتطوير
+
+- إذا قمت بتعديل تصميم قاعدة البيانات (Drift Schema)، تذكر دائماً تشغيل أمر توليد الأكواد ليتم تحديث ملف `lib/core/database/app_database.g.dart`.
+- قاعدة البيانات تقوم بزرع بياناتها (Seeding) من ملفات الـ JSON المرفقة عند أول تشغيل للتطبيق.
+- التنقل الرئيسي متاح بسهولة بين الشاشات الرئيسية (الرئيسية، القرآن، الأذكار، الحديث، المفضلة).
+- **يرجى دائماً الإبقاء على إسناد المصادر الدينية مرئياً للمستخدم** ضمن واجهات التطبيق كلما تم عرض محتوى ديني.
