@@ -11,12 +11,6 @@ int _getTodaySeed() {
   return now.year * 10000 + now.month * 100 + now.day;
 }
 
-String _dateKey(DateTime date) {
-  final month = date.month.toString().padLeft(2, '0');
-  final day = date.day.toString().padLeft(2, '0');
-  return '${date.year}-$month-$day';
-}
-
 class DailyVerseData {
   final int surah;
   final int ayah;
@@ -30,18 +24,6 @@ class DailyVerseData {
     required this.surahName,
     required this.text,
     required this.source,
-  });
-}
-
-class DailyProgress {
-  final bool taskCompleted;
-  final bool sunnahCompleted;
-  final int streak;
-
-  const DailyProgress({
-    required this.taskCompleted,
-    required this.sunnahCompleted,
-    required this.streak,
   });
 }
 
@@ -128,50 +110,6 @@ final todayActivityProvider = StreamProvider<UserDailyActivity?>((ref) {
 final todayMuhasabaProvider = StreamProvider<MuhasabaEntry?>((ref) {
   final db = ref.watch(appDatabaseProvider);
   return db.watchTodayMuhasaba();
-});
-
-final dailyProgressProvider = StreamProvider<DailyProgress>((ref) {
-  final db = ref.watch(appDatabaseProvider);
-  return db.watchAllActivities().map((activities) {
-    final todayKey = _dateKey(DateTime.now());
-    UserDailyActivity? today;
-    for (final activity in activities) {
-      if (activity.activityDate == todayKey) {
-        today = activity;
-        break;
-      }
-    }
-
-    final activityByDay = {
-      for (final activity in activities) activity.activityDate: activity,
-    };
-
-    var streak = 0;
-    var cursor = DateTime.now();
-    while (true) {
-      final key = _dateKey(cursor);
-      final activity = activityByDay[key];
-      if (activity == null) {
-        break;
-      }
-
-      final hasCompletedSomething =
-          (activity.completedTaskId?.isNotEmpty ?? false) ||
-          (activity.completedSunnahId?.isNotEmpty ?? false);
-      if (!hasCompletedSomething) {
-        break;
-      }
-
-      streak++;
-      cursor = cursor.subtract(const Duration(days: 1));
-    }
-
-    return DailyProgress(
-      taskCompleted: today?.completedTaskId?.isNotEmpty ?? false,
-      sunnahCompleted: today?.completedSunnahId?.isNotEmpty ?? false,
-      streak: streak,
-    );
-  });
 });
 
 final completionActionsProvider = Provider<CompletionActions>((ref) {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:quran_flutter/quran.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:quran_flutter/quran.dart';
 
 class SurahListTile extends StatelessWidget {
   final int surahNumber;
@@ -9,26 +10,95 @@ class SurahListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: CircleAvatar(
-        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-        child: Text(
-          surahNumber.toString(),
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.onPrimaryContainer,
-            fontWeight: FontWeight.bold,
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
+    final verseCount = Quran.getTotalVersesInSurah(surahNumber);
+
+    return Semantics(
+      button: true,
+      label: 'فتح سورة ${Quran.getSurahName(surahNumber)}، $verseCount آية',
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+        child: Material(
+          color: scheme.surface,
+          borderRadius: BorderRadius.circular(18),
+          clipBehavior: Clip.antiAlias,
+          child: InkWell(
+            onTap: () => context.push('/quran/$surahNumber'),
+            borderRadius: BorderRadius.circular(18),
+            child: Padding(
+              padding: const EdgeInsetsDirectional.fromSTEB(14, 13, 16, 13),
+              child: Row(
+                children: [
+                  Container(
+                    width: 46,
+                    height: 46,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: scheme.primaryContainer,
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: scheme.primary.withValues(alpha: 0.22),
+                      ),
+                    ),
+                    child: Text(
+                      _toArabicNumerals(surahNumber),
+                      style: GoogleFonts.amiri(
+                        color: scheme.onPrimaryContainer,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 14),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          Quran.getSurahName(surahNumber),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: GoogleFonts.amiri(
+                            fontSize: 22,
+                            height: 1.15,
+                            color: scheme.onSurface,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        const SizedBox(height: 5),
+                        Text(
+                          '$verseCount آية',
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: scheme.onSurfaceVariant,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Icon(
+                    Icons.arrow_back_ios_new_rounded,
+                    size: 17,
+                    color: scheme.primary,
+                    textDirection: TextDirection.rtl,
+                  ),
+                ],
+              ),
+            ),
           ),
         ),
       ),
-      title: Text(
-        Quran.getSurahName(surahNumber),
-        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-      ),
-      subtitle: Text('آياتها ${Quran.getTotalVersesInSurah(surahNumber)}'),
-      trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-      onTap: () {
-        context.push('/quran/$surahNumber');
-      },
     );
+  }
+
+  String _toArabicNumerals(int number) {
+    const english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+    const arabic = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+    var result = number.toString();
+    for (var index = 0; index < english.length; index++) {
+      result = result.replaceAll(english[index], arabic[index]);
+    }
+    return result;
   }
 }

@@ -1,11 +1,14 @@
-import 'package:flutter/material.dart';
 import 'dart:math' as math;
+
+import 'package:flutter/material.dart';
 
 class PremiumQuranFlipWidget extends StatefulWidget {
   final int itemCount;
   final Widget Function(BuildContext context, int index) itemBuilder;
   final Widget endPage;
   final int initialIndex;
+  final ValueChanged<int>? onPageChanged;
+  final String Function(int index, int total)? semanticPageLabel;
 
   const PremiumQuranFlipWidget({
     super.key,
@@ -13,6 +16,8 @@ class PremiumQuranFlipWidget extends StatefulWidget {
     required this.itemBuilder,
     required this.endPage,
     this.initialIndex = 0,
+    this.onPageChanged,
+    this.semanticPageLabel,
   });
 
   @override
@@ -28,76 +33,84 @@ class _PremiumQuranFlipWidgetState extends State<PremiumQuranFlipWidget> {
     super.initState();
     _currentPageValue = widget.initialIndex.toDouble();
     _controller = PageController(initialPage: widget.initialIndex);
-    _controller.addListener(() {
-      setState(() {
-        _currentPageValue = _controller.page ?? 0.0;
-      });
-    });
+    _controller.addListener(_onScroll);
+  }
+
+  void _onScroll() {
+    if (!mounted) return;
+    setState(() => _currentPageValue = _controller.page ?? 0.0);
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _controller
+      ..removeListener(_onScroll)
+      ..dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final reduceMotion =
+        MediaQuery.maybeOf(context)?.disableAnimations ?? false;
+
     return PageView.builder(
       controller: _controller,
-      physics: const BouncingScrollPhysics(),
+      physics: const BouncingScrollPhysics(
+        parent: AlwaysScrollableScrollPhysics(),
+      ),
       itemCount: widget.itemCount + 1,
+      allowImplicitScrolling: true,
+      onPageChanged: (index) {
+        if (index < widget.itemCount) widget.onPageChanged?.call(index);
+      },
       itemBuilder: (context, index) {
-        if (index == widget.itemCount) {
-          return widget.endPage;
-        }
+        if (index == widget.itemCount) return widget.endPage;
 
-        // Calculate how far this page is from the current view
         final difference = index - _currentPageValue;
-        
-        // If the page is completely out of view, don't render its heavy flip logic
+        final child = RepaintBoundary(
+          child: Semantics(
+            label:
+                widget.semanticPageLabel?.call(index, widget.itemCount) ??
+                'الصفحة ${index + 1} من ${widget.itemCount}',
+            child: widget.itemBuilder(context, index),
+          ),
+        );
+
+        if (reduceMotion || difference.abs() < 0.01) return child;
         if (difference <= -1.0 || difference >= 1.0) {
-          return const SizedBox.shrink(); // Lazy load optimization
+          return const SizedBox.shrink();
         }
 
-        // Apply 3D Matrix Transform
-        // In Arabic, spine is on the Right. Rotation happens around the Right edge.
+        final shadowOpacity = (difference.abs() * 0.32).clamp(0.0, 0.32);
         return Transform(
           transform: Matrix4.identity()
-            ..setEntry(3, 2, 0.002) // Perspective
-            ..rotateY(-difference * (math.pi / 1.8)), // Angle of flip
-          alignment: FractionalOffset.centerRight, // Spine is on the Right
-          child: _buildPage(index, difference),
+            ..setEntry(3, 2, 0.0016)
+            ..rotateY(-difference * (math.pi / 2.15)),
+          alignment: FractionalOffset.centerRight,
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              child,
+              IgnorePointer(
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.centerRight,
+                      end: Alignment.centerLeft,
+                      colors: [
+                        Colors.black.withValues(alpha: shadowOpacity),
+                        Colors.transparent,
+                      ],
+                      stops: const [0, 0.82],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         );
       },
-    );
-  }
-
-  Widget _buildPage(int index, double difference) {
-    // Add page curl/shadow details dynamically based on difference
-    final shadowOpacity = (difference.abs() * 0.5).clamp(0.0, 0.5);
-    
-    return Stack(
-      fit: StackFit.expand,
-      children: [
-        widget.itemBuilder(context, index),
-        
-        // Shadow overlay during flip
-        if (difference != 0)
-          Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.centerRight, // Spine
-                end: Alignment.centerLeft,
-                colors: [
-                  Colors.black.withValues(alpha: shadowOpacity),
-                  Colors.transparent,
-                ],
-                stops: const [0.0, 0.8],
-              ),
-            ),
-          ),
-      ],
     );
   }
 }

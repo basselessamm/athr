@@ -3401,6 +3401,2786 @@ class UserDailyActivityTableCompanion
   }
 }
 
+class $MemoryThreadTableTable extends MemoryThreadTable
+    with TableInfo<$MemoryThreadTableTable, MemoryThreadRow> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $MemoryThreadTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _sourceKindMeta = const VerificationMeta(
+    'sourceKind',
+  );
+  @override
+  late final GeneratedColumn<String> sourceKind = GeneratedColumn<String>(
+    'source_kind',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _sourceCanonicalIdMeta = const VerificationMeta(
+    'sourceCanonicalId',
+  );
+  @override
+  late final GeneratedColumn<String> sourceCanonicalId =
+      GeneratedColumn<String>(
+        'source_canonical_id',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: true,
+      );
+  static const VerificationMeta _sourceLabelMeta = const VerificationMeta(
+    'sourceLabel',
+  );
+  @override
+  late final GeneratedColumn<String> sourceLabel = GeneratedColumn<String>(
+    'source_label',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _sourceBookMeta = const VerificationMeta(
+    'sourceBook',
+  );
+  @override
+  late final GeneratedColumn<String> sourceBook = GeneratedColumn<String>(
+    'source_book',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _sourceCitationMeta = const VerificationMeta(
+    'sourceCitation',
+  );
+  @override
+  late final GeneratedColumn<String> sourceCitation = GeneratedColumn<String>(
+    'source_citation',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _sourceVersionMeta = const VerificationMeta(
+    'sourceVersion',
+  );
+  @override
+  late final GeneratedColumn<String> sourceVersion = GeneratedColumn<String>(
+    'source_version',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _sourceSecondaryReferenceMeta =
+      const VerificationMeta('sourceSecondaryReference');
+  @override
+  late final GeneratedColumn<String> sourceSecondaryReference =
+      GeneratedColumn<String>(
+        'source_secondary_reference',
+        aliasedName,
+        true,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+      );
+  static const VerificationMeta _userContextKindMeta = const VerificationMeta(
+    'userContextKind',
+  );
+  @override
+  late final GeneratedColumn<String> userContextKind = GeneratedColumn<String>(
+    'user_context_kind',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _userContextLabelMeta = const VerificationMeta(
+    'userContextLabel',
+  );
+  @override
+  late final GeneratedColumn<String> userContextLabel = GeneratedColumn<String>(
+    'user_context_label',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _userLabelMeta = const VerificationMeta(
+    'userLabel',
+  );
+  @override
+  late final GeneratedColumn<String> userLabel = GeneratedColumn<String>(
+    'user_label',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _statusMeta = const VerificationMeta('status');
+  @override
+  late final GeneratedColumn<String> status = GeneratedColumn<String>(
+    'status',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('active'),
+  );
+  static const VerificationMeta _resurfacingMeta = const VerificationMeta(
+    'resurfacing',
+  );
+  @override
+  late final GeneratedColumn<String> resurfacing = GeneratedColumn<String>(
+    'resurfacing',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('on'),
+  );
+  static const VerificationMeta _legacyKeyMeta = const VerificationMeta(
+    'legacyKey',
+  );
+  @override
+  late final GeneratedColumn<String> legacyKey = GeneratedColumn<String>(
+    'legacy_key',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<String> createdAt = GeneratedColumn<String>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<String> updatedAt = GeneratedColumn<String>(
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _lastReturnedAtMeta = const VerificationMeta(
+    'lastReturnedAt',
+  );
+  @override
+  late final GeneratedColumn<String> lastReturnedAt = GeneratedColumn<String>(
+    'last_returned_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    sourceKind,
+    sourceCanonicalId,
+    sourceLabel,
+    sourceBook,
+    sourceCitation,
+    sourceVersion,
+    sourceSecondaryReference,
+    userContextKind,
+    userContextLabel,
+    userLabel,
+    status,
+    resurfacing,
+    legacyKey,
+    createdAt,
+    updatedAt,
+    lastReturnedAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'memory_thread_table';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<MemoryThreadRow> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('source_kind')) {
+      context.handle(
+        _sourceKindMeta,
+        sourceKind.isAcceptableOrUnknown(data['source_kind']!, _sourceKindMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_sourceKindMeta);
+    }
+    if (data.containsKey('source_canonical_id')) {
+      context.handle(
+        _sourceCanonicalIdMeta,
+        sourceCanonicalId.isAcceptableOrUnknown(
+          data['source_canonical_id']!,
+          _sourceCanonicalIdMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_sourceCanonicalIdMeta);
+    }
+    if (data.containsKey('source_label')) {
+      context.handle(
+        _sourceLabelMeta,
+        sourceLabel.isAcceptableOrUnknown(
+          data['source_label']!,
+          _sourceLabelMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_sourceLabelMeta);
+    }
+    if (data.containsKey('source_book')) {
+      context.handle(
+        _sourceBookMeta,
+        sourceBook.isAcceptableOrUnknown(data['source_book']!, _sourceBookMeta),
+      );
+    }
+    if (data.containsKey('source_citation')) {
+      context.handle(
+        _sourceCitationMeta,
+        sourceCitation.isAcceptableOrUnknown(
+          data['source_citation']!,
+          _sourceCitationMeta,
+        ),
+      );
+    }
+    if (data.containsKey('source_version')) {
+      context.handle(
+        _sourceVersionMeta,
+        sourceVersion.isAcceptableOrUnknown(
+          data['source_version']!,
+          _sourceVersionMeta,
+        ),
+      );
+    }
+    if (data.containsKey('source_secondary_reference')) {
+      context.handle(
+        _sourceSecondaryReferenceMeta,
+        sourceSecondaryReference.isAcceptableOrUnknown(
+          data['source_secondary_reference']!,
+          _sourceSecondaryReferenceMeta,
+        ),
+      );
+    }
+    if (data.containsKey('user_context_kind')) {
+      context.handle(
+        _userContextKindMeta,
+        userContextKind.isAcceptableOrUnknown(
+          data['user_context_kind']!,
+          _userContextKindMeta,
+        ),
+      );
+    }
+    if (data.containsKey('user_context_label')) {
+      context.handle(
+        _userContextLabelMeta,
+        userContextLabel.isAcceptableOrUnknown(
+          data['user_context_label']!,
+          _userContextLabelMeta,
+        ),
+      );
+    }
+    if (data.containsKey('user_label')) {
+      context.handle(
+        _userLabelMeta,
+        userLabel.isAcceptableOrUnknown(data['user_label']!, _userLabelMeta),
+      );
+    }
+    if (data.containsKey('status')) {
+      context.handle(
+        _statusMeta,
+        status.isAcceptableOrUnknown(data['status']!, _statusMeta),
+      );
+    }
+    if (data.containsKey('resurfacing')) {
+      context.handle(
+        _resurfacingMeta,
+        resurfacing.isAcceptableOrUnknown(
+          data['resurfacing']!,
+          _resurfacingMeta,
+        ),
+      );
+    }
+    if (data.containsKey('legacy_key')) {
+      context.handle(
+        _legacyKeyMeta,
+        legacyKey.isAcceptableOrUnknown(data['legacy_key']!, _legacyKeyMeta),
+      );
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_updatedAtMeta);
+    }
+    if (data.containsKey('last_returned_at')) {
+      context.handle(
+        _lastReturnedAtMeta,
+        lastReturnedAt.isAcceptableOrUnknown(
+          data['last_returned_at']!,
+          _lastReturnedAtMeta,
+        ),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  List<Set<GeneratedColumn>> get uniqueKeys => [
+    {legacyKey},
+  ];
+  @override
+  MemoryThreadRow map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return MemoryThreadRow(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      sourceKind: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}source_kind'],
+      )!,
+      sourceCanonicalId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}source_canonical_id'],
+      )!,
+      sourceLabel: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}source_label'],
+      )!,
+      sourceBook: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}source_book'],
+      ),
+      sourceCitation: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}source_citation'],
+      ),
+      sourceVersion: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}source_version'],
+      ),
+      sourceSecondaryReference: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}source_secondary_reference'],
+      ),
+      userContextKind: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}user_context_kind'],
+      ),
+      userContextLabel: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}user_context_label'],
+      ),
+      userLabel: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}user_label'],
+      ),
+      status: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}status'],
+      )!,
+      resurfacing: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}resurfacing'],
+      )!,
+      legacyKey: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}legacy_key'],
+      ),
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}created_at'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}updated_at'],
+      )!,
+      lastReturnedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}last_returned_at'],
+      ),
+    );
+  }
+
+  @override
+  $MemoryThreadTableTable createAlias(String alias) {
+    return $MemoryThreadTableTable(attachedDatabase, alias);
+  }
+}
+
+class MemoryThreadRow extends DataClass implements Insertable<MemoryThreadRow> {
+  final String id;
+  final String sourceKind;
+  final String sourceCanonicalId;
+  final String sourceLabel;
+  final String? sourceBook;
+  final String? sourceCitation;
+  final String? sourceVersion;
+  final String? sourceSecondaryReference;
+  final String? userContextKind;
+  final String? userContextLabel;
+  final String? userLabel;
+  final String status;
+  final String resurfacing;
+  final String? legacyKey;
+  final String createdAt;
+  final String updatedAt;
+  final String? lastReturnedAt;
+  const MemoryThreadRow({
+    required this.id,
+    required this.sourceKind,
+    required this.sourceCanonicalId,
+    required this.sourceLabel,
+    this.sourceBook,
+    this.sourceCitation,
+    this.sourceVersion,
+    this.sourceSecondaryReference,
+    this.userContextKind,
+    this.userContextLabel,
+    this.userLabel,
+    required this.status,
+    required this.resurfacing,
+    this.legacyKey,
+    required this.createdAt,
+    required this.updatedAt,
+    this.lastReturnedAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['source_kind'] = Variable<String>(sourceKind);
+    map['source_canonical_id'] = Variable<String>(sourceCanonicalId);
+    map['source_label'] = Variable<String>(sourceLabel);
+    if (!nullToAbsent || sourceBook != null) {
+      map['source_book'] = Variable<String>(sourceBook);
+    }
+    if (!nullToAbsent || sourceCitation != null) {
+      map['source_citation'] = Variable<String>(sourceCitation);
+    }
+    if (!nullToAbsent || sourceVersion != null) {
+      map['source_version'] = Variable<String>(sourceVersion);
+    }
+    if (!nullToAbsent || sourceSecondaryReference != null) {
+      map['source_secondary_reference'] = Variable<String>(
+        sourceSecondaryReference,
+      );
+    }
+    if (!nullToAbsent || userContextKind != null) {
+      map['user_context_kind'] = Variable<String>(userContextKind);
+    }
+    if (!nullToAbsent || userContextLabel != null) {
+      map['user_context_label'] = Variable<String>(userContextLabel);
+    }
+    if (!nullToAbsent || userLabel != null) {
+      map['user_label'] = Variable<String>(userLabel);
+    }
+    map['status'] = Variable<String>(status);
+    map['resurfacing'] = Variable<String>(resurfacing);
+    if (!nullToAbsent || legacyKey != null) {
+      map['legacy_key'] = Variable<String>(legacyKey);
+    }
+    map['created_at'] = Variable<String>(createdAt);
+    map['updated_at'] = Variable<String>(updatedAt);
+    if (!nullToAbsent || lastReturnedAt != null) {
+      map['last_returned_at'] = Variable<String>(lastReturnedAt);
+    }
+    return map;
+  }
+
+  MemoryThreadTableCompanion toCompanion(bool nullToAbsent) {
+    return MemoryThreadTableCompanion(
+      id: Value(id),
+      sourceKind: Value(sourceKind),
+      sourceCanonicalId: Value(sourceCanonicalId),
+      sourceLabel: Value(sourceLabel),
+      sourceBook: sourceBook == null && nullToAbsent
+          ? const Value.absent()
+          : Value(sourceBook),
+      sourceCitation: sourceCitation == null && nullToAbsent
+          ? const Value.absent()
+          : Value(sourceCitation),
+      sourceVersion: sourceVersion == null && nullToAbsent
+          ? const Value.absent()
+          : Value(sourceVersion),
+      sourceSecondaryReference: sourceSecondaryReference == null && nullToAbsent
+          ? const Value.absent()
+          : Value(sourceSecondaryReference),
+      userContextKind: userContextKind == null && nullToAbsent
+          ? const Value.absent()
+          : Value(userContextKind),
+      userContextLabel: userContextLabel == null && nullToAbsent
+          ? const Value.absent()
+          : Value(userContextLabel),
+      userLabel: userLabel == null && nullToAbsent
+          ? const Value.absent()
+          : Value(userLabel),
+      status: Value(status),
+      resurfacing: Value(resurfacing),
+      legacyKey: legacyKey == null && nullToAbsent
+          ? const Value.absent()
+          : Value(legacyKey),
+      createdAt: Value(createdAt),
+      updatedAt: Value(updatedAt),
+      lastReturnedAt: lastReturnedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(lastReturnedAt),
+    );
+  }
+
+  factory MemoryThreadRow.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return MemoryThreadRow(
+      id: serializer.fromJson<String>(json['id']),
+      sourceKind: serializer.fromJson<String>(json['sourceKind']),
+      sourceCanonicalId: serializer.fromJson<String>(json['sourceCanonicalId']),
+      sourceLabel: serializer.fromJson<String>(json['sourceLabel']),
+      sourceBook: serializer.fromJson<String?>(json['sourceBook']),
+      sourceCitation: serializer.fromJson<String?>(json['sourceCitation']),
+      sourceVersion: serializer.fromJson<String?>(json['sourceVersion']),
+      sourceSecondaryReference: serializer.fromJson<String?>(
+        json['sourceSecondaryReference'],
+      ),
+      userContextKind: serializer.fromJson<String?>(json['userContextKind']),
+      userContextLabel: serializer.fromJson<String?>(json['userContextLabel']),
+      userLabel: serializer.fromJson<String?>(json['userLabel']),
+      status: serializer.fromJson<String>(json['status']),
+      resurfacing: serializer.fromJson<String>(json['resurfacing']),
+      legacyKey: serializer.fromJson<String?>(json['legacyKey']),
+      createdAt: serializer.fromJson<String>(json['createdAt']),
+      updatedAt: serializer.fromJson<String>(json['updatedAt']),
+      lastReturnedAt: serializer.fromJson<String?>(json['lastReturnedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'sourceKind': serializer.toJson<String>(sourceKind),
+      'sourceCanonicalId': serializer.toJson<String>(sourceCanonicalId),
+      'sourceLabel': serializer.toJson<String>(sourceLabel),
+      'sourceBook': serializer.toJson<String?>(sourceBook),
+      'sourceCitation': serializer.toJson<String?>(sourceCitation),
+      'sourceVersion': serializer.toJson<String?>(sourceVersion),
+      'sourceSecondaryReference': serializer.toJson<String?>(
+        sourceSecondaryReference,
+      ),
+      'userContextKind': serializer.toJson<String?>(userContextKind),
+      'userContextLabel': serializer.toJson<String?>(userContextLabel),
+      'userLabel': serializer.toJson<String?>(userLabel),
+      'status': serializer.toJson<String>(status),
+      'resurfacing': serializer.toJson<String>(resurfacing),
+      'legacyKey': serializer.toJson<String?>(legacyKey),
+      'createdAt': serializer.toJson<String>(createdAt),
+      'updatedAt': serializer.toJson<String>(updatedAt),
+      'lastReturnedAt': serializer.toJson<String?>(lastReturnedAt),
+    };
+  }
+
+  MemoryThreadRow copyWith({
+    String? id,
+    String? sourceKind,
+    String? sourceCanonicalId,
+    String? sourceLabel,
+    Value<String?> sourceBook = const Value.absent(),
+    Value<String?> sourceCitation = const Value.absent(),
+    Value<String?> sourceVersion = const Value.absent(),
+    Value<String?> sourceSecondaryReference = const Value.absent(),
+    Value<String?> userContextKind = const Value.absent(),
+    Value<String?> userContextLabel = const Value.absent(),
+    Value<String?> userLabel = const Value.absent(),
+    String? status,
+    String? resurfacing,
+    Value<String?> legacyKey = const Value.absent(),
+    String? createdAt,
+    String? updatedAt,
+    Value<String?> lastReturnedAt = const Value.absent(),
+  }) => MemoryThreadRow(
+    id: id ?? this.id,
+    sourceKind: sourceKind ?? this.sourceKind,
+    sourceCanonicalId: sourceCanonicalId ?? this.sourceCanonicalId,
+    sourceLabel: sourceLabel ?? this.sourceLabel,
+    sourceBook: sourceBook.present ? sourceBook.value : this.sourceBook,
+    sourceCitation: sourceCitation.present
+        ? sourceCitation.value
+        : this.sourceCitation,
+    sourceVersion: sourceVersion.present
+        ? sourceVersion.value
+        : this.sourceVersion,
+    sourceSecondaryReference: sourceSecondaryReference.present
+        ? sourceSecondaryReference.value
+        : this.sourceSecondaryReference,
+    userContextKind: userContextKind.present
+        ? userContextKind.value
+        : this.userContextKind,
+    userContextLabel: userContextLabel.present
+        ? userContextLabel.value
+        : this.userContextLabel,
+    userLabel: userLabel.present ? userLabel.value : this.userLabel,
+    status: status ?? this.status,
+    resurfacing: resurfacing ?? this.resurfacing,
+    legacyKey: legacyKey.present ? legacyKey.value : this.legacyKey,
+    createdAt: createdAt ?? this.createdAt,
+    updatedAt: updatedAt ?? this.updatedAt,
+    lastReturnedAt: lastReturnedAt.present
+        ? lastReturnedAt.value
+        : this.lastReturnedAt,
+  );
+  MemoryThreadRow copyWithCompanion(MemoryThreadTableCompanion data) {
+    return MemoryThreadRow(
+      id: data.id.present ? data.id.value : this.id,
+      sourceKind: data.sourceKind.present
+          ? data.sourceKind.value
+          : this.sourceKind,
+      sourceCanonicalId: data.sourceCanonicalId.present
+          ? data.sourceCanonicalId.value
+          : this.sourceCanonicalId,
+      sourceLabel: data.sourceLabel.present
+          ? data.sourceLabel.value
+          : this.sourceLabel,
+      sourceBook: data.sourceBook.present
+          ? data.sourceBook.value
+          : this.sourceBook,
+      sourceCitation: data.sourceCitation.present
+          ? data.sourceCitation.value
+          : this.sourceCitation,
+      sourceVersion: data.sourceVersion.present
+          ? data.sourceVersion.value
+          : this.sourceVersion,
+      sourceSecondaryReference: data.sourceSecondaryReference.present
+          ? data.sourceSecondaryReference.value
+          : this.sourceSecondaryReference,
+      userContextKind: data.userContextKind.present
+          ? data.userContextKind.value
+          : this.userContextKind,
+      userContextLabel: data.userContextLabel.present
+          ? data.userContextLabel.value
+          : this.userContextLabel,
+      userLabel: data.userLabel.present ? data.userLabel.value : this.userLabel,
+      status: data.status.present ? data.status.value : this.status,
+      resurfacing: data.resurfacing.present
+          ? data.resurfacing.value
+          : this.resurfacing,
+      legacyKey: data.legacyKey.present ? data.legacyKey.value : this.legacyKey,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+      lastReturnedAt: data.lastReturnedAt.present
+          ? data.lastReturnedAt.value
+          : this.lastReturnedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('MemoryThreadRow(')
+          ..write('id: $id, ')
+          ..write('sourceKind: $sourceKind, ')
+          ..write('sourceCanonicalId: $sourceCanonicalId, ')
+          ..write('sourceLabel: $sourceLabel, ')
+          ..write('sourceBook: $sourceBook, ')
+          ..write('sourceCitation: $sourceCitation, ')
+          ..write('sourceVersion: $sourceVersion, ')
+          ..write('sourceSecondaryReference: $sourceSecondaryReference, ')
+          ..write('userContextKind: $userContextKind, ')
+          ..write('userContextLabel: $userContextLabel, ')
+          ..write('userLabel: $userLabel, ')
+          ..write('status: $status, ')
+          ..write('resurfacing: $resurfacing, ')
+          ..write('legacyKey: $legacyKey, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('lastReturnedAt: $lastReturnedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    sourceKind,
+    sourceCanonicalId,
+    sourceLabel,
+    sourceBook,
+    sourceCitation,
+    sourceVersion,
+    sourceSecondaryReference,
+    userContextKind,
+    userContextLabel,
+    userLabel,
+    status,
+    resurfacing,
+    legacyKey,
+    createdAt,
+    updatedAt,
+    lastReturnedAt,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is MemoryThreadRow &&
+          other.id == this.id &&
+          other.sourceKind == this.sourceKind &&
+          other.sourceCanonicalId == this.sourceCanonicalId &&
+          other.sourceLabel == this.sourceLabel &&
+          other.sourceBook == this.sourceBook &&
+          other.sourceCitation == this.sourceCitation &&
+          other.sourceVersion == this.sourceVersion &&
+          other.sourceSecondaryReference == this.sourceSecondaryReference &&
+          other.userContextKind == this.userContextKind &&
+          other.userContextLabel == this.userContextLabel &&
+          other.userLabel == this.userLabel &&
+          other.status == this.status &&
+          other.resurfacing == this.resurfacing &&
+          other.legacyKey == this.legacyKey &&
+          other.createdAt == this.createdAt &&
+          other.updatedAt == this.updatedAt &&
+          other.lastReturnedAt == this.lastReturnedAt);
+}
+
+class MemoryThreadTableCompanion extends UpdateCompanion<MemoryThreadRow> {
+  final Value<String> id;
+  final Value<String> sourceKind;
+  final Value<String> sourceCanonicalId;
+  final Value<String> sourceLabel;
+  final Value<String?> sourceBook;
+  final Value<String?> sourceCitation;
+  final Value<String?> sourceVersion;
+  final Value<String?> sourceSecondaryReference;
+  final Value<String?> userContextKind;
+  final Value<String?> userContextLabel;
+  final Value<String?> userLabel;
+  final Value<String> status;
+  final Value<String> resurfacing;
+  final Value<String?> legacyKey;
+  final Value<String> createdAt;
+  final Value<String> updatedAt;
+  final Value<String?> lastReturnedAt;
+  final Value<int> rowid;
+  const MemoryThreadTableCompanion({
+    this.id = const Value.absent(),
+    this.sourceKind = const Value.absent(),
+    this.sourceCanonicalId = const Value.absent(),
+    this.sourceLabel = const Value.absent(),
+    this.sourceBook = const Value.absent(),
+    this.sourceCitation = const Value.absent(),
+    this.sourceVersion = const Value.absent(),
+    this.sourceSecondaryReference = const Value.absent(),
+    this.userContextKind = const Value.absent(),
+    this.userContextLabel = const Value.absent(),
+    this.userLabel = const Value.absent(),
+    this.status = const Value.absent(),
+    this.resurfacing = const Value.absent(),
+    this.legacyKey = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.lastReturnedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  MemoryThreadTableCompanion.insert({
+    required String id,
+    required String sourceKind,
+    required String sourceCanonicalId,
+    required String sourceLabel,
+    this.sourceBook = const Value.absent(),
+    this.sourceCitation = const Value.absent(),
+    this.sourceVersion = const Value.absent(),
+    this.sourceSecondaryReference = const Value.absent(),
+    this.userContextKind = const Value.absent(),
+    this.userContextLabel = const Value.absent(),
+    this.userLabel = const Value.absent(),
+    this.status = const Value.absent(),
+    this.resurfacing = const Value.absent(),
+    this.legacyKey = const Value.absent(),
+    required String createdAt,
+    required String updatedAt,
+    this.lastReturnedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       sourceKind = Value(sourceKind),
+       sourceCanonicalId = Value(sourceCanonicalId),
+       sourceLabel = Value(sourceLabel),
+       createdAt = Value(createdAt),
+       updatedAt = Value(updatedAt);
+  static Insertable<MemoryThreadRow> custom({
+    Expression<String>? id,
+    Expression<String>? sourceKind,
+    Expression<String>? sourceCanonicalId,
+    Expression<String>? sourceLabel,
+    Expression<String>? sourceBook,
+    Expression<String>? sourceCitation,
+    Expression<String>? sourceVersion,
+    Expression<String>? sourceSecondaryReference,
+    Expression<String>? userContextKind,
+    Expression<String>? userContextLabel,
+    Expression<String>? userLabel,
+    Expression<String>? status,
+    Expression<String>? resurfacing,
+    Expression<String>? legacyKey,
+    Expression<String>? createdAt,
+    Expression<String>? updatedAt,
+    Expression<String>? lastReturnedAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (sourceKind != null) 'source_kind': sourceKind,
+      if (sourceCanonicalId != null) 'source_canonical_id': sourceCanonicalId,
+      if (sourceLabel != null) 'source_label': sourceLabel,
+      if (sourceBook != null) 'source_book': sourceBook,
+      if (sourceCitation != null) 'source_citation': sourceCitation,
+      if (sourceVersion != null) 'source_version': sourceVersion,
+      if (sourceSecondaryReference != null)
+        'source_secondary_reference': sourceSecondaryReference,
+      if (userContextKind != null) 'user_context_kind': userContextKind,
+      if (userContextLabel != null) 'user_context_label': userContextLabel,
+      if (userLabel != null) 'user_label': userLabel,
+      if (status != null) 'status': status,
+      if (resurfacing != null) 'resurfacing': resurfacing,
+      if (legacyKey != null) 'legacy_key': legacyKey,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (lastReturnedAt != null) 'last_returned_at': lastReturnedAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  MemoryThreadTableCompanion copyWith({
+    Value<String>? id,
+    Value<String>? sourceKind,
+    Value<String>? sourceCanonicalId,
+    Value<String>? sourceLabel,
+    Value<String?>? sourceBook,
+    Value<String?>? sourceCitation,
+    Value<String?>? sourceVersion,
+    Value<String?>? sourceSecondaryReference,
+    Value<String?>? userContextKind,
+    Value<String?>? userContextLabel,
+    Value<String?>? userLabel,
+    Value<String>? status,
+    Value<String>? resurfacing,
+    Value<String?>? legacyKey,
+    Value<String>? createdAt,
+    Value<String>? updatedAt,
+    Value<String?>? lastReturnedAt,
+    Value<int>? rowid,
+  }) {
+    return MemoryThreadTableCompanion(
+      id: id ?? this.id,
+      sourceKind: sourceKind ?? this.sourceKind,
+      sourceCanonicalId: sourceCanonicalId ?? this.sourceCanonicalId,
+      sourceLabel: sourceLabel ?? this.sourceLabel,
+      sourceBook: sourceBook ?? this.sourceBook,
+      sourceCitation: sourceCitation ?? this.sourceCitation,
+      sourceVersion: sourceVersion ?? this.sourceVersion,
+      sourceSecondaryReference:
+          sourceSecondaryReference ?? this.sourceSecondaryReference,
+      userContextKind: userContextKind ?? this.userContextKind,
+      userContextLabel: userContextLabel ?? this.userContextLabel,
+      userLabel: userLabel ?? this.userLabel,
+      status: status ?? this.status,
+      resurfacing: resurfacing ?? this.resurfacing,
+      legacyKey: legacyKey ?? this.legacyKey,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      lastReturnedAt: lastReturnedAt ?? this.lastReturnedAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (sourceKind.present) {
+      map['source_kind'] = Variable<String>(sourceKind.value);
+    }
+    if (sourceCanonicalId.present) {
+      map['source_canonical_id'] = Variable<String>(sourceCanonicalId.value);
+    }
+    if (sourceLabel.present) {
+      map['source_label'] = Variable<String>(sourceLabel.value);
+    }
+    if (sourceBook.present) {
+      map['source_book'] = Variable<String>(sourceBook.value);
+    }
+    if (sourceCitation.present) {
+      map['source_citation'] = Variable<String>(sourceCitation.value);
+    }
+    if (sourceVersion.present) {
+      map['source_version'] = Variable<String>(sourceVersion.value);
+    }
+    if (sourceSecondaryReference.present) {
+      map['source_secondary_reference'] = Variable<String>(
+        sourceSecondaryReference.value,
+      );
+    }
+    if (userContextKind.present) {
+      map['user_context_kind'] = Variable<String>(userContextKind.value);
+    }
+    if (userContextLabel.present) {
+      map['user_context_label'] = Variable<String>(userContextLabel.value);
+    }
+    if (userLabel.present) {
+      map['user_label'] = Variable<String>(userLabel.value);
+    }
+    if (status.present) {
+      map['status'] = Variable<String>(status.value);
+    }
+    if (resurfacing.present) {
+      map['resurfacing'] = Variable<String>(resurfacing.value);
+    }
+    if (legacyKey.present) {
+      map['legacy_key'] = Variable<String>(legacyKey.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<String>(createdAt.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<String>(updatedAt.value);
+    }
+    if (lastReturnedAt.present) {
+      map['last_returned_at'] = Variable<String>(lastReturnedAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('MemoryThreadTableCompanion(')
+          ..write('id: $id, ')
+          ..write('sourceKind: $sourceKind, ')
+          ..write('sourceCanonicalId: $sourceCanonicalId, ')
+          ..write('sourceLabel: $sourceLabel, ')
+          ..write('sourceBook: $sourceBook, ')
+          ..write('sourceCitation: $sourceCitation, ')
+          ..write('sourceVersion: $sourceVersion, ')
+          ..write('sourceSecondaryReference: $sourceSecondaryReference, ')
+          ..write('userContextKind: $userContextKind, ')
+          ..write('userContextLabel: $userContextLabel, ')
+          ..write('userLabel: $userLabel, ')
+          ..write('status: $status, ')
+          ..write('resurfacing: $resurfacing, ')
+          ..write('legacyKey: $legacyKey, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('lastReturnedAt: $lastReturnedAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $ReflectionEntryTableTable extends ReflectionEntryTable
+    with TableInfo<$ReflectionEntryTableTable, ReflectionEntryRow> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ReflectionEntryTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _threadIdMeta = const VerificationMeta(
+    'threadId',
+  );
+  @override
+  late final GeneratedColumn<String> threadId = GeneratedColumn<String>(
+    'thread_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _bodyMeta = const VerificationMeta('body');
+  @override
+  late final GeneratedColumn<String> body = GeneratedColumn<String>(
+    'body',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<String> createdAt = GeneratedColumn<String>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<String> updatedAt = GeneratedColumn<String>(
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _deletedAtMeta = const VerificationMeta(
+    'deletedAt',
+  );
+  @override
+  late final GeneratedColumn<String> deletedAt = GeneratedColumn<String>(
+    'deleted_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    threadId,
+    body,
+    createdAt,
+    updatedAt,
+    deletedAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'reflection_entry_table';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<ReflectionEntryRow> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('thread_id')) {
+      context.handle(
+        _threadIdMeta,
+        threadId.isAcceptableOrUnknown(data['thread_id']!, _threadIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_threadIdMeta);
+    }
+    if (data.containsKey('body')) {
+      context.handle(
+        _bodyMeta,
+        body.isAcceptableOrUnknown(data['body']!, _bodyMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_bodyMeta);
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_updatedAtMeta);
+    }
+    if (data.containsKey('deleted_at')) {
+      context.handle(
+        _deletedAtMeta,
+        deletedAt.isAcceptableOrUnknown(data['deleted_at']!, _deletedAtMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  List<Set<GeneratedColumn>> get uniqueKeys => [
+    {threadId, createdAt},
+  ];
+  @override
+  ReflectionEntryRow map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ReflectionEntryRow(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      threadId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}thread_id'],
+      )!,
+      body: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}body'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}created_at'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}updated_at'],
+      )!,
+      deletedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}deleted_at'],
+      ),
+    );
+  }
+
+  @override
+  $ReflectionEntryTableTable createAlias(String alias) {
+    return $ReflectionEntryTableTable(attachedDatabase, alias);
+  }
+}
+
+class ReflectionEntryRow extends DataClass
+    implements Insertable<ReflectionEntryRow> {
+  final String id;
+  final String threadId;
+  final String body;
+  final String createdAt;
+  final String updatedAt;
+  final String? deletedAt;
+  const ReflectionEntryRow({
+    required this.id,
+    required this.threadId,
+    required this.body,
+    required this.createdAt,
+    required this.updatedAt,
+    this.deletedAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['thread_id'] = Variable<String>(threadId);
+    map['body'] = Variable<String>(body);
+    map['created_at'] = Variable<String>(createdAt);
+    map['updated_at'] = Variable<String>(updatedAt);
+    if (!nullToAbsent || deletedAt != null) {
+      map['deleted_at'] = Variable<String>(deletedAt);
+    }
+    return map;
+  }
+
+  ReflectionEntryTableCompanion toCompanion(bool nullToAbsent) {
+    return ReflectionEntryTableCompanion(
+      id: Value(id),
+      threadId: Value(threadId),
+      body: Value(body),
+      createdAt: Value(createdAt),
+      updatedAt: Value(updatedAt),
+      deletedAt: deletedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(deletedAt),
+    );
+  }
+
+  factory ReflectionEntryRow.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ReflectionEntryRow(
+      id: serializer.fromJson<String>(json['id']),
+      threadId: serializer.fromJson<String>(json['threadId']),
+      body: serializer.fromJson<String>(json['body']),
+      createdAt: serializer.fromJson<String>(json['createdAt']),
+      updatedAt: serializer.fromJson<String>(json['updatedAt']),
+      deletedAt: serializer.fromJson<String?>(json['deletedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'threadId': serializer.toJson<String>(threadId),
+      'body': serializer.toJson<String>(body),
+      'createdAt': serializer.toJson<String>(createdAt),
+      'updatedAt': serializer.toJson<String>(updatedAt),
+      'deletedAt': serializer.toJson<String?>(deletedAt),
+    };
+  }
+
+  ReflectionEntryRow copyWith({
+    String? id,
+    String? threadId,
+    String? body,
+    String? createdAt,
+    String? updatedAt,
+    Value<String?> deletedAt = const Value.absent(),
+  }) => ReflectionEntryRow(
+    id: id ?? this.id,
+    threadId: threadId ?? this.threadId,
+    body: body ?? this.body,
+    createdAt: createdAt ?? this.createdAt,
+    updatedAt: updatedAt ?? this.updatedAt,
+    deletedAt: deletedAt.present ? deletedAt.value : this.deletedAt,
+  );
+  ReflectionEntryRow copyWithCompanion(ReflectionEntryTableCompanion data) {
+    return ReflectionEntryRow(
+      id: data.id.present ? data.id.value : this.id,
+      threadId: data.threadId.present ? data.threadId.value : this.threadId,
+      body: data.body.present ? data.body.value : this.body,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+      deletedAt: data.deletedAt.present ? data.deletedAt.value : this.deletedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ReflectionEntryRow(')
+          ..write('id: $id, ')
+          ..write('threadId: $threadId, ')
+          ..write('body: $body, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('deletedAt: $deletedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(id, threadId, body, createdAt, updatedAt, deletedAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ReflectionEntryRow &&
+          other.id == this.id &&
+          other.threadId == this.threadId &&
+          other.body == this.body &&
+          other.createdAt == this.createdAt &&
+          other.updatedAt == this.updatedAt &&
+          other.deletedAt == this.deletedAt);
+}
+
+class ReflectionEntryTableCompanion
+    extends UpdateCompanion<ReflectionEntryRow> {
+  final Value<String> id;
+  final Value<String> threadId;
+  final Value<String> body;
+  final Value<String> createdAt;
+  final Value<String> updatedAt;
+  final Value<String?> deletedAt;
+  final Value<int> rowid;
+  const ReflectionEntryTableCompanion({
+    this.id = const Value.absent(),
+    this.threadId = const Value.absent(),
+    this.body = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.deletedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  ReflectionEntryTableCompanion.insert({
+    required String id,
+    required String threadId,
+    required String body,
+    required String createdAt,
+    required String updatedAt,
+    this.deletedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       threadId = Value(threadId),
+       body = Value(body),
+       createdAt = Value(createdAt),
+       updatedAt = Value(updatedAt);
+  static Insertable<ReflectionEntryRow> custom({
+    Expression<String>? id,
+    Expression<String>? threadId,
+    Expression<String>? body,
+    Expression<String>? createdAt,
+    Expression<String>? updatedAt,
+    Expression<String>? deletedAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (threadId != null) 'thread_id': threadId,
+      if (body != null) 'body': body,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (deletedAt != null) 'deleted_at': deletedAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  ReflectionEntryTableCompanion copyWith({
+    Value<String>? id,
+    Value<String>? threadId,
+    Value<String>? body,
+    Value<String>? createdAt,
+    Value<String>? updatedAt,
+    Value<String?>? deletedAt,
+    Value<int>? rowid,
+  }) {
+    return ReflectionEntryTableCompanion(
+      id: id ?? this.id,
+      threadId: threadId ?? this.threadId,
+      body: body ?? this.body,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      deletedAt: deletedAt ?? this.deletedAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (threadId.present) {
+      map['thread_id'] = Variable<String>(threadId.value);
+    }
+    if (body.present) {
+      map['body'] = Variable<String>(body.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<String>(createdAt.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<String>(updatedAt.value);
+    }
+    if (deletedAt.present) {
+      map['deleted_at'] = Variable<String>(deletedAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ReflectionEntryTableCompanion(')
+          ..write('id: $id, ')
+          ..write('threadId: $threadId, ')
+          ..write('body: $body, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('deletedAt: $deletedAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $ReadingAnchorTableTable extends ReadingAnchorTable
+    with TableInfo<$ReadingAnchorTableTable, ReadingAnchorRow> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ReadingAnchorTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _threadIdMeta = const VerificationMeta(
+    'threadId',
+  );
+  @override
+  late final GeneratedColumn<String> threadId = GeneratedColumn<String>(
+    'thread_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _sourceCanonicalIdMeta = const VerificationMeta(
+    'sourceCanonicalId',
+  );
+  @override
+  late final GeneratedColumn<String> sourceCanonicalId =
+      GeneratedColumn<String>(
+        'source_canonical_id',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: true,
+      );
+  static const VerificationMeta _surahNumberMeta = const VerificationMeta(
+    'surahNumber',
+  );
+  @override
+  late final GeneratedColumn<int> surahNumber = GeneratedColumn<int>(
+    'surah_number',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _ayahNumberMeta = const VerificationMeta(
+    'ayahNumber',
+  );
+  @override
+  late final GeneratedColumn<int> ayahNumber = GeneratedColumn<int>(
+    'ayah_number',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _pageNumberMeta = const VerificationMeta(
+    'pageNumber',
+  );
+  @override
+  late final GeneratedColumn<int> pageNumber = GeneratedColumn<int>(
+    'page_number',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _itemIndexMeta = const VerificationMeta(
+    'itemIndex',
+  );
+  @override
+  late final GeneratedColumn<int> itemIndex = GeneratedColumn<int>(
+    'item_index',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _scrollOffsetMeta = const VerificationMeta(
+    'scrollOffset',
+  );
+  @override
+  late final GeneratedColumn<double> scrollOffset = GeneratedColumn<double>(
+    'scroll_offset',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<String> updatedAt = GeneratedColumn<String>(
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    threadId,
+    sourceCanonicalId,
+    surahNumber,
+    ayahNumber,
+    pageNumber,
+    itemIndex,
+    scrollOffset,
+    updatedAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'reading_anchor_table';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<ReadingAnchorRow> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('thread_id')) {
+      context.handle(
+        _threadIdMeta,
+        threadId.isAcceptableOrUnknown(data['thread_id']!, _threadIdMeta),
+      );
+    }
+    if (data.containsKey('source_canonical_id')) {
+      context.handle(
+        _sourceCanonicalIdMeta,
+        sourceCanonicalId.isAcceptableOrUnknown(
+          data['source_canonical_id']!,
+          _sourceCanonicalIdMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_sourceCanonicalIdMeta);
+    }
+    if (data.containsKey('surah_number')) {
+      context.handle(
+        _surahNumberMeta,
+        surahNumber.isAcceptableOrUnknown(
+          data['surah_number']!,
+          _surahNumberMeta,
+        ),
+      );
+    }
+    if (data.containsKey('ayah_number')) {
+      context.handle(
+        _ayahNumberMeta,
+        ayahNumber.isAcceptableOrUnknown(data['ayah_number']!, _ayahNumberMeta),
+      );
+    }
+    if (data.containsKey('page_number')) {
+      context.handle(
+        _pageNumberMeta,
+        pageNumber.isAcceptableOrUnknown(data['page_number']!, _pageNumberMeta),
+      );
+    }
+    if (data.containsKey('item_index')) {
+      context.handle(
+        _itemIndexMeta,
+        itemIndex.isAcceptableOrUnknown(data['item_index']!, _itemIndexMeta),
+      );
+    }
+    if (data.containsKey('scroll_offset')) {
+      context.handle(
+        _scrollOffsetMeta,
+        scrollOffset.isAcceptableOrUnknown(
+          data['scroll_offset']!,
+          _scrollOffsetMeta,
+        ),
+      );
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_updatedAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  List<Set<GeneratedColumn>> get uniqueKeys => [
+    {threadId},
+  ];
+  @override
+  ReadingAnchorRow map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ReadingAnchorRow(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      threadId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}thread_id'],
+      ),
+      sourceCanonicalId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}source_canonical_id'],
+      )!,
+      surahNumber: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}surah_number'],
+      ),
+      ayahNumber: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}ayah_number'],
+      ),
+      pageNumber: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}page_number'],
+      ),
+      itemIndex: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}item_index'],
+      ),
+      scrollOffset: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}scroll_offset'],
+      ),
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}updated_at'],
+      )!,
+    );
+  }
+
+  @override
+  $ReadingAnchorTableTable createAlias(String alias) {
+    return $ReadingAnchorTableTable(attachedDatabase, alias);
+  }
+}
+
+class ReadingAnchorRow extends DataClass
+    implements Insertable<ReadingAnchorRow> {
+  final String id;
+  final String? threadId;
+  final String sourceCanonicalId;
+  final int? surahNumber;
+  final int? ayahNumber;
+  final int? pageNumber;
+  final int? itemIndex;
+  final double? scrollOffset;
+  final String updatedAt;
+  const ReadingAnchorRow({
+    required this.id,
+    this.threadId,
+    required this.sourceCanonicalId,
+    this.surahNumber,
+    this.ayahNumber,
+    this.pageNumber,
+    this.itemIndex,
+    this.scrollOffset,
+    required this.updatedAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    if (!nullToAbsent || threadId != null) {
+      map['thread_id'] = Variable<String>(threadId);
+    }
+    map['source_canonical_id'] = Variable<String>(sourceCanonicalId);
+    if (!nullToAbsent || surahNumber != null) {
+      map['surah_number'] = Variable<int>(surahNumber);
+    }
+    if (!nullToAbsent || ayahNumber != null) {
+      map['ayah_number'] = Variable<int>(ayahNumber);
+    }
+    if (!nullToAbsent || pageNumber != null) {
+      map['page_number'] = Variable<int>(pageNumber);
+    }
+    if (!nullToAbsent || itemIndex != null) {
+      map['item_index'] = Variable<int>(itemIndex);
+    }
+    if (!nullToAbsent || scrollOffset != null) {
+      map['scroll_offset'] = Variable<double>(scrollOffset);
+    }
+    map['updated_at'] = Variable<String>(updatedAt);
+    return map;
+  }
+
+  ReadingAnchorTableCompanion toCompanion(bool nullToAbsent) {
+    return ReadingAnchorTableCompanion(
+      id: Value(id),
+      threadId: threadId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(threadId),
+      sourceCanonicalId: Value(sourceCanonicalId),
+      surahNumber: surahNumber == null && nullToAbsent
+          ? const Value.absent()
+          : Value(surahNumber),
+      ayahNumber: ayahNumber == null && nullToAbsent
+          ? const Value.absent()
+          : Value(ayahNumber),
+      pageNumber: pageNumber == null && nullToAbsent
+          ? const Value.absent()
+          : Value(pageNumber),
+      itemIndex: itemIndex == null && nullToAbsent
+          ? const Value.absent()
+          : Value(itemIndex),
+      scrollOffset: scrollOffset == null && nullToAbsent
+          ? const Value.absent()
+          : Value(scrollOffset),
+      updatedAt: Value(updatedAt),
+    );
+  }
+
+  factory ReadingAnchorRow.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ReadingAnchorRow(
+      id: serializer.fromJson<String>(json['id']),
+      threadId: serializer.fromJson<String?>(json['threadId']),
+      sourceCanonicalId: serializer.fromJson<String>(json['sourceCanonicalId']),
+      surahNumber: serializer.fromJson<int?>(json['surahNumber']),
+      ayahNumber: serializer.fromJson<int?>(json['ayahNumber']),
+      pageNumber: serializer.fromJson<int?>(json['pageNumber']),
+      itemIndex: serializer.fromJson<int?>(json['itemIndex']),
+      scrollOffset: serializer.fromJson<double?>(json['scrollOffset']),
+      updatedAt: serializer.fromJson<String>(json['updatedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'threadId': serializer.toJson<String?>(threadId),
+      'sourceCanonicalId': serializer.toJson<String>(sourceCanonicalId),
+      'surahNumber': serializer.toJson<int?>(surahNumber),
+      'ayahNumber': serializer.toJson<int?>(ayahNumber),
+      'pageNumber': serializer.toJson<int?>(pageNumber),
+      'itemIndex': serializer.toJson<int?>(itemIndex),
+      'scrollOffset': serializer.toJson<double?>(scrollOffset),
+      'updatedAt': serializer.toJson<String>(updatedAt),
+    };
+  }
+
+  ReadingAnchorRow copyWith({
+    String? id,
+    Value<String?> threadId = const Value.absent(),
+    String? sourceCanonicalId,
+    Value<int?> surahNumber = const Value.absent(),
+    Value<int?> ayahNumber = const Value.absent(),
+    Value<int?> pageNumber = const Value.absent(),
+    Value<int?> itemIndex = const Value.absent(),
+    Value<double?> scrollOffset = const Value.absent(),
+    String? updatedAt,
+  }) => ReadingAnchorRow(
+    id: id ?? this.id,
+    threadId: threadId.present ? threadId.value : this.threadId,
+    sourceCanonicalId: sourceCanonicalId ?? this.sourceCanonicalId,
+    surahNumber: surahNumber.present ? surahNumber.value : this.surahNumber,
+    ayahNumber: ayahNumber.present ? ayahNumber.value : this.ayahNumber,
+    pageNumber: pageNumber.present ? pageNumber.value : this.pageNumber,
+    itemIndex: itemIndex.present ? itemIndex.value : this.itemIndex,
+    scrollOffset: scrollOffset.present ? scrollOffset.value : this.scrollOffset,
+    updatedAt: updatedAt ?? this.updatedAt,
+  );
+  ReadingAnchorRow copyWithCompanion(ReadingAnchorTableCompanion data) {
+    return ReadingAnchorRow(
+      id: data.id.present ? data.id.value : this.id,
+      threadId: data.threadId.present ? data.threadId.value : this.threadId,
+      sourceCanonicalId: data.sourceCanonicalId.present
+          ? data.sourceCanonicalId.value
+          : this.sourceCanonicalId,
+      surahNumber: data.surahNumber.present
+          ? data.surahNumber.value
+          : this.surahNumber,
+      ayahNumber: data.ayahNumber.present
+          ? data.ayahNumber.value
+          : this.ayahNumber,
+      pageNumber: data.pageNumber.present
+          ? data.pageNumber.value
+          : this.pageNumber,
+      itemIndex: data.itemIndex.present ? data.itemIndex.value : this.itemIndex,
+      scrollOffset: data.scrollOffset.present
+          ? data.scrollOffset.value
+          : this.scrollOffset,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ReadingAnchorRow(')
+          ..write('id: $id, ')
+          ..write('threadId: $threadId, ')
+          ..write('sourceCanonicalId: $sourceCanonicalId, ')
+          ..write('surahNumber: $surahNumber, ')
+          ..write('ayahNumber: $ayahNumber, ')
+          ..write('pageNumber: $pageNumber, ')
+          ..write('itemIndex: $itemIndex, ')
+          ..write('scrollOffset: $scrollOffset, ')
+          ..write('updatedAt: $updatedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    threadId,
+    sourceCanonicalId,
+    surahNumber,
+    ayahNumber,
+    pageNumber,
+    itemIndex,
+    scrollOffset,
+    updatedAt,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ReadingAnchorRow &&
+          other.id == this.id &&
+          other.threadId == this.threadId &&
+          other.sourceCanonicalId == this.sourceCanonicalId &&
+          other.surahNumber == this.surahNumber &&
+          other.ayahNumber == this.ayahNumber &&
+          other.pageNumber == this.pageNumber &&
+          other.itemIndex == this.itemIndex &&
+          other.scrollOffset == this.scrollOffset &&
+          other.updatedAt == this.updatedAt);
+}
+
+class ReadingAnchorTableCompanion extends UpdateCompanion<ReadingAnchorRow> {
+  final Value<String> id;
+  final Value<String?> threadId;
+  final Value<String> sourceCanonicalId;
+  final Value<int?> surahNumber;
+  final Value<int?> ayahNumber;
+  final Value<int?> pageNumber;
+  final Value<int?> itemIndex;
+  final Value<double?> scrollOffset;
+  final Value<String> updatedAt;
+  final Value<int> rowid;
+  const ReadingAnchorTableCompanion({
+    this.id = const Value.absent(),
+    this.threadId = const Value.absent(),
+    this.sourceCanonicalId = const Value.absent(),
+    this.surahNumber = const Value.absent(),
+    this.ayahNumber = const Value.absent(),
+    this.pageNumber = const Value.absent(),
+    this.itemIndex = const Value.absent(),
+    this.scrollOffset = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  ReadingAnchorTableCompanion.insert({
+    required String id,
+    this.threadId = const Value.absent(),
+    required String sourceCanonicalId,
+    this.surahNumber = const Value.absent(),
+    this.ayahNumber = const Value.absent(),
+    this.pageNumber = const Value.absent(),
+    this.itemIndex = const Value.absent(),
+    this.scrollOffset = const Value.absent(),
+    required String updatedAt,
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       sourceCanonicalId = Value(sourceCanonicalId),
+       updatedAt = Value(updatedAt);
+  static Insertable<ReadingAnchorRow> custom({
+    Expression<String>? id,
+    Expression<String>? threadId,
+    Expression<String>? sourceCanonicalId,
+    Expression<int>? surahNumber,
+    Expression<int>? ayahNumber,
+    Expression<int>? pageNumber,
+    Expression<int>? itemIndex,
+    Expression<double>? scrollOffset,
+    Expression<String>? updatedAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (threadId != null) 'thread_id': threadId,
+      if (sourceCanonicalId != null) 'source_canonical_id': sourceCanonicalId,
+      if (surahNumber != null) 'surah_number': surahNumber,
+      if (ayahNumber != null) 'ayah_number': ayahNumber,
+      if (pageNumber != null) 'page_number': pageNumber,
+      if (itemIndex != null) 'item_index': itemIndex,
+      if (scrollOffset != null) 'scroll_offset': scrollOffset,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  ReadingAnchorTableCompanion copyWith({
+    Value<String>? id,
+    Value<String?>? threadId,
+    Value<String>? sourceCanonicalId,
+    Value<int?>? surahNumber,
+    Value<int?>? ayahNumber,
+    Value<int?>? pageNumber,
+    Value<int?>? itemIndex,
+    Value<double?>? scrollOffset,
+    Value<String>? updatedAt,
+    Value<int>? rowid,
+  }) {
+    return ReadingAnchorTableCompanion(
+      id: id ?? this.id,
+      threadId: threadId ?? this.threadId,
+      sourceCanonicalId: sourceCanonicalId ?? this.sourceCanonicalId,
+      surahNumber: surahNumber ?? this.surahNumber,
+      ayahNumber: ayahNumber ?? this.ayahNumber,
+      pageNumber: pageNumber ?? this.pageNumber,
+      itemIndex: itemIndex ?? this.itemIndex,
+      scrollOffset: scrollOffset ?? this.scrollOffset,
+      updatedAt: updatedAt ?? this.updatedAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (threadId.present) {
+      map['thread_id'] = Variable<String>(threadId.value);
+    }
+    if (sourceCanonicalId.present) {
+      map['source_canonical_id'] = Variable<String>(sourceCanonicalId.value);
+    }
+    if (surahNumber.present) {
+      map['surah_number'] = Variable<int>(surahNumber.value);
+    }
+    if (ayahNumber.present) {
+      map['ayah_number'] = Variable<int>(ayahNumber.value);
+    }
+    if (pageNumber.present) {
+      map['page_number'] = Variable<int>(pageNumber.value);
+    }
+    if (itemIndex.present) {
+      map['item_index'] = Variable<int>(itemIndex.value);
+    }
+    if (scrollOffset.present) {
+      map['scroll_offset'] = Variable<double>(scrollOffset.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<String>(updatedAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ReadingAnchorTableCompanion(')
+          ..write('id: $id, ')
+          ..write('threadId: $threadId, ')
+          ..write('sourceCanonicalId: $sourceCanonicalId, ')
+          ..write('surahNumber: $surahNumber, ')
+          ..write('ayahNumber: $ayahNumber, ')
+          ..write('pageNumber: $pageNumber, ')
+          ..write('itemIndex: $itemIndex, ')
+          ..write('scrollOffset: $scrollOffset, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $ReturnEventTableTable extends ReturnEventTable
+    with TableInfo<$ReturnEventTableTable, ReturnEventRow> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ReturnEventTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _threadIdMeta = const VerificationMeta(
+    'threadId',
+  );
+  @override
+  late final GeneratedColumn<String> threadId = GeneratedColumn<String>(
+    'thread_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _kindMeta = const VerificationMeta('kind');
+  @override
+  late final GeneratedColumn<String> kind = GeneratedColumn<String>(
+    'kind',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _occurredAtMeta = const VerificationMeta(
+    'occurredAt',
+  );
+  @override
+  late final GeneratedColumn<String> occurredAt = GeneratedColumn<String>(
+    'occurred_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _durationSecondsMeta = const VerificationMeta(
+    'durationSeconds',
+  );
+  @override
+  late final GeneratedColumn<int> durationSeconds = GeneratedColumn<int>(
+    'duration_seconds',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _reflectionIdMeta = const VerificationMeta(
+    'reflectionId',
+  );
+  @override
+  late final GeneratedColumn<String> reflectionId = GeneratedColumn<String>(
+    'reflection_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    threadId,
+    kind,
+    occurredAt,
+    durationSeconds,
+    reflectionId,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'return_event_table';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<ReturnEventRow> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('thread_id')) {
+      context.handle(
+        _threadIdMeta,
+        threadId.isAcceptableOrUnknown(data['thread_id']!, _threadIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_threadIdMeta);
+    }
+    if (data.containsKey('kind')) {
+      context.handle(
+        _kindMeta,
+        kind.isAcceptableOrUnknown(data['kind']!, _kindMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_kindMeta);
+    }
+    if (data.containsKey('occurred_at')) {
+      context.handle(
+        _occurredAtMeta,
+        occurredAt.isAcceptableOrUnknown(data['occurred_at']!, _occurredAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_occurredAtMeta);
+    }
+    if (data.containsKey('duration_seconds')) {
+      context.handle(
+        _durationSecondsMeta,
+        durationSeconds.isAcceptableOrUnknown(
+          data['duration_seconds']!,
+          _durationSecondsMeta,
+        ),
+      );
+    }
+    if (data.containsKey('reflection_id')) {
+      context.handle(
+        _reflectionIdMeta,
+        reflectionId.isAcceptableOrUnknown(
+          data['reflection_id']!,
+          _reflectionIdMeta,
+        ),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  ReturnEventRow map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ReturnEventRow(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      threadId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}thread_id'],
+      )!,
+      kind: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}kind'],
+      )!,
+      occurredAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}occurred_at'],
+      )!,
+      durationSeconds: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}duration_seconds'],
+      ),
+      reflectionId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}reflection_id'],
+      ),
+    );
+  }
+
+  @override
+  $ReturnEventTableTable createAlias(String alias) {
+    return $ReturnEventTableTable(attachedDatabase, alias);
+  }
+}
+
+class ReturnEventRow extends DataClass implements Insertable<ReturnEventRow> {
+  final String id;
+  final String threadId;
+  final String kind;
+  final String occurredAt;
+  final int? durationSeconds;
+  final String? reflectionId;
+  const ReturnEventRow({
+    required this.id,
+    required this.threadId,
+    required this.kind,
+    required this.occurredAt,
+    this.durationSeconds,
+    this.reflectionId,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['thread_id'] = Variable<String>(threadId);
+    map['kind'] = Variable<String>(kind);
+    map['occurred_at'] = Variable<String>(occurredAt);
+    if (!nullToAbsent || durationSeconds != null) {
+      map['duration_seconds'] = Variable<int>(durationSeconds);
+    }
+    if (!nullToAbsent || reflectionId != null) {
+      map['reflection_id'] = Variable<String>(reflectionId);
+    }
+    return map;
+  }
+
+  ReturnEventTableCompanion toCompanion(bool nullToAbsent) {
+    return ReturnEventTableCompanion(
+      id: Value(id),
+      threadId: Value(threadId),
+      kind: Value(kind),
+      occurredAt: Value(occurredAt),
+      durationSeconds: durationSeconds == null && nullToAbsent
+          ? const Value.absent()
+          : Value(durationSeconds),
+      reflectionId: reflectionId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(reflectionId),
+    );
+  }
+
+  factory ReturnEventRow.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ReturnEventRow(
+      id: serializer.fromJson<String>(json['id']),
+      threadId: serializer.fromJson<String>(json['threadId']),
+      kind: serializer.fromJson<String>(json['kind']),
+      occurredAt: serializer.fromJson<String>(json['occurredAt']),
+      durationSeconds: serializer.fromJson<int?>(json['durationSeconds']),
+      reflectionId: serializer.fromJson<String?>(json['reflectionId']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'threadId': serializer.toJson<String>(threadId),
+      'kind': serializer.toJson<String>(kind),
+      'occurredAt': serializer.toJson<String>(occurredAt),
+      'durationSeconds': serializer.toJson<int?>(durationSeconds),
+      'reflectionId': serializer.toJson<String?>(reflectionId),
+    };
+  }
+
+  ReturnEventRow copyWith({
+    String? id,
+    String? threadId,
+    String? kind,
+    String? occurredAt,
+    Value<int?> durationSeconds = const Value.absent(),
+    Value<String?> reflectionId = const Value.absent(),
+  }) => ReturnEventRow(
+    id: id ?? this.id,
+    threadId: threadId ?? this.threadId,
+    kind: kind ?? this.kind,
+    occurredAt: occurredAt ?? this.occurredAt,
+    durationSeconds: durationSeconds.present
+        ? durationSeconds.value
+        : this.durationSeconds,
+    reflectionId: reflectionId.present ? reflectionId.value : this.reflectionId,
+  );
+  ReturnEventRow copyWithCompanion(ReturnEventTableCompanion data) {
+    return ReturnEventRow(
+      id: data.id.present ? data.id.value : this.id,
+      threadId: data.threadId.present ? data.threadId.value : this.threadId,
+      kind: data.kind.present ? data.kind.value : this.kind,
+      occurredAt: data.occurredAt.present
+          ? data.occurredAt.value
+          : this.occurredAt,
+      durationSeconds: data.durationSeconds.present
+          ? data.durationSeconds.value
+          : this.durationSeconds,
+      reflectionId: data.reflectionId.present
+          ? data.reflectionId.value
+          : this.reflectionId,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ReturnEventRow(')
+          ..write('id: $id, ')
+          ..write('threadId: $threadId, ')
+          ..write('kind: $kind, ')
+          ..write('occurredAt: $occurredAt, ')
+          ..write('durationSeconds: $durationSeconds, ')
+          ..write('reflectionId: $reflectionId')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    threadId,
+    kind,
+    occurredAt,
+    durationSeconds,
+    reflectionId,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ReturnEventRow &&
+          other.id == this.id &&
+          other.threadId == this.threadId &&
+          other.kind == this.kind &&
+          other.occurredAt == this.occurredAt &&
+          other.durationSeconds == this.durationSeconds &&
+          other.reflectionId == this.reflectionId);
+}
+
+class ReturnEventTableCompanion extends UpdateCompanion<ReturnEventRow> {
+  final Value<String> id;
+  final Value<String> threadId;
+  final Value<String> kind;
+  final Value<String> occurredAt;
+  final Value<int?> durationSeconds;
+  final Value<String?> reflectionId;
+  final Value<int> rowid;
+  const ReturnEventTableCompanion({
+    this.id = const Value.absent(),
+    this.threadId = const Value.absent(),
+    this.kind = const Value.absent(),
+    this.occurredAt = const Value.absent(),
+    this.durationSeconds = const Value.absent(),
+    this.reflectionId = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  ReturnEventTableCompanion.insert({
+    required String id,
+    required String threadId,
+    required String kind,
+    required String occurredAt,
+    this.durationSeconds = const Value.absent(),
+    this.reflectionId = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       threadId = Value(threadId),
+       kind = Value(kind),
+       occurredAt = Value(occurredAt);
+  static Insertable<ReturnEventRow> custom({
+    Expression<String>? id,
+    Expression<String>? threadId,
+    Expression<String>? kind,
+    Expression<String>? occurredAt,
+    Expression<int>? durationSeconds,
+    Expression<String>? reflectionId,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (threadId != null) 'thread_id': threadId,
+      if (kind != null) 'kind': kind,
+      if (occurredAt != null) 'occurred_at': occurredAt,
+      if (durationSeconds != null) 'duration_seconds': durationSeconds,
+      if (reflectionId != null) 'reflection_id': reflectionId,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  ReturnEventTableCompanion copyWith({
+    Value<String>? id,
+    Value<String>? threadId,
+    Value<String>? kind,
+    Value<String>? occurredAt,
+    Value<int?>? durationSeconds,
+    Value<String?>? reflectionId,
+    Value<int>? rowid,
+  }) {
+    return ReturnEventTableCompanion(
+      id: id ?? this.id,
+      threadId: threadId ?? this.threadId,
+      kind: kind ?? this.kind,
+      occurredAt: occurredAt ?? this.occurredAt,
+      durationSeconds: durationSeconds ?? this.durationSeconds,
+      reflectionId: reflectionId ?? this.reflectionId,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (threadId.present) {
+      map['thread_id'] = Variable<String>(threadId.value);
+    }
+    if (kind.present) {
+      map['kind'] = Variable<String>(kind.value);
+    }
+    if (occurredAt.present) {
+      map['occurred_at'] = Variable<String>(occurredAt.value);
+    }
+    if (durationSeconds.present) {
+      map['duration_seconds'] = Variable<int>(durationSeconds.value);
+    }
+    if (reflectionId.present) {
+      map['reflection_id'] = Variable<String>(reflectionId.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ReturnEventTableCompanion(')
+          ..write('id: $id, ')
+          ..write('threadId: $threadId, ')
+          ..write('kind: $kind, ')
+          ..write('occurredAt: $occurredAt, ')
+          ..write('durationSeconds: $durationSeconds, ')
+          ..write('reflectionId: $reflectionId, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $ReminderIntentTableTable extends ReminderIntentTable
+    with TableInfo<$ReminderIntentTableTable, ReminderIntentRow> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ReminderIntentTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _threadIdMeta = const VerificationMeta(
+    'threadId',
+  );
+  @override
+  late final GeneratedColumn<String> threadId = GeneratedColumn<String>(
+    'thread_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _scheduledAtMeta = const VerificationMeta(
+    'scheduledAt',
+  );
+  @override
+  late final GeneratedColumn<String> scheduledAt = GeneratedColumn<String>(
+    'scheduled_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _enabledMeta = const VerificationMeta(
+    'enabled',
+  );
+  @override
+  late final GeneratedColumn<bool> enabled = GeneratedColumn<bool>(
+    'enabled',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("enabled" IN (0, 1))',
+    ),
+    defaultValue: const Constant(true),
+  );
+  @override
+  List<GeneratedColumn> get $columns => [id, threadId, scheduledAt, enabled];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'reminder_intent_table';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<ReminderIntentRow> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('thread_id')) {
+      context.handle(
+        _threadIdMeta,
+        threadId.isAcceptableOrUnknown(data['thread_id']!, _threadIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_threadIdMeta);
+    }
+    if (data.containsKey('scheduled_at')) {
+      context.handle(
+        _scheduledAtMeta,
+        scheduledAt.isAcceptableOrUnknown(
+          data['scheduled_at']!,
+          _scheduledAtMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_scheduledAtMeta);
+    }
+    if (data.containsKey('enabled')) {
+      context.handle(
+        _enabledMeta,
+        enabled.isAcceptableOrUnknown(data['enabled']!, _enabledMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  List<Set<GeneratedColumn>> get uniqueKeys => [
+    {threadId},
+  ];
+  @override
+  ReminderIntentRow map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ReminderIntentRow(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      threadId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}thread_id'],
+      )!,
+      scheduledAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}scheduled_at'],
+      )!,
+      enabled: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}enabled'],
+      )!,
+    );
+  }
+
+  @override
+  $ReminderIntentTableTable createAlias(String alias) {
+    return $ReminderIntentTableTable(attachedDatabase, alias);
+  }
+}
+
+class ReminderIntentRow extends DataClass
+    implements Insertable<ReminderIntentRow> {
+  final String id;
+  final String threadId;
+  final String scheduledAt;
+  final bool enabled;
+  const ReminderIntentRow({
+    required this.id,
+    required this.threadId,
+    required this.scheduledAt,
+    required this.enabled,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['thread_id'] = Variable<String>(threadId);
+    map['scheduled_at'] = Variable<String>(scheduledAt);
+    map['enabled'] = Variable<bool>(enabled);
+    return map;
+  }
+
+  ReminderIntentTableCompanion toCompanion(bool nullToAbsent) {
+    return ReminderIntentTableCompanion(
+      id: Value(id),
+      threadId: Value(threadId),
+      scheduledAt: Value(scheduledAt),
+      enabled: Value(enabled),
+    );
+  }
+
+  factory ReminderIntentRow.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ReminderIntentRow(
+      id: serializer.fromJson<String>(json['id']),
+      threadId: serializer.fromJson<String>(json['threadId']),
+      scheduledAt: serializer.fromJson<String>(json['scheduledAt']),
+      enabled: serializer.fromJson<bool>(json['enabled']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'threadId': serializer.toJson<String>(threadId),
+      'scheduledAt': serializer.toJson<String>(scheduledAt),
+      'enabled': serializer.toJson<bool>(enabled),
+    };
+  }
+
+  ReminderIntentRow copyWith({
+    String? id,
+    String? threadId,
+    String? scheduledAt,
+    bool? enabled,
+  }) => ReminderIntentRow(
+    id: id ?? this.id,
+    threadId: threadId ?? this.threadId,
+    scheduledAt: scheduledAt ?? this.scheduledAt,
+    enabled: enabled ?? this.enabled,
+  );
+  ReminderIntentRow copyWithCompanion(ReminderIntentTableCompanion data) {
+    return ReminderIntentRow(
+      id: data.id.present ? data.id.value : this.id,
+      threadId: data.threadId.present ? data.threadId.value : this.threadId,
+      scheduledAt: data.scheduledAt.present
+          ? data.scheduledAt.value
+          : this.scheduledAt,
+      enabled: data.enabled.present ? data.enabled.value : this.enabled,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ReminderIntentRow(')
+          ..write('id: $id, ')
+          ..write('threadId: $threadId, ')
+          ..write('scheduledAt: $scheduledAt, ')
+          ..write('enabled: $enabled')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, threadId, scheduledAt, enabled);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ReminderIntentRow &&
+          other.id == this.id &&
+          other.threadId == this.threadId &&
+          other.scheduledAt == this.scheduledAt &&
+          other.enabled == this.enabled);
+}
+
+class ReminderIntentTableCompanion extends UpdateCompanion<ReminderIntentRow> {
+  final Value<String> id;
+  final Value<String> threadId;
+  final Value<String> scheduledAt;
+  final Value<bool> enabled;
+  final Value<int> rowid;
+  const ReminderIntentTableCompanion({
+    this.id = const Value.absent(),
+    this.threadId = const Value.absent(),
+    this.scheduledAt = const Value.absent(),
+    this.enabled = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  ReminderIntentTableCompanion.insert({
+    required String id,
+    required String threadId,
+    required String scheduledAt,
+    this.enabled = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       threadId = Value(threadId),
+       scheduledAt = Value(scheduledAt);
+  static Insertable<ReminderIntentRow> custom({
+    Expression<String>? id,
+    Expression<String>? threadId,
+    Expression<String>? scheduledAt,
+    Expression<bool>? enabled,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (threadId != null) 'thread_id': threadId,
+      if (scheduledAt != null) 'scheduled_at': scheduledAt,
+      if (enabled != null) 'enabled': enabled,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  ReminderIntentTableCompanion copyWith({
+    Value<String>? id,
+    Value<String>? threadId,
+    Value<String>? scheduledAt,
+    Value<bool>? enabled,
+    Value<int>? rowid,
+  }) {
+    return ReminderIntentTableCompanion(
+      id: id ?? this.id,
+      threadId: threadId ?? this.threadId,
+      scheduledAt: scheduledAt ?? this.scheduledAt,
+      enabled: enabled ?? this.enabled,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (threadId.present) {
+      map['thread_id'] = Variable<String>(threadId.value);
+    }
+    if (scheduledAt.present) {
+      map['scheduled_at'] = Variable<String>(scheduledAt.value);
+    }
+    if (enabled.present) {
+      map['enabled'] = Variable<bool>(enabled.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ReminderIntentTableCompanion(')
+          ..write('id: $id, ')
+          ..write('threadId: $threadId, ')
+          ..write('scheduledAt: $scheduledAt, ')
+          ..write('enabled: $enabled, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -3418,6 +6198,17 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       $UserFavoriteTableTable(this);
   late final $UserDailyActivityTableTable userDailyActivityTable =
       $UserDailyActivityTableTable(this);
+  late final $MemoryThreadTableTable memoryThreadTable =
+      $MemoryThreadTableTable(this);
+  late final $ReflectionEntryTableTable reflectionEntryTable =
+      $ReflectionEntryTableTable(this);
+  late final $ReadingAnchorTableTable readingAnchorTable =
+      $ReadingAnchorTableTable(this);
+  late final $ReturnEventTableTable returnEventTable = $ReturnEventTableTable(
+    this,
+  );
+  late final $ReminderIntentTableTable reminderIntentTable =
+      $ReminderIntentTableTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -3431,6 +6222,11 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     muhasabaEntryTable,
     userFavoriteTable,
     userDailyActivityTable,
+    memoryThreadTable,
+    reflectionEntryTable,
+    readingAnchorTable,
+    returnEventTable,
+    reminderIntentTable,
   ];
 }
 
@@ -4942,6 +7738,1211 @@ typedef $$UserDailyActivityTableTableProcessedTableManager =
       UserDailyActivity,
       PrefetchHooks Function()
     >;
+typedef $$MemoryThreadTableTableCreateCompanionBuilder =
+    MemoryThreadTableCompanion Function({
+      required String id,
+      required String sourceKind,
+      required String sourceCanonicalId,
+      required String sourceLabel,
+      Value<String?> sourceBook,
+      Value<String?> sourceCitation,
+      Value<String?> sourceVersion,
+      Value<String?> sourceSecondaryReference,
+      Value<String?> userContextKind,
+      Value<String?> userContextLabel,
+      Value<String?> userLabel,
+      Value<String> status,
+      Value<String> resurfacing,
+      Value<String?> legacyKey,
+      required String createdAt,
+      required String updatedAt,
+      Value<String?> lastReturnedAt,
+      Value<int> rowid,
+    });
+typedef $$MemoryThreadTableTableUpdateCompanionBuilder =
+    MemoryThreadTableCompanion Function({
+      Value<String> id,
+      Value<String> sourceKind,
+      Value<String> sourceCanonicalId,
+      Value<String> sourceLabel,
+      Value<String?> sourceBook,
+      Value<String?> sourceCitation,
+      Value<String?> sourceVersion,
+      Value<String?> sourceSecondaryReference,
+      Value<String?> userContextKind,
+      Value<String?> userContextLabel,
+      Value<String?> userLabel,
+      Value<String> status,
+      Value<String> resurfacing,
+      Value<String?> legacyKey,
+      Value<String> createdAt,
+      Value<String> updatedAt,
+      Value<String?> lastReturnedAt,
+      Value<int> rowid,
+    });
+
+class $$MemoryThreadTableTableFilterComposer
+    extends FilterComposer<_$AppDatabase, $MemoryThreadTableTable> {
+  $$MemoryThreadTableTableFilterComposer(super.$state);
+  ColumnFilters<String> get id => $state.composableBuilder(
+    column: $state.table.id,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<String> get sourceKind => $state.composableBuilder(
+    column: $state.table.sourceKind,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<String> get sourceCanonicalId => $state.composableBuilder(
+    column: $state.table.sourceCanonicalId,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<String> get sourceLabel => $state.composableBuilder(
+    column: $state.table.sourceLabel,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<String> get sourceBook => $state.composableBuilder(
+    column: $state.table.sourceBook,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<String> get sourceCitation => $state.composableBuilder(
+    column: $state.table.sourceCitation,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<String> get sourceVersion => $state.composableBuilder(
+    column: $state.table.sourceVersion,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<String> get sourceSecondaryReference =>
+      $state.composableBuilder(
+        column: $state.table.sourceSecondaryReference,
+        builder: (column, joinBuilders) =>
+            ColumnFilters(column, joinBuilders: joinBuilders),
+      );
+
+  ColumnFilters<String> get userContextKind => $state.composableBuilder(
+    column: $state.table.userContextKind,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<String> get userContextLabel => $state.composableBuilder(
+    column: $state.table.userContextLabel,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<String> get userLabel => $state.composableBuilder(
+    column: $state.table.userLabel,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<String> get status => $state.composableBuilder(
+    column: $state.table.status,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<String> get resurfacing => $state.composableBuilder(
+    column: $state.table.resurfacing,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<String> get legacyKey => $state.composableBuilder(
+    column: $state.table.legacyKey,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<String> get createdAt => $state.composableBuilder(
+    column: $state.table.createdAt,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<String> get updatedAt => $state.composableBuilder(
+    column: $state.table.updatedAt,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<String> get lastReturnedAt => $state.composableBuilder(
+    column: $state.table.lastReturnedAt,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+}
+
+class $$MemoryThreadTableTableOrderingComposer
+    extends OrderingComposer<_$AppDatabase, $MemoryThreadTableTable> {
+  $$MemoryThreadTableTableOrderingComposer(super.$state);
+  ColumnOrderings<String> get id => $state.composableBuilder(
+    column: $state.table.id,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<String> get sourceKind => $state.composableBuilder(
+    column: $state.table.sourceKind,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<String> get sourceCanonicalId => $state.composableBuilder(
+    column: $state.table.sourceCanonicalId,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<String> get sourceLabel => $state.composableBuilder(
+    column: $state.table.sourceLabel,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<String> get sourceBook => $state.composableBuilder(
+    column: $state.table.sourceBook,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<String> get sourceCitation => $state.composableBuilder(
+    column: $state.table.sourceCitation,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<String> get sourceVersion => $state.composableBuilder(
+    column: $state.table.sourceVersion,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<String> get sourceSecondaryReference =>
+      $state.composableBuilder(
+        column: $state.table.sourceSecondaryReference,
+        builder: (column, joinBuilders) =>
+            ColumnOrderings(column, joinBuilders: joinBuilders),
+      );
+
+  ColumnOrderings<String> get userContextKind => $state.composableBuilder(
+    column: $state.table.userContextKind,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<String> get userContextLabel => $state.composableBuilder(
+    column: $state.table.userContextLabel,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<String> get userLabel => $state.composableBuilder(
+    column: $state.table.userLabel,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<String> get status => $state.composableBuilder(
+    column: $state.table.status,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<String> get resurfacing => $state.composableBuilder(
+    column: $state.table.resurfacing,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<String> get legacyKey => $state.composableBuilder(
+    column: $state.table.legacyKey,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<String> get createdAt => $state.composableBuilder(
+    column: $state.table.createdAt,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<String> get updatedAt => $state.composableBuilder(
+    column: $state.table.updatedAt,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<String> get lastReturnedAt => $state.composableBuilder(
+    column: $state.table.lastReturnedAt,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+}
+
+class $$MemoryThreadTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $MemoryThreadTableTable,
+          MemoryThreadRow,
+          $$MemoryThreadTableTableFilterComposer,
+          $$MemoryThreadTableTableOrderingComposer,
+          $$MemoryThreadTableTableCreateCompanionBuilder,
+          $$MemoryThreadTableTableUpdateCompanionBuilder,
+          (
+            MemoryThreadRow,
+            BaseReferences<
+              _$AppDatabase,
+              $MemoryThreadTableTable,
+              MemoryThreadRow
+            >,
+          ),
+          MemoryThreadRow,
+          PrefetchHooks Function()
+        > {
+  $$MemoryThreadTableTableTableManager(
+    _$AppDatabase db,
+    $MemoryThreadTableTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer: $$MemoryThreadTableTableFilterComposer(
+            ComposerState(db, table),
+          ),
+          orderingComposer: $$MemoryThreadTableTableOrderingComposer(
+            ComposerState(db, table),
+          ),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> sourceKind = const Value.absent(),
+                Value<String> sourceCanonicalId = const Value.absent(),
+                Value<String> sourceLabel = const Value.absent(),
+                Value<String?> sourceBook = const Value.absent(),
+                Value<String?> sourceCitation = const Value.absent(),
+                Value<String?> sourceVersion = const Value.absent(),
+                Value<String?> sourceSecondaryReference = const Value.absent(),
+                Value<String?> userContextKind = const Value.absent(),
+                Value<String?> userContextLabel = const Value.absent(),
+                Value<String?> userLabel = const Value.absent(),
+                Value<String> status = const Value.absent(),
+                Value<String> resurfacing = const Value.absent(),
+                Value<String?> legacyKey = const Value.absent(),
+                Value<String> createdAt = const Value.absent(),
+                Value<String> updatedAt = const Value.absent(),
+                Value<String?> lastReturnedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => MemoryThreadTableCompanion(
+                id: id,
+                sourceKind: sourceKind,
+                sourceCanonicalId: sourceCanonicalId,
+                sourceLabel: sourceLabel,
+                sourceBook: sourceBook,
+                sourceCitation: sourceCitation,
+                sourceVersion: sourceVersion,
+                sourceSecondaryReference: sourceSecondaryReference,
+                userContextKind: userContextKind,
+                userContextLabel: userContextLabel,
+                userLabel: userLabel,
+                status: status,
+                resurfacing: resurfacing,
+                legacyKey: legacyKey,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                lastReturnedAt: lastReturnedAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String sourceKind,
+                required String sourceCanonicalId,
+                required String sourceLabel,
+                Value<String?> sourceBook = const Value.absent(),
+                Value<String?> sourceCitation = const Value.absent(),
+                Value<String?> sourceVersion = const Value.absent(),
+                Value<String?> sourceSecondaryReference = const Value.absent(),
+                Value<String?> userContextKind = const Value.absent(),
+                Value<String?> userContextLabel = const Value.absent(),
+                Value<String?> userLabel = const Value.absent(),
+                Value<String> status = const Value.absent(),
+                Value<String> resurfacing = const Value.absent(),
+                Value<String?> legacyKey = const Value.absent(),
+                required String createdAt,
+                required String updatedAt,
+                Value<String?> lastReturnedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => MemoryThreadTableCompanion.insert(
+                id: id,
+                sourceKind: sourceKind,
+                sourceCanonicalId: sourceCanonicalId,
+                sourceLabel: sourceLabel,
+                sourceBook: sourceBook,
+                sourceCitation: sourceCitation,
+                sourceVersion: sourceVersion,
+                sourceSecondaryReference: sourceSecondaryReference,
+                userContextKind: userContextKind,
+                userContextLabel: userContextLabel,
+                userLabel: userLabel,
+                status: status,
+                resurfacing: resurfacing,
+                legacyKey: legacyKey,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                lastReturnedAt: lastReturnedAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$MemoryThreadTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $MemoryThreadTableTable,
+      MemoryThreadRow,
+      $$MemoryThreadTableTableFilterComposer,
+      $$MemoryThreadTableTableOrderingComposer,
+      $$MemoryThreadTableTableCreateCompanionBuilder,
+      $$MemoryThreadTableTableUpdateCompanionBuilder,
+      (
+        MemoryThreadRow,
+        BaseReferences<_$AppDatabase, $MemoryThreadTableTable, MemoryThreadRow>,
+      ),
+      MemoryThreadRow,
+      PrefetchHooks Function()
+    >;
+typedef $$ReflectionEntryTableTableCreateCompanionBuilder =
+    ReflectionEntryTableCompanion Function({
+      required String id,
+      required String threadId,
+      required String body,
+      required String createdAt,
+      required String updatedAt,
+      Value<String?> deletedAt,
+      Value<int> rowid,
+    });
+typedef $$ReflectionEntryTableTableUpdateCompanionBuilder =
+    ReflectionEntryTableCompanion Function({
+      Value<String> id,
+      Value<String> threadId,
+      Value<String> body,
+      Value<String> createdAt,
+      Value<String> updatedAt,
+      Value<String?> deletedAt,
+      Value<int> rowid,
+    });
+
+class $$ReflectionEntryTableTableFilterComposer
+    extends FilterComposer<_$AppDatabase, $ReflectionEntryTableTable> {
+  $$ReflectionEntryTableTableFilterComposer(super.$state);
+  ColumnFilters<String> get id => $state.composableBuilder(
+    column: $state.table.id,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<String> get threadId => $state.composableBuilder(
+    column: $state.table.threadId,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<String> get body => $state.composableBuilder(
+    column: $state.table.body,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<String> get createdAt => $state.composableBuilder(
+    column: $state.table.createdAt,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<String> get updatedAt => $state.composableBuilder(
+    column: $state.table.updatedAt,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<String> get deletedAt => $state.composableBuilder(
+    column: $state.table.deletedAt,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+}
+
+class $$ReflectionEntryTableTableOrderingComposer
+    extends OrderingComposer<_$AppDatabase, $ReflectionEntryTableTable> {
+  $$ReflectionEntryTableTableOrderingComposer(super.$state);
+  ColumnOrderings<String> get id => $state.composableBuilder(
+    column: $state.table.id,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<String> get threadId => $state.composableBuilder(
+    column: $state.table.threadId,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<String> get body => $state.composableBuilder(
+    column: $state.table.body,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<String> get createdAt => $state.composableBuilder(
+    column: $state.table.createdAt,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<String> get updatedAt => $state.composableBuilder(
+    column: $state.table.updatedAt,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<String> get deletedAt => $state.composableBuilder(
+    column: $state.table.deletedAt,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+}
+
+class $$ReflectionEntryTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $ReflectionEntryTableTable,
+          ReflectionEntryRow,
+          $$ReflectionEntryTableTableFilterComposer,
+          $$ReflectionEntryTableTableOrderingComposer,
+          $$ReflectionEntryTableTableCreateCompanionBuilder,
+          $$ReflectionEntryTableTableUpdateCompanionBuilder,
+          (
+            ReflectionEntryRow,
+            BaseReferences<
+              _$AppDatabase,
+              $ReflectionEntryTableTable,
+              ReflectionEntryRow
+            >,
+          ),
+          ReflectionEntryRow,
+          PrefetchHooks Function()
+        > {
+  $$ReflectionEntryTableTableTableManager(
+    _$AppDatabase db,
+    $ReflectionEntryTableTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer: $$ReflectionEntryTableTableFilterComposer(
+            ComposerState(db, table),
+          ),
+          orderingComposer: $$ReflectionEntryTableTableOrderingComposer(
+            ComposerState(db, table),
+          ),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> threadId = const Value.absent(),
+                Value<String> body = const Value.absent(),
+                Value<String> createdAt = const Value.absent(),
+                Value<String> updatedAt = const Value.absent(),
+                Value<String?> deletedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => ReflectionEntryTableCompanion(
+                id: id,
+                threadId: threadId,
+                body: body,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                deletedAt: deletedAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String threadId,
+                required String body,
+                required String createdAt,
+                required String updatedAt,
+                Value<String?> deletedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => ReflectionEntryTableCompanion.insert(
+                id: id,
+                threadId: threadId,
+                body: body,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                deletedAt: deletedAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$ReflectionEntryTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $ReflectionEntryTableTable,
+      ReflectionEntryRow,
+      $$ReflectionEntryTableTableFilterComposer,
+      $$ReflectionEntryTableTableOrderingComposer,
+      $$ReflectionEntryTableTableCreateCompanionBuilder,
+      $$ReflectionEntryTableTableUpdateCompanionBuilder,
+      (
+        ReflectionEntryRow,
+        BaseReferences<
+          _$AppDatabase,
+          $ReflectionEntryTableTable,
+          ReflectionEntryRow
+        >,
+      ),
+      ReflectionEntryRow,
+      PrefetchHooks Function()
+    >;
+typedef $$ReadingAnchorTableTableCreateCompanionBuilder =
+    ReadingAnchorTableCompanion Function({
+      required String id,
+      Value<String?> threadId,
+      required String sourceCanonicalId,
+      Value<int?> surahNumber,
+      Value<int?> ayahNumber,
+      Value<int?> pageNumber,
+      Value<int?> itemIndex,
+      Value<double?> scrollOffset,
+      required String updatedAt,
+      Value<int> rowid,
+    });
+typedef $$ReadingAnchorTableTableUpdateCompanionBuilder =
+    ReadingAnchorTableCompanion Function({
+      Value<String> id,
+      Value<String?> threadId,
+      Value<String> sourceCanonicalId,
+      Value<int?> surahNumber,
+      Value<int?> ayahNumber,
+      Value<int?> pageNumber,
+      Value<int?> itemIndex,
+      Value<double?> scrollOffset,
+      Value<String> updatedAt,
+      Value<int> rowid,
+    });
+
+class $$ReadingAnchorTableTableFilterComposer
+    extends FilterComposer<_$AppDatabase, $ReadingAnchorTableTable> {
+  $$ReadingAnchorTableTableFilterComposer(super.$state);
+  ColumnFilters<String> get id => $state.composableBuilder(
+    column: $state.table.id,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<String> get threadId => $state.composableBuilder(
+    column: $state.table.threadId,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<String> get sourceCanonicalId => $state.composableBuilder(
+    column: $state.table.sourceCanonicalId,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<int> get surahNumber => $state.composableBuilder(
+    column: $state.table.surahNumber,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<int> get ayahNumber => $state.composableBuilder(
+    column: $state.table.ayahNumber,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<int> get pageNumber => $state.composableBuilder(
+    column: $state.table.pageNumber,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<int> get itemIndex => $state.composableBuilder(
+    column: $state.table.itemIndex,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<double> get scrollOffset => $state.composableBuilder(
+    column: $state.table.scrollOffset,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<String> get updatedAt => $state.composableBuilder(
+    column: $state.table.updatedAt,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+}
+
+class $$ReadingAnchorTableTableOrderingComposer
+    extends OrderingComposer<_$AppDatabase, $ReadingAnchorTableTable> {
+  $$ReadingAnchorTableTableOrderingComposer(super.$state);
+  ColumnOrderings<String> get id => $state.composableBuilder(
+    column: $state.table.id,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<String> get threadId => $state.composableBuilder(
+    column: $state.table.threadId,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<String> get sourceCanonicalId => $state.composableBuilder(
+    column: $state.table.sourceCanonicalId,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<int> get surahNumber => $state.composableBuilder(
+    column: $state.table.surahNumber,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<int> get ayahNumber => $state.composableBuilder(
+    column: $state.table.ayahNumber,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<int> get pageNumber => $state.composableBuilder(
+    column: $state.table.pageNumber,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<int> get itemIndex => $state.composableBuilder(
+    column: $state.table.itemIndex,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<double> get scrollOffset => $state.composableBuilder(
+    column: $state.table.scrollOffset,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<String> get updatedAt => $state.composableBuilder(
+    column: $state.table.updatedAt,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+}
+
+class $$ReadingAnchorTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $ReadingAnchorTableTable,
+          ReadingAnchorRow,
+          $$ReadingAnchorTableTableFilterComposer,
+          $$ReadingAnchorTableTableOrderingComposer,
+          $$ReadingAnchorTableTableCreateCompanionBuilder,
+          $$ReadingAnchorTableTableUpdateCompanionBuilder,
+          (
+            ReadingAnchorRow,
+            BaseReferences<
+              _$AppDatabase,
+              $ReadingAnchorTableTable,
+              ReadingAnchorRow
+            >,
+          ),
+          ReadingAnchorRow,
+          PrefetchHooks Function()
+        > {
+  $$ReadingAnchorTableTableTableManager(
+    _$AppDatabase db,
+    $ReadingAnchorTableTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer: $$ReadingAnchorTableTableFilterComposer(
+            ComposerState(db, table),
+          ),
+          orderingComposer: $$ReadingAnchorTableTableOrderingComposer(
+            ComposerState(db, table),
+          ),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String?> threadId = const Value.absent(),
+                Value<String> sourceCanonicalId = const Value.absent(),
+                Value<int?> surahNumber = const Value.absent(),
+                Value<int?> ayahNumber = const Value.absent(),
+                Value<int?> pageNumber = const Value.absent(),
+                Value<int?> itemIndex = const Value.absent(),
+                Value<double?> scrollOffset = const Value.absent(),
+                Value<String> updatedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => ReadingAnchorTableCompanion(
+                id: id,
+                threadId: threadId,
+                sourceCanonicalId: sourceCanonicalId,
+                surahNumber: surahNumber,
+                ayahNumber: ayahNumber,
+                pageNumber: pageNumber,
+                itemIndex: itemIndex,
+                scrollOffset: scrollOffset,
+                updatedAt: updatedAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                Value<String?> threadId = const Value.absent(),
+                required String sourceCanonicalId,
+                Value<int?> surahNumber = const Value.absent(),
+                Value<int?> ayahNumber = const Value.absent(),
+                Value<int?> pageNumber = const Value.absent(),
+                Value<int?> itemIndex = const Value.absent(),
+                Value<double?> scrollOffset = const Value.absent(),
+                required String updatedAt,
+                Value<int> rowid = const Value.absent(),
+              }) => ReadingAnchorTableCompanion.insert(
+                id: id,
+                threadId: threadId,
+                sourceCanonicalId: sourceCanonicalId,
+                surahNumber: surahNumber,
+                ayahNumber: ayahNumber,
+                pageNumber: pageNumber,
+                itemIndex: itemIndex,
+                scrollOffset: scrollOffset,
+                updatedAt: updatedAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$ReadingAnchorTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $ReadingAnchorTableTable,
+      ReadingAnchorRow,
+      $$ReadingAnchorTableTableFilterComposer,
+      $$ReadingAnchorTableTableOrderingComposer,
+      $$ReadingAnchorTableTableCreateCompanionBuilder,
+      $$ReadingAnchorTableTableUpdateCompanionBuilder,
+      (
+        ReadingAnchorRow,
+        BaseReferences<
+          _$AppDatabase,
+          $ReadingAnchorTableTable,
+          ReadingAnchorRow
+        >,
+      ),
+      ReadingAnchorRow,
+      PrefetchHooks Function()
+    >;
+typedef $$ReturnEventTableTableCreateCompanionBuilder =
+    ReturnEventTableCompanion Function({
+      required String id,
+      required String threadId,
+      required String kind,
+      required String occurredAt,
+      Value<int?> durationSeconds,
+      Value<String?> reflectionId,
+      Value<int> rowid,
+    });
+typedef $$ReturnEventTableTableUpdateCompanionBuilder =
+    ReturnEventTableCompanion Function({
+      Value<String> id,
+      Value<String> threadId,
+      Value<String> kind,
+      Value<String> occurredAt,
+      Value<int?> durationSeconds,
+      Value<String?> reflectionId,
+      Value<int> rowid,
+    });
+
+class $$ReturnEventTableTableFilterComposer
+    extends FilterComposer<_$AppDatabase, $ReturnEventTableTable> {
+  $$ReturnEventTableTableFilterComposer(super.$state);
+  ColumnFilters<String> get id => $state.composableBuilder(
+    column: $state.table.id,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<String> get threadId => $state.composableBuilder(
+    column: $state.table.threadId,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<String> get kind => $state.composableBuilder(
+    column: $state.table.kind,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<String> get occurredAt => $state.composableBuilder(
+    column: $state.table.occurredAt,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<int> get durationSeconds => $state.composableBuilder(
+    column: $state.table.durationSeconds,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<String> get reflectionId => $state.composableBuilder(
+    column: $state.table.reflectionId,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+}
+
+class $$ReturnEventTableTableOrderingComposer
+    extends OrderingComposer<_$AppDatabase, $ReturnEventTableTable> {
+  $$ReturnEventTableTableOrderingComposer(super.$state);
+  ColumnOrderings<String> get id => $state.composableBuilder(
+    column: $state.table.id,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<String> get threadId => $state.composableBuilder(
+    column: $state.table.threadId,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<String> get kind => $state.composableBuilder(
+    column: $state.table.kind,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<String> get occurredAt => $state.composableBuilder(
+    column: $state.table.occurredAt,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<int> get durationSeconds => $state.composableBuilder(
+    column: $state.table.durationSeconds,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<String> get reflectionId => $state.composableBuilder(
+    column: $state.table.reflectionId,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+}
+
+class $$ReturnEventTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $ReturnEventTableTable,
+          ReturnEventRow,
+          $$ReturnEventTableTableFilterComposer,
+          $$ReturnEventTableTableOrderingComposer,
+          $$ReturnEventTableTableCreateCompanionBuilder,
+          $$ReturnEventTableTableUpdateCompanionBuilder,
+          (
+            ReturnEventRow,
+            BaseReferences<
+              _$AppDatabase,
+              $ReturnEventTableTable,
+              ReturnEventRow
+            >,
+          ),
+          ReturnEventRow,
+          PrefetchHooks Function()
+        > {
+  $$ReturnEventTableTableTableManager(
+    _$AppDatabase db,
+    $ReturnEventTableTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer: $$ReturnEventTableTableFilterComposer(
+            ComposerState(db, table),
+          ),
+          orderingComposer: $$ReturnEventTableTableOrderingComposer(
+            ComposerState(db, table),
+          ),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> threadId = const Value.absent(),
+                Value<String> kind = const Value.absent(),
+                Value<String> occurredAt = const Value.absent(),
+                Value<int?> durationSeconds = const Value.absent(),
+                Value<String?> reflectionId = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => ReturnEventTableCompanion(
+                id: id,
+                threadId: threadId,
+                kind: kind,
+                occurredAt: occurredAt,
+                durationSeconds: durationSeconds,
+                reflectionId: reflectionId,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String threadId,
+                required String kind,
+                required String occurredAt,
+                Value<int?> durationSeconds = const Value.absent(),
+                Value<String?> reflectionId = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => ReturnEventTableCompanion.insert(
+                id: id,
+                threadId: threadId,
+                kind: kind,
+                occurredAt: occurredAt,
+                durationSeconds: durationSeconds,
+                reflectionId: reflectionId,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$ReturnEventTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $ReturnEventTableTable,
+      ReturnEventRow,
+      $$ReturnEventTableTableFilterComposer,
+      $$ReturnEventTableTableOrderingComposer,
+      $$ReturnEventTableTableCreateCompanionBuilder,
+      $$ReturnEventTableTableUpdateCompanionBuilder,
+      (
+        ReturnEventRow,
+        BaseReferences<_$AppDatabase, $ReturnEventTableTable, ReturnEventRow>,
+      ),
+      ReturnEventRow,
+      PrefetchHooks Function()
+    >;
+typedef $$ReminderIntentTableTableCreateCompanionBuilder =
+    ReminderIntentTableCompanion Function({
+      required String id,
+      required String threadId,
+      required String scheduledAt,
+      Value<bool> enabled,
+      Value<int> rowid,
+    });
+typedef $$ReminderIntentTableTableUpdateCompanionBuilder =
+    ReminderIntentTableCompanion Function({
+      Value<String> id,
+      Value<String> threadId,
+      Value<String> scheduledAt,
+      Value<bool> enabled,
+      Value<int> rowid,
+    });
+
+class $$ReminderIntentTableTableFilterComposer
+    extends FilterComposer<_$AppDatabase, $ReminderIntentTableTable> {
+  $$ReminderIntentTableTableFilterComposer(super.$state);
+  ColumnFilters<String> get id => $state.composableBuilder(
+    column: $state.table.id,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<String> get threadId => $state.composableBuilder(
+    column: $state.table.threadId,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<String> get scheduledAt => $state.composableBuilder(
+    column: $state.table.scheduledAt,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnFilters<bool> get enabled => $state.composableBuilder(
+    column: $state.table.enabled,
+    builder: (column, joinBuilders) =>
+        ColumnFilters(column, joinBuilders: joinBuilders),
+  );
+}
+
+class $$ReminderIntentTableTableOrderingComposer
+    extends OrderingComposer<_$AppDatabase, $ReminderIntentTableTable> {
+  $$ReminderIntentTableTableOrderingComposer(super.$state);
+  ColumnOrderings<String> get id => $state.composableBuilder(
+    column: $state.table.id,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<String> get threadId => $state.composableBuilder(
+    column: $state.table.threadId,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<String> get scheduledAt => $state.composableBuilder(
+    column: $state.table.scheduledAt,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+
+  ColumnOrderings<bool> get enabled => $state.composableBuilder(
+    column: $state.table.enabled,
+    builder: (column, joinBuilders) =>
+        ColumnOrderings(column, joinBuilders: joinBuilders),
+  );
+}
+
+class $$ReminderIntentTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $ReminderIntentTableTable,
+          ReminderIntentRow,
+          $$ReminderIntentTableTableFilterComposer,
+          $$ReminderIntentTableTableOrderingComposer,
+          $$ReminderIntentTableTableCreateCompanionBuilder,
+          $$ReminderIntentTableTableUpdateCompanionBuilder,
+          (
+            ReminderIntentRow,
+            BaseReferences<
+              _$AppDatabase,
+              $ReminderIntentTableTable,
+              ReminderIntentRow
+            >,
+          ),
+          ReminderIntentRow,
+          PrefetchHooks Function()
+        > {
+  $$ReminderIntentTableTableTableManager(
+    _$AppDatabase db,
+    $ReminderIntentTableTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer: $$ReminderIntentTableTableFilterComposer(
+            ComposerState(db, table),
+          ),
+          orderingComposer: $$ReminderIntentTableTableOrderingComposer(
+            ComposerState(db, table),
+          ),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> threadId = const Value.absent(),
+                Value<String> scheduledAt = const Value.absent(),
+                Value<bool> enabled = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => ReminderIntentTableCompanion(
+                id: id,
+                threadId: threadId,
+                scheduledAt: scheduledAt,
+                enabled: enabled,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String threadId,
+                required String scheduledAt,
+                Value<bool> enabled = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => ReminderIntentTableCompanion.insert(
+                id: id,
+                threadId: threadId,
+                scheduledAt: scheduledAt,
+                enabled: enabled,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$ReminderIntentTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $ReminderIntentTableTable,
+      ReminderIntentRow,
+      $$ReminderIntentTableTableFilterComposer,
+      $$ReminderIntentTableTableOrderingComposer,
+      $$ReminderIntentTableTableCreateCompanionBuilder,
+      $$ReminderIntentTableTableUpdateCompanionBuilder,
+      (
+        ReminderIntentRow,
+        BaseReferences<
+          _$AppDatabase,
+          $ReminderIntentTableTable,
+          ReminderIntentRow
+        >,
+      ),
+      ReminderIntentRow,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -4965,4 +8966,14 @@ class $AppDatabaseManager {
         _db,
         _db.userDailyActivityTable,
       );
+  $$MemoryThreadTableTableTableManager get memoryThreadTable =>
+      $$MemoryThreadTableTableTableManager(_db, _db.memoryThreadTable);
+  $$ReflectionEntryTableTableTableManager get reflectionEntryTable =>
+      $$ReflectionEntryTableTableTableManager(_db, _db.reflectionEntryTable);
+  $$ReadingAnchorTableTableTableManager get readingAnchorTable =>
+      $$ReadingAnchorTableTableTableManager(_db, _db.readingAnchorTable);
+  $$ReturnEventTableTableTableManager get returnEventTable =>
+      $$ReturnEventTableTableTableManager(_db, _db.returnEventTable);
+  $$ReminderIntentTableTableTableManager get reminderIntentTable =>
+      $$ReminderIntentTableTableTableManager(_db, _db.reminderIntentTable);
 }

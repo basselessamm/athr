@@ -58,23 +58,3 @@ final themeModeProvider = StateNotifierProvider<ThemeModeNotifier, ThemeMode>((
   final prefs = ref.watch(sharedPreferencesProvider);
   return ThemeModeNotifier(prefs);
 });
-
-// Notifications Enabled StateNotifier
-class NotificationsEnabledNotifier extends StateNotifier<bool> {
-  final SharedPreferences _prefs;
-  static const _key = 'notifications_enabled';
-
-  NotificationsEnabledNotifier(this._prefs)
-    : super(_prefs.getBool(_key) ?? false);
-
-  void setEnabled(bool enabled) {
-    state = enabled;
-    _prefs.setBool(_key, enabled);
-  }
-}
-
-final notificationsEnabledProvider =
-    StateNotifierProvider<NotificationsEnabledNotifier, bool>((ref) {
-      final prefs = ref.watch(sharedPreferencesProvider);
-      return NotificationsEnabledNotifier(prefs);
-    });

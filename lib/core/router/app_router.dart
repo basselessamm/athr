@@ -2,6 +2,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:athr/features/splash/splash_screen.dart';
 import 'package:athr/features/home/presentation/home_screen.dart';
+import 'package:athr/features/prayer/application/prayer_times.dart';
+import 'package:athr/features/prayer/presentation/prayer_times_screen.dart';
 import 'package:athr/features/quran/presentation/quran_list_screen.dart';
 import 'package:athr/features/quran/presentation/quran_reading_screen.dart';
 import 'package:athr/features/azkar/presentation/azkar_categories_screen.dart';
@@ -11,19 +13,34 @@ import 'package:athr/features/hadith/presentation/hadith_reading_screen.dart';
 import 'package:athr/features/settings/presentation/settings_screen.dart';
 import 'package:athr/features/situations/presentation/situations_grid_screen.dart';
 import 'package:athr/features/situations/presentation/situations_detail_screen.dart';
-import 'package:athr/features/challenges/presentation/challenges_list_screen.dart';
 import 'package:athr/features/favorites/presentation/favorites_screen.dart';
 import 'package:athr/features/muhasaba/presentation/muhasaba_screen.dart';
-import 'package:athr/features/progress/presentation/progress_screen.dart';
+import 'package:athr/features/memory_return/presentation/thread_detail_screen.dart';
 import 'package:athr/features/search/presentation/search_screen.dart';
 import 'package:athr/core/router/error_screen.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
-    initialLocation: '/splash',
+    // Android LaunchTheme covers native process startup. Going directly to Home
+    // prevents a second Flutter splash animation from delaying first use.
+    initialLocation: '/',
     errorBuilder: (context, state) => ErrorScreen(error: state.error),
     routes: [
       GoRoute(path: '/', builder: (context, state) => const HomeScreen()),
+      GoRoute(
+        path: '/prayer',
+        builder: (context, state) {
+          final requested = state.uri.queryParameters['prayer'];
+          PrayerName? highlightedPrayer;
+          for (final prayer in PrayerName.values) {
+            if (prayer.name == requested) {
+              highlightedPrayer = prayer;
+              break;
+            }
+          }
+          return PrayerTimesScreen(highlightedPrayer: highlightedPrayer);
+        },
+      ),
       GoRoute(
         path: '/splash',
         builder: (context, state) => const SplashScreen(),
@@ -36,7 +53,8 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/quran/:surahId',
         builder: (context, state) {
           final surahId = int.parse(state.pathParameters['surahId']!);
-          return QuranReadingScreen(surahNumber: surahId);
+          final ayah = int.tryParse(state.uri.queryParameters['ayah'] ?? '');
+          return QuranReadingScreen(surahNumber: surahId, focusAyah: ayah);
         },
       ),
       GoRoute(
@@ -48,7 +66,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/azkar/:category',
         builder: (context, state) {
           final category = state.pathParameters['category'] ?? '';
-          return AzkarReadingScreen(category: category);
+          final itemId = int.tryParse(
+            state.uri.queryParameters['itemId'] ?? '',
+          );
+          return AzkarReadingScreen(category: category, focusItemId: itemId);
         },
       ),
       GoRoute(
@@ -60,7 +81,21 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/hadith/:bookName',
         builder: (context, state) {
           final bookName = state.pathParameters['bookName'] ?? '';
-          return HadithReadingScreen(bookName: bookName);
+          final hadithId = int.tryParse(
+            state.uri.queryParameters['hadithId'] ?? '',
+          );
+          return HadithReadingScreen(
+            bookName: bookName,
+            focusHadithId: hadithId,
+          );
+        },
+      ),
+      GoRoute(
+        path: '/memory/:threadId',
+        builder: (context, state) {
+          return ThreadDetailScreen(
+            threadId: state.pathParameters['threadId']!,
+          );
         },
       ),
       GoRoute(
@@ -70,10 +105,6 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/favorites',
         builder: (context, state) => const FavoritesScreen(),
-      ),
-      GoRoute(
-        path: '/progress',
-        builder: (context, state) => const ProgressScreen(),
       ),
       GoRoute(
         path: '/muhasaba',
@@ -89,10 +120,6 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           final id = state.pathParameters['id']!;
           return SituationDetailScreen(id: id);
         },
-      ),
-      GoRoute(
-        path: '/challenges',
-        builder: (context, state) => const ChallengesListScreen(),
       ),
       GoRoute(
         path: '/search',

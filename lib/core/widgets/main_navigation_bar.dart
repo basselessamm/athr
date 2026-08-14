@@ -11,9 +11,9 @@ class MainNavigationBar extends StatelessWidget {
     return SafeArea(
       minimum: const EdgeInsets.fromLTRB(16, 0, 16, 16),
       child: NavigationBar(
-        height: 68,
+        height: 76,
         selectedIndex: selectedIndex,
-        labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
+        labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
         onDestinationSelected: (index) {
           if (index == selectedIndex) {
             return;

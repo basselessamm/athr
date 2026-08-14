@@ -2,9 +2,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:athr/core/database/app_database.dart';
 
 import 'package:athr/core/database/database_providers.dart';
+import 'package:athr/core/database/seeder/database_seed_providers.dart';
 
 // Fetch distinct categories
 final azkarCategoriesProvider = FutureProvider<List<String>>((ref) async {
+  await ref.watch(azkarSeedProvider.future);
   final db = ref.watch(appDatabaseProvider);
   final query = db.selectOnly(db.duaTable, distinct: true)
     ..addColumns([db.duaTable.category]);
@@ -18,6 +20,7 @@ final azkarByCategoryProvider = FutureProvider.family<List<Dua>, String>((
   ref,
   category,
 ) async {
+  await ref.watch(azkarSeedProvider.future);
   final db = ref.watch(appDatabaseProvider);
   final result = await (db.select(
     db.duaTable,

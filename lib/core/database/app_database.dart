@@ -15,6 +15,12 @@ import 'tables/daily_task_table.dart';
 import 'tables/muhasaba_entry_table.dart';
 import 'tables/user_daily_activity_table.dart';
 import 'tables/user_favorite_table.dart';
+import 'tables/memory_thread_table.dart';
+import 'tables/reflection_entry_table.dart';
+import 'tables/reading_anchor_table.dart';
+import 'tables/return_event_table.dart';
+import 'tables/reminder_intent_table.dart';
+import 'package:athr/core/memory/migration/legacy_memory_migration.dart';
 
 part 'app_database.g.dart';
 
@@ -28,6 +34,11 @@ part 'app_database.g.dart';
     MuhasabaEntryTable,
     UserFavoriteTable,
     UserDailyActivityTable,
+    MemoryThreadTable,
+    ReflectionEntryTable,
+    ReadingAnchorTable,
+    ReturnEventTable,
+    ReminderIntentTable,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -35,7 +46,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase.forTesting(super.executor);
 
   @override
-  int get schemaVersion => 4;
+  int get schemaVersion => 6;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -61,6 +72,16 @@ class AppDatabase extends _$AppDatabase {
           "UPDATE hadith_table SET book_name = 'صحيح مسلم' WHERE book_name = 'Sahih Muslim'",
         );
       }
+      if (from < 5) {
+        await m.createTable(memoryThreadTable);
+        await m.createTable(reflectionEntryTable);
+        await m.createTable(readingAnchorTable);
+        await m.createTable(returnEventTable);
+        await _migrateLegacyFavorites();
+      }
+      if (from < 6) {
+        await m.createTable(reminderIntentTable);
+      }
     },
     beforeOpen: (details) async {
       await customStatement(
@@ -77,6 +98,21 @@ class AppDatabase extends _$AppDatabase {
       );
       await customStatement(
         'CREATE INDEX IF NOT EXISTS idx_muhasaba_date ON muhasaba_entry_table (activity_date)',
+      );
+      await customStatement(
+        'CREATE INDEX IF NOT EXISTS idx_memory_thread_status_updated ON memory_thread_table (status, updated_at)',
+      );
+      await customStatement(
+        'CREATE INDEX IF NOT EXISTS idx_reflection_thread_created ON reflection_entry_table (thread_id, created_at)',
+      );
+      await customStatement(
+        'CREATE INDEX IF NOT EXISTS idx_reading_anchor_thread ON reading_anchor_table (thread_id)',
+      );
+      await customStatement(
+        'CREATE INDEX IF NOT EXISTS idx_return_event_thread_occurred ON return_event_table (thread_id, occurred_at)',
+      );
+      await customStatement(
+        'CREATE INDEX IF NOT EXISTS idx_reminder_intent_scheduled ON reminder_intent_table (enabled, scheduled_at)',
       );
     },
   );
@@ -289,6 +325,59 @@ class AppDatabase extends _$AppDatabase {
       'SELECT COUNT(*) AS count FROM $tableName',
     ).getSingle();
     return row.read<int>('count');
+  }
+
+  Future<void> _migrateLegacyFavorites() async {
+    final legacyRows = await select(userFavoriteTable).get();
+    if (legacyRows.isEmpty) return;
+
+    final records = <LegacyFavoriteRecord>[];
+    for (final row in legacyRows) {
+      final createdAt = DateTime.tryParse(row.createdAt);
+      if (createdAt == null) continue;
+      records.add(
+        LegacyFavoriteRecord(
+          id: row.id,
+          contentType: row.contentType,
+          primaryReference: row.primaryReference,
+          secondaryReference: row.secondaryReference,
+          title: row.title,
+          contentText: row.contentText,
+          source: row.source,
+          createdAt: createdAt,
+        ),
+      );
+    }
+
+    final result = const LegacyMemoryMigration().map(
+      favorites: records,
+      migrationTime: DateTime.now().toUtc(),
+    );
+    for (final candidate in result.acceptedFavorites) {
+      final thread = candidate.thread;
+      await into(memoryThreadTable).insert(
+        MemoryThreadTableCompanion.insert(
+          id: thread.id,
+          sourceKind: thread.source.kind.storageKey,
+          sourceCanonicalId: thread.source.canonicalId,
+          sourceLabel: thread.source.sourceLabel,
+          sourceBook: Value(thread.source.sourceBook),
+          sourceCitation: Value(thread.source.sourceCitation),
+          sourceVersion: Value(thread.source.sourceVersion),
+          sourceSecondaryReference: Value(thread.source.secondaryReference),
+          userContextKind: Value(thread.context?.kind.storageKey),
+          userContextLabel: Value(thread.context?.customLabel),
+          userLabel: Value(thread.userLabel),
+          status: Value(thread.status.storageKey),
+          resurfacing: Value(thread.resurfacing.storageKey),
+          legacyKey: Value(candidate.legacyKey),
+          createdAt: thread.createdAt.toIso8601String(),
+          updatedAt: thread.updatedAt.toIso8601String(),
+          lastReturnedAt: Value(thread.lastReturnedAt?.toIso8601String()),
+        ),
+        mode: InsertMode.insertOrIgnore,
+      );
+    }
   }
 
   String _dateKey(DateTime date) {

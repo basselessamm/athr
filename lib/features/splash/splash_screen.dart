@@ -1,25 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:athr/core/database/database_providers.dart';
-import 'package:athr/core/database/seeder/db_seeder.dart';
 
-final seederProvider = FutureProvider<void>((ref) async {
-  final db = ref.watch(appDatabaseProvider);
-  final seeder = DatabaseSeeder(db);
-  await seeder.seedDatabase();
-  // Ensure the splash screen stays for at least 2 seconds for the animation to finish
-  await Future.delayed(const Duration(seconds: 2));
-});
-
-class SplashScreen extends ConsumerStatefulWidget {
+class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
   @override
-  ConsumerState<SplashScreen> createState() => _SplashScreenState();
+  State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends ConsumerState<SplashScreen>
+class _SplashScreenState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
@@ -32,6 +21,11 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
       vsync: this,
       duration: const Duration(milliseconds: 1500),
     )..forward();
+    _controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed && mounted) {
+        context.go('/');
+      }
+    });
 
     _scaleAnimation = Tween<double>(
       begin: 0.5,
@@ -54,14 +48,6 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
 
   @override
   Widget build(BuildContext context) {
-    final seederAsync = ref.watch(seederProvider);
-
-    ref.listen<AsyncValue<void>>(seederProvider, (_, state) {
-      if (!state.isLoading && !state.hasError) {
-        context.go('/');
-      }
-    });
-
     return Scaffold(
       backgroundColor: const Color(
         0xFFFDF7EF,
@@ -92,23 +78,14 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                     ),
                     const SizedBox(height: 8),
                     const Text(
-                      'تَعَلَّم... اعْمَل... واستَمِرّ',
+                      'مواضع تعود إليها كما تحب',
                       style: TextStyle(
                         fontSize: 18,
                         color: Color(0xFF5A7B72), // Sage green
                       ),
                     ),
                     const SizedBox(height: 48),
-                    if (seederAsync.isLoading) ...[
-                      const CircularProgressIndicator(color: Color(0xFF5A7B72)),
-                    ] else if (seederAsync.hasError) ...[
-                      const Icon(Icons.error, color: Colors.redAccent),
-                      const SizedBox(height: 16),
-                      Text(
-                        'حدث خطأ: ${seederAsync.error}',
-                        style: const TextStyle(color: Colors.red),
-                      ),
-                    ],
+                    const CircularProgressIndicator(color: Color(0xFF5A7B72)),
                   ],
                 ),
               ),

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:drift/drift.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:athr/core/database/app_database.dart';
 
@@ -11,25 +12,33 @@ class DatabaseSeeder {
   DatabaseSeeder(this.db);
 
   Future<void> seedDatabase() async {
-    final tafseerCount = await (db.select(
-      db.quranTafseerTable,
-    )..limit(1)).get();
-    if (tafseerCount.isEmpty) await _seedTafseer();
-
-    final duaCount = await (db.select(db.duaTable)..limit(1)).get();
-    if (duaCount.isEmpty) await _seedDuas();
-
-    final hadithCount = await (db.select(db.hadithTable)..limit(1)).get();
-    if (hadithCount.isEmpty) {
-      await _seedHadith('bukhari.json', 'صحيح البخاري');
-      await _seedHadith('muslim.json', 'صحيح مسلم');
-    }
+    await seedTafseerIfNeeded();
+    await seedDuasIfNeeded();
+    await seedHadithIfNeeded();
 
     final sunnahCount = await (db.select(db.dailySunnahTable)..limit(1)).get();
     if (sunnahCount.isEmpty) await _seedDailySunnah();
 
     final taskCount = await (db.select(db.dailyTaskTable)..limit(1)).get();
     if (taskCount.isEmpty) await _seedDailyTasks();
+  }
+
+  Future<void> seedTafseerIfNeeded() async {
+    final count = await (db.select(db.quranTafseerTable)..limit(1)).get();
+    if (count.isEmpty) await _seedTafseer();
+  }
+
+  Future<void> seedDuasIfNeeded() async {
+    final count = await (db.select(db.duaTable)..limit(1)).get();
+    if (count.isEmpty) await _seedDuas();
+  }
+
+  Future<void> seedHadithIfNeeded() async {
+    final count = await (db.select(db.hadithTable)..limit(1)).get();
+    if (count.isEmpty) {
+      await _seedHadith('bukhari.json', 'صحيح البخاري');
+      await _seedHadith('muslim.json', 'صحيح مسلم');
+    }
   }
 
   Future<void> _seedDailySunnah() async {
@@ -74,52 +83,23 @@ class DatabaseSeeder {
   }
 
   Future<void> _seedTafseer() async {
-    // Load mapping from pk -> (surah, ayah)
-    final quranTextString = await rootBundle.loadString(
-      'assets/json/quran_text.json',
-    );
-    final List<dynamic> quranTextJson = jsonDecode(quranTextString);
+    final payload = await Future.wait([
+      rootBundle.loadString('assets/json/quran_text.json'),
+      rootBundle.loadString('assets/json/tafseer.json'),
+    ]);
 
-    Map<int, Map<String, int>> ayahMapping = {};
-    for (var item in quranTextJson) {
-      if (item['model'] == 'quran_text.ayah') {
-        final pk = item['pk'] as int;
-        final fields = item['fields'] as Map<String, dynamic>;
-        ayahMapping[pk] = {
-          'surah': fields['sura'] as int,
-          'ayah': fields['number'] as int,
-        };
-      }
-    }
-
-    // Load tafseer
-    final tafseerString = await rootBundle.loadString(
-      'assets/json/tafseer.json',
-    );
-    final List<dynamic> tafseerJson = jsonDecode(tafseerString);
-
-    List<QuranTafseerTableCompanion> inserts = [];
-    for (var item in tafseerJson) {
-      if (item['model'] == 'quran_tafseer.tafseertext') {
-        final fields = item['fields'] as Map<String, dynamic>;
-        // fields['tafseer'] == 1 means Tafseer Al-Muyassar usually. We can filter if needed.
-        if (fields['tafseer'] != 1) continue;
-
-        final ayahId = fields['ayah'] as int;
-        final text = fields['text'] as String;
-
-        final mapping = ayahMapping[ayahId];
-        if (mapping != null) {
-          inserts.add(
-            QuranTafseerTableCompanion.insert(
-              surahNumber: mapping['surah']!,
-              ayahNumber: mapping['ayah']!,
-              tafseerText: text,
-            ),
-          );
-        }
-      }
-    }
+    // JSON decoding is CPU-heavy on a first install. Keep it off the Flutter
+    // UI isolate so the user can still interact with the splash/Home surface.
+    final rows = await compute(_parseTafseerPayload, (payload[0], payload[1]));
+    final inserts = rows
+        .map(
+          (row) => QuranTafseerTableCompanion.insert(
+            surahNumber: row['surah']! as int,
+            ayahNumber: row['ayah']! as int,
+            tafseerText: row['text']! as String,
+          ),
+        )
+        .toList(growable: false);
 
     await db.batch((batch) {
       batch.insertAll(db.quranTafseerTable, inserts);
@@ -152,50 +132,18 @@ class DatabaseSeeder {
   Future<void> _seedHadith(String fileName, String bookName) async {
     try {
       final hadithString = await rootBundle.loadString('assets/json/$fileName');
-      final Map<String, dynamic> hadithJson = jsonDecode(hadithString);
-
-      final chaptersList = hadithJson['chapters'] as List<dynamic>? ?? [];
-      final Map<int, String> chapterMap = {};
-      for (var c in chaptersList) {
-        final cm = c as Map<String, dynamic>;
-        if (cm['id'] != null) {
-          chapterMap[cm['id'] as int] = cm['arabic']?.toString() ?? '';
-        }
-      }
-
-      final hadiths = hadithJson['hadiths'] as List<dynamic>;
-      List<HadithTableCompanion> inserts = [];
-      final metadata = hadithJson['metadata'] as Map<String, dynamic>?;
-      final metadataArabic = metadata?['arabic'] as Map<String, dynamic>?;
-      final sourceBookArabic = metadataArabic?['title']?.toString() ?? bookName;
-
-      for (var item in hadiths) {
-        final map = item as Map<String, dynamic>;
-        final englishObj = map['english'];
-        String? englishText;
-        if (englishObj is Map<String, dynamic>) {
-          final narrator = englishObj['narrator']?.toString() ?? '';
-          final text = englishObj['text']?.toString() ?? '';
-          englishText = '$narrator\n$text'.trim();
-        }
-
-        final chapterId = map['chapterId'] as int?;
-        final chapterName = chapterId != null ? chapterMap[chapterId] : null;
-        final idInBook = map['idInBook']?.toString();
-        final reference = idInBook == null || idInBook.isEmpty
-            ? sourceBookArabic
-            : '$sourceBookArabic - حديث $idInBook';
-
-        inserts.add(
-          HadithTableCompanion.insert(
-            bookName: bookName,
-            chapterName: Value(chapterName),
-            reference: Value(reference),
-            hadithTextAr: map['arabic']?.toString() ?? '',
-            hadithTextEn: Value(englishText),
-          ),
-        );
-      }
+      final rows = await compute(_parseHadithPayload, (hadithString, bookName));
+      final inserts = rows
+          .map(
+            (row) => HadithTableCompanion.insert(
+              bookName: bookName,
+              chapterName: Value(row['chapterName'] as String?),
+              reference: Value(row['reference']! as String),
+              hadithTextAr: row['hadithTextAr']! as String,
+              hadithTextEn: Value(row['hadithTextEn'] as String?),
+            ),
+          )
+          .toList(growable: false);
 
       await db.batch((batch) {
         batch.insertAll(db.hadithTable, inserts);
@@ -204,4 +152,89 @@ class DatabaseSeeder {
       throw Exception('تعذر تهيئة كتاب الحديث $bookName: $e');
     }
   }
+}
+
+List<Map<String, Object>> _parseTafseerPayload(
+  (String quranText, String tafseer) payload,
+) => _parseTafseerRows(payload.$1, payload.$2);
+
+List<Map<String, Object>> _parseTafseerRows(
+  String quranTextString,
+  String tafseerString,
+) {
+  final quranTextJson = jsonDecode(quranTextString) as List<dynamic>;
+  final ayahMapping = <int, Map<String, int>>{};
+  for (final item in quranTextJson) {
+    final map = item as Map<String, dynamic>;
+    if (map['model'] != 'quran_text.ayah') continue;
+    final fields = map['fields'] as Map<String, dynamic>;
+    ayahMapping[map['pk'] as int] = {
+      'surah': fields['sura'] as int,
+      'ayah': fields['number'] as int,
+    };
+  }
+
+  final tafseerJson = jsonDecode(tafseerString) as List<dynamic>;
+  final rows = <Map<String, Object>>[];
+  for (final item in tafseerJson) {
+    final map = item as Map<String, dynamic>;
+    if (map['model'] != 'quran_tafseer.tafseertext') continue;
+    final fields = map['fields'] as Map<String, dynamic>;
+    if (fields['tafseer'] != 1) continue;
+    final mapping = ayahMapping[fields['ayah'] as int];
+    if (mapping == null) continue;
+    rows.add({
+      'surah': mapping['surah']!,
+      'ayah': mapping['ayah']!,
+      'text': fields['text'] as String,
+    });
+  }
+  return rows;
+}
+
+List<Map<String, Object?>> _parseHadithPayload(
+  (String hadith, String bookName) payload,
+) => _parseHadithRows(payload.$1, payload.$2);
+
+List<Map<String, Object?>> _parseHadithRows(
+  String hadithString,
+  String fallbackBookName,
+) {
+  final hadithJson = jsonDecode(hadithString) as Map<String, dynamic>;
+  final chapterMap = <int, String>{};
+  for (final item in (hadithJson['chapters'] as List<dynamic>? ?? [])) {
+    final chapter = item as Map<String, dynamic>;
+    final id = chapter['id'];
+    if (id != null) {
+      chapterMap[id as int] = chapter['arabic']?.toString() ?? '';
+    }
+  }
+
+  final metadata = hadithJson['metadata'] as Map<String, dynamic>?;
+  final metadataArabic = metadata?['arabic'] as Map<String, dynamic>?;
+  final sourceBookArabic =
+      metadataArabic?['title']?.toString() ?? fallbackBookName;
+  final rows = <Map<String, Object?>>[];
+  for (final item in hadithJson['hadiths'] as List<dynamic>) {
+    final hadith = item as Map<String, dynamic>;
+    final english = hadith['english'];
+    String? englishText;
+    if (english is Map<String, dynamic>) {
+      englishText =
+          '${english['narrator']?.toString() ?? ''}\n${english['text']?.toString() ?? ''}'
+              .trim();
+    }
+    final idInBook = hadith['idInBook']?.toString();
+    rows.add({
+      'chapterName': hadith['chapterId'] is int
+          ? chapterMap[hadith['chapterId'] as int]
+          : null,
+      'reference': idInBook == null || idInBook.isEmpty
+          ? sourceBookArabic
+          : '$sourceBookArabic - حديث $idInBook',
+      'hadithTextAr': hadith['arabic']?.toString() ?? '',
+      'hadithTextEn': englishText,
+    });
+  }
+  return rows;
 }

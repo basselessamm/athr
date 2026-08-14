@@ -8,6 +8,7 @@ class HadithPageWidget extends StatelessWidget {
   final String hadithText;
   final String? reference;
   final double fontSize;
+  final VoidCallback? onCapturePressed;
 
   const HadithPageWidget({
     super.key,
@@ -17,6 +18,7 @@ class HadithPageWidget extends StatelessWidget {
     required this.hadithText,
     this.reference,
     this.fontSize = 22.0,
+    this.onCapturePressed,
   });
 
   @override
@@ -143,6 +145,12 @@ class HadithPageWidget extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 8),
+          IconButton(
+            onPressed: onCapturePressed,
+            tooltip: 'اترك أثرًا',
+            icon: const Icon(Icons.bookmark_add_outlined),
+            color: const Color(0xFF5A4328),
+          ),
           Text(
             headerTitle, // e.g. "صحيح البخاري"
             style: GoogleFonts.amiri(

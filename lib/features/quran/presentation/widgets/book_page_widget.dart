@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:quran_flutter/quran.dart';
@@ -7,6 +8,8 @@ class BookPageWidget extends StatelessWidget {
   final String headerTitle;
   final String headerSubtitle;
   final List<dynamic> verses;
+  final double textScale;
+  final int? highlightedAyah;
   final Function(int surah, int ayah)? onAyahTapped;
 
   const BookPageWidget({
@@ -15,6 +18,8 @@ class BookPageWidget extends StatelessWidget {
     required this.headerTitle,
     required this.headerSubtitle,
     required this.verses,
+    this.textScale = 1,
+    this.highlightedAyah,
     this.onAyahTapped,
   });
 
@@ -22,9 +27,9 @@ class BookPageWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     // In Arabic (RTL), page 1 is on the right, page 2 on the left.
     final bool isRightPage = pageNumber % 2 != 0;
-    
+
     // Dynamic book thickness calculation (Total Quran pages = 604)
-    final double rightThickness = (pageNumber / 604) * 8.0; 
+    final double rightThickness = (pageNumber / 604) * 8.0;
     final double leftThickness = ((604 - pageNumber) / 604) * 8.0;
 
     return Directionality(
@@ -45,13 +50,17 @@ class BookPageWidget extends StatelessWidget {
                 BoxShadow(
                   color: Colors.black.withValues(alpha: 0.15),
                   blurRadius: 10,
-                  offset: isRightPage ? const Offset(-5, 0) : const Offset(5, 0),
+                  offset: isRightPage
+                      ? const Offset(-5, 0)
+                      : const Offset(5, 0),
                 ),
                 // Stack of pages illusion
                 BoxShadow(
                   color: const Color(0xFFDCD5C6),
-                  offset: isRightPage ? Offset(rightThickness, 0) : Offset(-leftThickness, 0),
-                )
+                  offset: isRightPage
+                      ? Offset(rightThickness, 0)
+                      : Offset(-leftThickness, 0),
+                ),
               ],
             ),
             child: Stack(
@@ -64,26 +73,39 @@ class BookPageWidget extends StatelessWidget {
                       end: Alignment.centerRight,
                       colors: isRightPage
                           ? [
-                              Colors.black.withValues(alpha: 0.08), // Spine shadow
+                              Colors.black.withValues(
+                                alpha: 0.08,
+                              ), // Spine shadow
                               Colors.transparent,
                               Colors.transparent,
-                              Colors.white.withValues(alpha: 0.4), // Page edge highlight
+                              Colors.white.withValues(
+                                alpha: 0.4,
+                              ), // Page edge highlight
                             ]
                           : [
-                              Colors.white.withValues(alpha: 0.4), // Page edge highlight
+                              Colors.white.withValues(
+                                alpha: 0.4,
+                              ), // Page edge highlight
                               Colors.transparent,
                               Colors.transparent,
-                              Colors.black.withValues(alpha: 0.08), // Spine shadow
+                              Colors.black.withValues(
+                                alpha: 0.08,
+                              ), // Spine shadow
                             ],
                       stops: const [0.0, 0.1, 0.95, 1.0],
                     ),
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0,
+                      vertical: 24.0,
+                    ),
                     child: Container(
                       decoration: BoxDecoration(
                         border: Border.all(
-                          color: const Color(0xFFB89E73), // Muted gold classical frame
+                          color: const Color(
+                            0xFFB89E73,
+                          ), // Muted gold classical frame
                           width: 1.5,
                         ),
                       ),
@@ -91,7 +113,9 @@ class BookPageWidget extends StatelessWidget {
                         margin: const EdgeInsets.all(4.0),
                         decoration: BoxDecoration(
                           border: Border.all(
-                            color: const Color(0xFFB89E73).withValues(alpha: 0.4),
+                            color: const Color(
+                              0xFFB89E73,
+                            ).withValues(alpha: 0.4),
                             width: 1.0,
                           ),
                         ),
@@ -100,7 +124,10 @@ class BookPageWidget extends StatelessWidget {
                             _buildHeader(),
                             Expanded(
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16.0,
+                                  vertical: 12.0,
+                                ),
                                 child: _buildVersesText(context),
                               ),
                             ),
@@ -111,7 +138,7 @@ class BookPageWidget extends StatelessWidget {
                     ),
                   ),
                 ),
-                
+
                 // Elegant Bookmark Ribbon (only on right page for aesthetics, or based on last read)
                 if (isRightPage)
                   Positioned(
@@ -130,9 +157,7 @@ class BookPageWidget extends StatelessWidget {
                           ),
                         ],
                       ),
-                      child: CustomPaint(
-                        painter: BookmarkPainter(),
-                      ),
+                      child: CustomPaint(painter: BookmarkPainter()),
                     ),
                   ),
               ],
@@ -147,7 +172,9 @@ class BookPageWidget extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
       decoration: const BoxDecoration(
-        border: Border(bottom: BorderSide(color: Color(0xFFB89E73), width: 1.0)),
+        border: Border(
+          bottom: BorderSide(color: Color(0xFFB89E73), width: 1.0),
+        ),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -174,79 +201,11 @@ class BookPageWidget extends StatelessWidget {
   }
 
   Widget _buildVersesText(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return SelectableText.rich(
-          TextSpan(
-            children: verses.map((verse) {
-              final isBismillah =
-                  verse.verseNumber == 1 &&
-                  verse.surahNumber != 1 &&
-                  verse.surahNumber != 9;
-
-              String text = verse.text;
-              if (isBismillah && text.startsWith(Quran.bismillah)) {
-                text = text.replaceFirst(Quran.bismillah, '').trim();
-              }
-
-              return TextSpan(
-                children: [
-                  if (isBismillah) ...[
-                    TextSpan(
-                      text: '${Quran.bismillah}\n',
-                      style: GoogleFonts.amiri(
-                        fontSize: 26,
-                        color: const Color(0xFF1C130D),
-                        fontWeight: FontWeight.bold,
-                        height: 2.2,
-                      ),
-                    ),
-                  ],
-                  TextSpan(
-                    text: '$text ',
-                    style: GoogleFonts.amiri(
-                      fontSize: 24, // Authentic readable size
-                      color: const Color(0xFF1C130D), // Deep dark brown, softer than pure black
-                      height: 2.2, // Balanced line height for Harakat
-                    ),
-                  ),
-                  WidgetSpan(
-                    alignment: PlaceholderAlignment.middle,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          Text(
-                            '\u06DD', // ۝ Authentic End of Ayah marker
-                            style: GoogleFonts.amiri(
-                              fontSize: 34,
-                              color: const Color(0xFFB89E73),
-                              height: 1.0,
-                            ),
-                          ),
-                          Text(
-                            _toArabicNumerals(verse.verseNumber),
-                            style: GoogleFonts.amiri(
-                              fontSize: 13,
-                              color: const Color(0xFF5A4328),
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              );
-            }).toList(),
-          ),
-          textAlign: TextAlign.justify,
-          onTap: () {
-            // Tap handling can be refined if using precise text spans
-          },
-        );
-      },
+    return _AyahRichText(
+      verses: verses,
+      textScale: textScale,
+      highlightedAyah: highlightedAyah,
+      onAyahTapped: onAyahTapped,
     );
   }
 
@@ -280,13 +239,168 @@ class BookPageWidget extends StatelessWidget {
   }
 }
 
+class _AyahRichText extends StatefulWidget {
+  final List<dynamic> verses;
+  final double textScale;
+  final int? highlightedAyah;
+  final Function(int surah, int ayah)? onAyahTapped;
+
+  const _AyahRichText({
+    required this.verses,
+    required this.textScale,
+    required this.highlightedAyah,
+    required this.onAyahTapped,
+  });
+
+  @override
+  State<_AyahRichText> createState() => _AyahRichTextState();
+}
+
+class _AyahRichTextState extends State<_AyahRichText> {
+  final List<TapGestureRecognizer> _recognizers = [];
+
+  @override
+  void didUpdateWidget(covariant _AyahRichText oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _disposeRecognizers();
+  }
+
+  @override
+  void dispose() {
+    _disposeRecognizers();
+    super.dispose();
+  }
+
+  void _disposeRecognizers() {
+    for (final recognizer in _recognizers) {
+      recognizer.dispose();
+    }
+    _recognizers.clear();
+  }
+
+  TapGestureRecognizer _recognizerFor(dynamic verse) {
+    final recognizer = TapGestureRecognizer()
+      ..onTap = widget.onAyahTapped == null
+          ? null
+          : () => widget.onAyahTapped!(verse.surahNumber, verse.verseNumber);
+    _recognizers.add(recognizer);
+    return recognizer;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    _disposeRecognizers();
+    return Semantics(
+      label: 'نص الصفحة. اضغط على الآية لفتح خياراتها.',
+      child: RichText(
+        text: TextSpan(
+          children: widget.verses.map((verse) {
+            final isBismillah =
+                verse.verseNumber == 1 &&
+                verse.surahNumber != 1 &&
+                verse.surahNumber != 9;
+
+            String text = verse.text;
+            if (isBismillah && text.startsWith(Quran.bismillah)) {
+              text = text.replaceFirst(Quran.bismillah, '').trim();
+            }
+
+            return TextSpan(
+              children: [
+                if (isBismillah)
+                  TextSpan(
+                    text: '${Quran.bismillah}\n',
+                    style: GoogleFonts.amiri(
+                      fontSize: 26 * widget.textScale,
+                      color: const Color(0xFF1C130D),
+                      fontWeight: FontWeight.bold,
+                      height: 2.2,
+                    ),
+                  ),
+                TextSpan(
+                  text: '$text ',
+                  recognizer: _recognizerFor(verse),
+                  style: GoogleFonts.amiri(
+                    fontSize: 24 * widget.textScale,
+                    color: const Color(0xFF1C130D),
+                    height: 2.2,
+                    backgroundColor: verse.verseNumber == widget.highlightedAyah
+                        ? const Color(0x33C7A87D)
+                        : null,
+                  ),
+                ),
+                WidgetSpan(
+                  alignment: PlaceholderAlignment.middle,
+                  child: Semantics(
+                    container: true,
+                    button: true,
+                    label:
+                        'خيارات الآية ${_toArabicNumerals(verse.verseNumber)}',
+                    child: GestureDetector(
+                      key: ValueKey(
+                        'ayah-marker-${verse.surahNumber}-${verse.verseNumber}',
+                      ),
+                      onTap: widget.onAyahTapped == null
+                          ? null
+                          : () => widget.onAyahTapped!(
+                              verse.surahNumber,
+                              verse.verseNumber,
+                            ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            Text(
+                              '\u06DD',
+                              style: GoogleFonts.amiri(
+                                fontSize: 34 * widget.textScale,
+                                color: const Color(0xFFB89E73),
+                                height: 1.0,
+                              ),
+                            ),
+                            Text(
+                              _toArabicNumerals(verse.verseNumber),
+                              style: GoogleFonts.amiri(
+                                fontSize: 13 * widget.textScale,
+                                color: const Color(0xFF5A4328),
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          }).toList(),
+        ),
+        textAlign: TextAlign.justify,
+      ),
+    );
+  }
+
+  String _toArabicNumerals(int number) {
+    const english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+    const arabic = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+    String result = number.toString();
+    for (int i = 0; i < english.length; i++) {
+      result = result.replaceAll(english[i], arabic[i]);
+    }
+    return result;
+  }
+}
+
 class BookmarkPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = const Color(0xFFF9F6EE) // Match paper color to "cut out" the triangle
+      ..color =
+          const Color(0xFFF9F6EE) // Match paper color to "cut out" the triangle
       ..style = PaintingStyle.fill;
-      
+
     final path = Path()
       ..moveTo(0, size.height)
       ..lineTo(size.width / 2, size.height - 10)
