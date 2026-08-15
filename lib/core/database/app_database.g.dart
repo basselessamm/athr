@@ -12,66 +12,41 @@ class $QuranTafseerTableTable extends QuranTafseerTable
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
-    'id',
-    aliasedName,
-    false,
-    hasAutoIncrement: true,
-    type: DriftSqlType.int,
-    requiredDuringInsert: false,
-    defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'PRIMARY KEY AUTOINCREMENT',
-    ),
-  );
-  static const VerificationMeta _surahNumberMeta = const VerificationMeta(
-    'surahNumber',
-  );
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _surahNumberMeta =
+      const VerificationMeta('surahNumber');
   @override
   late final GeneratedColumn<int> surahNumber = GeneratedColumn<int>(
-    'surah_number',
-    aliasedName,
-    false,
-    type: DriftSqlType.int,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _ayahNumberMeta = const VerificationMeta(
-    'ayahNumber',
-  );
+      'surah_number', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _ayahNumberMeta =
+      const VerificationMeta('ayahNumber');
   @override
   late final GeneratedColumn<int> ayahNumber = GeneratedColumn<int>(
-    'ayah_number',
-    aliasedName,
-    false,
-    type: DriftSqlType.int,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _tafseerTextMeta = const VerificationMeta(
-    'tafseerText',
-  );
+      'ayah_number', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _tafseerTextMeta =
+      const VerificationMeta('tafseerText');
   @override
   late final GeneratedColumn<String> tafseerText = GeneratedColumn<String>(
-    'tafseer_text',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
+      'tafseer_text', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
   @override
-  List<GeneratedColumn> get $columns => [
-    id,
-    surahNumber,
-    ayahNumber,
-    tafseerText,
-  ];
+  List<GeneratedColumn> get $columns =>
+      [id, surahNumber, ayahNumber, tafseerText];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
   static const String $name = 'quran_tafseer_table';
   @override
-  VerificationContext validateIntegrity(
-    Insertable<QuranTafseer> instance, {
-    bool isInserting = false,
-  }) {
+  VerificationContext validateIntegrity(Insertable<QuranTafseer> instance,
+      {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
@@ -79,31 +54,25 @@ class $QuranTafseerTableTable extends QuranTafseerTable
     }
     if (data.containsKey('surah_number')) {
       context.handle(
-        _surahNumberMeta,
-        surahNumber.isAcceptableOrUnknown(
-          data['surah_number']!,
           _surahNumberMeta,
-        ),
-      );
+          surahNumber.isAcceptableOrUnknown(
+              data['surah_number']!, _surahNumberMeta));
     } else if (isInserting) {
       context.missing(_surahNumberMeta);
     }
     if (data.containsKey('ayah_number')) {
       context.handle(
-        _ayahNumberMeta,
-        ayahNumber.isAcceptableOrUnknown(data['ayah_number']!, _ayahNumberMeta),
-      );
+          _ayahNumberMeta,
+          ayahNumber.isAcceptableOrUnknown(
+              data['ayah_number']!, _ayahNumberMeta));
     } else if (isInserting) {
       context.missing(_ayahNumberMeta);
     }
     if (data.containsKey('tafseer_text')) {
       context.handle(
-        _tafseerTextMeta,
-        tafseerText.isAcceptableOrUnknown(
-          data['tafseer_text']!,
           _tafseerTextMeta,
-        ),
-      );
+          tafseerText.isAcceptableOrUnknown(
+              data['tafseer_text']!, _tafseerTextMeta));
     } else if (isInserting) {
       context.missing(_tafseerTextMeta);
     }
@@ -116,22 +85,14 @@ class $QuranTafseerTableTable extends QuranTafseerTable
   QuranTafseer map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return QuranTafseer(
-      id: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}id'],
-      )!,
-      surahNumber: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}surah_number'],
-      )!,
-      ayahNumber: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}ayah_number'],
-      )!,
-      tafseerText: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}tafseer_text'],
-      )!,
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      surahNumber: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}surah_number'])!,
+      ayahNumber: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}ayah_number'])!,
+      tafseerText: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}tafseer_text'])!,
     );
   }
 
@@ -146,12 +107,11 @@ class QuranTafseer extends DataClass implements Insertable<QuranTafseer> {
   final int surahNumber;
   final int ayahNumber;
   final String tafseerText;
-  const QuranTafseer({
-    required this.id,
-    required this.surahNumber,
-    required this.ayahNumber,
-    required this.tafseerText,
-  });
+  const QuranTafseer(
+      {required this.id,
+      required this.surahNumber,
+      required this.ayahNumber,
+      required this.tafseerText});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -171,10 +131,8 @@ class QuranTafseer extends DataClass implements Insertable<QuranTafseer> {
     );
   }
 
-  factory QuranTafseer.fromJson(
-    Map<String, dynamic> json, {
-    ValueSerializer? serializer,
-  }) {
+  factory QuranTafseer.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return QuranTafseer(
       id: serializer.fromJson<int>(json['id']),
@@ -194,29 +152,23 @@ class QuranTafseer extends DataClass implements Insertable<QuranTafseer> {
     };
   }
 
-  QuranTafseer copyWith({
-    int? id,
-    int? surahNumber,
-    int? ayahNumber,
-    String? tafseerText,
-  }) => QuranTafseer(
-    id: id ?? this.id,
-    surahNumber: surahNumber ?? this.surahNumber,
-    ayahNumber: ayahNumber ?? this.ayahNumber,
-    tafseerText: tafseerText ?? this.tafseerText,
-  );
+  QuranTafseer copyWith(
+          {int? id, int? surahNumber, int? ayahNumber, String? tafseerText}) =>
+      QuranTafseer(
+        id: id ?? this.id,
+        surahNumber: surahNumber ?? this.surahNumber,
+        ayahNumber: ayahNumber ?? this.ayahNumber,
+        tafseerText: tafseerText ?? this.tafseerText,
+      );
   QuranTafseer copyWithCompanion(QuranTafseerTableCompanion data) {
     return QuranTafseer(
       id: data.id.present ? data.id.value : this.id,
-      surahNumber: data.surahNumber.present
-          ? data.surahNumber.value
-          : this.surahNumber,
-      ayahNumber: data.ayahNumber.present
-          ? data.ayahNumber.value
-          : this.ayahNumber,
-      tafseerText: data.tafseerText.present
-          ? data.tafseerText.value
-          : this.tafseerText,
+      surahNumber:
+          data.surahNumber.present ? data.surahNumber.value : this.surahNumber,
+      ayahNumber:
+          data.ayahNumber.present ? data.ayahNumber.value : this.ayahNumber,
+      tafseerText:
+          data.tafseerText.present ? data.tafseerText.value : this.tafseerText,
     );
   }
 
@@ -259,9 +211,9 @@ class QuranTafseerTableCompanion extends UpdateCompanion<QuranTafseer> {
     required int surahNumber,
     required int ayahNumber,
     required String tafseerText,
-  }) : surahNumber = Value(surahNumber),
-       ayahNumber = Value(ayahNumber),
-       tafseerText = Value(tafseerText);
+  })  : surahNumber = Value(surahNumber),
+        ayahNumber = Value(ayahNumber),
+        tafseerText = Value(tafseerText);
   static Insertable<QuranTafseer> custom({
     Expression<int>? id,
     Expression<int>? surahNumber,
@@ -276,12 +228,11 @@ class QuranTafseerTableCompanion extends UpdateCompanion<QuranTafseer> {
     });
   }
 
-  QuranTafseerTableCompanion copyWith({
-    Value<int>? id,
-    Value<int>? surahNumber,
-    Value<int>? ayahNumber,
-    Value<String>? tafseerText,
-  }) {
+  QuranTafseerTableCompanion copyWith(
+      {Value<int>? id,
+      Value<int>? surahNumber,
+      Value<int>? ayahNumber,
+      Value<String>? tafseerText}) {
     return QuranTafseerTableCompanion(
       id: id ?? this.id,
       surahNumber: surahNumber ?? this.surahNumber,
@@ -329,162 +280,110 @@ class $HadithTableTable extends HadithTable
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
-    'id',
-    aliasedName,
-    false,
-    hasAutoIncrement: true,
-    type: DriftSqlType.int,
-    requiredDuringInsert: false,
-    defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'PRIMARY KEY AUTOINCREMENT',
-    ),
-  );
-  static const VerificationMeta _bookNameMeta = const VerificationMeta(
-    'bookName',
-  );
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _bookNameMeta =
+      const VerificationMeta('bookName');
   @override
   late final GeneratedColumn<String> bookName = GeneratedColumn<String>(
-    'book_name',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _chapterNameMeta = const VerificationMeta(
-    'chapterName',
-  );
+      'book_name', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _chapterNameMeta =
+      const VerificationMeta('chapterName');
   @override
   late final GeneratedColumn<String> chapterName = GeneratedColumn<String>(
-    'chapter_name',
-    aliasedName,
-    true,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-  );
-  static const VerificationMeta _referenceMeta = const VerificationMeta(
-    'reference',
-  );
+      'chapter_name', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _referenceMeta =
+      const VerificationMeta('reference');
   @override
   late final GeneratedColumn<String> reference = GeneratedColumn<String>(
-    'reference',
-    aliasedName,
-    true,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-  );
-  static const VerificationMeta _hadithTextArMeta = const VerificationMeta(
-    'hadithTextAr',
-  );
+      'reference', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _hadithTextArMeta =
+      const VerificationMeta('hadithTextAr');
   @override
   late final GeneratedColumn<String> hadithTextAr = GeneratedColumn<String>(
-    'hadith_text_ar',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _hadithTextEnMeta = const VerificationMeta(
-    'hadithTextEn',
-  );
+      'hadith_text_ar', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _hadithTextEnMeta =
+      const VerificationMeta('hadithTextEn');
   @override
   late final GeneratedColumn<String> hadithTextEn = GeneratedColumn<String>(
-    'hadith_text_en',
-    aliasedName,
-    true,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-  );
-  static const VerificationMeta _isBookmarkedMeta = const VerificationMeta(
-    'isBookmarked',
-  );
+      'hadith_text_en', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _isBookmarkedMeta =
+      const VerificationMeta('isBookmarked');
   @override
   late final GeneratedColumn<bool> isBookmarked = GeneratedColumn<bool>(
-    'is_bookmarked',
-    aliasedName,
-    false,
-    type: DriftSqlType.bool,
-    requiredDuringInsert: false,
-    defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'CHECK ("is_bookmarked" IN (0, 1))',
-    ),
-    defaultValue: const Constant(false),
-  );
+      'is_bookmarked', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("is_bookmarked" IN (0, 1))'),
+      defaultValue: const Constant(false));
   @override
   List<GeneratedColumn> get $columns => [
-    id,
-    bookName,
-    chapterName,
-    reference,
-    hadithTextAr,
-    hadithTextEn,
-    isBookmarked,
-  ];
+        id,
+        bookName,
+        chapterName,
+        reference,
+        hadithTextAr,
+        hadithTextEn,
+        isBookmarked
+      ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
   static const String $name = 'hadith_table';
   @override
-  VerificationContext validateIntegrity(
-    Insertable<Hadith> instance, {
-    bool isInserting = false,
-  }) {
+  VerificationContext validateIntegrity(Insertable<Hadith> instance,
+      {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
     if (data.containsKey('book_name')) {
-      context.handle(
-        _bookNameMeta,
-        bookName.isAcceptableOrUnknown(data['book_name']!, _bookNameMeta),
-      );
+      context.handle(_bookNameMeta,
+          bookName.isAcceptableOrUnknown(data['book_name']!, _bookNameMeta));
     } else if (isInserting) {
       context.missing(_bookNameMeta);
     }
     if (data.containsKey('chapter_name')) {
       context.handle(
-        _chapterNameMeta,
-        chapterName.isAcceptableOrUnknown(
-          data['chapter_name']!,
           _chapterNameMeta,
-        ),
-      );
+          chapterName.isAcceptableOrUnknown(
+              data['chapter_name']!, _chapterNameMeta));
     }
     if (data.containsKey('reference')) {
-      context.handle(
-        _referenceMeta,
-        reference.isAcceptableOrUnknown(data['reference']!, _referenceMeta),
-      );
+      context.handle(_referenceMeta,
+          reference.isAcceptableOrUnknown(data['reference']!, _referenceMeta));
     }
     if (data.containsKey('hadith_text_ar')) {
       context.handle(
-        _hadithTextArMeta,
-        hadithTextAr.isAcceptableOrUnknown(
-          data['hadith_text_ar']!,
           _hadithTextArMeta,
-        ),
-      );
+          hadithTextAr.isAcceptableOrUnknown(
+              data['hadith_text_ar']!, _hadithTextArMeta));
     } else if (isInserting) {
       context.missing(_hadithTextArMeta);
     }
     if (data.containsKey('hadith_text_en')) {
       context.handle(
-        _hadithTextEnMeta,
-        hadithTextEn.isAcceptableOrUnknown(
-          data['hadith_text_en']!,
           _hadithTextEnMeta,
-        ),
-      );
+          hadithTextEn.isAcceptableOrUnknown(
+              data['hadith_text_en']!, _hadithTextEnMeta));
     }
     if (data.containsKey('is_bookmarked')) {
       context.handle(
-        _isBookmarkedMeta,
-        isBookmarked.isAcceptableOrUnknown(
-          data['is_bookmarked']!,
           _isBookmarkedMeta,
-        ),
-      );
+          isBookmarked.isAcceptableOrUnknown(
+              data['is_bookmarked']!, _isBookmarkedMeta));
     }
     return context;
   }
@@ -495,34 +394,20 @@ class $HadithTableTable extends HadithTable
   Hadith map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return Hadith(
-      id: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}id'],
-      )!,
-      bookName: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}book_name'],
-      )!,
-      chapterName: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}chapter_name'],
-      ),
-      reference: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}reference'],
-      ),
-      hadithTextAr: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}hadith_text_ar'],
-      )!,
-      hadithTextEn: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}hadith_text_en'],
-      ),
-      isBookmarked: attachedDatabase.typeMapping.read(
-        DriftSqlType.bool,
-        data['${effectivePrefix}is_bookmarked'],
-      )!,
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      bookName: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}book_name'])!,
+      chapterName: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}chapter_name']),
+      reference: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}reference']),
+      hadithTextAr: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}hadith_text_ar'])!,
+      hadithTextEn: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}hadith_text_en']),
+      isBookmarked: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_bookmarked'])!,
     );
   }
 
@@ -540,15 +425,14 @@ class Hadith extends DataClass implements Insertable<Hadith> {
   final String hadithTextAr;
   final String? hadithTextEn;
   final bool isBookmarked;
-  const Hadith({
-    required this.id,
-    required this.bookName,
-    this.chapterName,
-    this.reference,
-    required this.hadithTextAr,
-    this.hadithTextEn,
-    required this.isBookmarked,
-  });
+  const Hadith(
+      {required this.id,
+      required this.bookName,
+      this.chapterName,
+      this.reference,
+      required this.hadithTextAr,
+      this.hadithTextEn,
+      required this.isBookmarked});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -586,10 +470,8 @@ class Hadith extends DataClass implements Insertable<Hadith> {
     );
   }
 
-  factory Hadith.fromJson(
-    Map<String, dynamic> json, {
-    ValueSerializer? serializer,
-  }) {
+  factory Hadith.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Hadith(
       id: serializer.fromJson<int>(json['id']),
@@ -615,30 +497,30 @@ class Hadith extends DataClass implements Insertable<Hadith> {
     };
   }
 
-  Hadith copyWith({
-    int? id,
-    String? bookName,
-    Value<String?> chapterName = const Value.absent(),
-    Value<String?> reference = const Value.absent(),
-    String? hadithTextAr,
-    Value<String?> hadithTextEn = const Value.absent(),
-    bool? isBookmarked,
-  }) => Hadith(
-    id: id ?? this.id,
-    bookName: bookName ?? this.bookName,
-    chapterName: chapterName.present ? chapterName.value : this.chapterName,
-    reference: reference.present ? reference.value : this.reference,
-    hadithTextAr: hadithTextAr ?? this.hadithTextAr,
-    hadithTextEn: hadithTextEn.present ? hadithTextEn.value : this.hadithTextEn,
-    isBookmarked: isBookmarked ?? this.isBookmarked,
-  );
+  Hadith copyWith(
+          {int? id,
+          String? bookName,
+          Value<String?> chapterName = const Value.absent(),
+          Value<String?> reference = const Value.absent(),
+          String? hadithTextAr,
+          Value<String?> hadithTextEn = const Value.absent(),
+          bool? isBookmarked}) =>
+      Hadith(
+        id: id ?? this.id,
+        bookName: bookName ?? this.bookName,
+        chapterName: chapterName.present ? chapterName.value : this.chapterName,
+        reference: reference.present ? reference.value : this.reference,
+        hadithTextAr: hadithTextAr ?? this.hadithTextAr,
+        hadithTextEn:
+            hadithTextEn.present ? hadithTextEn.value : this.hadithTextEn,
+        isBookmarked: isBookmarked ?? this.isBookmarked,
+      );
   Hadith copyWithCompanion(HadithTableCompanion data) {
     return Hadith(
       id: data.id.present ? data.id.value : this.id,
       bookName: data.bookName.present ? data.bookName.value : this.bookName,
-      chapterName: data.chapterName.present
-          ? data.chapterName.value
-          : this.chapterName,
+      chapterName:
+          data.chapterName.present ? data.chapterName.value : this.chapterName,
       reference: data.reference.present ? data.reference.value : this.reference,
       hadithTextAr: data.hadithTextAr.present
           ? data.hadithTextAr.value
@@ -667,15 +549,8 @@ class Hadith extends DataClass implements Insertable<Hadith> {
   }
 
   @override
-  int get hashCode => Object.hash(
-    id,
-    bookName,
-    chapterName,
-    reference,
-    hadithTextAr,
-    hadithTextEn,
-    isBookmarked,
-  );
+  int get hashCode => Object.hash(id, bookName, chapterName, reference,
+      hadithTextAr, hadithTextEn, isBookmarked);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -714,8 +589,8 @@ class HadithTableCompanion extends UpdateCompanion<Hadith> {
     required String hadithTextAr,
     this.hadithTextEn = const Value.absent(),
     this.isBookmarked = const Value.absent(),
-  }) : bookName = Value(bookName),
-       hadithTextAr = Value(hadithTextAr);
+  })  : bookName = Value(bookName),
+        hadithTextAr = Value(hadithTextAr);
   static Insertable<Hadith> custom({
     Expression<int>? id,
     Expression<String>? bookName,
@@ -736,15 +611,14 @@ class HadithTableCompanion extends UpdateCompanion<Hadith> {
     });
   }
 
-  HadithTableCompanion copyWith({
-    Value<int>? id,
-    Value<String>? bookName,
-    Value<String?>? chapterName,
-    Value<String?>? reference,
-    Value<String>? hadithTextAr,
-    Value<String?>? hadithTextEn,
-    Value<bool>? isBookmarked,
-  }) {
+  HadithTableCompanion copyWith(
+      {Value<int>? id,
+      Value<String>? bookName,
+      Value<String?>? chapterName,
+      Value<String?>? reference,
+      Value<String>? hadithTextAr,
+      Value<String?>? hadithTextEn,
+      Value<bool>? isBookmarked}) {
     return HadithTableCompanion(
       id: id ?? this.id,
       bookName: bookName ?? this.bookName,
@@ -806,117 +680,77 @@ class $DuaTableTable extends DuaTable with TableInfo<$DuaTableTable, Dua> {
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
-    'id',
-    aliasedName,
-    false,
-    hasAutoIncrement: true,
-    type: DriftSqlType.int,
-    requiredDuringInsert: false,
-    defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'PRIMARY KEY AUTOINCREMENT',
-    ),
-  );
-  static const VerificationMeta _categoryMeta = const VerificationMeta(
-    'category',
-  );
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _categoryMeta =
+      const VerificationMeta('category');
   @override
   late final GeneratedColumn<String> category = GeneratedColumn<String>(
-    'category',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _duaTextMeta = const VerificationMeta(
-    'duaText',
-  );
+      'category', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _duaTextMeta =
+      const VerificationMeta('duaText');
   @override
   late final GeneratedColumn<String> duaText = GeneratedColumn<String>(
-    'dua_text',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _referenceMeta = const VerificationMeta(
-    'reference',
-  );
+      'dua_text', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _referenceMeta =
+      const VerificationMeta('reference');
   @override
   late final GeneratedColumn<String> reference = GeneratedColumn<String>(
-    'reference',
-    aliasedName,
-    true,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-  );
-  static const VerificationMeta _isBookmarkedMeta = const VerificationMeta(
-    'isBookmarked',
-  );
+      'reference', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _isBookmarkedMeta =
+      const VerificationMeta('isBookmarked');
   @override
   late final GeneratedColumn<bool> isBookmarked = GeneratedColumn<bool>(
-    'is_bookmarked',
-    aliasedName,
-    false,
-    type: DriftSqlType.bool,
-    requiredDuringInsert: false,
-    defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'CHECK ("is_bookmarked" IN (0, 1))',
-    ),
-    defaultValue: const Constant(false),
-  );
+      'is_bookmarked', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("is_bookmarked" IN (0, 1))'),
+      defaultValue: const Constant(false));
   @override
-  List<GeneratedColumn> get $columns => [
-    id,
-    category,
-    duaText,
-    reference,
-    isBookmarked,
-  ];
+  List<GeneratedColumn> get $columns =>
+      [id, category, duaText, reference, isBookmarked];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
   static const String $name = 'dua_table';
   @override
-  VerificationContext validateIntegrity(
-    Insertable<Dua> instance, {
-    bool isInserting = false,
-  }) {
+  VerificationContext validateIntegrity(Insertable<Dua> instance,
+      {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
     if (data.containsKey('category')) {
-      context.handle(
-        _categoryMeta,
-        category.isAcceptableOrUnknown(data['category']!, _categoryMeta),
-      );
+      context.handle(_categoryMeta,
+          category.isAcceptableOrUnknown(data['category']!, _categoryMeta));
     } else if (isInserting) {
       context.missing(_categoryMeta);
     }
     if (data.containsKey('dua_text')) {
-      context.handle(
-        _duaTextMeta,
-        duaText.isAcceptableOrUnknown(data['dua_text']!, _duaTextMeta),
-      );
+      context.handle(_duaTextMeta,
+          duaText.isAcceptableOrUnknown(data['dua_text']!, _duaTextMeta));
     } else if (isInserting) {
       context.missing(_duaTextMeta);
     }
     if (data.containsKey('reference')) {
-      context.handle(
-        _referenceMeta,
-        reference.isAcceptableOrUnknown(data['reference']!, _referenceMeta),
-      );
+      context.handle(_referenceMeta,
+          reference.isAcceptableOrUnknown(data['reference']!, _referenceMeta));
     }
     if (data.containsKey('is_bookmarked')) {
       context.handle(
-        _isBookmarkedMeta,
-        isBookmarked.isAcceptableOrUnknown(
-          data['is_bookmarked']!,
           _isBookmarkedMeta,
-        ),
-      );
+          isBookmarked.isAcceptableOrUnknown(
+              data['is_bookmarked']!, _isBookmarkedMeta));
     }
     return context;
   }
@@ -927,26 +761,16 @@ class $DuaTableTable extends DuaTable with TableInfo<$DuaTableTable, Dua> {
   Dua map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return Dua(
-      id: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}id'],
-      )!,
-      category: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}category'],
-      )!,
-      duaText: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}dua_text'],
-      )!,
-      reference: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}reference'],
-      ),
-      isBookmarked: attachedDatabase.typeMapping.read(
-        DriftSqlType.bool,
-        data['${effectivePrefix}is_bookmarked'],
-      )!,
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      category: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}category'])!,
+      duaText: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}dua_text'])!,
+      reference: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}reference']),
+      isBookmarked: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_bookmarked'])!,
     );
   }
 
@@ -962,13 +786,12 @@ class Dua extends DataClass implements Insertable<Dua> {
   final String duaText;
   final String? reference;
   final bool isBookmarked;
-  const Dua({
-    required this.id,
-    required this.category,
-    required this.duaText,
-    this.reference,
-    required this.isBookmarked,
-  });
+  const Dua(
+      {required this.id,
+      required this.category,
+      required this.duaText,
+      this.reference,
+      required this.isBookmarked});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -994,10 +817,8 @@ class Dua extends DataClass implements Insertable<Dua> {
     );
   }
 
-  factory Dua.fromJson(
-    Map<String, dynamic> json, {
-    ValueSerializer? serializer,
-  }) {
+  factory Dua.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Dua(
       id: serializer.fromJson<int>(json['id']),
@@ -1019,19 +840,19 @@ class Dua extends DataClass implements Insertable<Dua> {
     };
   }
 
-  Dua copyWith({
-    int? id,
-    String? category,
-    String? duaText,
-    Value<String?> reference = const Value.absent(),
-    bool? isBookmarked,
-  }) => Dua(
-    id: id ?? this.id,
-    category: category ?? this.category,
-    duaText: duaText ?? this.duaText,
-    reference: reference.present ? reference.value : this.reference,
-    isBookmarked: isBookmarked ?? this.isBookmarked,
-  );
+  Dua copyWith(
+          {int? id,
+          String? category,
+          String? duaText,
+          Value<String?> reference = const Value.absent(),
+          bool? isBookmarked}) =>
+      Dua(
+        id: id ?? this.id,
+        category: category ?? this.category,
+        duaText: duaText ?? this.duaText,
+        reference: reference.present ? reference.value : this.reference,
+        isBookmarked: isBookmarked ?? this.isBookmarked,
+      );
   Dua copyWithCompanion(DuaTableCompanion data) {
     return Dua(
       id: data.id.present ? data.id.value : this.id,
@@ -1089,8 +910,8 @@ class DuaTableCompanion extends UpdateCompanion<Dua> {
     required String duaText,
     this.reference = const Value.absent(),
     this.isBookmarked = const Value.absent(),
-  }) : category = Value(category),
-       duaText = Value(duaText);
+  })  : category = Value(category),
+        duaText = Value(duaText);
   static Insertable<Dua> custom({
     Expression<int>? id,
     Expression<String>? category,
@@ -1107,13 +928,12 @@ class DuaTableCompanion extends UpdateCompanion<Dua> {
     });
   }
 
-  DuaTableCompanion copyWith({
-    Value<int>? id,
-    Value<String>? category,
-    Value<String>? duaText,
-    Value<String?>? reference,
-    Value<bool>? isBookmarked,
-  }) {
+  DuaTableCompanion copyWith(
+      {Value<int>? id,
+      Value<String>? category,
+      Value<String>? duaText,
+      Value<String?>? reference,
+      Value<bool>? isBookmarked}) {
     return DuaTableCompanion(
       id: id ?? this.id,
       category: category ?? this.category,
@@ -1166,82 +986,47 @@ class $DailySunnahTableTable extends DailySunnahTable
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<String> id = GeneratedColumn<String>(
-    'id',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
+      'id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
   static const VerificationMeta _titleMeta = const VerificationMeta('title');
   @override
   late final GeneratedColumn<String> title = GeneratedColumn<String>(
-    'title',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _descriptionMeta = const VerificationMeta(
-    'description',
-  );
+      'title', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _descriptionMeta =
+      const VerificationMeta('description');
   @override
   late final GeneratedColumn<String> description = GeneratedColumn<String>(
-    'description',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _howToApplyMeta = const VerificationMeta(
-    'howToApply',
-  );
+      'description', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _howToApplyMeta =
+      const VerificationMeta('howToApply');
   @override
   late final GeneratedColumn<String> howToApply = GeneratedColumn<String>(
-    'how_to_apply',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
+      'how_to_apply', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
   static const VerificationMeta _sourceMeta = const VerificationMeta('source');
   @override
   late final GeneratedColumn<String> source = GeneratedColumn<String>(
-    'source',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _sortOrderMeta = const VerificationMeta(
-    'sortOrder',
-  );
+      'source', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _sortOrderMeta =
+      const VerificationMeta('sortOrder');
   @override
   late final GeneratedColumn<int> sortOrder = GeneratedColumn<int>(
-    'sort_order',
-    aliasedName,
-    false,
-    type: DriftSqlType.int,
-    requiredDuringInsert: true,
-  );
+      'sort_order', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
   @override
-  List<GeneratedColumn> get $columns => [
-    id,
-    title,
-    description,
-    howToApply,
-    source,
-    sortOrder,
-  ];
+  List<GeneratedColumn> get $columns =>
+      [id, title, description, howToApply, source, sortOrder];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
   static const String $name = 'daily_sunnah_table';
   @override
-  VerificationContext validateIntegrity(
-    Insertable<DailySunnah> instance, {
-    bool isInserting = false,
-  }) {
+  VerificationContext validateIntegrity(Insertable<DailySunnah> instance,
+      {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
@@ -1251,47 +1036,35 @@ class $DailySunnahTableTable extends DailySunnahTable
     }
     if (data.containsKey('title')) {
       context.handle(
-        _titleMeta,
-        title.isAcceptableOrUnknown(data['title']!, _titleMeta),
-      );
+          _titleMeta, title.isAcceptableOrUnknown(data['title']!, _titleMeta));
     } else if (isInserting) {
       context.missing(_titleMeta);
     }
     if (data.containsKey('description')) {
       context.handle(
-        _descriptionMeta,
-        description.isAcceptableOrUnknown(
-          data['description']!,
           _descriptionMeta,
-        ),
-      );
+          description.isAcceptableOrUnknown(
+              data['description']!, _descriptionMeta));
     } else if (isInserting) {
       context.missing(_descriptionMeta);
     }
     if (data.containsKey('how_to_apply')) {
       context.handle(
-        _howToApplyMeta,
-        howToApply.isAcceptableOrUnknown(
-          data['how_to_apply']!,
           _howToApplyMeta,
-        ),
-      );
+          howToApply.isAcceptableOrUnknown(
+              data['how_to_apply']!, _howToApplyMeta));
     } else if (isInserting) {
       context.missing(_howToApplyMeta);
     }
     if (data.containsKey('source')) {
-      context.handle(
-        _sourceMeta,
-        source.isAcceptableOrUnknown(data['source']!, _sourceMeta),
-      );
+      context.handle(_sourceMeta,
+          source.isAcceptableOrUnknown(data['source']!, _sourceMeta));
     } else if (isInserting) {
       context.missing(_sourceMeta);
     }
     if (data.containsKey('sort_order')) {
-      context.handle(
-        _sortOrderMeta,
-        sortOrder.isAcceptableOrUnknown(data['sort_order']!, _sortOrderMeta),
-      );
+      context.handle(_sortOrderMeta,
+          sortOrder.isAcceptableOrUnknown(data['sort_order']!, _sortOrderMeta));
     } else if (isInserting) {
       context.missing(_sortOrderMeta);
     }
@@ -1304,30 +1077,18 @@ class $DailySunnahTableTable extends DailySunnahTable
   DailySunnah map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return DailySunnah(
-      id: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}id'],
-      )!,
-      title: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}title'],
-      )!,
-      description: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}description'],
-      )!,
-      howToApply: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}how_to_apply'],
-      )!,
-      source: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}source'],
-      )!,
-      sortOrder: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}sort_order'],
-      )!,
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
+      title: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}title'])!,
+      description: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}description'])!,
+      howToApply: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}how_to_apply'])!,
+      source: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}source'])!,
+      sortOrder: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}sort_order'])!,
     );
   }
 
@@ -1344,14 +1105,13 @@ class DailySunnah extends DataClass implements Insertable<DailySunnah> {
   final String howToApply;
   final String source;
   final int sortOrder;
-  const DailySunnah({
-    required this.id,
-    required this.title,
-    required this.description,
-    required this.howToApply,
-    required this.source,
-    required this.sortOrder,
-  });
+  const DailySunnah(
+      {required this.id,
+      required this.title,
+      required this.description,
+      required this.howToApply,
+      required this.source,
+      required this.sortOrder});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -1375,10 +1135,8 @@ class DailySunnah extends DataClass implements Insertable<DailySunnah> {
     );
   }
 
-  factory DailySunnah.fromJson(
-    Map<String, dynamic> json, {
-    ValueSerializer? serializer,
-  }) {
+  factory DailySunnah.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return DailySunnah(
       id: serializer.fromJson<String>(json['id']),
@@ -1402,31 +1160,29 @@ class DailySunnah extends DataClass implements Insertable<DailySunnah> {
     };
   }
 
-  DailySunnah copyWith({
-    String? id,
-    String? title,
-    String? description,
-    String? howToApply,
-    String? source,
-    int? sortOrder,
-  }) => DailySunnah(
-    id: id ?? this.id,
-    title: title ?? this.title,
-    description: description ?? this.description,
-    howToApply: howToApply ?? this.howToApply,
-    source: source ?? this.source,
-    sortOrder: sortOrder ?? this.sortOrder,
-  );
+  DailySunnah copyWith(
+          {String? id,
+          String? title,
+          String? description,
+          String? howToApply,
+          String? source,
+          int? sortOrder}) =>
+      DailySunnah(
+        id: id ?? this.id,
+        title: title ?? this.title,
+        description: description ?? this.description,
+        howToApply: howToApply ?? this.howToApply,
+        source: source ?? this.source,
+        sortOrder: sortOrder ?? this.sortOrder,
+      );
   DailySunnah copyWithCompanion(DailySunnahTableCompanion data) {
     return DailySunnah(
       id: data.id.present ? data.id.value : this.id,
       title: data.title.present ? data.title.value : this.title,
-      description: data.description.present
-          ? data.description.value
-          : this.description,
-      howToApply: data.howToApply.present
-          ? data.howToApply.value
-          : this.howToApply,
+      description:
+          data.description.present ? data.description.value : this.description,
+      howToApply:
+          data.howToApply.present ? data.howToApply.value : this.howToApply,
       source: data.source.present ? data.source.value : this.source,
       sortOrder: data.sortOrder.present ? data.sortOrder.value : this.sortOrder,
     );
@@ -1485,12 +1241,12 @@ class DailySunnahTableCompanion extends UpdateCompanion<DailySunnah> {
     required String source,
     required int sortOrder,
     this.rowid = const Value.absent(),
-  }) : id = Value(id),
-       title = Value(title),
-       description = Value(description),
-       howToApply = Value(howToApply),
-       source = Value(source),
-       sortOrder = Value(sortOrder);
+  })  : id = Value(id),
+        title = Value(title),
+        description = Value(description),
+        howToApply = Value(howToApply),
+        source = Value(source),
+        sortOrder = Value(sortOrder);
   static Insertable<DailySunnah> custom({
     Expression<String>? id,
     Expression<String>? title,
@@ -1511,15 +1267,14 @@ class DailySunnahTableCompanion extends UpdateCompanion<DailySunnah> {
     });
   }
 
-  DailySunnahTableCompanion copyWith({
-    Value<String>? id,
-    Value<String>? title,
-    Value<String>? description,
-    Value<String>? howToApply,
-    Value<String>? source,
-    Value<int>? sortOrder,
-    Value<int>? rowid,
-  }) {
+  DailySunnahTableCompanion copyWith(
+      {Value<String>? id,
+      Value<String>? title,
+      Value<String>? description,
+      Value<String>? howToApply,
+      Value<String>? source,
+      Value<int>? sortOrder,
+      Value<int>? rowid}) {
     return DailySunnahTableCompanion(
       id: id ?? this.id,
       title: title ?? this.title,
@@ -1582,70 +1337,41 @@ class $DailyTaskTableTable extends DailyTaskTable
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<String> id = GeneratedColumn<String>(
-    'id',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
+      'id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
   static const VerificationMeta _titleMeta = const VerificationMeta('title');
   @override
   late final GeneratedColumn<String> title = GeneratedColumn<String>(
-    'title',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _descriptionMeta = const VerificationMeta(
-    'description',
-  );
+      'title', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _descriptionMeta =
+      const VerificationMeta('description');
   @override
   late final GeneratedColumn<String> description = GeneratedColumn<String>(
-    'description',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
+      'description', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
   static const VerificationMeta _impactMeta = const VerificationMeta('impact');
   @override
   late final GeneratedColumn<String> impact = GeneratedColumn<String>(
-    'impact',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _sortOrderMeta = const VerificationMeta(
-    'sortOrder',
-  );
+      'impact', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _sortOrderMeta =
+      const VerificationMeta('sortOrder');
   @override
   late final GeneratedColumn<int> sortOrder = GeneratedColumn<int>(
-    'sort_order',
-    aliasedName,
-    false,
-    type: DriftSqlType.int,
-    requiredDuringInsert: true,
-  );
+      'sort_order', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
   @override
-  List<GeneratedColumn> get $columns => [
-    id,
-    title,
-    description,
-    impact,
-    sortOrder,
-  ];
+  List<GeneratedColumn> get $columns =>
+      [id, title, description, impact, sortOrder];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
   static const String $name = 'daily_task_table';
   @override
-  VerificationContext validateIntegrity(
-    Insertable<DailyTask> instance, {
-    bool isInserting = false,
-  }) {
+  VerificationContext validateIntegrity(Insertable<DailyTask> instance,
+      {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
@@ -1655,36 +1381,27 @@ class $DailyTaskTableTable extends DailyTaskTable
     }
     if (data.containsKey('title')) {
       context.handle(
-        _titleMeta,
-        title.isAcceptableOrUnknown(data['title']!, _titleMeta),
-      );
+          _titleMeta, title.isAcceptableOrUnknown(data['title']!, _titleMeta));
     } else if (isInserting) {
       context.missing(_titleMeta);
     }
     if (data.containsKey('description')) {
       context.handle(
-        _descriptionMeta,
-        description.isAcceptableOrUnknown(
-          data['description']!,
           _descriptionMeta,
-        ),
-      );
+          description.isAcceptableOrUnknown(
+              data['description']!, _descriptionMeta));
     } else if (isInserting) {
       context.missing(_descriptionMeta);
     }
     if (data.containsKey('impact')) {
-      context.handle(
-        _impactMeta,
-        impact.isAcceptableOrUnknown(data['impact']!, _impactMeta),
-      );
+      context.handle(_impactMeta,
+          impact.isAcceptableOrUnknown(data['impact']!, _impactMeta));
     } else if (isInserting) {
       context.missing(_impactMeta);
     }
     if (data.containsKey('sort_order')) {
-      context.handle(
-        _sortOrderMeta,
-        sortOrder.isAcceptableOrUnknown(data['sort_order']!, _sortOrderMeta),
-      );
+      context.handle(_sortOrderMeta,
+          sortOrder.isAcceptableOrUnknown(data['sort_order']!, _sortOrderMeta));
     } else if (isInserting) {
       context.missing(_sortOrderMeta);
     }
@@ -1697,26 +1414,16 @@ class $DailyTaskTableTable extends DailyTaskTable
   DailyTask map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return DailyTask(
-      id: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}id'],
-      )!,
-      title: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}title'],
-      )!,
-      description: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}description'],
-      )!,
-      impact: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}impact'],
-      )!,
-      sortOrder: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}sort_order'],
-      )!,
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
+      title: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}title'])!,
+      description: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}description'])!,
+      impact: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}impact'])!,
+      sortOrder: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}sort_order'])!,
     );
   }
 
@@ -1732,13 +1439,12 @@ class DailyTask extends DataClass implements Insertable<DailyTask> {
   final String description;
   final String impact;
   final int sortOrder;
-  const DailyTask({
-    required this.id,
-    required this.title,
-    required this.description,
-    required this.impact,
-    required this.sortOrder,
-  });
+  const DailyTask(
+      {required this.id,
+      required this.title,
+      required this.description,
+      required this.impact,
+      required this.sortOrder});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -1760,10 +1466,8 @@ class DailyTask extends DataClass implements Insertable<DailyTask> {
     );
   }
 
-  factory DailyTask.fromJson(
-    Map<String, dynamic> json, {
-    ValueSerializer? serializer,
-  }) {
+  factory DailyTask.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return DailyTask(
       id: serializer.fromJson<String>(json['id']),
@@ -1785,26 +1489,25 @@ class DailyTask extends DataClass implements Insertable<DailyTask> {
     };
   }
 
-  DailyTask copyWith({
-    String? id,
-    String? title,
-    String? description,
-    String? impact,
-    int? sortOrder,
-  }) => DailyTask(
-    id: id ?? this.id,
-    title: title ?? this.title,
-    description: description ?? this.description,
-    impact: impact ?? this.impact,
-    sortOrder: sortOrder ?? this.sortOrder,
-  );
+  DailyTask copyWith(
+          {String? id,
+          String? title,
+          String? description,
+          String? impact,
+          int? sortOrder}) =>
+      DailyTask(
+        id: id ?? this.id,
+        title: title ?? this.title,
+        description: description ?? this.description,
+        impact: impact ?? this.impact,
+        sortOrder: sortOrder ?? this.sortOrder,
+      );
   DailyTask copyWithCompanion(DailyTaskTableCompanion data) {
     return DailyTask(
       id: data.id.present ? data.id.value : this.id,
       title: data.title.present ? data.title.value : this.title,
-      description: data.description.present
-          ? data.description.value
-          : this.description,
+      description:
+          data.description.present ? data.description.value : this.description,
       impact: data.impact.present ? data.impact.value : this.impact,
       sortOrder: data.sortOrder.present ? data.sortOrder.value : this.sortOrder,
     );
@@ -1857,11 +1560,11 @@ class DailyTaskTableCompanion extends UpdateCompanion<DailyTask> {
     required String impact,
     required int sortOrder,
     this.rowid = const Value.absent(),
-  }) : id = Value(id),
-       title = Value(title),
-       description = Value(description),
-       impact = Value(impact),
-       sortOrder = Value(sortOrder);
+  })  : id = Value(id),
+        title = Value(title),
+        description = Value(description),
+        impact = Value(impact),
+        sortOrder = Value(sortOrder);
   static Insertable<DailyTask> custom({
     Expression<String>? id,
     Expression<String>? title,
@@ -1880,14 +1583,13 @@ class DailyTaskTableCompanion extends UpdateCompanion<DailyTask> {
     });
   }
 
-  DailyTaskTableCompanion copyWith({
-    Value<String>? id,
-    Value<String>? title,
-    Value<String>? description,
-    Value<String>? impact,
-    Value<int>? sortOrder,
-    Value<int>? rowid,
-  }) {
+  DailyTaskTableCompanion copyWith(
+      {Value<String>? id,
+      Value<String>? title,
+      Value<String>? description,
+      Value<String>? impact,
+      Value<int>? sortOrder,
+      Value<int>? rowid}) {
     return DailyTaskTableCompanion(
       id: id ?? this.id,
       title: title ?? this.title,
@@ -1942,219 +1644,151 @@ class $MuhasabaEntryTableTable extends MuhasabaEntryTable
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $MuhasabaEntryTableTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _activityDateMeta = const VerificationMeta(
-    'activityDate',
-  );
+  static const VerificationMeta _activityDateMeta =
+      const VerificationMeta('activityDate');
   @override
   late final GeneratedColumn<String> activityDate = GeneratedColumn<String>(
-    'activity_date',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
+      'activity_date', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
   static const VerificationMeta _prayedMeta = const VerificationMeta('prayed');
   @override
   late final GeneratedColumn<bool> prayed = GeneratedColumn<bool>(
-    'prayed',
-    aliasedName,
-    false,
-    type: DriftSqlType.bool,
-    requiredDuringInsert: false,
-    defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'CHECK ("prayed" IN (0, 1))',
-    ),
-    defaultValue: const Constant(false),
-  );
-  static const VerificationMeta _guardedTongueMeta = const VerificationMeta(
-    'guardedTongue',
-  );
+      'prayed', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("prayed" IN (0, 1))'),
+      defaultValue: const Constant(false));
+  static const VerificationMeta _guardedTongueMeta =
+      const VerificationMeta('guardedTongue');
   @override
   late final GeneratedColumn<bool> guardedTongue = GeneratedColumn<bool>(
-    'guarded_tongue',
-    aliasedName,
-    false,
-    type: DriftSqlType.bool,
-    requiredDuringInsert: false,
-    defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'CHECK ("guarded_tongue" IN (0, 1))',
-    ),
-    defaultValue: const Constant(false),
-  );
-  static const VerificationMeta _honoredParentsMeta = const VerificationMeta(
-    'honoredParents',
-  );
+      'guarded_tongue', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("guarded_tongue" IN (0, 1))'),
+      defaultValue: const Constant(false));
+  static const VerificationMeta _honoredParentsMeta =
+      const VerificationMeta('honoredParents');
   @override
   late final GeneratedColumn<bool> honoredParents = GeneratedColumn<bool>(
-    'honored_parents',
-    aliasedName,
-    false,
-    type: DriftSqlType.bool,
-    requiredDuringInsert: false,
-    defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'CHECK ("honored_parents" IN (0, 1))',
-    ),
-    defaultValue: const Constant(false),
-  );
-  static const VerificationMeta _avoidedHarmMeta = const VerificationMeta(
-    'avoidedHarm',
-  );
+      'honored_parents', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("honored_parents" IN (0, 1))'),
+      defaultValue: const Constant(false));
+  static const VerificationMeta _avoidedHarmMeta =
+      const VerificationMeta('avoidedHarm');
   @override
   late final GeneratedColumn<bool> avoidedHarm = GeneratedColumn<bool>(
-    'avoided_harm',
-    aliasedName,
-    false,
-    type: DriftSqlType.bool,
-    requiredDuringInsert: false,
-    defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'CHECK ("avoided_harm" IN (0, 1))',
-    ),
-    defaultValue: const Constant(false),
-  );
-  static const VerificationMeta _gaveCharityMeta = const VerificationMeta(
-    'gaveCharity',
-  );
+      'avoided_harm', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("avoided_harm" IN (0, 1))'),
+      defaultValue: const Constant(false));
+  static const VerificationMeta _gaveCharityMeta =
+      const VerificationMeta('gaveCharity');
   @override
   late final GeneratedColumn<bool> gaveCharity = GeneratedColumn<bool>(
-    'gave_charity',
-    aliasedName,
-    false,
-    type: DriftSqlType.bool,
-    requiredDuringInsert: false,
-    defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'CHECK ("gave_charity" IN (0, 1))',
-    ),
-    defaultValue: const Constant(false),
-  );
-  static const VerificationMeta _quranReadMeta = const VerificationMeta(
-    'quranRead',
-  );
+      'gave_charity', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("gave_charity" IN (0, 1))'),
+      defaultValue: const Constant(false));
+  static const VerificationMeta _quranReadMeta =
+      const VerificationMeta('quranRead');
   @override
   late final GeneratedColumn<bool> quranRead = GeneratedColumn<bool>(
-    'quran_read',
-    aliasedName,
-    false,
-    type: DriftSqlType.bool,
-    requiredDuringInsert: false,
-    defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'CHECK ("quran_read" IN (0, 1))',
-    ),
-    defaultValue: const Constant(false),
-  );
+      'quran_read', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("quran_read" IN (0, 1))'),
+      defaultValue: const Constant(false));
   static const VerificationMeta _noteMeta = const VerificationMeta('note');
   @override
   late final GeneratedColumn<String> note = GeneratedColumn<String>(
-    'note',
-    aliasedName,
-    true,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-  );
-  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
-    'updatedAt',
-  );
+      'note', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _updatedAtMeta =
+      const VerificationMeta('updatedAt');
   @override
   late final GeneratedColumn<String> updatedAt = GeneratedColumn<String>(
-    'updated_at',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
+      'updated_at', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns => [
-    activityDate,
-    prayed,
-    guardedTongue,
-    honoredParents,
-    avoidedHarm,
-    gaveCharity,
-    quranRead,
-    note,
-    updatedAt,
-  ];
+        activityDate,
+        prayed,
+        guardedTongue,
+        honoredParents,
+        avoidedHarm,
+        gaveCharity,
+        quranRead,
+        note,
+        updatedAt
+      ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
   static const String $name = 'muhasaba_entry_table';
   @override
-  VerificationContext validateIntegrity(
-    Insertable<MuhasabaEntry> instance, {
-    bool isInserting = false,
-  }) {
+  VerificationContext validateIntegrity(Insertable<MuhasabaEntry> instance,
+      {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('activity_date')) {
       context.handle(
-        _activityDateMeta,
-        activityDate.isAcceptableOrUnknown(
-          data['activity_date']!,
           _activityDateMeta,
-        ),
-      );
+          activityDate.isAcceptableOrUnknown(
+              data['activity_date']!, _activityDateMeta));
     } else if (isInserting) {
       context.missing(_activityDateMeta);
     }
     if (data.containsKey('prayed')) {
-      context.handle(
-        _prayedMeta,
-        prayed.isAcceptableOrUnknown(data['prayed']!, _prayedMeta),
-      );
+      context.handle(_prayedMeta,
+          prayed.isAcceptableOrUnknown(data['prayed']!, _prayedMeta));
     }
     if (data.containsKey('guarded_tongue')) {
       context.handle(
-        _guardedTongueMeta,
-        guardedTongue.isAcceptableOrUnknown(
-          data['guarded_tongue']!,
           _guardedTongueMeta,
-        ),
-      );
+          guardedTongue.isAcceptableOrUnknown(
+              data['guarded_tongue']!, _guardedTongueMeta));
     }
     if (data.containsKey('honored_parents')) {
       context.handle(
-        _honoredParentsMeta,
-        honoredParents.isAcceptableOrUnknown(
-          data['honored_parents']!,
           _honoredParentsMeta,
-        ),
-      );
+          honoredParents.isAcceptableOrUnknown(
+              data['honored_parents']!, _honoredParentsMeta));
     }
     if (data.containsKey('avoided_harm')) {
       context.handle(
-        _avoidedHarmMeta,
-        avoidedHarm.isAcceptableOrUnknown(
-          data['avoided_harm']!,
           _avoidedHarmMeta,
-        ),
-      );
+          avoidedHarm.isAcceptableOrUnknown(
+              data['avoided_harm']!, _avoidedHarmMeta));
     }
     if (data.containsKey('gave_charity')) {
       context.handle(
-        _gaveCharityMeta,
-        gaveCharity.isAcceptableOrUnknown(
-          data['gave_charity']!,
           _gaveCharityMeta,
-        ),
-      );
+          gaveCharity.isAcceptableOrUnknown(
+              data['gave_charity']!, _gaveCharityMeta));
     }
     if (data.containsKey('quran_read')) {
-      context.handle(
-        _quranReadMeta,
-        quranRead.isAcceptableOrUnknown(data['quran_read']!, _quranReadMeta),
-      );
+      context.handle(_quranReadMeta,
+          quranRead.isAcceptableOrUnknown(data['quran_read']!, _quranReadMeta));
     }
     if (data.containsKey('note')) {
       context.handle(
-        _noteMeta,
-        note.isAcceptableOrUnknown(data['note']!, _noteMeta),
-      );
+          _noteMeta, note.isAcceptableOrUnknown(data['note']!, _noteMeta));
     }
     if (data.containsKey('updated_at')) {
-      context.handle(
-        _updatedAtMeta,
-        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
-      );
+      context.handle(_updatedAtMeta,
+          updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta));
     } else if (isInserting) {
       context.missing(_updatedAtMeta);
     }
@@ -2167,42 +1801,24 @@ class $MuhasabaEntryTableTable extends MuhasabaEntryTable
   MuhasabaEntry map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return MuhasabaEntry(
-      activityDate: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}activity_date'],
-      )!,
-      prayed: attachedDatabase.typeMapping.read(
-        DriftSqlType.bool,
-        data['${effectivePrefix}prayed'],
-      )!,
-      guardedTongue: attachedDatabase.typeMapping.read(
-        DriftSqlType.bool,
-        data['${effectivePrefix}guarded_tongue'],
-      )!,
-      honoredParents: attachedDatabase.typeMapping.read(
-        DriftSqlType.bool,
-        data['${effectivePrefix}honored_parents'],
-      )!,
-      avoidedHarm: attachedDatabase.typeMapping.read(
-        DriftSqlType.bool,
-        data['${effectivePrefix}avoided_harm'],
-      )!,
-      gaveCharity: attachedDatabase.typeMapping.read(
-        DriftSqlType.bool,
-        data['${effectivePrefix}gave_charity'],
-      )!,
-      quranRead: attachedDatabase.typeMapping.read(
-        DriftSqlType.bool,
-        data['${effectivePrefix}quran_read'],
-      )!,
-      note: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}note'],
-      ),
-      updatedAt: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}updated_at'],
-      )!,
+      activityDate: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}activity_date'])!,
+      prayed: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}prayed'])!,
+      guardedTongue: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}guarded_tongue'])!,
+      honoredParents: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}honored_parents'])!,
+      avoidedHarm: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}avoided_harm'])!,
+      gaveCharity: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}gave_charity'])!,
+      quranRead: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}quran_read'])!,
+      note: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}note']),
+      updatedAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}updated_at'])!,
     );
   }
 
@@ -2222,17 +1838,16 @@ class MuhasabaEntry extends DataClass implements Insertable<MuhasabaEntry> {
   final bool quranRead;
   final String? note;
   final String updatedAt;
-  const MuhasabaEntry({
-    required this.activityDate,
-    required this.prayed,
-    required this.guardedTongue,
-    required this.honoredParents,
-    required this.avoidedHarm,
-    required this.gaveCharity,
-    required this.quranRead,
-    this.note,
-    required this.updatedAt,
-  });
+  const MuhasabaEntry(
+      {required this.activityDate,
+      required this.prayed,
+      required this.guardedTongue,
+      required this.honoredParents,
+      required this.avoidedHarm,
+      required this.gaveCharity,
+      required this.quranRead,
+      this.note,
+      required this.updatedAt});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -2264,10 +1879,8 @@ class MuhasabaEntry extends DataClass implements Insertable<MuhasabaEntry> {
     );
   }
 
-  factory MuhasabaEntry.fromJson(
-    Map<String, dynamic> json, {
-    ValueSerializer? serializer,
-  }) {
+  factory MuhasabaEntry.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return MuhasabaEntry(
       activityDate: serializer.fromJson<String>(json['activityDate']),
@@ -2297,27 +1910,27 @@ class MuhasabaEntry extends DataClass implements Insertable<MuhasabaEntry> {
     };
   }
 
-  MuhasabaEntry copyWith({
-    String? activityDate,
-    bool? prayed,
-    bool? guardedTongue,
-    bool? honoredParents,
-    bool? avoidedHarm,
-    bool? gaveCharity,
-    bool? quranRead,
-    Value<String?> note = const Value.absent(),
-    String? updatedAt,
-  }) => MuhasabaEntry(
-    activityDate: activityDate ?? this.activityDate,
-    prayed: prayed ?? this.prayed,
-    guardedTongue: guardedTongue ?? this.guardedTongue,
-    honoredParents: honoredParents ?? this.honoredParents,
-    avoidedHarm: avoidedHarm ?? this.avoidedHarm,
-    gaveCharity: gaveCharity ?? this.gaveCharity,
-    quranRead: quranRead ?? this.quranRead,
-    note: note.present ? note.value : this.note,
-    updatedAt: updatedAt ?? this.updatedAt,
-  );
+  MuhasabaEntry copyWith(
+          {String? activityDate,
+          bool? prayed,
+          bool? guardedTongue,
+          bool? honoredParents,
+          bool? avoidedHarm,
+          bool? gaveCharity,
+          bool? quranRead,
+          Value<String?> note = const Value.absent(),
+          String? updatedAt}) =>
+      MuhasabaEntry(
+        activityDate: activityDate ?? this.activityDate,
+        prayed: prayed ?? this.prayed,
+        guardedTongue: guardedTongue ?? this.guardedTongue,
+        honoredParents: honoredParents ?? this.honoredParents,
+        avoidedHarm: avoidedHarm ?? this.avoidedHarm,
+        gaveCharity: gaveCharity ?? this.gaveCharity,
+        quranRead: quranRead ?? this.quranRead,
+        note: note.present ? note.value : this.note,
+        updatedAt: updatedAt ?? this.updatedAt,
+      );
   MuhasabaEntry copyWithCompanion(MuhasabaEntryTableCompanion data) {
     return MuhasabaEntry(
       activityDate: data.activityDate.present
@@ -2330,12 +1943,10 @@ class MuhasabaEntry extends DataClass implements Insertable<MuhasabaEntry> {
       honoredParents: data.honoredParents.present
           ? data.honoredParents.value
           : this.honoredParents,
-      avoidedHarm: data.avoidedHarm.present
-          ? data.avoidedHarm.value
-          : this.avoidedHarm,
-      gaveCharity: data.gaveCharity.present
-          ? data.gaveCharity.value
-          : this.gaveCharity,
+      avoidedHarm:
+          data.avoidedHarm.present ? data.avoidedHarm.value : this.avoidedHarm,
+      gaveCharity:
+          data.gaveCharity.present ? data.gaveCharity.value : this.gaveCharity,
       quranRead: data.quranRead.present ? data.quranRead.value : this.quranRead,
       note: data.note.present ? data.note.value : this.note,
       updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
@@ -2359,17 +1970,8 @@ class MuhasabaEntry extends DataClass implements Insertable<MuhasabaEntry> {
   }
 
   @override
-  int get hashCode => Object.hash(
-    activityDate,
-    prayed,
-    guardedTongue,
-    honoredParents,
-    avoidedHarm,
-    gaveCharity,
-    quranRead,
-    note,
-    updatedAt,
-  );
+  int get hashCode => Object.hash(activityDate, prayed, guardedTongue,
+      honoredParents, avoidedHarm, gaveCharity, quranRead, note, updatedAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -2419,8 +2021,8 @@ class MuhasabaEntryTableCompanion extends UpdateCompanion<MuhasabaEntry> {
     this.note = const Value.absent(),
     required String updatedAt,
     this.rowid = const Value.absent(),
-  }) : activityDate = Value(activityDate),
-       updatedAt = Value(updatedAt);
+  })  : activityDate = Value(activityDate),
+        updatedAt = Value(updatedAt);
   static Insertable<MuhasabaEntry> custom({
     Expression<String>? activityDate,
     Expression<bool>? prayed,
@@ -2447,18 +2049,17 @@ class MuhasabaEntryTableCompanion extends UpdateCompanion<MuhasabaEntry> {
     });
   }
 
-  MuhasabaEntryTableCompanion copyWith({
-    Value<String>? activityDate,
-    Value<bool>? prayed,
-    Value<bool>? guardedTongue,
-    Value<bool>? honoredParents,
-    Value<bool>? avoidedHarm,
-    Value<bool>? gaveCharity,
-    Value<bool>? quranRead,
-    Value<String?>? note,
-    Value<String>? updatedAt,
-    Value<int>? rowid,
-  }) {
+  MuhasabaEntryTableCompanion copyWith(
+      {Value<String>? activityDate,
+      Value<bool>? prayed,
+      Value<bool>? guardedTongue,
+      Value<bool>? honoredParents,
+      Value<bool>? avoidedHarm,
+      Value<bool>? gaveCharity,
+      Value<bool>? quranRead,
+      Value<String?>? note,
+      Value<String>? updatedAt,
+      Value<int>? rowid}) {
     return MuhasabaEntryTableCompanion(
       activityDate: activityDate ?? this.activityDate,
       prayed: prayed ?? this.prayed,
@@ -2536,110 +2137,71 @@ class $UserFavoriteTableTable extends UserFavoriteTable
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
-    'id',
-    aliasedName,
-    false,
-    hasAutoIncrement: true,
-    type: DriftSqlType.int,
-    requiredDuringInsert: false,
-    defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'PRIMARY KEY AUTOINCREMENT',
-    ),
-  );
-  static const VerificationMeta _contentTypeMeta = const VerificationMeta(
-    'contentType',
-  );
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _contentTypeMeta =
+      const VerificationMeta('contentType');
   @override
   late final GeneratedColumn<String> contentType = GeneratedColumn<String>(
-    'content_type',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _primaryReferenceMeta = const VerificationMeta(
-    'primaryReference',
-  );
+      'content_type', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _primaryReferenceMeta =
+      const VerificationMeta('primaryReference');
   @override
   late final GeneratedColumn<String> primaryReference = GeneratedColumn<String>(
-    'primary_reference',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
+      'primary_reference', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
   static const VerificationMeta _secondaryReferenceMeta =
       const VerificationMeta('secondaryReference');
   @override
   late final GeneratedColumn<String> secondaryReference =
-      GeneratedColumn<String>(
-        'secondary_reference',
-        aliasedName,
-        true,
-        type: DriftSqlType.string,
-        requiredDuringInsert: false,
-      );
+      GeneratedColumn<String>('secondary_reference', aliasedName, true,
+          type: DriftSqlType.string, requiredDuringInsert: false);
   static const VerificationMeta _titleMeta = const VerificationMeta('title');
   @override
   late final GeneratedColumn<String> title = GeneratedColumn<String>(
-    'title',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _contentTextMeta = const VerificationMeta(
-    'contentText',
-  );
+      'title', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _contentTextMeta =
+      const VerificationMeta('contentText');
   @override
   late final GeneratedColumn<String> contentText = GeneratedColumn<String>(
-    'content_text',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
+      'content_text', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
   static const VerificationMeta _sourceMeta = const VerificationMeta('source');
   @override
   late final GeneratedColumn<String> source = GeneratedColumn<String>(
-    'source',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _createdAtMeta = const VerificationMeta(
-    'createdAt',
-  );
+      'source', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _createdAtMeta =
+      const VerificationMeta('createdAt');
   @override
   late final GeneratedColumn<String> createdAt = GeneratedColumn<String>(
-    'created_at',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
+      'created_at', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns => [
-    id,
-    contentType,
-    primaryReference,
-    secondaryReference,
-    title,
-    contentText,
-    source,
-    createdAt,
-  ];
+        id,
+        contentType,
+        primaryReference,
+        secondaryReference,
+        title,
+        contentText,
+        source,
+        createdAt
+      ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
   static const String $name = 'user_favorite_table';
   @override
-  VerificationContext validateIntegrity(
-    Insertable<UserFavorite> instance, {
-    bool isInserting = false,
-  }) {
+  VerificationContext validateIntegrity(Insertable<UserFavorite> instance,
+      {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
@@ -2647,67 +2209,49 @@ class $UserFavoriteTableTable extends UserFavoriteTable
     }
     if (data.containsKey('content_type')) {
       context.handle(
-        _contentTypeMeta,
-        contentType.isAcceptableOrUnknown(
-          data['content_type']!,
           _contentTypeMeta,
-        ),
-      );
+          contentType.isAcceptableOrUnknown(
+              data['content_type']!, _contentTypeMeta));
     } else if (isInserting) {
       context.missing(_contentTypeMeta);
     }
     if (data.containsKey('primary_reference')) {
       context.handle(
-        _primaryReferenceMeta,
-        primaryReference.isAcceptableOrUnknown(
-          data['primary_reference']!,
           _primaryReferenceMeta,
-        ),
-      );
+          primaryReference.isAcceptableOrUnknown(
+              data['primary_reference']!, _primaryReferenceMeta));
     } else if (isInserting) {
       context.missing(_primaryReferenceMeta);
     }
     if (data.containsKey('secondary_reference')) {
       context.handle(
-        _secondaryReferenceMeta,
-        secondaryReference.isAcceptableOrUnknown(
-          data['secondary_reference']!,
           _secondaryReferenceMeta,
-        ),
-      );
+          secondaryReference.isAcceptableOrUnknown(
+              data['secondary_reference']!, _secondaryReferenceMeta));
     }
     if (data.containsKey('title')) {
       context.handle(
-        _titleMeta,
-        title.isAcceptableOrUnknown(data['title']!, _titleMeta),
-      );
+          _titleMeta, title.isAcceptableOrUnknown(data['title']!, _titleMeta));
     } else if (isInserting) {
       context.missing(_titleMeta);
     }
     if (data.containsKey('content_text')) {
       context.handle(
-        _contentTextMeta,
-        contentText.isAcceptableOrUnknown(
-          data['content_text']!,
           _contentTextMeta,
-        ),
-      );
+          contentText.isAcceptableOrUnknown(
+              data['content_text']!, _contentTextMeta));
     } else if (isInserting) {
       context.missing(_contentTextMeta);
     }
     if (data.containsKey('source')) {
-      context.handle(
-        _sourceMeta,
-        source.isAcceptableOrUnknown(data['source']!, _sourceMeta),
-      );
+      context.handle(_sourceMeta,
+          source.isAcceptableOrUnknown(data['source']!, _sourceMeta));
     } else if (isInserting) {
       context.missing(_sourceMeta);
     }
     if (data.containsKey('created_at')) {
-      context.handle(
-        _createdAtMeta,
-        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
-      );
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
     } else if (isInserting) {
       context.missing(_createdAtMeta);
     }
@@ -2718,44 +2262,28 @@ class $UserFavoriteTableTable extends UserFavoriteTable
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
   List<Set<GeneratedColumn>> get uniqueKeys => [
-    {contentType, primaryReference},
-  ];
+        {contentType, primaryReference},
+      ];
   @override
   UserFavorite map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return UserFavorite(
-      id: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}id'],
-      )!,
-      contentType: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}content_type'],
-      )!,
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      contentType: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}content_type'])!,
       primaryReference: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}primary_reference'],
-      )!,
+          DriftSqlType.string, data['${effectivePrefix}primary_reference'])!,
       secondaryReference: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}secondary_reference'],
-      ),
-      title: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}title'],
-      )!,
-      contentText: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}content_text'],
-      )!,
-      source: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}source'],
-      )!,
-      createdAt: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}created_at'],
-      )!,
+          DriftSqlType.string, data['${effectivePrefix}secondary_reference']),
+      title: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}title'])!,
+      contentText: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}content_text'])!,
+      source: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}source'])!,
+      createdAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}created_at'])!,
     );
   }
 
@@ -2774,16 +2302,15 @@ class UserFavorite extends DataClass implements Insertable<UserFavorite> {
   final String contentText;
   final String source;
   final String createdAt;
-  const UserFavorite({
-    required this.id,
-    required this.contentType,
-    required this.primaryReference,
-    this.secondaryReference,
-    required this.title,
-    required this.contentText,
-    required this.source,
-    required this.createdAt,
-  });
+  const UserFavorite(
+      {required this.id,
+      required this.contentType,
+      required this.primaryReference,
+      this.secondaryReference,
+      required this.title,
+      required this.contentText,
+      required this.source,
+      required this.createdAt});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -2815,18 +2342,15 @@ class UserFavorite extends DataClass implements Insertable<UserFavorite> {
     );
   }
 
-  factory UserFavorite.fromJson(
-    Map<String, dynamic> json, {
-    ValueSerializer? serializer,
-  }) {
+  factory UserFavorite.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return UserFavorite(
       id: serializer.fromJson<int>(json['id']),
       contentType: serializer.fromJson<String>(json['contentType']),
       primaryReference: serializer.fromJson<String>(json['primaryReference']),
-      secondaryReference: serializer.fromJson<String?>(
-        json['secondaryReference'],
-      ),
+      secondaryReference:
+          serializer.fromJson<String?>(json['secondaryReference']),
       title: serializer.fromJson<String>(json['title']),
       contentText: serializer.fromJson<String>(json['contentText']),
       source: serializer.fromJson<String>(json['source']),
@@ -2848,33 +2372,32 @@ class UserFavorite extends DataClass implements Insertable<UserFavorite> {
     };
   }
 
-  UserFavorite copyWith({
-    int? id,
-    String? contentType,
-    String? primaryReference,
-    Value<String?> secondaryReference = const Value.absent(),
-    String? title,
-    String? contentText,
-    String? source,
-    String? createdAt,
-  }) => UserFavorite(
-    id: id ?? this.id,
-    contentType: contentType ?? this.contentType,
-    primaryReference: primaryReference ?? this.primaryReference,
-    secondaryReference: secondaryReference.present
-        ? secondaryReference.value
-        : this.secondaryReference,
-    title: title ?? this.title,
-    contentText: contentText ?? this.contentText,
-    source: source ?? this.source,
-    createdAt: createdAt ?? this.createdAt,
-  );
+  UserFavorite copyWith(
+          {int? id,
+          String? contentType,
+          String? primaryReference,
+          Value<String?> secondaryReference = const Value.absent(),
+          String? title,
+          String? contentText,
+          String? source,
+          String? createdAt}) =>
+      UserFavorite(
+        id: id ?? this.id,
+        contentType: contentType ?? this.contentType,
+        primaryReference: primaryReference ?? this.primaryReference,
+        secondaryReference: secondaryReference.present
+            ? secondaryReference.value
+            : this.secondaryReference,
+        title: title ?? this.title,
+        contentText: contentText ?? this.contentText,
+        source: source ?? this.source,
+        createdAt: createdAt ?? this.createdAt,
+      );
   UserFavorite copyWithCompanion(UserFavoriteTableCompanion data) {
     return UserFavorite(
       id: data.id.present ? data.id.value : this.id,
-      contentType: data.contentType.present
-          ? data.contentType.value
-          : this.contentType,
+      contentType:
+          data.contentType.present ? data.contentType.value : this.contentType,
       primaryReference: data.primaryReference.present
           ? data.primaryReference.value
           : this.primaryReference,
@@ -2882,9 +2405,8 @@ class UserFavorite extends DataClass implements Insertable<UserFavorite> {
           ? data.secondaryReference.value
           : this.secondaryReference,
       title: data.title.present ? data.title.value : this.title,
-      contentText: data.contentText.present
-          ? data.contentText.value
-          : this.contentText,
+      contentText:
+          data.contentText.present ? data.contentText.value : this.contentText,
       source: data.source.present ? data.source.value : this.source,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
     );
@@ -2906,16 +2428,8 @@ class UserFavorite extends DataClass implements Insertable<UserFavorite> {
   }
 
   @override
-  int get hashCode => Object.hash(
-    id,
-    contentType,
-    primaryReference,
-    secondaryReference,
-    title,
-    contentText,
-    source,
-    createdAt,
-  );
+  int get hashCode => Object.hash(id, contentType, primaryReference,
+      secondaryReference, title, contentText, source, createdAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -2958,12 +2472,12 @@ class UserFavoriteTableCompanion extends UpdateCompanion<UserFavorite> {
     required String contentText,
     required String source,
     required String createdAt,
-  }) : contentType = Value(contentType),
-       primaryReference = Value(primaryReference),
-       title = Value(title),
-       contentText = Value(contentText),
-       source = Value(source),
-       createdAt = Value(createdAt);
+  })  : contentType = Value(contentType),
+        primaryReference = Value(primaryReference),
+        title = Value(title),
+        contentText = Value(contentText),
+        source = Value(source),
+        createdAt = Value(createdAt);
   static Insertable<UserFavorite> custom({
     Expression<int>? id,
     Expression<String>? contentType,
@@ -2986,16 +2500,15 @@ class UserFavoriteTableCompanion extends UpdateCompanion<UserFavorite> {
     });
   }
 
-  UserFavoriteTableCompanion copyWith({
-    Value<int>? id,
-    Value<String>? contentType,
-    Value<String>? primaryReference,
-    Value<String?>? secondaryReference,
-    Value<String>? title,
-    Value<String>? contentText,
-    Value<String>? source,
-    Value<String>? createdAt,
-  }) {
+  UserFavoriteTableCompanion copyWith(
+      {Value<int>? id,
+      Value<String>? contentType,
+      Value<String>? primaryReference,
+      Value<String?>? secondaryReference,
+      Value<String>? title,
+      Value<String>? contentText,
+      Value<String>? source,
+      Value<String>? createdAt}) {
     return UserFavoriteTableCompanion(
       id: id ?? this.id,
       contentType: contentType ?? this.contentType,
@@ -3060,104 +2573,66 @@ class $UserDailyActivityTableTable extends UserDailyActivityTable
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $UserDailyActivityTableTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _activityDateMeta = const VerificationMeta(
-    'activityDate',
-  );
+  static const VerificationMeta _activityDateMeta =
+      const VerificationMeta('activityDate');
   @override
   late final GeneratedColumn<String> activityDate = GeneratedColumn<String>(
-    'activity_date',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _completedTaskIdMeta = const VerificationMeta(
-    'completedTaskId',
-  );
+      'activity_date', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _completedTaskIdMeta =
+      const VerificationMeta('completedTaskId');
   @override
   late final GeneratedColumn<String> completedTaskId = GeneratedColumn<String>(
-    'completed_task_id',
-    aliasedName,
-    true,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-  );
-  static const VerificationMeta _completedSunnahIdMeta = const VerificationMeta(
-    'completedSunnahId',
-  );
+      'completed_task_id', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _completedSunnahIdMeta =
+      const VerificationMeta('completedSunnahId');
   @override
   late final GeneratedColumn<String> completedSunnahId =
-      GeneratedColumn<String>(
-        'completed_sunnah_id',
-        aliasedName,
-        true,
-        type: DriftSqlType.string,
-        requiredDuringInsert: false,
-      );
-  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
-    'updatedAt',
-  );
+      GeneratedColumn<String>('completed_sunnah_id', aliasedName, true,
+          type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _updatedAtMeta =
+      const VerificationMeta('updatedAt');
   @override
   late final GeneratedColumn<String> updatedAt = GeneratedColumn<String>(
-    'updated_at',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
+      'updated_at', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
   @override
-  List<GeneratedColumn> get $columns => [
-    activityDate,
-    completedTaskId,
-    completedSunnahId,
-    updatedAt,
-  ];
+  List<GeneratedColumn> get $columns =>
+      [activityDate, completedTaskId, completedSunnahId, updatedAt];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
   static const String $name = 'user_daily_activity_table';
   @override
-  VerificationContext validateIntegrity(
-    Insertable<UserDailyActivity> instance, {
-    bool isInserting = false,
-  }) {
+  VerificationContext validateIntegrity(Insertable<UserDailyActivity> instance,
+      {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('activity_date')) {
       context.handle(
-        _activityDateMeta,
-        activityDate.isAcceptableOrUnknown(
-          data['activity_date']!,
           _activityDateMeta,
-        ),
-      );
+          activityDate.isAcceptableOrUnknown(
+              data['activity_date']!, _activityDateMeta));
     } else if (isInserting) {
       context.missing(_activityDateMeta);
     }
     if (data.containsKey('completed_task_id')) {
       context.handle(
-        _completedTaskIdMeta,
-        completedTaskId.isAcceptableOrUnknown(
-          data['completed_task_id']!,
           _completedTaskIdMeta,
-        ),
-      );
+          completedTaskId.isAcceptableOrUnknown(
+              data['completed_task_id']!, _completedTaskIdMeta));
     }
     if (data.containsKey('completed_sunnah_id')) {
       context.handle(
-        _completedSunnahIdMeta,
-        completedSunnahId.isAcceptableOrUnknown(
-          data['completed_sunnah_id']!,
           _completedSunnahIdMeta,
-        ),
-      );
+          completedSunnahId.isAcceptableOrUnknown(
+              data['completed_sunnah_id']!, _completedSunnahIdMeta));
     }
     if (data.containsKey('updated_at')) {
-      context.handle(
-        _updatedAtMeta,
-        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
-      );
+      context.handle(_updatedAtMeta,
+          updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta));
     } else if (isInserting) {
       context.missing(_updatedAtMeta);
     }
@@ -3170,22 +2645,14 @@ class $UserDailyActivityTableTable extends UserDailyActivityTable
   UserDailyActivity map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return UserDailyActivity(
-      activityDate: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}activity_date'],
-      )!,
+      activityDate: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}activity_date'])!,
       completedTaskId: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}completed_task_id'],
-      ),
+          DriftSqlType.string, data['${effectivePrefix}completed_task_id']),
       completedSunnahId: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}completed_sunnah_id'],
-      ),
-      updatedAt: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}updated_at'],
-      )!,
+          DriftSqlType.string, data['${effectivePrefix}completed_sunnah_id']),
+      updatedAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}updated_at'])!,
     );
   }
 
@@ -3201,12 +2668,11 @@ class UserDailyActivity extends DataClass
   final String? completedTaskId;
   final String? completedSunnahId;
   final String updatedAt;
-  const UserDailyActivity({
-    required this.activityDate,
-    this.completedTaskId,
-    this.completedSunnahId,
-    required this.updatedAt,
-  });
+  const UserDailyActivity(
+      {required this.activityDate,
+      this.completedTaskId,
+      this.completedSunnahId,
+      required this.updatedAt});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -3234,17 +2700,14 @@ class UserDailyActivity extends DataClass
     );
   }
 
-  factory UserDailyActivity.fromJson(
-    Map<String, dynamic> json, {
-    ValueSerializer? serializer,
-  }) {
+  factory UserDailyActivity.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return UserDailyActivity(
       activityDate: serializer.fromJson<String>(json['activityDate']),
       completedTaskId: serializer.fromJson<String?>(json['completedTaskId']),
-      completedSunnahId: serializer.fromJson<String?>(
-        json['completedSunnahId'],
-      ),
+      completedSunnahId:
+          serializer.fromJson<String?>(json['completedSunnahId']),
       updatedAt: serializer.fromJson<String>(json['updatedAt']),
     );
   }
@@ -3259,21 +2722,21 @@ class UserDailyActivity extends DataClass
     };
   }
 
-  UserDailyActivity copyWith({
-    String? activityDate,
-    Value<String?> completedTaskId = const Value.absent(),
-    Value<String?> completedSunnahId = const Value.absent(),
-    String? updatedAt,
-  }) => UserDailyActivity(
-    activityDate: activityDate ?? this.activityDate,
-    completedTaskId: completedTaskId.present
-        ? completedTaskId.value
-        : this.completedTaskId,
-    completedSunnahId: completedSunnahId.present
-        ? completedSunnahId.value
-        : this.completedSunnahId,
-    updatedAt: updatedAt ?? this.updatedAt,
-  );
+  UserDailyActivity copyWith(
+          {String? activityDate,
+          Value<String?> completedTaskId = const Value.absent(),
+          Value<String?> completedSunnahId = const Value.absent(),
+          String? updatedAt}) =>
+      UserDailyActivity(
+        activityDate: activityDate ?? this.activityDate,
+        completedTaskId: completedTaskId.present
+            ? completedTaskId.value
+            : this.completedTaskId,
+        completedSunnahId: completedSunnahId.present
+            ? completedSunnahId.value
+            : this.completedSunnahId,
+        updatedAt: updatedAt ?? this.updatedAt,
+      );
   UserDailyActivity copyWithCompanion(UserDailyActivityTableCompanion data) {
     return UserDailyActivity(
       activityDate: data.activityDate.present
@@ -3333,8 +2796,8 @@ class UserDailyActivityTableCompanion
     this.completedSunnahId = const Value.absent(),
     required String updatedAt,
     this.rowid = const Value.absent(),
-  }) : activityDate = Value(activityDate),
-       updatedAt = Value(updatedAt);
+  })  : activityDate = Value(activityDate),
+        updatedAt = Value(updatedAt);
   static Insertable<UserDailyActivity> custom({
     Expression<String>? activityDate,
     Expression<String>? completedTaskId,
@@ -3351,13 +2814,12 @@ class UserDailyActivityTableCompanion
     });
   }
 
-  UserDailyActivityTableCompanion copyWith({
-    Value<String>? activityDate,
-    Value<String?>? completedTaskId,
-    Value<String?>? completedSunnahId,
-    Value<String>? updatedAt,
-    Value<int>? rowid,
-  }) {
+  UserDailyActivityTableCompanion copyWith(
+      {Value<String>? activityDate,
+      Value<String?>? completedTaskId,
+      Value<String?>? completedSunnahId,
+      Value<String>? updatedAt,
+      Value<int>? rowid}) {
     return UserDailyActivityTableCompanion(
       activityDate: activityDate ?? this.activityDate,
       completedTaskId: completedTaskId ?? this.completedTaskId,
@@ -3410,219 +2872,135 @@ class $MemoryThreadTableTable extends MemoryThreadTable
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<String> id = GeneratedColumn<String>(
-    'id',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _sourceKindMeta = const VerificationMeta(
-    'sourceKind',
-  );
+      'id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _sourceKindMeta =
+      const VerificationMeta('sourceKind');
   @override
   late final GeneratedColumn<String> sourceKind = GeneratedColumn<String>(
-    'source_kind',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _sourceCanonicalIdMeta = const VerificationMeta(
-    'sourceCanonicalId',
-  );
+      'source_kind', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _sourceCanonicalIdMeta =
+      const VerificationMeta('sourceCanonicalId');
   @override
   late final GeneratedColumn<String> sourceCanonicalId =
-      GeneratedColumn<String>(
-        'source_canonical_id',
-        aliasedName,
-        false,
-        type: DriftSqlType.string,
-        requiredDuringInsert: true,
-      );
-  static const VerificationMeta _sourceLabelMeta = const VerificationMeta(
-    'sourceLabel',
-  );
+      GeneratedColumn<String>('source_canonical_id', aliasedName, false,
+          type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _sourceLabelMeta =
+      const VerificationMeta('sourceLabel');
   @override
   late final GeneratedColumn<String> sourceLabel = GeneratedColumn<String>(
-    'source_label',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _sourceBookMeta = const VerificationMeta(
-    'sourceBook',
-  );
+      'source_label', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _sourceBookMeta =
+      const VerificationMeta('sourceBook');
   @override
   late final GeneratedColumn<String> sourceBook = GeneratedColumn<String>(
-    'source_book',
-    aliasedName,
-    true,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-  );
-  static const VerificationMeta _sourceCitationMeta = const VerificationMeta(
-    'sourceCitation',
-  );
+      'source_book', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _sourceCitationMeta =
+      const VerificationMeta('sourceCitation');
   @override
   late final GeneratedColumn<String> sourceCitation = GeneratedColumn<String>(
-    'source_citation',
-    aliasedName,
-    true,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-  );
-  static const VerificationMeta _sourceVersionMeta = const VerificationMeta(
-    'sourceVersion',
-  );
+      'source_citation', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _sourceVersionMeta =
+      const VerificationMeta('sourceVersion');
   @override
   late final GeneratedColumn<String> sourceVersion = GeneratedColumn<String>(
-    'source_version',
-    aliasedName,
-    true,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-  );
+      'source_version', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   static const VerificationMeta _sourceSecondaryReferenceMeta =
       const VerificationMeta('sourceSecondaryReference');
   @override
   late final GeneratedColumn<String> sourceSecondaryReference =
-      GeneratedColumn<String>(
-        'source_secondary_reference',
-        aliasedName,
-        true,
-        type: DriftSqlType.string,
-        requiredDuringInsert: false,
-      );
-  static const VerificationMeta _userContextKindMeta = const VerificationMeta(
-    'userContextKind',
-  );
+      GeneratedColumn<String>('source_secondary_reference', aliasedName, true,
+          type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _userContextKindMeta =
+      const VerificationMeta('userContextKind');
   @override
   late final GeneratedColumn<String> userContextKind = GeneratedColumn<String>(
-    'user_context_kind',
-    aliasedName,
-    true,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-  );
-  static const VerificationMeta _userContextLabelMeta = const VerificationMeta(
-    'userContextLabel',
-  );
+      'user_context_kind', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _userContextLabelMeta =
+      const VerificationMeta('userContextLabel');
   @override
   late final GeneratedColumn<String> userContextLabel = GeneratedColumn<String>(
-    'user_context_label',
-    aliasedName,
-    true,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-  );
-  static const VerificationMeta _userLabelMeta = const VerificationMeta(
-    'userLabel',
-  );
+      'user_context_label', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _userLabelMeta =
+      const VerificationMeta('userLabel');
   @override
   late final GeneratedColumn<String> userLabel = GeneratedColumn<String>(
-    'user_label',
-    aliasedName,
-    true,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-  );
+      'user_label', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   static const VerificationMeta _statusMeta = const VerificationMeta('status');
   @override
   late final GeneratedColumn<String> status = GeneratedColumn<String>(
-    'status',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-    defaultValue: const Constant('active'),
-  );
-  static const VerificationMeta _resurfacingMeta = const VerificationMeta(
-    'resurfacing',
-  );
+      'status', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultValue: const Constant('active'));
+  static const VerificationMeta _resurfacingMeta =
+      const VerificationMeta('resurfacing');
   @override
   late final GeneratedColumn<String> resurfacing = GeneratedColumn<String>(
-    'resurfacing',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-    defaultValue: const Constant('on'),
-  );
-  static const VerificationMeta _legacyKeyMeta = const VerificationMeta(
-    'legacyKey',
-  );
+      'resurfacing', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultValue: const Constant('on'));
+  static const VerificationMeta _legacyKeyMeta =
+      const VerificationMeta('legacyKey');
   @override
   late final GeneratedColumn<String> legacyKey = GeneratedColumn<String>(
-    'legacy_key',
-    aliasedName,
-    true,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-  );
-  static const VerificationMeta _createdAtMeta = const VerificationMeta(
-    'createdAt',
-  );
+      'legacy_key', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _createdAtMeta =
+      const VerificationMeta('createdAt');
   @override
   late final GeneratedColumn<String> createdAt = GeneratedColumn<String>(
-    'created_at',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
-    'updatedAt',
-  );
+      'created_at', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _updatedAtMeta =
+      const VerificationMeta('updatedAt');
   @override
   late final GeneratedColumn<String> updatedAt = GeneratedColumn<String>(
-    'updated_at',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _lastReturnedAtMeta = const VerificationMeta(
-    'lastReturnedAt',
-  );
+      'updated_at', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _lastReturnedAtMeta =
+      const VerificationMeta('lastReturnedAt');
   @override
   late final GeneratedColumn<String> lastReturnedAt = GeneratedColumn<String>(
-    'last_returned_at',
-    aliasedName,
-    true,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-  );
+      'last_returned_at', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   @override
   List<GeneratedColumn> get $columns => [
-    id,
-    sourceKind,
-    sourceCanonicalId,
-    sourceLabel,
-    sourceBook,
-    sourceCitation,
-    sourceVersion,
-    sourceSecondaryReference,
-    userContextKind,
-    userContextLabel,
-    userLabel,
-    status,
-    resurfacing,
-    legacyKey,
-    createdAt,
-    updatedAt,
-    lastReturnedAt,
-  ];
+        id,
+        sourceKind,
+        sourceCanonicalId,
+        sourceLabel,
+        sourceBook,
+        sourceCitation,
+        sourceVersion,
+        sourceSecondaryReference,
+        userContextKind,
+        userContextLabel,
+        userLabel,
+        status,
+        resurfacing,
+        legacyKey,
+        createdAt,
+        updatedAt,
+        lastReturnedAt
+      ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
   static const String $name = 'memory_thread_table';
   @override
-  VerificationContext validateIntegrity(
-    Insertable<MemoryThreadRow> instance, {
-    bool isInserting = false,
-  }) {
+  VerificationContext validateIntegrity(Insertable<MemoryThreadRow> instance,
+      {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
@@ -3632,136 +3010,100 @@ class $MemoryThreadTableTable extends MemoryThreadTable
     }
     if (data.containsKey('source_kind')) {
       context.handle(
-        _sourceKindMeta,
-        sourceKind.isAcceptableOrUnknown(data['source_kind']!, _sourceKindMeta),
-      );
+          _sourceKindMeta,
+          sourceKind.isAcceptableOrUnknown(
+              data['source_kind']!, _sourceKindMeta));
     } else if (isInserting) {
       context.missing(_sourceKindMeta);
     }
     if (data.containsKey('source_canonical_id')) {
       context.handle(
-        _sourceCanonicalIdMeta,
-        sourceCanonicalId.isAcceptableOrUnknown(
-          data['source_canonical_id']!,
           _sourceCanonicalIdMeta,
-        ),
-      );
+          sourceCanonicalId.isAcceptableOrUnknown(
+              data['source_canonical_id']!, _sourceCanonicalIdMeta));
     } else if (isInserting) {
       context.missing(_sourceCanonicalIdMeta);
     }
     if (data.containsKey('source_label')) {
       context.handle(
-        _sourceLabelMeta,
-        sourceLabel.isAcceptableOrUnknown(
-          data['source_label']!,
           _sourceLabelMeta,
-        ),
-      );
+          sourceLabel.isAcceptableOrUnknown(
+              data['source_label']!, _sourceLabelMeta));
     } else if (isInserting) {
       context.missing(_sourceLabelMeta);
     }
     if (data.containsKey('source_book')) {
       context.handle(
-        _sourceBookMeta,
-        sourceBook.isAcceptableOrUnknown(data['source_book']!, _sourceBookMeta),
-      );
+          _sourceBookMeta,
+          sourceBook.isAcceptableOrUnknown(
+              data['source_book']!, _sourceBookMeta));
     }
     if (data.containsKey('source_citation')) {
       context.handle(
-        _sourceCitationMeta,
-        sourceCitation.isAcceptableOrUnknown(
-          data['source_citation']!,
           _sourceCitationMeta,
-        ),
-      );
+          sourceCitation.isAcceptableOrUnknown(
+              data['source_citation']!, _sourceCitationMeta));
     }
     if (data.containsKey('source_version')) {
       context.handle(
-        _sourceVersionMeta,
-        sourceVersion.isAcceptableOrUnknown(
-          data['source_version']!,
           _sourceVersionMeta,
-        ),
-      );
+          sourceVersion.isAcceptableOrUnknown(
+              data['source_version']!, _sourceVersionMeta));
     }
     if (data.containsKey('source_secondary_reference')) {
       context.handle(
-        _sourceSecondaryReferenceMeta,
-        sourceSecondaryReference.isAcceptableOrUnknown(
-          data['source_secondary_reference']!,
           _sourceSecondaryReferenceMeta,
-        ),
-      );
+          sourceSecondaryReference.isAcceptableOrUnknown(
+              data['source_secondary_reference']!,
+              _sourceSecondaryReferenceMeta));
     }
     if (data.containsKey('user_context_kind')) {
       context.handle(
-        _userContextKindMeta,
-        userContextKind.isAcceptableOrUnknown(
-          data['user_context_kind']!,
           _userContextKindMeta,
-        ),
-      );
+          userContextKind.isAcceptableOrUnknown(
+              data['user_context_kind']!, _userContextKindMeta));
     }
     if (data.containsKey('user_context_label')) {
       context.handle(
-        _userContextLabelMeta,
-        userContextLabel.isAcceptableOrUnknown(
-          data['user_context_label']!,
           _userContextLabelMeta,
-        ),
-      );
+          userContextLabel.isAcceptableOrUnknown(
+              data['user_context_label']!, _userContextLabelMeta));
     }
     if (data.containsKey('user_label')) {
-      context.handle(
-        _userLabelMeta,
-        userLabel.isAcceptableOrUnknown(data['user_label']!, _userLabelMeta),
-      );
+      context.handle(_userLabelMeta,
+          userLabel.isAcceptableOrUnknown(data['user_label']!, _userLabelMeta));
     }
     if (data.containsKey('status')) {
-      context.handle(
-        _statusMeta,
-        status.isAcceptableOrUnknown(data['status']!, _statusMeta),
-      );
+      context.handle(_statusMeta,
+          status.isAcceptableOrUnknown(data['status']!, _statusMeta));
     }
     if (data.containsKey('resurfacing')) {
       context.handle(
-        _resurfacingMeta,
-        resurfacing.isAcceptableOrUnknown(
-          data['resurfacing']!,
           _resurfacingMeta,
-        ),
-      );
+          resurfacing.isAcceptableOrUnknown(
+              data['resurfacing']!, _resurfacingMeta));
     }
     if (data.containsKey('legacy_key')) {
-      context.handle(
-        _legacyKeyMeta,
-        legacyKey.isAcceptableOrUnknown(data['legacy_key']!, _legacyKeyMeta),
-      );
+      context.handle(_legacyKeyMeta,
+          legacyKey.isAcceptableOrUnknown(data['legacy_key']!, _legacyKeyMeta));
     }
     if (data.containsKey('created_at')) {
-      context.handle(
-        _createdAtMeta,
-        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
-      );
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
     } else if (isInserting) {
       context.missing(_createdAtMeta);
     }
     if (data.containsKey('updated_at')) {
-      context.handle(
-        _updatedAtMeta,
-        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
-      );
+      context.handle(_updatedAtMeta,
+          updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta));
     } else if (isInserting) {
       context.missing(_updatedAtMeta);
     }
     if (data.containsKey('last_returned_at')) {
       context.handle(
-        _lastReturnedAtMeta,
-        lastReturnedAt.isAcceptableOrUnknown(
-          data['last_returned_at']!,
           _lastReturnedAtMeta,
-        ),
-      );
+          lastReturnedAt.isAcceptableOrUnknown(
+              data['last_returned_at']!, _lastReturnedAtMeta));
     }
     return context;
   }
@@ -3770,80 +3112,47 @@ class $MemoryThreadTableTable extends MemoryThreadTable
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
   List<Set<GeneratedColumn>> get uniqueKeys => [
-    {legacyKey},
-  ];
+        {legacyKey},
+      ];
   @override
   MemoryThreadRow map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return MemoryThreadRow(
-      id: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}id'],
-      )!,
-      sourceKind: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}source_kind'],
-      )!,
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
+      sourceKind: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}source_kind'])!,
       sourceCanonicalId: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}source_canonical_id'],
-      )!,
-      sourceLabel: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}source_label'],
-      )!,
-      sourceBook: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}source_book'],
-      ),
-      sourceCitation: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}source_citation'],
-      ),
-      sourceVersion: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}source_version'],
-      ),
+          DriftSqlType.string, data['${effectivePrefix}source_canonical_id'])!,
+      sourceLabel: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}source_label'])!,
+      sourceBook: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}source_book']),
+      sourceCitation: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}source_citation']),
+      sourceVersion: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}source_version']),
       sourceSecondaryReference: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}source_secondary_reference'],
-      ),
+          DriftSqlType.string,
+          data['${effectivePrefix}source_secondary_reference']),
       userContextKind: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}user_context_kind'],
-      ),
+          DriftSqlType.string, data['${effectivePrefix}user_context_kind']),
       userContextLabel: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}user_context_label'],
-      ),
-      userLabel: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}user_label'],
-      ),
-      status: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}status'],
-      )!,
-      resurfacing: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}resurfacing'],
-      )!,
-      legacyKey: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}legacy_key'],
-      ),
-      createdAt: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}created_at'],
-      )!,
-      updatedAt: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}updated_at'],
-      )!,
+          DriftSqlType.string, data['${effectivePrefix}user_context_label']),
+      userLabel: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}user_label']),
+      status: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}status'])!,
+      resurfacing: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}resurfacing'])!,
+      legacyKey: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}legacy_key']),
+      createdAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}created_at'])!,
+      updatedAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}updated_at'])!,
       lastReturnedAt: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}last_returned_at'],
-      ),
+          DriftSqlType.string, data['${effectivePrefix}last_returned_at']),
     );
   }
 
@@ -3871,25 +3180,24 @@ class MemoryThreadRow extends DataClass implements Insertable<MemoryThreadRow> {
   final String createdAt;
   final String updatedAt;
   final String? lastReturnedAt;
-  const MemoryThreadRow({
-    required this.id,
-    required this.sourceKind,
-    required this.sourceCanonicalId,
-    required this.sourceLabel,
-    this.sourceBook,
-    this.sourceCitation,
-    this.sourceVersion,
-    this.sourceSecondaryReference,
-    this.userContextKind,
-    this.userContextLabel,
-    this.userLabel,
-    required this.status,
-    required this.resurfacing,
-    this.legacyKey,
-    required this.createdAt,
-    required this.updatedAt,
-    this.lastReturnedAt,
-  });
+  const MemoryThreadRow(
+      {required this.id,
+      required this.sourceKind,
+      required this.sourceCanonicalId,
+      required this.sourceLabel,
+      this.sourceBook,
+      this.sourceCitation,
+      this.sourceVersion,
+      this.sourceSecondaryReference,
+      this.userContextKind,
+      this.userContextLabel,
+      this.userLabel,
+      required this.status,
+      required this.resurfacing,
+      this.legacyKey,
+      required this.createdAt,
+      required this.updatedAt,
+      this.lastReturnedAt});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -3907,9 +3215,8 @@ class MemoryThreadRow extends DataClass implements Insertable<MemoryThreadRow> {
       map['source_version'] = Variable<String>(sourceVersion);
     }
     if (!nullToAbsent || sourceSecondaryReference != null) {
-      map['source_secondary_reference'] = Variable<String>(
-        sourceSecondaryReference,
-      );
+      map['source_secondary_reference'] =
+          Variable<String>(sourceSecondaryReference);
     }
     if (!nullToAbsent || userContextKind != null) {
       map['user_context_kind'] = Variable<String>(userContextKind);
@@ -3973,10 +3280,8 @@ class MemoryThreadRow extends DataClass implements Insertable<MemoryThreadRow> {
     );
   }
 
-  factory MemoryThreadRow.fromJson(
-    Map<String, dynamic> json, {
-    ValueSerializer? serializer,
-  }) {
+  factory MemoryThreadRow.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return MemoryThreadRow(
       id: serializer.fromJson<String>(json['id']),
@@ -3986,9 +3291,8 @@ class MemoryThreadRow extends DataClass implements Insertable<MemoryThreadRow> {
       sourceBook: serializer.fromJson<String?>(json['sourceBook']),
       sourceCitation: serializer.fromJson<String?>(json['sourceCitation']),
       sourceVersion: serializer.fromJson<String?>(json['sourceVersion']),
-      sourceSecondaryReference: serializer.fromJson<String?>(
-        json['sourceSecondaryReference'],
-      ),
+      sourceSecondaryReference:
+          serializer.fromJson<String?>(json['sourceSecondaryReference']),
       userContextKind: serializer.fromJson<String?>(json['userContextKind']),
       userContextLabel: serializer.fromJson<String?>(json['userContextLabel']),
       userLabel: serializer.fromJson<String?>(json['userLabel']),
@@ -4011,9 +3315,8 @@ class MemoryThreadRow extends DataClass implements Insertable<MemoryThreadRow> {
       'sourceBook': serializer.toJson<String?>(sourceBook),
       'sourceCitation': serializer.toJson<String?>(sourceCitation),
       'sourceVersion': serializer.toJson<String?>(sourceVersion),
-      'sourceSecondaryReference': serializer.toJson<String?>(
-        sourceSecondaryReference,
-      ),
+      'sourceSecondaryReference':
+          serializer.toJson<String?>(sourceSecondaryReference),
       'userContextKind': serializer.toJson<String?>(userContextKind),
       'userContextLabel': serializer.toJson<String?>(userContextLabel),
       'userLabel': serializer.toJson<String?>(userLabel),
@@ -4026,70 +3329,64 @@ class MemoryThreadRow extends DataClass implements Insertable<MemoryThreadRow> {
     };
   }
 
-  MemoryThreadRow copyWith({
-    String? id,
-    String? sourceKind,
-    String? sourceCanonicalId,
-    String? sourceLabel,
-    Value<String?> sourceBook = const Value.absent(),
-    Value<String?> sourceCitation = const Value.absent(),
-    Value<String?> sourceVersion = const Value.absent(),
-    Value<String?> sourceSecondaryReference = const Value.absent(),
-    Value<String?> userContextKind = const Value.absent(),
-    Value<String?> userContextLabel = const Value.absent(),
-    Value<String?> userLabel = const Value.absent(),
-    String? status,
-    String? resurfacing,
-    Value<String?> legacyKey = const Value.absent(),
-    String? createdAt,
-    String? updatedAt,
-    Value<String?> lastReturnedAt = const Value.absent(),
-  }) => MemoryThreadRow(
-    id: id ?? this.id,
-    sourceKind: sourceKind ?? this.sourceKind,
-    sourceCanonicalId: sourceCanonicalId ?? this.sourceCanonicalId,
-    sourceLabel: sourceLabel ?? this.sourceLabel,
-    sourceBook: sourceBook.present ? sourceBook.value : this.sourceBook,
-    sourceCitation: sourceCitation.present
-        ? sourceCitation.value
-        : this.sourceCitation,
-    sourceVersion: sourceVersion.present
-        ? sourceVersion.value
-        : this.sourceVersion,
-    sourceSecondaryReference: sourceSecondaryReference.present
-        ? sourceSecondaryReference.value
-        : this.sourceSecondaryReference,
-    userContextKind: userContextKind.present
-        ? userContextKind.value
-        : this.userContextKind,
-    userContextLabel: userContextLabel.present
-        ? userContextLabel.value
-        : this.userContextLabel,
-    userLabel: userLabel.present ? userLabel.value : this.userLabel,
-    status: status ?? this.status,
-    resurfacing: resurfacing ?? this.resurfacing,
-    legacyKey: legacyKey.present ? legacyKey.value : this.legacyKey,
-    createdAt: createdAt ?? this.createdAt,
-    updatedAt: updatedAt ?? this.updatedAt,
-    lastReturnedAt: lastReturnedAt.present
-        ? lastReturnedAt.value
-        : this.lastReturnedAt,
-  );
+  MemoryThreadRow copyWith(
+          {String? id,
+          String? sourceKind,
+          String? sourceCanonicalId,
+          String? sourceLabel,
+          Value<String?> sourceBook = const Value.absent(),
+          Value<String?> sourceCitation = const Value.absent(),
+          Value<String?> sourceVersion = const Value.absent(),
+          Value<String?> sourceSecondaryReference = const Value.absent(),
+          Value<String?> userContextKind = const Value.absent(),
+          Value<String?> userContextLabel = const Value.absent(),
+          Value<String?> userLabel = const Value.absent(),
+          String? status,
+          String? resurfacing,
+          Value<String?> legacyKey = const Value.absent(),
+          String? createdAt,
+          String? updatedAt,
+          Value<String?> lastReturnedAt = const Value.absent()}) =>
+      MemoryThreadRow(
+        id: id ?? this.id,
+        sourceKind: sourceKind ?? this.sourceKind,
+        sourceCanonicalId: sourceCanonicalId ?? this.sourceCanonicalId,
+        sourceLabel: sourceLabel ?? this.sourceLabel,
+        sourceBook: sourceBook.present ? sourceBook.value : this.sourceBook,
+        sourceCitation:
+            sourceCitation.present ? sourceCitation.value : this.sourceCitation,
+        sourceVersion:
+            sourceVersion.present ? sourceVersion.value : this.sourceVersion,
+        sourceSecondaryReference: sourceSecondaryReference.present
+            ? sourceSecondaryReference.value
+            : this.sourceSecondaryReference,
+        userContextKind: userContextKind.present
+            ? userContextKind.value
+            : this.userContextKind,
+        userContextLabel: userContextLabel.present
+            ? userContextLabel.value
+            : this.userContextLabel,
+        userLabel: userLabel.present ? userLabel.value : this.userLabel,
+        status: status ?? this.status,
+        resurfacing: resurfacing ?? this.resurfacing,
+        legacyKey: legacyKey.present ? legacyKey.value : this.legacyKey,
+        createdAt: createdAt ?? this.createdAt,
+        updatedAt: updatedAt ?? this.updatedAt,
+        lastReturnedAt:
+            lastReturnedAt.present ? lastReturnedAt.value : this.lastReturnedAt,
+      );
   MemoryThreadRow copyWithCompanion(MemoryThreadTableCompanion data) {
     return MemoryThreadRow(
       id: data.id.present ? data.id.value : this.id,
-      sourceKind: data.sourceKind.present
-          ? data.sourceKind.value
-          : this.sourceKind,
+      sourceKind:
+          data.sourceKind.present ? data.sourceKind.value : this.sourceKind,
       sourceCanonicalId: data.sourceCanonicalId.present
           ? data.sourceCanonicalId.value
           : this.sourceCanonicalId,
-      sourceLabel: data.sourceLabel.present
-          ? data.sourceLabel.value
-          : this.sourceLabel,
-      sourceBook: data.sourceBook.present
-          ? data.sourceBook.value
-          : this.sourceBook,
+      sourceLabel:
+          data.sourceLabel.present ? data.sourceLabel.value : this.sourceLabel,
+      sourceBook:
+          data.sourceBook.present ? data.sourceBook.value : this.sourceBook,
       sourceCitation: data.sourceCitation.present
           ? data.sourceCitation.value
           : this.sourceCitation,
@@ -4107,9 +3404,8 @@ class MemoryThreadRow extends DataClass implements Insertable<MemoryThreadRow> {
           : this.userContextLabel,
       userLabel: data.userLabel.present ? data.userLabel.value : this.userLabel,
       status: data.status.present ? data.status.value : this.status,
-      resurfacing: data.resurfacing.present
-          ? data.resurfacing.value
-          : this.resurfacing,
+      resurfacing:
+          data.resurfacing.present ? data.resurfacing.value : this.resurfacing,
       legacyKey: data.legacyKey.present ? data.legacyKey.value : this.legacyKey,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
       updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
@@ -4145,24 +3441,23 @@ class MemoryThreadRow extends DataClass implements Insertable<MemoryThreadRow> {
 
   @override
   int get hashCode => Object.hash(
-    id,
-    sourceKind,
-    sourceCanonicalId,
-    sourceLabel,
-    sourceBook,
-    sourceCitation,
-    sourceVersion,
-    sourceSecondaryReference,
-    userContextKind,
-    userContextLabel,
-    userLabel,
-    status,
-    resurfacing,
-    legacyKey,
-    createdAt,
-    updatedAt,
-    lastReturnedAt,
-  );
+      id,
+      sourceKind,
+      sourceCanonicalId,
+      sourceLabel,
+      sourceBook,
+      sourceCitation,
+      sourceVersion,
+      sourceSecondaryReference,
+      userContextKind,
+      userContextLabel,
+      userLabel,
+      status,
+      resurfacing,
+      legacyKey,
+      createdAt,
+      updatedAt,
+      lastReturnedAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -4244,12 +3539,12 @@ class MemoryThreadTableCompanion extends UpdateCompanion<MemoryThreadRow> {
     required String updatedAt,
     this.lastReturnedAt = const Value.absent(),
     this.rowid = const Value.absent(),
-  }) : id = Value(id),
-       sourceKind = Value(sourceKind),
-       sourceCanonicalId = Value(sourceCanonicalId),
-       sourceLabel = Value(sourceLabel),
-       createdAt = Value(createdAt),
-       updatedAt = Value(updatedAt);
+  })  : id = Value(id),
+        sourceKind = Value(sourceKind),
+        sourceCanonicalId = Value(sourceCanonicalId),
+        sourceLabel = Value(sourceLabel),
+        createdAt = Value(createdAt),
+        updatedAt = Value(updatedAt);
   static Insertable<MemoryThreadRow> custom({
     Expression<String>? id,
     Expression<String>? sourceKind,
@@ -4293,26 +3588,25 @@ class MemoryThreadTableCompanion extends UpdateCompanion<MemoryThreadRow> {
     });
   }
 
-  MemoryThreadTableCompanion copyWith({
-    Value<String>? id,
-    Value<String>? sourceKind,
-    Value<String>? sourceCanonicalId,
-    Value<String>? sourceLabel,
-    Value<String?>? sourceBook,
-    Value<String?>? sourceCitation,
-    Value<String?>? sourceVersion,
-    Value<String?>? sourceSecondaryReference,
-    Value<String?>? userContextKind,
-    Value<String?>? userContextLabel,
-    Value<String?>? userLabel,
-    Value<String>? status,
-    Value<String>? resurfacing,
-    Value<String?>? legacyKey,
-    Value<String>? createdAt,
-    Value<String>? updatedAt,
-    Value<String?>? lastReturnedAt,
-    Value<int>? rowid,
-  }) {
+  MemoryThreadTableCompanion copyWith(
+      {Value<String>? id,
+      Value<String>? sourceKind,
+      Value<String>? sourceCanonicalId,
+      Value<String>? sourceLabel,
+      Value<String?>? sourceBook,
+      Value<String?>? sourceCitation,
+      Value<String?>? sourceVersion,
+      Value<String?>? sourceSecondaryReference,
+      Value<String?>? userContextKind,
+      Value<String?>? userContextLabel,
+      Value<String?>? userLabel,
+      Value<String>? status,
+      Value<String>? resurfacing,
+      Value<String?>? legacyKey,
+      Value<String>? createdAt,
+      Value<String>? updatedAt,
+      Value<String?>? lastReturnedAt,
+      Value<int>? rowid}) {
     return MemoryThreadTableCompanion(
       id: id ?? this.id,
       sourceKind: sourceKind ?? this.sourceKind,
@@ -4361,9 +3655,8 @@ class MemoryThreadTableCompanion extends UpdateCompanion<MemoryThreadRow> {
       map['source_version'] = Variable<String>(sourceVersion.value);
     }
     if (sourceSecondaryReference.present) {
-      map['source_secondary_reference'] = Variable<String>(
-        sourceSecondaryReference.value,
-      );
+      map['source_secondary_reference'] =
+          Variable<String>(sourceSecondaryReference.value);
     }
     if (userContextKind.present) {
       map['user_context_kind'] = Variable<String>(userContextKind.value);
@@ -4433,84 +3726,48 @@ class $ReflectionEntryTableTable extends ReflectionEntryTable
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<String> id = GeneratedColumn<String>(
-    'id',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _threadIdMeta = const VerificationMeta(
-    'threadId',
-  );
+      'id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _threadIdMeta =
+      const VerificationMeta('threadId');
   @override
   late final GeneratedColumn<String> threadId = GeneratedColumn<String>(
-    'thread_id',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
+      'thread_id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
   static const VerificationMeta _bodyMeta = const VerificationMeta('body');
   @override
   late final GeneratedColumn<String> body = GeneratedColumn<String>(
-    'body',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _createdAtMeta = const VerificationMeta(
-    'createdAt',
-  );
+      'body', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _createdAtMeta =
+      const VerificationMeta('createdAt');
   @override
   late final GeneratedColumn<String> createdAt = GeneratedColumn<String>(
-    'created_at',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
-    'updatedAt',
-  );
+      'created_at', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _updatedAtMeta =
+      const VerificationMeta('updatedAt');
   @override
   late final GeneratedColumn<String> updatedAt = GeneratedColumn<String>(
-    'updated_at',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _deletedAtMeta = const VerificationMeta(
-    'deletedAt',
-  );
+      'updated_at', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _deletedAtMeta =
+      const VerificationMeta('deletedAt');
   @override
   late final GeneratedColumn<String> deletedAt = GeneratedColumn<String>(
-    'deleted_at',
-    aliasedName,
-    true,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-  );
+      'deleted_at', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   @override
-  List<GeneratedColumn> get $columns => [
-    id,
-    threadId,
-    body,
-    createdAt,
-    updatedAt,
-    deletedAt,
-  ];
+  List<GeneratedColumn> get $columns =>
+      [id, threadId, body, createdAt, updatedAt, deletedAt];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
   static const String $name = 'reflection_entry_table';
   @override
-  VerificationContext validateIntegrity(
-    Insertable<ReflectionEntryRow> instance, {
-    bool isInserting = false,
-  }) {
+  VerificationContext validateIntegrity(Insertable<ReflectionEntryRow> instance,
+      {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
@@ -4519,42 +3776,32 @@ class $ReflectionEntryTableTable extends ReflectionEntryTable
       context.missing(_idMeta);
     }
     if (data.containsKey('thread_id')) {
-      context.handle(
-        _threadIdMeta,
-        threadId.isAcceptableOrUnknown(data['thread_id']!, _threadIdMeta),
-      );
+      context.handle(_threadIdMeta,
+          threadId.isAcceptableOrUnknown(data['thread_id']!, _threadIdMeta));
     } else if (isInserting) {
       context.missing(_threadIdMeta);
     }
     if (data.containsKey('body')) {
       context.handle(
-        _bodyMeta,
-        body.isAcceptableOrUnknown(data['body']!, _bodyMeta),
-      );
+          _bodyMeta, body.isAcceptableOrUnknown(data['body']!, _bodyMeta));
     } else if (isInserting) {
       context.missing(_bodyMeta);
     }
     if (data.containsKey('created_at')) {
-      context.handle(
-        _createdAtMeta,
-        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
-      );
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
     } else if (isInserting) {
       context.missing(_createdAtMeta);
     }
     if (data.containsKey('updated_at')) {
-      context.handle(
-        _updatedAtMeta,
-        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
-      );
+      context.handle(_updatedAtMeta,
+          updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta));
     } else if (isInserting) {
       context.missing(_updatedAtMeta);
     }
     if (data.containsKey('deleted_at')) {
-      context.handle(
-        _deletedAtMeta,
-        deletedAt.isAcceptableOrUnknown(data['deleted_at']!, _deletedAtMeta),
-      );
+      context.handle(_deletedAtMeta,
+          deletedAt.isAcceptableOrUnknown(data['deleted_at']!, _deletedAtMeta));
     }
     return context;
   }
@@ -4563,36 +3810,24 @@ class $ReflectionEntryTableTable extends ReflectionEntryTable
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
   List<Set<GeneratedColumn>> get uniqueKeys => [
-    {threadId, createdAt},
-  ];
+        {threadId, createdAt},
+      ];
   @override
   ReflectionEntryRow map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return ReflectionEntryRow(
-      id: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}id'],
-      )!,
-      threadId: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}thread_id'],
-      )!,
-      body: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}body'],
-      )!,
-      createdAt: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}created_at'],
-      )!,
-      updatedAt: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}updated_at'],
-      )!,
-      deletedAt: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}deleted_at'],
-      ),
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
+      threadId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}thread_id'])!,
+      body: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}body'])!,
+      createdAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}created_at'])!,
+      updatedAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}updated_at'])!,
+      deletedAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}deleted_at']),
     );
   }
 
@@ -4610,14 +3845,13 @@ class ReflectionEntryRow extends DataClass
   final String createdAt;
   final String updatedAt;
   final String? deletedAt;
-  const ReflectionEntryRow({
-    required this.id,
-    required this.threadId,
-    required this.body,
-    required this.createdAt,
-    required this.updatedAt,
-    this.deletedAt,
-  });
+  const ReflectionEntryRow(
+      {required this.id,
+      required this.threadId,
+      required this.body,
+      required this.createdAt,
+      required this.updatedAt,
+      this.deletedAt});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -4645,10 +3879,8 @@ class ReflectionEntryRow extends DataClass
     );
   }
 
-  factory ReflectionEntryRow.fromJson(
-    Map<String, dynamic> json, {
-    ValueSerializer? serializer,
-  }) {
+  factory ReflectionEntryRow.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return ReflectionEntryRow(
       id: serializer.fromJson<String>(json['id']),
@@ -4672,21 +3904,21 @@ class ReflectionEntryRow extends DataClass
     };
   }
 
-  ReflectionEntryRow copyWith({
-    String? id,
-    String? threadId,
-    String? body,
-    String? createdAt,
-    String? updatedAt,
-    Value<String?> deletedAt = const Value.absent(),
-  }) => ReflectionEntryRow(
-    id: id ?? this.id,
-    threadId: threadId ?? this.threadId,
-    body: body ?? this.body,
-    createdAt: createdAt ?? this.createdAt,
-    updatedAt: updatedAt ?? this.updatedAt,
-    deletedAt: deletedAt.present ? deletedAt.value : this.deletedAt,
-  );
+  ReflectionEntryRow copyWith(
+          {String? id,
+          String? threadId,
+          String? body,
+          String? createdAt,
+          String? updatedAt,
+          Value<String?> deletedAt = const Value.absent()}) =>
+      ReflectionEntryRow(
+        id: id ?? this.id,
+        threadId: threadId ?? this.threadId,
+        body: body ?? this.body,
+        createdAt: createdAt ?? this.createdAt,
+        updatedAt: updatedAt ?? this.updatedAt,
+        deletedAt: deletedAt.present ? deletedAt.value : this.deletedAt,
+      );
   ReflectionEntryRow copyWithCompanion(ReflectionEntryTableCompanion data) {
     return ReflectionEntryRow(
       id: data.id.present ? data.id.value : this.id,
@@ -4752,11 +3984,11 @@ class ReflectionEntryTableCompanion
     required String updatedAt,
     this.deletedAt = const Value.absent(),
     this.rowid = const Value.absent(),
-  }) : id = Value(id),
-       threadId = Value(threadId),
-       body = Value(body),
-       createdAt = Value(createdAt),
-       updatedAt = Value(updatedAt);
+  })  : id = Value(id),
+        threadId = Value(threadId),
+        body = Value(body),
+        createdAt = Value(createdAt),
+        updatedAt = Value(updatedAt);
   static Insertable<ReflectionEntryRow> custom({
     Expression<String>? id,
     Expression<String>? threadId,
@@ -4777,15 +4009,14 @@ class ReflectionEntryTableCompanion
     });
   }
 
-  ReflectionEntryTableCompanion copyWith({
-    Value<String>? id,
-    Value<String>? threadId,
-    Value<String>? body,
-    Value<String>? createdAt,
-    Value<String>? updatedAt,
-    Value<String?>? deletedAt,
-    Value<int>? rowid,
-  }) {
+  ReflectionEntryTableCompanion copyWith(
+      {Value<String>? id,
+      Value<String>? threadId,
+      Value<String>? body,
+      Value<String>? createdAt,
+      Value<String>? updatedAt,
+      Value<String?>? deletedAt,
+      Value<int>? rowid}) {
     return ReflectionEntryTableCompanion(
       id: id ?? this.id,
       threadId: threadId ?? this.threadId,
@@ -4848,123 +4079,76 @@ class $ReadingAnchorTableTable extends ReadingAnchorTable
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<String> id = GeneratedColumn<String>(
-    'id',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _threadIdMeta = const VerificationMeta(
-    'threadId',
-  );
+      'id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _threadIdMeta =
+      const VerificationMeta('threadId');
   @override
   late final GeneratedColumn<String> threadId = GeneratedColumn<String>(
-    'thread_id',
-    aliasedName,
-    true,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-  );
-  static const VerificationMeta _sourceCanonicalIdMeta = const VerificationMeta(
-    'sourceCanonicalId',
-  );
+      'thread_id', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _sourceCanonicalIdMeta =
+      const VerificationMeta('sourceCanonicalId');
   @override
   late final GeneratedColumn<String> sourceCanonicalId =
-      GeneratedColumn<String>(
-        'source_canonical_id',
-        aliasedName,
-        false,
-        type: DriftSqlType.string,
-        requiredDuringInsert: true,
-      );
-  static const VerificationMeta _surahNumberMeta = const VerificationMeta(
-    'surahNumber',
-  );
+      GeneratedColumn<String>('source_canonical_id', aliasedName, false,
+          type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _surahNumberMeta =
+      const VerificationMeta('surahNumber');
   @override
   late final GeneratedColumn<int> surahNumber = GeneratedColumn<int>(
-    'surah_number',
-    aliasedName,
-    true,
-    type: DriftSqlType.int,
-    requiredDuringInsert: false,
-  );
-  static const VerificationMeta _ayahNumberMeta = const VerificationMeta(
-    'ayahNumber',
-  );
+      'surah_number', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _ayahNumberMeta =
+      const VerificationMeta('ayahNumber');
   @override
   late final GeneratedColumn<int> ayahNumber = GeneratedColumn<int>(
-    'ayah_number',
-    aliasedName,
-    true,
-    type: DriftSqlType.int,
-    requiredDuringInsert: false,
-  );
-  static const VerificationMeta _pageNumberMeta = const VerificationMeta(
-    'pageNumber',
-  );
+      'ayah_number', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _pageNumberMeta =
+      const VerificationMeta('pageNumber');
   @override
   late final GeneratedColumn<int> pageNumber = GeneratedColumn<int>(
-    'page_number',
-    aliasedName,
-    true,
-    type: DriftSqlType.int,
-    requiredDuringInsert: false,
-  );
-  static const VerificationMeta _itemIndexMeta = const VerificationMeta(
-    'itemIndex',
-  );
+      'page_number', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _itemIndexMeta =
+      const VerificationMeta('itemIndex');
   @override
   late final GeneratedColumn<int> itemIndex = GeneratedColumn<int>(
-    'item_index',
-    aliasedName,
-    true,
-    type: DriftSqlType.int,
-    requiredDuringInsert: false,
-  );
-  static const VerificationMeta _scrollOffsetMeta = const VerificationMeta(
-    'scrollOffset',
-  );
+      'item_index', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _scrollOffsetMeta =
+      const VerificationMeta('scrollOffset');
   @override
   late final GeneratedColumn<double> scrollOffset = GeneratedColumn<double>(
-    'scroll_offset',
-    aliasedName,
-    true,
-    type: DriftSqlType.double,
-    requiredDuringInsert: false,
-  );
-  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
-    'updatedAt',
-  );
+      'scroll_offset', aliasedName, true,
+      type: DriftSqlType.double, requiredDuringInsert: false);
+  static const VerificationMeta _updatedAtMeta =
+      const VerificationMeta('updatedAt');
   @override
   late final GeneratedColumn<String> updatedAt = GeneratedColumn<String>(
-    'updated_at',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
+      'updated_at', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns => [
-    id,
-    threadId,
-    sourceCanonicalId,
-    surahNumber,
-    ayahNumber,
-    pageNumber,
-    itemIndex,
-    scrollOffset,
-    updatedAt,
-  ];
+        id,
+        threadId,
+        sourceCanonicalId,
+        surahNumber,
+        ayahNumber,
+        pageNumber,
+        itemIndex,
+        scrollOffset,
+        updatedAt
+      ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
   static const String $name = 'reading_anchor_table';
   @override
-  VerificationContext validateIntegrity(
-    Insertable<ReadingAnchorRow> instance, {
-    bool isInserting = false,
-  }) {
+  VerificationContext validateIntegrity(Insertable<ReadingAnchorRow> instance,
+      {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
@@ -4973,63 +4157,48 @@ class $ReadingAnchorTableTable extends ReadingAnchorTable
       context.missing(_idMeta);
     }
     if (data.containsKey('thread_id')) {
-      context.handle(
-        _threadIdMeta,
-        threadId.isAcceptableOrUnknown(data['thread_id']!, _threadIdMeta),
-      );
+      context.handle(_threadIdMeta,
+          threadId.isAcceptableOrUnknown(data['thread_id']!, _threadIdMeta));
     }
     if (data.containsKey('source_canonical_id')) {
       context.handle(
-        _sourceCanonicalIdMeta,
-        sourceCanonicalId.isAcceptableOrUnknown(
-          data['source_canonical_id']!,
           _sourceCanonicalIdMeta,
-        ),
-      );
+          sourceCanonicalId.isAcceptableOrUnknown(
+              data['source_canonical_id']!, _sourceCanonicalIdMeta));
     } else if (isInserting) {
       context.missing(_sourceCanonicalIdMeta);
     }
     if (data.containsKey('surah_number')) {
       context.handle(
-        _surahNumberMeta,
-        surahNumber.isAcceptableOrUnknown(
-          data['surah_number']!,
           _surahNumberMeta,
-        ),
-      );
+          surahNumber.isAcceptableOrUnknown(
+              data['surah_number']!, _surahNumberMeta));
     }
     if (data.containsKey('ayah_number')) {
       context.handle(
-        _ayahNumberMeta,
-        ayahNumber.isAcceptableOrUnknown(data['ayah_number']!, _ayahNumberMeta),
-      );
+          _ayahNumberMeta,
+          ayahNumber.isAcceptableOrUnknown(
+              data['ayah_number']!, _ayahNumberMeta));
     }
     if (data.containsKey('page_number')) {
       context.handle(
-        _pageNumberMeta,
-        pageNumber.isAcceptableOrUnknown(data['page_number']!, _pageNumberMeta),
-      );
+          _pageNumberMeta,
+          pageNumber.isAcceptableOrUnknown(
+              data['page_number']!, _pageNumberMeta));
     }
     if (data.containsKey('item_index')) {
-      context.handle(
-        _itemIndexMeta,
-        itemIndex.isAcceptableOrUnknown(data['item_index']!, _itemIndexMeta),
-      );
+      context.handle(_itemIndexMeta,
+          itemIndex.isAcceptableOrUnknown(data['item_index']!, _itemIndexMeta));
     }
     if (data.containsKey('scroll_offset')) {
       context.handle(
-        _scrollOffsetMeta,
-        scrollOffset.isAcceptableOrUnknown(
-          data['scroll_offset']!,
           _scrollOffsetMeta,
-        ),
-      );
+          scrollOffset.isAcceptableOrUnknown(
+              data['scroll_offset']!, _scrollOffsetMeta));
     }
     if (data.containsKey('updated_at')) {
-      context.handle(
-        _updatedAtMeta,
-        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
-      );
+      context.handle(_updatedAtMeta,
+          updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta));
     } else if (isInserting) {
       context.missing(_updatedAtMeta);
     }
@@ -5040,48 +4209,30 @@ class $ReadingAnchorTableTable extends ReadingAnchorTable
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
   List<Set<GeneratedColumn>> get uniqueKeys => [
-    {threadId},
-  ];
+        {threadId},
+      ];
   @override
   ReadingAnchorRow map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return ReadingAnchorRow(
-      id: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}id'],
-      )!,
-      threadId: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}thread_id'],
-      ),
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
+      threadId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}thread_id']),
       sourceCanonicalId: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}source_canonical_id'],
-      )!,
-      surahNumber: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}surah_number'],
-      ),
-      ayahNumber: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}ayah_number'],
-      ),
-      pageNumber: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}page_number'],
-      ),
-      itemIndex: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}item_index'],
-      ),
-      scrollOffset: attachedDatabase.typeMapping.read(
-        DriftSqlType.double,
-        data['${effectivePrefix}scroll_offset'],
-      ),
-      updatedAt: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}updated_at'],
-      )!,
+          DriftSqlType.string, data['${effectivePrefix}source_canonical_id'])!,
+      surahNumber: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}surah_number']),
+      ayahNumber: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}ayah_number']),
+      pageNumber: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}page_number']),
+      itemIndex: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}item_index']),
+      scrollOffset: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}scroll_offset']),
+      updatedAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}updated_at'])!,
     );
   }
 
@@ -5102,17 +4253,16 @@ class ReadingAnchorRow extends DataClass
   final int? itemIndex;
   final double? scrollOffset;
   final String updatedAt;
-  const ReadingAnchorRow({
-    required this.id,
-    this.threadId,
-    required this.sourceCanonicalId,
-    this.surahNumber,
-    this.ayahNumber,
-    this.pageNumber,
-    this.itemIndex,
-    this.scrollOffset,
-    required this.updatedAt,
-  });
+  const ReadingAnchorRow(
+      {required this.id,
+      this.threadId,
+      required this.sourceCanonicalId,
+      this.surahNumber,
+      this.ayahNumber,
+      this.pageNumber,
+      this.itemIndex,
+      this.scrollOffset,
+      required this.updatedAt});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -5166,10 +4316,8 @@ class ReadingAnchorRow extends DataClass
     );
   }
 
-  factory ReadingAnchorRow.fromJson(
-    Map<String, dynamic> json, {
-    ValueSerializer? serializer,
-  }) {
+  factory ReadingAnchorRow.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return ReadingAnchorRow(
       id: serializer.fromJson<String>(json['id']),
@@ -5199,27 +4347,28 @@ class ReadingAnchorRow extends DataClass
     };
   }
 
-  ReadingAnchorRow copyWith({
-    String? id,
-    Value<String?> threadId = const Value.absent(),
-    String? sourceCanonicalId,
-    Value<int?> surahNumber = const Value.absent(),
-    Value<int?> ayahNumber = const Value.absent(),
-    Value<int?> pageNumber = const Value.absent(),
-    Value<int?> itemIndex = const Value.absent(),
-    Value<double?> scrollOffset = const Value.absent(),
-    String? updatedAt,
-  }) => ReadingAnchorRow(
-    id: id ?? this.id,
-    threadId: threadId.present ? threadId.value : this.threadId,
-    sourceCanonicalId: sourceCanonicalId ?? this.sourceCanonicalId,
-    surahNumber: surahNumber.present ? surahNumber.value : this.surahNumber,
-    ayahNumber: ayahNumber.present ? ayahNumber.value : this.ayahNumber,
-    pageNumber: pageNumber.present ? pageNumber.value : this.pageNumber,
-    itemIndex: itemIndex.present ? itemIndex.value : this.itemIndex,
-    scrollOffset: scrollOffset.present ? scrollOffset.value : this.scrollOffset,
-    updatedAt: updatedAt ?? this.updatedAt,
-  );
+  ReadingAnchorRow copyWith(
+          {String? id,
+          Value<String?> threadId = const Value.absent(),
+          String? sourceCanonicalId,
+          Value<int?> surahNumber = const Value.absent(),
+          Value<int?> ayahNumber = const Value.absent(),
+          Value<int?> pageNumber = const Value.absent(),
+          Value<int?> itemIndex = const Value.absent(),
+          Value<double?> scrollOffset = const Value.absent(),
+          String? updatedAt}) =>
+      ReadingAnchorRow(
+        id: id ?? this.id,
+        threadId: threadId.present ? threadId.value : this.threadId,
+        sourceCanonicalId: sourceCanonicalId ?? this.sourceCanonicalId,
+        surahNumber: surahNumber.present ? surahNumber.value : this.surahNumber,
+        ayahNumber: ayahNumber.present ? ayahNumber.value : this.ayahNumber,
+        pageNumber: pageNumber.present ? pageNumber.value : this.pageNumber,
+        itemIndex: itemIndex.present ? itemIndex.value : this.itemIndex,
+        scrollOffset:
+            scrollOffset.present ? scrollOffset.value : this.scrollOffset,
+        updatedAt: updatedAt ?? this.updatedAt,
+      );
   ReadingAnchorRow copyWithCompanion(ReadingAnchorTableCompanion data) {
     return ReadingAnchorRow(
       id: data.id.present ? data.id.value : this.id,
@@ -5227,15 +4376,12 @@ class ReadingAnchorRow extends DataClass
       sourceCanonicalId: data.sourceCanonicalId.present
           ? data.sourceCanonicalId.value
           : this.sourceCanonicalId,
-      surahNumber: data.surahNumber.present
-          ? data.surahNumber.value
-          : this.surahNumber,
-      ayahNumber: data.ayahNumber.present
-          ? data.ayahNumber.value
-          : this.ayahNumber,
-      pageNumber: data.pageNumber.present
-          ? data.pageNumber.value
-          : this.pageNumber,
+      surahNumber:
+          data.surahNumber.present ? data.surahNumber.value : this.surahNumber,
+      ayahNumber:
+          data.ayahNumber.present ? data.ayahNumber.value : this.ayahNumber,
+      pageNumber:
+          data.pageNumber.present ? data.pageNumber.value : this.pageNumber,
       itemIndex: data.itemIndex.present ? data.itemIndex.value : this.itemIndex,
       scrollOffset: data.scrollOffset.present
           ? data.scrollOffset.value
@@ -5261,17 +4407,8 @@ class ReadingAnchorRow extends DataClass
   }
 
   @override
-  int get hashCode => Object.hash(
-    id,
-    threadId,
-    sourceCanonicalId,
-    surahNumber,
-    ayahNumber,
-    pageNumber,
-    itemIndex,
-    scrollOffset,
-    updatedAt,
-  );
+  int get hashCode => Object.hash(id, threadId, sourceCanonicalId, surahNumber,
+      ayahNumber, pageNumber, itemIndex, scrollOffset, updatedAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -5321,9 +4458,9 @@ class ReadingAnchorTableCompanion extends UpdateCompanion<ReadingAnchorRow> {
     this.scrollOffset = const Value.absent(),
     required String updatedAt,
     this.rowid = const Value.absent(),
-  }) : id = Value(id),
-       sourceCanonicalId = Value(sourceCanonicalId),
-       updatedAt = Value(updatedAt);
+  })  : id = Value(id),
+        sourceCanonicalId = Value(sourceCanonicalId),
+        updatedAt = Value(updatedAt);
   static Insertable<ReadingAnchorRow> custom({
     Expression<String>? id,
     Expression<String>? threadId,
@@ -5350,18 +4487,17 @@ class ReadingAnchorTableCompanion extends UpdateCompanion<ReadingAnchorRow> {
     });
   }
 
-  ReadingAnchorTableCompanion copyWith({
-    Value<String>? id,
-    Value<String?>? threadId,
-    Value<String>? sourceCanonicalId,
-    Value<int?>? surahNumber,
-    Value<int?>? ayahNumber,
-    Value<int?>? pageNumber,
-    Value<int?>? itemIndex,
-    Value<double?>? scrollOffset,
-    Value<String>? updatedAt,
-    Value<int>? rowid,
-  }) {
+  ReadingAnchorTableCompanion copyWith(
+      {Value<String>? id,
+      Value<String?>? threadId,
+      Value<String>? sourceCanonicalId,
+      Value<int?>? surahNumber,
+      Value<int?>? ayahNumber,
+      Value<int?>? pageNumber,
+      Value<int?>? itemIndex,
+      Value<double?>? scrollOffset,
+      Value<String>? updatedAt,
+      Value<int>? rowid}) {
     return ReadingAnchorTableCompanion(
       id: id ?? this.id,
       threadId: threadId ?? this.threadId,
@@ -5439,84 +4575,48 @@ class $ReturnEventTableTable extends ReturnEventTable
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<String> id = GeneratedColumn<String>(
-    'id',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _threadIdMeta = const VerificationMeta(
-    'threadId',
-  );
+      'id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _threadIdMeta =
+      const VerificationMeta('threadId');
   @override
   late final GeneratedColumn<String> threadId = GeneratedColumn<String>(
-    'thread_id',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
+      'thread_id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
   static const VerificationMeta _kindMeta = const VerificationMeta('kind');
   @override
   late final GeneratedColumn<String> kind = GeneratedColumn<String>(
-    'kind',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _occurredAtMeta = const VerificationMeta(
-    'occurredAt',
-  );
+      'kind', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _occurredAtMeta =
+      const VerificationMeta('occurredAt');
   @override
   late final GeneratedColumn<String> occurredAt = GeneratedColumn<String>(
-    'occurred_at',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _durationSecondsMeta = const VerificationMeta(
-    'durationSeconds',
-  );
+      'occurred_at', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _durationSecondsMeta =
+      const VerificationMeta('durationSeconds');
   @override
   late final GeneratedColumn<int> durationSeconds = GeneratedColumn<int>(
-    'duration_seconds',
-    aliasedName,
-    true,
-    type: DriftSqlType.int,
-    requiredDuringInsert: false,
-  );
-  static const VerificationMeta _reflectionIdMeta = const VerificationMeta(
-    'reflectionId',
-  );
+      'duration_seconds', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _reflectionIdMeta =
+      const VerificationMeta('reflectionId');
   @override
   late final GeneratedColumn<String> reflectionId = GeneratedColumn<String>(
-    'reflection_id',
-    aliasedName,
-    true,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-  );
+      'reflection_id', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   @override
-  List<GeneratedColumn> get $columns => [
-    id,
-    threadId,
-    kind,
-    occurredAt,
-    durationSeconds,
-    reflectionId,
-  ];
+  List<GeneratedColumn> get $columns =>
+      [id, threadId, kind, occurredAt, durationSeconds, reflectionId];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
   static const String $name = 'return_event_table';
   @override
-  VerificationContext validateIntegrity(
-    Insertable<ReturnEventRow> instance, {
-    bool isInserting = false,
-  }) {
+  VerificationContext validateIntegrity(Insertable<ReturnEventRow> instance,
+      {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
@@ -5525,46 +4625,36 @@ class $ReturnEventTableTable extends ReturnEventTable
       context.missing(_idMeta);
     }
     if (data.containsKey('thread_id')) {
-      context.handle(
-        _threadIdMeta,
-        threadId.isAcceptableOrUnknown(data['thread_id']!, _threadIdMeta),
-      );
+      context.handle(_threadIdMeta,
+          threadId.isAcceptableOrUnknown(data['thread_id']!, _threadIdMeta));
     } else if (isInserting) {
       context.missing(_threadIdMeta);
     }
     if (data.containsKey('kind')) {
       context.handle(
-        _kindMeta,
-        kind.isAcceptableOrUnknown(data['kind']!, _kindMeta),
-      );
+          _kindMeta, kind.isAcceptableOrUnknown(data['kind']!, _kindMeta));
     } else if (isInserting) {
       context.missing(_kindMeta);
     }
     if (data.containsKey('occurred_at')) {
       context.handle(
-        _occurredAtMeta,
-        occurredAt.isAcceptableOrUnknown(data['occurred_at']!, _occurredAtMeta),
-      );
+          _occurredAtMeta,
+          occurredAt.isAcceptableOrUnknown(
+              data['occurred_at']!, _occurredAtMeta));
     } else if (isInserting) {
       context.missing(_occurredAtMeta);
     }
     if (data.containsKey('duration_seconds')) {
       context.handle(
-        _durationSecondsMeta,
-        durationSeconds.isAcceptableOrUnknown(
-          data['duration_seconds']!,
           _durationSecondsMeta,
-        ),
-      );
+          durationSeconds.isAcceptableOrUnknown(
+              data['duration_seconds']!, _durationSecondsMeta));
     }
     if (data.containsKey('reflection_id')) {
       context.handle(
-        _reflectionIdMeta,
-        reflectionId.isAcceptableOrUnknown(
-          data['reflection_id']!,
           _reflectionIdMeta,
-        ),
-      );
+          reflectionId.isAcceptableOrUnknown(
+              data['reflection_id']!, _reflectionIdMeta));
     }
     return context;
   }
@@ -5575,30 +4665,18 @@ class $ReturnEventTableTable extends ReturnEventTable
   ReturnEventRow map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return ReturnEventRow(
-      id: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}id'],
-      )!,
-      threadId: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}thread_id'],
-      )!,
-      kind: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}kind'],
-      )!,
-      occurredAt: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}occurred_at'],
-      )!,
-      durationSeconds: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}duration_seconds'],
-      ),
-      reflectionId: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}reflection_id'],
-      ),
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
+      threadId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}thread_id'])!,
+      kind: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}kind'])!,
+      occurredAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}occurred_at'])!,
+      durationSeconds: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}duration_seconds']),
+      reflectionId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}reflection_id']),
     );
   }
 
@@ -5615,14 +4693,13 @@ class ReturnEventRow extends DataClass implements Insertable<ReturnEventRow> {
   final String occurredAt;
   final int? durationSeconds;
   final String? reflectionId;
-  const ReturnEventRow({
-    required this.id,
-    required this.threadId,
-    required this.kind,
-    required this.occurredAt,
-    this.durationSeconds,
-    this.reflectionId,
-  });
+  const ReturnEventRow(
+      {required this.id,
+      required this.threadId,
+      required this.kind,
+      required this.occurredAt,
+      this.durationSeconds,
+      this.reflectionId});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -5654,10 +4731,8 @@ class ReturnEventRow extends DataClass implements Insertable<ReturnEventRow> {
     );
   }
 
-  factory ReturnEventRow.fromJson(
-    Map<String, dynamic> json, {
-    ValueSerializer? serializer,
-  }) {
+  factory ReturnEventRow.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return ReturnEventRow(
       id: serializer.fromJson<String>(json['id']),
@@ -5681,31 +4756,31 @@ class ReturnEventRow extends DataClass implements Insertable<ReturnEventRow> {
     };
   }
 
-  ReturnEventRow copyWith({
-    String? id,
-    String? threadId,
-    String? kind,
-    String? occurredAt,
-    Value<int?> durationSeconds = const Value.absent(),
-    Value<String?> reflectionId = const Value.absent(),
-  }) => ReturnEventRow(
-    id: id ?? this.id,
-    threadId: threadId ?? this.threadId,
-    kind: kind ?? this.kind,
-    occurredAt: occurredAt ?? this.occurredAt,
-    durationSeconds: durationSeconds.present
-        ? durationSeconds.value
-        : this.durationSeconds,
-    reflectionId: reflectionId.present ? reflectionId.value : this.reflectionId,
-  );
+  ReturnEventRow copyWith(
+          {String? id,
+          String? threadId,
+          String? kind,
+          String? occurredAt,
+          Value<int?> durationSeconds = const Value.absent(),
+          Value<String?> reflectionId = const Value.absent()}) =>
+      ReturnEventRow(
+        id: id ?? this.id,
+        threadId: threadId ?? this.threadId,
+        kind: kind ?? this.kind,
+        occurredAt: occurredAt ?? this.occurredAt,
+        durationSeconds: durationSeconds.present
+            ? durationSeconds.value
+            : this.durationSeconds,
+        reflectionId:
+            reflectionId.present ? reflectionId.value : this.reflectionId,
+      );
   ReturnEventRow copyWithCompanion(ReturnEventTableCompanion data) {
     return ReturnEventRow(
       id: data.id.present ? data.id.value : this.id,
       threadId: data.threadId.present ? data.threadId.value : this.threadId,
       kind: data.kind.present ? data.kind.value : this.kind,
-      occurredAt: data.occurredAt.present
-          ? data.occurredAt.value
-          : this.occurredAt,
+      occurredAt:
+          data.occurredAt.present ? data.occurredAt.value : this.occurredAt,
       durationSeconds: data.durationSeconds.present
           ? data.durationSeconds.value
           : this.durationSeconds,
@@ -5730,13 +4805,7 @@ class ReturnEventRow extends DataClass implements Insertable<ReturnEventRow> {
 
   @override
   int get hashCode => Object.hash(
-    id,
-    threadId,
-    kind,
-    occurredAt,
-    durationSeconds,
-    reflectionId,
-  );
+      id, threadId, kind, occurredAt, durationSeconds, reflectionId);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -5774,10 +4843,10 @@ class ReturnEventTableCompanion extends UpdateCompanion<ReturnEventRow> {
     this.durationSeconds = const Value.absent(),
     this.reflectionId = const Value.absent(),
     this.rowid = const Value.absent(),
-  }) : id = Value(id),
-       threadId = Value(threadId),
-       kind = Value(kind),
-       occurredAt = Value(occurredAt);
+  })  : id = Value(id),
+        threadId = Value(threadId),
+        kind = Value(kind),
+        occurredAt = Value(occurredAt);
   static Insertable<ReturnEventRow> custom({
     Expression<String>? id,
     Expression<String>? threadId,
@@ -5798,15 +4867,14 @@ class ReturnEventTableCompanion extends UpdateCompanion<ReturnEventRow> {
     });
   }
 
-  ReturnEventTableCompanion copyWith({
-    Value<String>? id,
-    Value<String>? threadId,
-    Value<String>? kind,
-    Value<String>? occurredAt,
-    Value<int?>? durationSeconds,
-    Value<String?>? reflectionId,
-    Value<int>? rowid,
-  }) {
+  ReturnEventTableCompanion copyWith(
+      {Value<String>? id,
+      Value<String>? threadId,
+      Value<String>? kind,
+      Value<String>? occurredAt,
+      Value<int?>? durationSeconds,
+      Value<String?>? reflectionId,
+      Value<int>? rowid}) {
     return ReturnEventTableCompanion(
       id: id ?? this.id,
       threadId: threadId ?? this.threadId,
@@ -5869,49 +4937,30 @@ class $ReminderIntentTableTable extends ReminderIntentTable
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<String> id = GeneratedColumn<String>(
-    'id',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _threadIdMeta = const VerificationMeta(
-    'threadId',
-  );
+      'id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _threadIdMeta =
+      const VerificationMeta('threadId');
   @override
   late final GeneratedColumn<String> threadId = GeneratedColumn<String>(
-    'thread_id',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _scheduledAtMeta = const VerificationMeta(
-    'scheduledAt',
-  );
+      'thread_id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _scheduledAtMeta =
+      const VerificationMeta('scheduledAt');
   @override
   late final GeneratedColumn<String> scheduledAt = GeneratedColumn<String>(
-    'scheduled_at',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _enabledMeta = const VerificationMeta(
-    'enabled',
-  );
+      'scheduled_at', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _enabledMeta =
+      const VerificationMeta('enabled');
   @override
   late final GeneratedColumn<bool> enabled = GeneratedColumn<bool>(
-    'enabled',
-    aliasedName,
-    false,
-    type: DriftSqlType.bool,
-    requiredDuringInsert: false,
-    defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'CHECK ("enabled" IN (0, 1))',
-    ),
-    defaultValue: const Constant(true),
-  );
+      'enabled', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("enabled" IN (0, 1))'),
+      defaultValue: const Constant(true));
   @override
   List<GeneratedColumn> get $columns => [id, threadId, scheduledAt, enabled];
   @override
@@ -5920,10 +4969,8 @@ class $ReminderIntentTableTable extends ReminderIntentTable
   String get actualTableName => $name;
   static const String $name = 'reminder_intent_table';
   @override
-  VerificationContext validateIntegrity(
-    Insertable<ReminderIntentRow> instance, {
-    bool isInserting = false,
-  }) {
+  VerificationContext validateIntegrity(Insertable<ReminderIntentRow> instance,
+      {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
@@ -5932,29 +4979,22 @@ class $ReminderIntentTableTable extends ReminderIntentTable
       context.missing(_idMeta);
     }
     if (data.containsKey('thread_id')) {
-      context.handle(
-        _threadIdMeta,
-        threadId.isAcceptableOrUnknown(data['thread_id']!, _threadIdMeta),
-      );
+      context.handle(_threadIdMeta,
+          threadId.isAcceptableOrUnknown(data['thread_id']!, _threadIdMeta));
     } else if (isInserting) {
       context.missing(_threadIdMeta);
     }
     if (data.containsKey('scheduled_at')) {
       context.handle(
-        _scheduledAtMeta,
-        scheduledAt.isAcceptableOrUnknown(
-          data['scheduled_at']!,
           _scheduledAtMeta,
-        ),
-      );
+          scheduledAt.isAcceptableOrUnknown(
+              data['scheduled_at']!, _scheduledAtMeta));
     } else if (isInserting) {
       context.missing(_scheduledAtMeta);
     }
     if (data.containsKey('enabled')) {
-      context.handle(
-        _enabledMeta,
-        enabled.isAcceptableOrUnknown(data['enabled']!, _enabledMeta),
-      );
+      context.handle(_enabledMeta,
+          enabled.isAcceptableOrUnknown(data['enabled']!, _enabledMeta));
     }
     return context;
   }
@@ -5963,28 +5003,20 @@ class $ReminderIntentTableTable extends ReminderIntentTable
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
   List<Set<GeneratedColumn>> get uniqueKeys => [
-    {threadId},
-  ];
+        {threadId},
+      ];
   @override
   ReminderIntentRow map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return ReminderIntentRow(
-      id: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}id'],
-      )!,
-      threadId: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}thread_id'],
-      )!,
-      scheduledAt: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}scheduled_at'],
-      )!,
-      enabled: attachedDatabase.typeMapping.read(
-        DriftSqlType.bool,
-        data['${effectivePrefix}enabled'],
-      )!,
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
+      threadId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}thread_id'])!,
+      scheduledAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}scheduled_at'])!,
+      enabled: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}enabled'])!,
     );
   }
 
@@ -6000,12 +5032,11 @@ class ReminderIntentRow extends DataClass
   final String threadId;
   final String scheduledAt;
   final bool enabled;
-  const ReminderIntentRow({
-    required this.id,
-    required this.threadId,
-    required this.scheduledAt,
-    required this.enabled,
-  });
+  const ReminderIntentRow(
+      {required this.id,
+      required this.threadId,
+      required this.scheduledAt,
+      required this.enabled});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -6025,10 +5056,8 @@ class ReminderIntentRow extends DataClass
     );
   }
 
-  factory ReminderIntentRow.fromJson(
-    Map<String, dynamic> json, {
-    ValueSerializer? serializer,
-  }) {
+  factory ReminderIntentRow.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return ReminderIntentRow(
       id: serializer.fromJson<String>(json['id']),
@@ -6048,24 +5077,20 @@ class ReminderIntentRow extends DataClass
     };
   }
 
-  ReminderIntentRow copyWith({
-    String? id,
-    String? threadId,
-    String? scheduledAt,
-    bool? enabled,
-  }) => ReminderIntentRow(
-    id: id ?? this.id,
-    threadId: threadId ?? this.threadId,
-    scheduledAt: scheduledAt ?? this.scheduledAt,
-    enabled: enabled ?? this.enabled,
-  );
+  ReminderIntentRow copyWith(
+          {String? id, String? threadId, String? scheduledAt, bool? enabled}) =>
+      ReminderIntentRow(
+        id: id ?? this.id,
+        threadId: threadId ?? this.threadId,
+        scheduledAt: scheduledAt ?? this.scheduledAt,
+        enabled: enabled ?? this.enabled,
+      );
   ReminderIntentRow copyWithCompanion(ReminderIntentTableCompanion data) {
     return ReminderIntentRow(
       id: data.id.present ? data.id.value : this.id,
       threadId: data.threadId.present ? data.threadId.value : this.threadId,
-      scheduledAt: data.scheduledAt.present
-          ? data.scheduledAt.value
-          : this.scheduledAt,
+      scheduledAt:
+          data.scheduledAt.present ? data.scheduledAt.value : this.scheduledAt,
       enabled: data.enabled.present ? data.enabled.value : this.enabled,
     );
   }
@@ -6112,9 +5137,9 @@ class ReminderIntentTableCompanion extends UpdateCompanion<ReminderIntentRow> {
     required String scheduledAt,
     this.enabled = const Value.absent(),
     this.rowid = const Value.absent(),
-  }) : id = Value(id),
-       threadId = Value(threadId),
-       scheduledAt = Value(scheduledAt);
+  })  : id = Value(id),
+        threadId = Value(threadId),
+        scheduledAt = Value(scheduledAt);
   static Insertable<ReminderIntentRow> custom({
     Expression<String>? id,
     Expression<String>? threadId,
@@ -6131,13 +5156,12 @@ class ReminderIntentTableCompanion extends UpdateCompanion<ReminderIntentRow> {
     });
   }
 
-  ReminderIntentTableCompanion copyWith({
-    Value<String>? id,
-    Value<String>? threadId,
-    Value<String>? scheduledAt,
-    Value<bool>? enabled,
-    Value<int>? rowid,
-  }) {
+  ReminderIntentTableCompanion copyWith(
+      {Value<String>? id,
+      Value<String>? threadId,
+      Value<String>? scheduledAt,
+      Value<bool>? enabled,
+      Value<int>? rowid}) {
     return ReminderIntentTableCompanion(
       id: id ?? this.id,
       threadId: threadId ?? this.threadId,
@@ -6188,9 +5212,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       $QuranTafseerTableTable(this);
   late final $HadithTableTable hadithTable = $HadithTableTable(this);
   late final $DuaTableTable duaTable = $DuaTableTable(this);
-  late final $DailySunnahTableTable dailySunnahTable = $DailySunnahTableTable(
-    this,
-  );
+  late final $DailySunnahTableTable dailySunnahTable =
+      $DailySunnahTableTable(this);
   late final $DailyTaskTableTable dailyTaskTable = $DailyTaskTableTable(this);
   late final $MuhasabaEntryTableTable muhasabaEntryTable =
       $MuhasabaEntryTableTable(this);
@@ -6204,9 +5227,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       $ReflectionEntryTableTable(this);
   late final $ReadingAnchorTableTable readingAnchorTable =
       $ReadingAnchorTableTable(this);
-  late final $ReturnEventTableTable returnEventTable = $ReturnEventTableTable(
-    this,
-  );
+  late final $ReturnEventTableTable returnEventTable =
+      $ReturnEventTableTable(this);
   late final $ReminderIntentTableTable reminderIntentTable =
       $ReminderIntentTableTable(this);
   @override
@@ -6214,2735 +5236,2375 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities => [
-    quranTafseerTable,
-    hadithTable,
-    duaTable,
-    dailySunnahTable,
-    dailyTaskTable,
-    muhasabaEntryTable,
-    userFavoriteTable,
-    userDailyActivityTable,
-    memoryThreadTable,
-    reflectionEntryTable,
-    readingAnchorTable,
-    returnEventTable,
-    reminderIntentTable,
-  ];
+        quranTafseerTable,
+        hadithTable,
+        duaTable,
+        dailySunnahTable,
+        dailyTaskTable,
+        muhasabaEntryTable,
+        userFavoriteTable,
+        userDailyActivityTable,
+        memoryThreadTable,
+        reflectionEntryTable,
+        readingAnchorTable,
+        returnEventTable,
+        reminderIntentTable
+      ];
 }
 
-typedef $$QuranTafseerTableTableCreateCompanionBuilder =
-    QuranTafseerTableCompanion Function({
-      Value<int> id,
-      required int surahNumber,
-      required int ayahNumber,
-      required String tafseerText,
-    });
-typedef $$QuranTafseerTableTableUpdateCompanionBuilder =
-    QuranTafseerTableCompanion Function({
-      Value<int> id,
-      Value<int> surahNumber,
-      Value<int> ayahNumber,
-      Value<String> tafseerText,
-    });
+typedef $$QuranTafseerTableTableCreateCompanionBuilder
+    = QuranTafseerTableCompanion Function({
+  Value<int> id,
+  required int surahNumber,
+  required int ayahNumber,
+  required String tafseerText,
+});
+typedef $$QuranTafseerTableTableUpdateCompanionBuilder
+    = QuranTafseerTableCompanion Function({
+  Value<int> id,
+  Value<int> surahNumber,
+  Value<int> ayahNumber,
+  Value<String> tafseerText,
+});
 
 class $$QuranTafseerTableTableFilterComposer
     extends FilterComposer<_$AppDatabase, $QuranTafseerTableTable> {
   $$QuranTafseerTableTableFilterComposer(super.$state);
   ColumnFilters<int> get id => $state.composableBuilder(
-    column: $state.table.id,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<int> get surahNumber => $state.composableBuilder(
-    column: $state.table.surahNumber,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.surahNumber,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<int> get ayahNumber => $state.composableBuilder(
-    column: $state.table.ayahNumber,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.ayahNumber,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<String> get tafseerText => $state.composableBuilder(
-    column: $state.table.tafseerText,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.tafseerText,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 }
 
 class $$QuranTafseerTableTableOrderingComposer
     extends OrderingComposer<_$AppDatabase, $QuranTafseerTableTable> {
   $$QuranTafseerTableTableOrderingComposer(super.$state);
   ColumnOrderings<int> get id => $state.composableBuilder(
-    column: $state.table.id,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<int> get surahNumber => $state.composableBuilder(
-    column: $state.table.surahNumber,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.surahNumber,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<int> get ayahNumber => $state.composableBuilder(
-    column: $state.table.ayahNumber,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.ayahNumber,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<String> get tafseerText => $state.composableBuilder(
-    column: $state.table.tafseerText,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.tafseerText,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 }
 
-class $$QuranTafseerTableTableTableManager
-    extends
-        RootTableManager<
-          _$AppDatabase,
-          $QuranTafseerTableTable,
-          QuranTafseer,
-          $$QuranTafseerTableTableFilterComposer,
-          $$QuranTafseerTableTableOrderingComposer,
-          $$QuranTafseerTableTableCreateCompanionBuilder,
-          $$QuranTafseerTableTableUpdateCompanionBuilder,
-          (
-            QuranTafseer,
-            BaseReferences<
-              _$AppDatabase,
-              $QuranTafseerTableTable,
-              QuranTafseer
-            >,
-          ),
-          QuranTafseer,
-          PrefetchHooks Function()
-        > {
+class $$QuranTafseerTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $QuranTafseerTableTable,
+    QuranTafseer,
+    $$QuranTafseerTableTableFilterComposer,
+    $$QuranTafseerTableTableOrderingComposer,
+    $$QuranTafseerTableTableCreateCompanionBuilder,
+    $$QuranTafseerTableTableUpdateCompanionBuilder,
+    (
+      QuranTafseer,
+      BaseReferences<_$AppDatabase, $QuranTafseerTableTable, QuranTafseer>
+    ),
+    QuranTafseer,
+    PrefetchHooks Function()> {
   $$QuranTafseerTableTableTableManager(
-    _$AppDatabase db,
-    $QuranTafseerTableTable table,
-  ) : super(
-        TableManagerState(
+      _$AppDatabase db, $QuranTafseerTableTable table)
+      : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer: $$QuranTafseerTableTableFilterComposer(
-            ComposerState(db, table),
-          ),
+          filteringComposer:
+              $$QuranTafseerTableTableFilterComposer(ComposerState(db, table)),
           orderingComposer: $$QuranTafseerTableTableOrderingComposer(
-            ComposerState(db, table),
+              ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<int> surahNumber = const Value.absent(),
+            Value<int> ayahNumber = const Value.absent(),
+            Value<String> tafseerText = const Value.absent(),
+          }) =>
+              QuranTafseerTableCompanion(
+            id: id,
+            surahNumber: surahNumber,
+            ayahNumber: ayahNumber,
+            tafseerText: tafseerText,
           ),
-          updateCompanionCallback:
-              ({
-                Value<int> id = const Value.absent(),
-                Value<int> surahNumber = const Value.absent(),
-                Value<int> ayahNumber = const Value.absent(),
-                Value<String> tafseerText = const Value.absent(),
-              }) => QuranTafseerTableCompanion(
-                id: id,
-                surahNumber: surahNumber,
-                ayahNumber: ayahNumber,
-                tafseerText: tafseerText,
-              ),
-          createCompanionCallback:
-              ({
-                Value<int> id = const Value.absent(),
-                required int surahNumber,
-                required int ayahNumber,
-                required String tafseerText,
-              }) => QuranTafseerTableCompanion.insert(
-                id: id,
-                surahNumber: surahNumber,
-                ayahNumber: ayahNumber,
-                tafseerText: tafseerText,
-              ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required int surahNumber,
+            required int ayahNumber,
+            required String tafseerText,
+          }) =>
+              QuranTafseerTableCompanion.insert(
+            id: id,
+            surahNumber: surahNumber,
+            ayahNumber: ayahNumber,
+            tafseerText: tafseerText,
+          ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
               .toList(),
           prefetchHooksCallback: null,
-        ),
-      );
+        ));
 }
 
-typedef $$QuranTafseerTableTableProcessedTableManager =
-    ProcessedTableManager<
-      _$AppDatabase,
-      $QuranTafseerTableTable,
+typedef $$QuranTafseerTableTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $QuranTafseerTableTable,
+    QuranTafseer,
+    $$QuranTafseerTableTableFilterComposer,
+    $$QuranTafseerTableTableOrderingComposer,
+    $$QuranTafseerTableTableCreateCompanionBuilder,
+    $$QuranTafseerTableTableUpdateCompanionBuilder,
+    (
       QuranTafseer,
-      $$QuranTafseerTableTableFilterComposer,
-      $$QuranTafseerTableTableOrderingComposer,
-      $$QuranTafseerTableTableCreateCompanionBuilder,
-      $$QuranTafseerTableTableUpdateCompanionBuilder,
-      (
-        QuranTafseer,
-        BaseReferences<_$AppDatabase, $QuranTafseerTableTable, QuranTafseer>,
-      ),
-      QuranTafseer,
-      PrefetchHooks Function()
-    >;
-typedef $$HadithTableTableCreateCompanionBuilder =
-    HadithTableCompanion Function({
-      Value<int> id,
-      required String bookName,
-      Value<String?> chapterName,
-      Value<String?> reference,
-      required String hadithTextAr,
-      Value<String?> hadithTextEn,
-      Value<bool> isBookmarked,
-    });
-typedef $$HadithTableTableUpdateCompanionBuilder =
-    HadithTableCompanion Function({
-      Value<int> id,
-      Value<String> bookName,
-      Value<String?> chapterName,
-      Value<String?> reference,
-      Value<String> hadithTextAr,
-      Value<String?> hadithTextEn,
-      Value<bool> isBookmarked,
-    });
+      BaseReferences<_$AppDatabase, $QuranTafseerTableTable, QuranTafseer>
+    ),
+    QuranTafseer,
+    PrefetchHooks Function()>;
+typedef $$HadithTableTableCreateCompanionBuilder = HadithTableCompanion
+    Function({
+  Value<int> id,
+  required String bookName,
+  Value<String?> chapterName,
+  Value<String?> reference,
+  required String hadithTextAr,
+  Value<String?> hadithTextEn,
+  Value<bool> isBookmarked,
+});
+typedef $$HadithTableTableUpdateCompanionBuilder = HadithTableCompanion
+    Function({
+  Value<int> id,
+  Value<String> bookName,
+  Value<String?> chapterName,
+  Value<String?> reference,
+  Value<String> hadithTextAr,
+  Value<String?> hadithTextEn,
+  Value<bool> isBookmarked,
+});
 
 class $$HadithTableTableFilterComposer
     extends FilterComposer<_$AppDatabase, $HadithTableTable> {
   $$HadithTableTableFilterComposer(super.$state);
   ColumnFilters<int> get id => $state.composableBuilder(
-    column: $state.table.id,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<String> get bookName => $state.composableBuilder(
-    column: $state.table.bookName,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.bookName,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<String> get chapterName => $state.composableBuilder(
-    column: $state.table.chapterName,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.chapterName,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<String> get reference => $state.composableBuilder(
-    column: $state.table.reference,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.reference,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<String> get hadithTextAr => $state.composableBuilder(
-    column: $state.table.hadithTextAr,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.hadithTextAr,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<String> get hadithTextEn => $state.composableBuilder(
-    column: $state.table.hadithTextEn,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.hadithTextEn,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<bool> get isBookmarked => $state.composableBuilder(
-    column: $state.table.isBookmarked,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.isBookmarked,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 }
 
 class $$HadithTableTableOrderingComposer
     extends OrderingComposer<_$AppDatabase, $HadithTableTable> {
   $$HadithTableTableOrderingComposer(super.$state);
   ColumnOrderings<int> get id => $state.composableBuilder(
-    column: $state.table.id,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<String> get bookName => $state.composableBuilder(
-    column: $state.table.bookName,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.bookName,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<String> get chapterName => $state.composableBuilder(
-    column: $state.table.chapterName,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.chapterName,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<String> get reference => $state.composableBuilder(
-    column: $state.table.reference,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.reference,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<String> get hadithTextAr => $state.composableBuilder(
-    column: $state.table.hadithTextAr,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.hadithTextAr,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<String> get hadithTextEn => $state.composableBuilder(
-    column: $state.table.hadithTextEn,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.hadithTextEn,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<bool> get isBookmarked => $state.composableBuilder(
-    column: $state.table.isBookmarked,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.isBookmarked,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 }
 
-class $$HadithTableTableTableManager
-    extends
-        RootTableManager<
-          _$AppDatabase,
-          $HadithTableTable,
-          Hadith,
-          $$HadithTableTableFilterComposer,
-          $$HadithTableTableOrderingComposer,
-          $$HadithTableTableCreateCompanionBuilder,
-          $$HadithTableTableUpdateCompanionBuilder,
-          (Hadith, BaseReferences<_$AppDatabase, $HadithTableTable, Hadith>),
-          Hadith,
-          PrefetchHooks Function()
-        > {
+class $$HadithTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $HadithTableTable,
+    Hadith,
+    $$HadithTableTableFilterComposer,
+    $$HadithTableTableOrderingComposer,
+    $$HadithTableTableCreateCompanionBuilder,
+    $$HadithTableTableUpdateCompanionBuilder,
+    (Hadith, BaseReferences<_$AppDatabase, $HadithTableTable, Hadith>),
+    Hadith,
+    PrefetchHooks Function()> {
   $$HadithTableTableTableManager(_$AppDatabase db, $HadithTableTable table)
-    : super(
-        TableManagerState(
+      : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer: $$HadithTableTableFilterComposer(
-            ComposerState(db, table),
+          filteringComposer:
+              $$HadithTableTableFilterComposer(ComposerState(db, table)),
+          orderingComposer:
+              $$HadithTableTableOrderingComposer(ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> bookName = const Value.absent(),
+            Value<String?> chapterName = const Value.absent(),
+            Value<String?> reference = const Value.absent(),
+            Value<String> hadithTextAr = const Value.absent(),
+            Value<String?> hadithTextEn = const Value.absent(),
+            Value<bool> isBookmarked = const Value.absent(),
+          }) =>
+              HadithTableCompanion(
+            id: id,
+            bookName: bookName,
+            chapterName: chapterName,
+            reference: reference,
+            hadithTextAr: hadithTextAr,
+            hadithTextEn: hadithTextEn,
+            isBookmarked: isBookmarked,
           ),
-          orderingComposer: $$HadithTableTableOrderingComposer(
-            ComposerState(db, table),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required String bookName,
+            Value<String?> chapterName = const Value.absent(),
+            Value<String?> reference = const Value.absent(),
+            required String hadithTextAr,
+            Value<String?> hadithTextEn = const Value.absent(),
+            Value<bool> isBookmarked = const Value.absent(),
+          }) =>
+              HadithTableCompanion.insert(
+            id: id,
+            bookName: bookName,
+            chapterName: chapterName,
+            reference: reference,
+            hadithTextAr: hadithTextAr,
+            hadithTextEn: hadithTextEn,
+            isBookmarked: isBookmarked,
           ),
-          updateCompanionCallback:
-              ({
-                Value<int> id = const Value.absent(),
-                Value<String> bookName = const Value.absent(),
-                Value<String?> chapterName = const Value.absent(),
-                Value<String?> reference = const Value.absent(),
-                Value<String> hadithTextAr = const Value.absent(),
-                Value<String?> hadithTextEn = const Value.absent(),
-                Value<bool> isBookmarked = const Value.absent(),
-              }) => HadithTableCompanion(
-                id: id,
-                bookName: bookName,
-                chapterName: chapterName,
-                reference: reference,
-                hadithTextAr: hadithTextAr,
-                hadithTextEn: hadithTextEn,
-                isBookmarked: isBookmarked,
-              ),
-          createCompanionCallback:
-              ({
-                Value<int> id = const Value.absent(),
-                required String bookName,
-                Value<String?> chapterName = const Value.absent(),
-                Value<String?> reference = const Value.absent(),
-                required String hadithTextAr,
-                Value<String?> hadithTextEn = const Value.absent(),
-                Value<bool> isBookmarked = const Value.absent(),
-              }) => HadithTableCompanion.insert(
-                id: id,
-                bookName: bookName,
-                chapterName: chapterName,
-                reference: reference,
-                hadithTextAr: hadithTextAr,
-                hadithTextEn: hadithTextEn,
-                isBookmarked: isBookmarked,
-              ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
               .toList(),
           prefetchHooksCallback: null,
-        ),
-      );
+        ));
 }
 
-typedef $$HadithTableTableProcessedTableManager =
-    ProcessedTableManager<
-      _$AppDatabase,
-      $HadithTableTable,
-      Hadith,
-      $$HadithTableTableFilterComposer,
-      $$HadithTableTableOrderingComposer,
-      $$HadithTableTableCreateCompanionBuilder,
-      $$HadithTableTableUpdateCompanionBuilder,
-      (Hadith, BaseReferences<_$AppDatabase, $HadithTableTable, Hadith>),
-      Hadith,
-      PrefetchHooks Function()
-    >;
-typedef $$DuaTableTableCreateCompanionBuilder =
-    DuaTableCompanion Function({
-      Value<int> id,
-      required String category,
-      required String duaText,
-      Value<String?> reference,
-      Value<bool> isBookmarked,
-    });
-typedef $$DuaTableTableUpdateCompanionBuilder =
-    DuaTableCompanion Function({
-      Value<int> id,
-      Value<String> category,
-      Value<String> duaText,
-      Value<String?> reference,
-      Value<bool> isBookmarked,
-    });
+typedef $$HadithTableTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $HadithTableTable,
+    Hadith,
+    $$HadithTableTableFilterComposer,
+    $$HadithTableTableOrderingComposer,
+    $$HadithTableTableCreateCompanionBuilder,
+    $$HadithTableTableUpdateCompanionBuilder,
+    (Hadith, BaseReferences<_$AppDatabase, $HadithTableTable, Hadith>),
+    Hadith,
+    PrefetchHooks Function()>;
+typedef $$DuaTableTableCreateCompanionBuilder = DuaTableCompanion Function({
+  Value<int> id,
+  required String category,
+  required String duaText,
+  Value<String?> reference,
+  Value<bool> isBookmarked,
+});
+typedef $$DuaTableTableUpdateCompanionBuilder = DuaTableCompanion Function({
+  Value<int> id,
+  Value<String> category,
+  Value<String> duaText,
+  Value<String?> reference,
+  Value<bool> isBookmarked,
+});
 
 class $$DuaTableTableFilterComposer
     extends FilterComposer<_$AppDatabase, $DuaTableTable> {
   $$DuaTableTableFilterComposer(super.$state);
   ColumnFilters<int> get id => $state.composableBuilder(
-    column: $state.table.id,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<String> get category => $state.composableBuilder(
-    column: $state.table.category,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.category,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<String> get duaText => $state.composableBuilder(
-    column: $state.table.duaText,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.duaText,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<String> get reference => $state.composableBuilder(
-    column: $state.table.reference,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.reference,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<bool> get isBookmarked => $state.composableBuilder(
-    column: $state.table.isBookmarked,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.isBookmarked,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 }
 
 class $$DuaTableTableOrderingComposer
     extends OrderingComposer<_$AppDatabase, $DuaTableTable> {
   $$DuaTableTableOrderingComposer(super.$state);
   ColumnOrderings<int> get id => $state.composableBuilder(
-    column: $state.table.id,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<String> get category => $state.composableBuilder(
-    column: $state.table.category,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.category,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<String> get duaText => $state.composableBuilder(
-    column: $state.table.duaText,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.duaText,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<String> get reference => $state.composableBuilder(
-    column: $state.table.reference,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.reference,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<bool> get isBookmarked => $state.composableBuilder(
-    column: $state.table.isBookmarked,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.isBookmarked,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 }
 
-class $$DuaTableTableTableManager
-    extends
-        RootTableManager<
-          _$AppDatabase,
-          $DuaTableTable,
-          Dua,
-          $$DuaTableTableFilterComposer,
-          $$DuaTableTableOrderingComposer,
-          $$DuaTableTableCreateCompanionBuilder,
-          $$DuaTableTableUpdateCompanionBuilder,
-          (Dua, BaseReferences<_$AppDatabase, $DuaTableTable, Dua>),
-          Dua,
-          PrefetchHooks Function()
-        > {
+class $$DuaTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $DuaTableTable,
+    Dua,
+    $$DuaTableTableFilterComposer,
+    $$DuaTableTableOrderingComposer,
+    $$DuaTableTableCreateCompanionBuilder,
+    $$DuaTableTableUpdateCompanionBuilder,
+    (Dua, BaseReferences<_$AppDatabase, $DuaTableTable, Dua>),
+    Dua,
+    PrefetchHooks Function()> {
   $$DuaTableTableTableManager(_$AppDatabase db, $DuaTableTable table)
-    : super(
-        TableManagerState(
+      : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer: $$DuaTableTableFilterComposer(
-            ComposerState(db, table),
+          filteringComposer:
+              $$DuaTableTableFilterComposer(ComposerState(db, table)),
+          orderingComposer:
+              $$DuaTableTableOrderingComposer(ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> category = const Value.absent(),
+            Value<String> duaText = const Value.absent(),
+            Value<String?> reference = const Value.absent(),
+            Value<bool> isBookmarked = const Value.absent(),
+          }) =>
+              DuaTableCompanion(
+            id: id,
+            category: category,
+            duaText: duaText,
+            reference: reference,
+            isBookmarked: isBookmarked,
           ),
-          orderingComposer: $$DuaTableTableOrderingComposer(
-            ComposerState(db, table),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required String category,
+            required String duaText,
+            Value<String?> reference = const Value.absent(),
+            Value<bool> isBookmarked = const Value.absent(),
+          }) =>
+              DuaTableCompanion.insert(
+            id: id,
+            category: category,
+            duaText: duaText,
+            reference: reference,
+            isBookmarked: isBookmarked,
           ),
-          updateCompanionCallback:
-              ({
-                Value<int> id = const Value.absent(),
-                Value<String> category = const Value.absent(),
-                Value<String> duaText = const Value.absent(),
-                Value<String?> reference = const Value.absent(),
-                Value<bool> isBookmarked = const Value.absent(),
-              }) => DuaTableCompanion(
-                id: id,
-                category: category,
-                duaText: duaText,
-                reference: reference,
-                isBookmarked: isBookmarked,
-              ),
-          createCompanionCallback:
-              ({
-                Value<int> id = const Value.absent(),
-                required String category,
-                required String duaText,
-                Value<String?> reference = const Value.absent(),
-                Value<bool> isBookmarked = const Value.absent(),
-              }) => DuaTableCompanion.insert(
-                id: id,
-                category: category,
-                duaText: duaText,
-                reference: reference,
-                isBookmarked: isBookmarked,
-              ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
               .toList(),
           prefetchHooksCallback: null,
-        ),
-      );
+        ));
 }
 
-typedef $$DuaTableTableProcessedTableManager =
-    ProcessedTableManager<
-      _$AppDatabase,
-      $DuaTableTable,
-      Dua,
-      $$DuaTableTableFilterComposer,
-      $$DuaTableTableOrderingComposer,
-      $$DuaTableTableCreateCompanionBuilder,
-      $$DuaTableTableUpdateCompanionBuilder,
-      (Dua, BaseReferences<_$AppDatabase, $DuaTableTable, Dua>),
-      Dua,
-      PrefetchHooks Function()
-    >;
-typedef $$DailySunnahTableTableCreateCompanionBuilder =
-    DailySunnahTableCompanion Function({
-      required String id,
-      required String title,
-      required String description,
-      required String howToApply,
-      required String source,
-      required int sortOrder,
-      Value<int> rowid,
-    });
-typedef $$DailySunnahTableTableUpdateCompanionBuilder =
-    DailySunnahTableCompanion Function({
-      Value<String> id,
-      Value<String> title,
-      Value<String> description,
-      Value<String> howToApply,
-      Value<String> source,
-      Value<int> sortOrder,
-      Value<int> rowid,
-    });
+typedef $$DuaTableTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $DuaTableTable,
+    Dua,
+    $$DuaTableTableFilterComposer,
+    $$DuaTableTableOrderingComposer,
+    $$DuaTableTableCreateCompanionBuilder,
+    $$DuaTableTableUpdateCompanionBuilder,
+    (Dua, BaseReferences<_$AppDatabase, $DuaTableTable, Dua>),
+    Dua,
+    PrefetchHooks Function()>;
+typedef $$DailySunnahTableTableCreateCompanionBuilder
+    = DailySunnahTableCompanion Function({
+  required String id,
+  required String title,
+  required String description,
+  required String howToApply,
+  required String source,
+  required int sortOrder,
+  Value<int> rowid,
+});
+typedef $$DailySunnahTableTableUpdateCompanionBuilder
+    = DailySunnahTableCompanion Function({
+  Value<String> id,
+  Value<String> title,
+  Value<String> description,
+  Value<String> howToApply,
+  Value<String> source,
+  Value<int> sortOrder,
+  Value<int> rowid,
+});
 
 class $$DailySunnahTableTableFilterComposer
     extends FilterComposer<_$AppDatabase, $DailySunnahTableTable> {
   $$DailySunnahTableTableFilterComposer(super.$state);
   ColumnFilters<String> get id => $state.composableBuilder(
-    column: $state.table.id,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<String> get title => $state.composableBuilder(
-    column: $state.table.title,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.title,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<String> get description => $state.composableBuilder(
-    column: $state.table.description,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.description,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<String> get howToApply => $state.composableBuilder(
-    column: $state.table.howToApply,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.howToApply,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<String> get source => $state.composableBuilder(
-    column: $state.table.source,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.source,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<int> get sortOrder => $state.composableBuilder(
-    column: $state.table.sortOrder,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.sortOrder,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 }
 
 class $$DailySunnahTableTableOrderingComposer
     extends OrderingComposer<_$AppDatabase, $DailySunnahTableTable> {
   $$DailySunnahTableTableOrderingComposer(super.$state);
   ColumnOrderings<String> get id => $state.composableBuilder(
-    column: $state.table.id,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<String> get title => $state.composableBuilder(
-    column: $state.table.title,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.title,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<String> get description => $state.composableBuilder(
-    column: $state.table.description,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.description,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<String> get howToApply => $state.composableBuilder(
-    column: $state.table.howToApply,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.howToApply,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<String> get source => $state.composableBuilder(
-    column: $state.table.source,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.source,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<int> get sortOrder => $state.composableBuilder(
-    column: $state.table.sortOrder,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.sortOrder,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 }
 
-class $$DailySunnahTableTableTableManager
-    extends
-        RootTableManager<
-          _$AppDatabase,
-          $DailySunnahTableTable,
-          DailySunnah,
-          $$DailySunnahTableTableFilterComposer,
-          $$DailySunnahTableTableOrderingComposer,
-          $$DailySunnahTableTableCreateCompanionBuilder,
-          $$DailySunnahTableTableUpdateCompanionBuilder,
-          (
-            DailySunnah,
-            BaseReferences<_$AppDatabase, $DailySunnahTableTable, DailySunnah>,
-          ),
-          DailySunnah,
-          PrefetchHooks Function()
-        > {
+class $$DailySunnahTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $DailySunnahTableTable,
+    DailySunnah,
+    $$DailySunnahTableTableFilterComposer,
+    $$DailySunnahTableTableOrderingComposer,
+    $$DailySunnahTableTableCreateCompanionBuilder,
+    $$DailySunnahTableTableUpdateCompanionBuilder,
+    (
+      DailySunnah,
+      BaseReferences<_$AppDatabase, $DailySunnahTableTable, DailySunnah>
+    ),
+    DailySunnah,
+    PrefetchHooks Function()> {
   $$DailySunnahTableTableTableManager(
-    _$AppDatabase db,
-    $DailySunnahTableTable table,
-  ) : super(
-        TableManagerState(
+      _$AppDatabase db, $DailySunnahTableTable table)
+      : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer: $$DailySunnahTableTableFilterComposer(
-            ComposerState(db, table),
+          filteringComposer:
+              $$DailySunnahTableTableFilterComposer(ComposerState(db, table)),
+          orderingComposer:
+              $$DailySunnahTableTableOrderingComposer(ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<String> id = const Value.absent(),
+            Value<String> title = const Value.absent(),
+            Value<String> description = const Value.absent(),
+            Value<String> howToApply = const Value.absent(),
+            Value<String> source = const Value.absent(),
+            Value<int> sortOrder = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              DailySunnahTableCompanion(
+            id: id,
+            title: title,
+            description: description,
+            howToApply: howToApply,
+            source: source,
+            sortOrder: sortOrder,
+            rowid: rowid,
           ),
-          orderingComposer: $$DailySunnahTableTableOrderingComposer(
-            ComposerState(db, table),
+          createCompanionCallback: ({
+            required String id,
+            required String title,
+            required String description,
+            required String howToApply,
+            required String source,
+            required int sortOrder,
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              DailySunnahTableCompanion.insert(
+            id: id,
+            title: title,
+            description: description,
+            howToApply: howToApply,
+            source: source,
+            sortOrder: sortOrder,
+            rowid: rowid,
           ),
-          updateCompanionCallback:
-              ({
-                Value<String> id = const Value.absent(),
-                Value<String> title = const Value.absent(),
-                Value<String> description = const Value.absent(),
-                Value<String> howToApply = const Value.absent(),
-                Value<String> source = const Value.absent(),
-                Value<int> sortOrder = const Value.absent(),
-                Value<int> rowid = const Value.absent(),
-              }) => DailySunnahTableCompanion(
-                id: id,
-                title: title,
-                description: description,
-                howToApply: howToApply,
-                source: source,
-                sortOrder: sortOrder,
-                rowid: rowid,
-              ),
-          createCompanionCallback:
-              ({
-                required String id,
-                required String title,
-                required String description,
-                required String howToApply,
-                required String source,
-                required int sortOrder,
-                Value<int> rowid = const Value.absent(),
-              }) => DailySunnahTableCompanion.insert(
-                id: id,
-                title: title,
-                description: description,
-                howToApply: howToApply,
-                source: source,
-                sortOrder: sortOrder,
-                rowid: rowid,
-              ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
               .toList(),
           prefetchHooksCallback: null,
-        ),
-      );
+        ));
 }
 
-typedef $$DailySunnahTableTableProcessedTableManager =
-    ProcessedTableManager<
-      _$AppDatabase,
-      $DailySunnahTableTable,
+typedef $$DailySunnahTableTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $DailySunnahTableTable,
+    DailySunnah,
+    $$DailySunnahTableTableFilterComposer,
+    $$DailySunnahTableTableOrderingComposer,
+    $$DailySunnahTableTableCreateCompanionBuilder,
+    $$DailySunnahTableTableUpdateCompanionBuilder,
+    (
       DailySunnah,
-      $$DailySunnahTableTableFilterComposer,
-      $$DailySunnahTableTableOrderingComposer,
-      $$DailySunnahTableTableCreateCompanionBuilder,
-      $$DailySunnahTableTableUpdateCompanionBuilder,
-      (
-        DailySunnah,
-        BaseReferences<_$AppDatabase, $DailySunnahTableTable, DailySunnah>,
-      ),
-      DailySunnah,
-      PrefetchHooks Function()
-    >;
-typedef $$DailyTaskTableTableCreateCompanionBuilder =
-    DailyTaskTableCompanion Function({
-      required String id,
-      required String title,
-      required String description,
-      required String impact,
-      required int sortOrder,
-      Value<int> rowid,
-    });
-typedef $$DailyTaskTableTableUpdateCompanionBuilder =
-    DailyTaskTableCompanion Function({
-      Value<String> id,
-      Value<String> title,
-      Value<String> description,
-      Value<String> impact,
-      Value<int> sortOrder,
-      Value<int> rowid,
-    });
+      BaseReferences<_$AppDatabase, $DailySunnahTableTable, DailySunnah>
+    ),
+    DailySunnah,
+    PrefetchHooks Function()>;
+typedef $$DailyTaskTableTableCreateCompanionBuilder = DailyTaskTableCompanion
+    Function({
+  required String id,
+  required String title,
+  required String description,
+  required String impact,
+  required int sortOrder,
+  Value<int> rowid,
+});
+typedef $$DailyTaskTableTableUpdateCompanionBuilder = DailyTaskTableCompanion
+    Function({
+  Value<String> id,
+  Value<String> title,
+  Value<String> description,
+  Value<String> impact,
+  Value<int> sortOrder,
+  Value<int> rowid,
+});
 
 class $$DailyTaskTableTableFilterComposer
     extends FilterComposer<_$AppDatabase, $DailyTaskTableTable> {
   $$DailyTaskTableTableFilterComposer(super.$state);
   ColumnFilters<String> get id => $state.composableBuilder(
-    column: $state.table.id,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<String> get title => $state.composableBuilder(
-    column: $state.table.title,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.title,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<String> get description => $state.composableBuilder(
-    column: $state.table.description,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.description,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<String> get impact => $state.composableBuilder(
-    column: $state.table.impact,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.impact,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<int> get sortOrder => $state.composableBuilder(
-    column: $state.table.sortOrder,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.sortOrder,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 }
 
 class $$DailyTaskTableTableOrderingComposer
     extends OrderingComposer<_$AppDatabase, $DailyTaskTableTable> {
   $$DailyTaskTableTableOrderingComposer(super.$state);
   ColumnOrderings<String> get id => $state.composableBuilder(
-    column: $state.table.id,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<String> get title => $state.composableBuilder(
-    column: $state.table.title,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.title,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<String> get description => $state.composableBuilder(
-    column: $state.table.description,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.description,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<String> get impact => $state.composableBuilder(
-    column: $state.table.impact,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.impact,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<int> get sortOrder => $state.composableBuilder(
-    column: $state.table.sortOrder,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.sortOrder,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 }
 
-class $$DailyTaskTableTableTableManager
-    extends
-        RootTableManager<
-          _$AppDatabase,
-          $DailyTaskTableTable,
-          DailyTask,
-          $$DailyTaskTableTableFilterComposer,
-          $$DailyTaskTableTableOrderingComposer,
-          $$DailyTaskTableTableCreateCompanionBuilder,
-          $$DailyTaskTableTableUpdateCompanionBuilder,
-          (
-            DailyTask,
-            BaseReferences<_$AppDatabase, $DailyTaskTableTable, DailyTask>,
-          ),
-          DailyTask,
-          PrefetchHooks Function()
-        > {
+class $$DailyTaskTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $DailyTaskTableTable,
+    DailyTask,
+    $$DailyTaskTableTableFilterComposer,
+    $$DailyTaskTableTableOrderingComposer,
+    $$DailyTaskTableTableCreateCompanionBuilder,
+    $$DailyTaskTableTableUpdateCompanionBuilder,
+    (DailyTask, BaseReferences<_$AppDatabase, $DailyTaskTableTable, DailyTask>),
+    DailyTask,
+    PrefetchHooks Function()> {
   $$DailyTaskTableTableTableManager(
-    _$AppDatabase db,
-    $DailyTaskTableTable table,
-  ) : super(
-        TableManagerState(
+      _$AppDatabase db, $DailyTaskTableTable table)
+      : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer: $$DailyTaskTableTableFilterComposer(
-            ComposerState(db, table),
+          filteringComposer:
+              $$DailyTaskTableTableFilterComposer(ComposerState(db, table)),
+          orderingComposer:
+              $$DailyTaskTableTableOrderingComposer(ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<String> id = const Value.absent(),
+            Value<String> title = const Value.absent(),
+            Value<String> description = const Value.absent(),
+            Value<String> impact = const Value.absent(),
+            Value<int> sortOrder = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              DailyTaskTableCompanion(
+            id: id,
+            title: title,
+            description: description,
+            impact: impact,
+            sortOrder: sortOrder,
+            rowid: rowid,
           ),
-          orderingComposer: $$DailyTaskTableTableOrderingComposer(
-            ComposerState(db, table),
+          createCompanionCallback: ({
+            required String id,
+            required String title,
+            required String description,
+            required String impact,
+            required int sortOrder,
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              DailyTaskTableCompanion.insert(
+            id: id,
+            title: title,
+            description: description,
+            impact: impact,
+            sortOrder: sortOrder,
+            rowid: rowid,
           ),
-          updateCompanionCallback:
-              ({
-                Value<String> id = const Value.absent(),
-                Value<String> title = const Value.absent(),
-                Value<String> description = const Value.absent(),
-                Value<String> impact = const Value.absent(),
-                Value<int> sortOrder = const Value.absent(),
-                Value<int> rowid = const Value.absent(),
-              }) => DailyTaskTableCompanion(
-                id: id,
-                title: title,
-                description: description,
-                impact: impact,
-                sortOrder: sortOrder,
-                rowid: rowid,
-              ),
-          createCompanionCallback:
-              ({
-                required String id,
-                required String title,
-                required String description,
-                required String impact,
-                required int sortOrder,
-                Value<int> rowid = const Value.absent(),
-              }) => DailyTaskTableCompanion.insert(
-                id: id,
-                title: title,
-                description: description,
-                impact: impact,
-                sortOrder: sortOrder,
-                rowid: rowid,
-              ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
               .toList(),
           prefetchHooksCallback: null,
-        ),
-      );
+        ));
 }
 
-typedef $$DailyTaskTableTableProcessedTableManager =
-    ProcessedTableManager<
-      _$AppDatabase,
-      $DailyTaskTableTable,
-      DailyTask,
-      $$DailyTaskTableTableFilterComposer,
-      $$DailyTaskTableTableOrderingComposer,
-      $$DailyTaskTableTableCreateCompanionBuilder,
-      $$DailyTaskTableTableUpdateCompanionBuilder,
-      (
-        DailyTask,
-        BaseReferences<_$AppDatabase, $DailyTaskTableTable, DailyTask>,
-      ),
-      DailyTask,
-      PrefetchHooks Function()
-    >;
-typedef $$MuhasabaEntryTableTableCreateCompanionBuilder =
-    MuhasabaEntryTableCompanion Function({
-      required String activityDate,
-      Value<bool> prayed,
-      Value<bool> guardedTongue,
-      Value<bool> honoredParents,
-      Value<bool> avoidedHarm,
-      Value<bool> gaveCharity,
-      Value<bool> quranRead,
-      Value<String?> note,
-      required String updatedAt,
-      Value<int> rowid,
-    });
-typedef $$MuhasabaEntryTableTableUpdateCompanionBuilder =
-    MuhasabaEntryTableCompanion Function({
-      Value<String> activityDate,
-      Value<bool> prayed,
-      Value<bool> guardedTongue,
-      Value<bool> honoredParents,
-      Value<bool> avoidedHarm,
-      Value<bool> gaveCharity,
-      Value<bool> quranRead,
-      Value<String?> note,
-      Value<String> updatedAt,
-      Value<int> rowid,
-    });
+typedef $$DailyTaskTableTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $DailyTaskTableTable,
+    DailyTask,
+    $$DailyTaskTableTableFilterComposer,
+    $$DailyTaskTableTableOrderingComposer,
+    $$DailyTaskTableTableCreateCompanionBuilder,
+    $$DailyTaskTableTableUpdateCompanionBuilder,
+    (DailyTask, BaseReferences<_$AppDatabase, $DailyTaskTableTable, DailyTask>),
+    DailyTask,
+    PrefetchHooks Function()>;
+typedef $$MuhasabaEntryTableTableCreateCompanionBuilder
+    = MuhasabaEntryTableCompanion Function({
+  required String activityDate,
+  Value<bool> prayed,
+  Value<bool> guardedTongue,
+  Value<bool> honoredParents,
+  Value<bool> avoidedHarm,
+  Value<bool> gaveCharity,
+  Value<bool> quranRead,
+  Value<String?> note,
+  required String updatedAt,
+  Value<int> rowid,
+});
+typedef $$MuhasabaEntryTableTableUpdateCompanionBuilder
+    = MuhasabaEntryTableCompanion Function({
+  Value<String> activityDate,
+  Value<bool> prayed,
+  Value<bool> guardedTongue,
+  Value<bool> honoredParents,
+  Value<bool> avoidedHarm,
+  Value<bool> gaveCharity,
+  Value<bool> quranRead,
+  Value<String?> note,
+  Value<String> updatedAt,
+  Value<int> rowid,
+});
 
 class $$MuhasabaEntryTableTableFilterComposer
     extends FilterComposer<_$AppDatabase, $MuhasabaEntryTableTable> {
   $$MuhasabaEntryTableTableFilterComposer(super.$state);
   ColumnFilters<String> get activityDate => $state.composableBuilder(
-    column: $state.table.activityDate,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.activityDate,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<bool> get prayed => $state.composableBuilder(
-    column: $state.table.prayed,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.prayed,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<bool> get guardedTongue => $state.composableBuilder(
-    column: $state.table.guardedTongue,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.guardedTongue,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<bool> get honoredParents => $state.composableBuilder(
-    column: $state.table.honoredParents,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.honoredParents,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<bool> get avoidedHarm => $state.composableBuilder(
-    column: $state.table.avoidedHarm,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.avoidedHarm,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<bool> get gaveCharity => $state.composableBuilder(
-    column: $state.table.gaveCharity,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.gaveCharity,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<bool> get quranRead => $state.composableBuilder(
-    column: $state.table.quranRead,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.quranRead,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<String> get note => $state.composableBuilder(
-    column: $state.table.note,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.note,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<String> get updatedAt => $state.composableBuilder(
-    column: $state.table.updatedAt,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.updatedAt,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 }
 
 class $$MuhasabaEntryTableTableOrderingComposer
     extends OrderingComposer<_$AppDatabase, $MuhasabaEntryTableTable> {
   $$MuhasabaEntryTableTableOrderingComposer(super.$state);
   ColumnOrderings<String> get activityDate => $state.composableBuilder(
-    column: $state.table.activityDate,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.activityDate,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<bool> get prayed => $state.composableBuilder(
-    column: $state.table.prayed,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.prayed,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<bool> get guardedTongue => $state.composableBuilder(
-    column: $state.table.guardedTongue,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.guardedTongue,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<bool> get honoredParents => $state.composableBuilder(
-    column: $state.table.honoredParents,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.honoredParents,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<bool> get avoidedHarm => $state.composableBuilder(
-    column: $state.table.avoidedHarm,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.avoidedHarm,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<bool> get gaveCharity => $state.composableBuilder(
-    column: $state.table.gaveCharity,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.gaveCharity,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<bool> get quranRead => $state.composableBuilder(
-    column: $state.table.quranRead,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.quranRead,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<String> get note => $state.composableBuilder(
-    column: $state.table.note,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.note,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<String> get updatedAt => $state.composableBuilder(
-    column: $state.table.updatedAt,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.updatedAt,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 }
 
-class $$MuhasabaEntryTableTableTableManager
-    extends
-        RootTableManager<
-          _$AppDatabase,
-          $MuhasabaEntryTableTable,
-          MuhasabaEntry,
-          $$MuhasabaEntryTableTableFilterComposer,
-          $$MuhasabaEntryTableTableOrderingComposer,
-          $$MuhasabaEntryTableTableCreateCompanionBuilder,
-          $$MuhasabaEntryTableTableUpdateCompanionBuilder,
-          (
-            MuhasabaEntry,
-            BaseReferences<
-              _$AppDatabase,
-              $MuhasabaEntryTableTable,
-              MuhasabaEntry
-            >,
-          ),
-          MuhasabaEntry,
-          PrefetchHooks Function()
-        > {
+class $$MuhasabaEntryTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $MuhasabaEntryTableTable,
+    MuhasabaEntry,
+    $$MuhasabaEntryTableTableFilterComposer,
+    $$MuhasabaEntryTableTableOrderingComposer,
+    $$MuhasabaEntryTableTableCreateCompanionBuilder,
+    $$MuhasabaEntryTableTableUpdateCompanionBuilder,
+    (
+      MuhasabaEntry,
+      BaseReferences<_$AppDatabase, $MuhasabaEntryTableTable, MuhasabaEntry>
+    ),
+    MuhasabaEntry,
+    PrefetchHooks Function()> {
   $$MuhasabaEntryTableTableTableManager(
-    _$AppDatabase db,
-    $MuhasabaEntryTableTable table,
-  ) : super(
-        TableManagerState(
+      _$AppDatabase db, $MuhasabaEntryTableTable table)
+      : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer: $$MuhasabaEntryTableTableFilterComposer(
-            ComposerState(db, table),
-          ),
+          filteringComposer:
+              $$MuhasabaEntryTableTableFilterComposer(ComposerState(db, table)),
           orderingComposer: $$MuhasabaEntryTableTableOrderingComposer(
-            ComposerState(db, table),
+              ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<String> activityDate = const Value.absent(),
+            Value<bool> prayed = const Value.absent(),
+            Value<bool> guardedTongue = const Value.absent(),
+            Value<bool> honoredParents = const Value.absent(),
+            Value<bool> avoidedHarm = const Value.absent(),
+            Value<bool> gaveCharity = const Value.absent(),
+            Value<bool> quranRead = const Value.absent(),
+            Value<String?> note = const Value.absent(),
+            Value<String> updatedAt = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              MuhasabaEntryTableCompanion(
+            activityDate: activityDate,
+            prayed: prayed,
+            guardedTongue: guardedTongue,
+            honoredParents: honoredParents,
+            avoidedHarm: avoidedHarm,
+            gaveCharity: gaveCharity,
+            quranRead: quranRead,
+            note: note,
+            updatedAt: updatedAt,
+            rowid: rowid,
           ),
-          updateCompanionCallback:
-              ({
-                Value<String> activityDate = const Value.absent(),
-                Value<bool> prayed = const Value.absent(),
-                Value<bool> guardedTongue = const Value.absent(),
-                Value<bool> honoredParents = const Value.absent(),
-                Value<bool> avoidedHarm = const Value.absent(),
-                Value<bool> gaveCharity = const Value.absent(),
-                Value<bool> quranRead = const Value.absent(),
-                Value<String?> note = const Value.absent(),
-                Value<String> updatedAt = const Value.absent(),
-                Value<int> rowid = const Value.absent(),
-              }) => MuhasabaEntryTableCompanion(
-                activityDate: activityDate,
-                prayed: prayed,
-                guardedTongue: guardedTongue,
-                honoredParents: honoredParents,
-                avoidedHarm: avoidedHarm,
-                gaveCharity: gaveCharity,
-                quranRead: quranRead,
-                note: note,
-                updatedAt: updatedAt,
-                rowid: rowid,
-              ),
-          createCompanionCallback:
-              ({
-                required String activityDate,
-                Value<bool> prayed = const Value.absent(),
-                Value<bool> guardedTongue = const Value.absent(),
-                Value<bool> honoredParents = const Value.absent(),
-                Value<bool> avoidedHarm = const Value.absent(),
-                Value<bool> gaveCharity = const Value.absent(),
-                Value<bool> quranRead = const Value.absent(),
-                Value<String?> note = const Value.absent(),
-                required String updatedAt,
-                Value<int> rowid = const Value.absent(),
-              }) => MuhasabaEntryTableCompanion.insert(
-                activityDate: activityDate,
-                prayed: prayed,
-                guardedTongue: guardedTongue,
-                honoredParents: honoredParents,
-                avoidedHarm: avoidedHarm,
-                gaveCharity: gaveCharity,
-                quranRead: quranRead,
-                note: note,
-                updatedAt: updatedAt,
-                rowid: rowid,
-              ),
+          createCompanionCallback: ({
+            required String activityDate,
+            Value<bool> prayed = const Value.absent(),
+            Value<bool> guardedTongue = const Value.absent(),
+            Value<bool> honoredParents = const Value.absent(),
+            Value<bool> avoidedHarm = const Value.absent(),
+            Value<bool> gaveCharity = const Value.absent(),
+            Value<bool> quranRead = const Value.absent(),
+            Value<String?> note = const Value.absent(),
+            required String updatedAt,
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              MuhasabaEntryTableCompanion.insert(
+            activityDate: activityDate,
+            prayed: prayed,
+            guardedTongue: guardedTongue,
+            honoredParents: honoredParents,
+            avoidedHarm: avoidedHarm,
+            gaveCharity: gaveCharity,
+            quranRead: quranRead,
+            note: note,
+            updatedAt: updatedAt,
+            rowid: rowid,
+          ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
               .toList(),
           prefetchHooksCallback: null,
-        ),
-      );
+        ));
 }
 
-typedef $$MuhasabaEntryTableTableProcessedTableManager =
-    ProcessedTableManager<
-      _$AppDatabase,
-      $MuhasabaEntryTableTable,
+typedef $$MuhasabaEntryTableTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $MuhasabaEntryTableTable,
+    MuhasabaEntry,
+    $$MuhasabaEntryTableTableFilterComposer,
+    $$MuhasabaEntryTableTableOrderingComposer,
+    $$MuhasabaEntryTableTableCreateCompanionBuilder,
+    $$MuhasabaEntryTableTableUpdateCompanionBuilder,
+    (
       MuhasabaEntry,
-      $$MuhasabaEntryTableTableFilterComposer,
-      $$MuhasabaEntryTableTableOrderingComposer,
-      $$MuhasabaEntryTableTableCreateCompanionBuilder,
-      $$MuhasabaEntryTableTableUpdateCompanionBuilder,
-      (
-        MuhasabaEntry,
-        BaseReferences<_$AppDatabase, $MuhasabaEntryTableTable, MuhasabaEntry>,
-      ),
-      MuhasabaEntry,
-      PrefetchHooks Function()
-    >;
-typedef $$UserFavoriteTableTableCreateCompanionBuilder =
-    UserFavoriteTableCompanion Function({
-      Value<int> id,
-      required String contentType,
-      required String primaryReference,
-      Value<String?> secondaryReference,
-      required String title,
-      required String contentText,
-      required String source,
-      required String createdAt,
-    });
-typedef $$UserFavoriteTableTableUpdateCompanionBuilder =
-    UserFavoriteTableCompanion Function({
-      Value<int> id,
-      Value<String> contentType,
-      Value<String> primaryReference,
-      Value<String?> secondaryReference,
-      Value<String> title,
-      Value<String> contentText,
-      Value<String> source,
-      Value<String> createdAt,
-    });
+      BaseReferences<_$AppDatabase, $MuhasabaEntryTableTable, MuhasabaEntry>
+    ),
+    MuhasabaEntry,
+    PrefetchHooks Function()>;
+typedef $$UserFavoriteTableTableCreateCompanionBuilder
+    = UserFavoriteTableCompanion Function({
+  Value<int> id,
+  required String contentType,
+  required String primaryReference,
+  Value<String?> secondaryReference,
+  required String title,
+  required String contentText,
+  required String source,
+  required String createdAt,
+});
+typedef $$UserFavoriteTableTableUpdateCompanionBuilder
+    = UserFavoriteTableCompanion Function({
+  Value<int> id,
+  Value<String> contentType,
+  Value<String> primaryReference,
+  Value<String?> secondaryReference,
+  Value<String> title,
+  Value<String> contentText,
+  Value<String> source,
+  Value<String> createdAt,
+});
 
 class $$UserFavoriteTableTableFilterComposer
     extends FilterComposer<_$AppDatabase, $UserFavoriteTableTable> {
   $$UserFavoriteTableTableFilterComposer(super.$state);
   ColumnFilters<int> get id => $state.composableBuilder(
-    column: $state.table.id,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<String> get contentType => $state.composableBuilder(
-    column: $state.table.contentType,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.contentType,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<String> get primaryReference => $state.composableBuilder(
-    column: $state.table.primaryReference,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.primaryReference,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<String> get secondaryReference => $state.composableBuilder(
-    column: $state.table.secondaryReference,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.secondaryReference,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<String> get title => $state.composableBuilder(
-    column: $state.table.title,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.title,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<String> get contentText => $state.composableBuilder(
-    column: $state.table.contentText,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.contentText,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<String> get source => $state.composableBuilder(
-    column: $state.table.source,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.source,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<String> get createdAt => $state.composableBuilder(
-    column: $state.table.createdAt,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.createdAt,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 }
 
 class $$UserFavoriteTableTableOrderingComposer
     extends OrderingComposer<_$AppDatabase, $UserFavoriteTableTable> {
   $$UserFavoriteTableTableOrderingComposer(super.$state);
   ColumnOrderings<int> get id => $state.composableBuilder(
-    column: $state.table.id,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<String> get contentType => $state.composableBuilder(
-    column: $state.table.contentType,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.contentType,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<String> get primaryReference => $state.composableBuilder(
-    column: $state.table.primaryReference,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.primaryReference,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<String> get secondaryReference => $state.composableBuilder(
-    column: $state.table.secondaryReference,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.secondaryReference,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<String> get title => $state.composableBuilder(
-    column: $state.table.title,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.title,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<String> get contentText => $state.composableBuilder(
-    column: $state.table.contentText,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.contentText,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<String> get source => $state.composableBuilder(
-    column: $state.table.source,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.source,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<String> get createdAt => $state.composableBuilder(
-    column: $state.table.createdAt,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.createdAt,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 }
 
-class $$UserFavoriteTableTableTableManager
-    extends
-        RootTableManager<
-          _$AppDatabase,
-          $UserFavoriteTableTable,
-          UserFavorite,
-          $$UserFavoriteTableTableFilterComposer,
-          $$UserFavoriteTableTableOrderingComposer,
-          $$UserFavoriteTableTableCreateCompanionBuilder,
-          $$UserFavoriteTableTableUpdateCompanionBuilder,
-          (
-            UserFavorite,
-            BaseReferences<
-              _$AppDatabase,
-              $UserFavoriteTableTable,
-              UserFavorite
-            >,
-          ),
-          UserFavorite,
-          PrefetchHooks Function()
-        > {
+class $$UserFavoriteTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $UserFavoriteTableTable,
+    UserFavorite,
+    $$UserFavoriteTableTableFilterComposer,
+    $$UserFavoriteTableTableOrderingComposer,
+    $$UserFavoriteTableTableCreateCompanionBuilder,
+    $$UserFavoriteTableTableUpdateCompanionBuilder,
+    (
+      UserFavorite,
+      BaseReferences<_$AppDatabase, $UserFavoriteTableTable, UserFavorite>
+    ),
+    UserFavorite,
+    PrefetchHooks Function()> {
   $$UserFavoriteTableTableTableManager(
-    _$AppDatabase db,
-    $UserFavoriteTableTable table,
-  ) : super(
-        TableManagerState(
+      _$AppDatabase db, $UserFavoriteTableTable table)
+      : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer: $$UserFavoriteTableTableFilterComposer(
-            ComposerState(db, table),
-          ),
+          filteringComposer:
+              $$UserFavoriteTableTableFilterComposer(ComposerState(db, table)),
           orderingComposer: $$UserFavoriteTableTableOrderingComposer(
-            ComposerState(db, table),
+              ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> contentType = const Value.absent(),
+            Value<String> primaryReference = const Value.absent(),
+            Value<String?> secondaryReference = const Value.absent(),
+            Value<String> title = const Value.absent(),
+            Value<String> contentText = const Value.absent(),
+            Value<String> source = const Value.absent(),
+            Value<String> createdAt = const Value.absent(),
+          }) =>
+              UserFavoriteTableCompanion(
+            id: id,
+            contentType: contentType,
+            primaryReference: primaryReference,
+            secondaryReference: secondaryReference,
+            title: title,
+            contentText: contentText,
+            source: source,
+            createdAt: createdAt,
           ),
-          updateCompanionCallback:
-              ({
-                Value<int> id = const Value.absent(),
-                Value<String> contentType = const Value.absent(),
-                Value<String> primaryReference = const Value.absent(),
-                Value<String?> secondaryReference = const Value.absent(),
-                Value<String> title = const Value.absent(),
-                Value<String> contentText = const Value.absent(),
-                Value<String> source = const Value.absent(),
-                Value<String> createdAt = const Value.absent(),
-              }) => UserFavoriteTableCompanion(
-                id: id,
-                contentType: contentType,
-                primaryReference: primaryReference,
-                secondaryReference: secondaryReference,
-                title: title,
-                contentText: contentText,
-                source: source,
-                createdAt: createdAt,
-              ),
-          createCompanionCallback:
-              ({
-                Value<int> id = const Value.absent(),
-                required String contentType,
-                required String primaryReference,
-                Value<String?> secondaryReference = const Value.absent(),
-                required String title,
-                required String contentText,
-                required String source,
-                required String createdAt,
-              }) => UserFavoriteTableCompanion.insert(
-                id: id,
-                contentType: contentType,
-                primaryReference: primaryReference,
-                secondaryReference: secondaryReference,
-                title: title,
-                contentText: contentText,
-                source: source,
-                createdAt: createdAt,
-              ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required String contentType,
+            required String primaryReference,
+            Value<String?> secondaryReference = const Value.absent(),
+            required String title,
+            required String contentText,
+            required String source,
+            required String createdAt,
+          }) =>
+              UserFavoriteTableCompanion.insert(
+            id: id,
+            contentType: contentType,
+            primaryReference: primaryReference,
+            secondaryReference: secondaryReference,
+            title: title,
+            contentText: contentText,
+            source: source,
+            createdAt: createdAt,
+          ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
               .toList(),
           prefetchHooksCallback: null,
-        ),
-      );
+        ));
 }
 
-typedef $$UserFavoriteTableTableProcessedTableManager =
-    ProcessedTableManager<
-      _$AppDatabase,
-      $UserFavoriteTableTable,
+typedef $$UserFavoriteTableTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $UserFavoriteTableTable,
+    UserFavorite,
+    $$UserFavoriteTableTableFilterComposer,
+    $$UserFavoriteTableTableOrderingComposer,
+    $$UserFavoriteTableTableCreateCompanionBuilder,
+    $$UserFavoriteTableTableUpdateCompanionBuilder,
+    (
       UserFavorite,
-      $$UserFavoriteTableTableFilterComposer,
-      $$UserFavoriteTableTableOrderingComposer,
-      $$UserFavoriteTableTableCreateCompanionBuilder,
-      $$UserFavoriteTableTableUpdateCompanionBuilder,
-      (
-        UserFavorite,
-        BaseReferences<_$AppDatabase, $UserFavoriteTableTable, UserFavorite>,
-      ),
-      UserFavorite,
-      PrefetchHooks Function()
-    >;
-typedef $$UserDailyActivityTableTableCreateCompanionBuilder =
-    UserDailyActivityTableCompanion Function({
-      required String activityDate,
-      Value<String?> completedTaskId,
-      Value<String?> completedSunnahId,
-      required String updatedAt,
-      Value<int> rowid,
-    });
-typedef $$UserDailyActivityTableTableUpdateCompanionBuilder =
-    UserDailyActivityTableCompanion Function({
-      Value<String> activityDate,
-      Value<String?> completedTaskId,
-      Value<String?> completedSunnahId,
-      Value<String> updatedAt,
-      Value<int> rowid,
-    });
+      BaseReferences<_$AppDatabase, $UserFavoriteTableTable, UserFavorite>
+    ),
+    UserFavorite,
+    PrefetchHooks Function()>;
+typedef $$UserDailyActivityTableTableCreateCompanionBuilder
+    = UserDailyActivityTableCompanion Function({
+  required String activityDate,
+  Value<String?> completedTaskId,
+  Value<String?> completedSunnahId,
+  required String updatedAt,
+  Value<int> rowid,
+});
+typedef $$UserDailyActivityTableTableUpdateCompanionBuilder
+    = UserDailyActivityTableCompanion Function({
+  Value<String> activityDate,
+  Value<String?> completedTaskId,
+  Value<String?> completedSunnahId,
+  Value<String> updatedAt,
+  Value<int> rowid,
+});
 
 class $$UserDailyActivityTableTableFilterComposer
     extends FilterComposer<_$AppDatabase, $UserDailyActivityTableTable> {
   $$UserDailyActivityTableTableFilterComposer(super.$state);
   ColumnFilters<String> get activityDate => $state.composableBuilder(
-    column: $state.table.activityDate,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.activityDate,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<String> get completedTaskId => $state.composableBuilder(
-    column: $state.table.completedTaskId,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.completedTaskId,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<String> get completedSunnahId => $state.composableBuilder(
-    column: $state.table.completedSunnahId,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.completedSunnahId,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<String> get updatedAt => $state.composableBuilder(
-    column: $state.table.updatedAt,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.updatedAt,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 }
 
 class $$UserDailyActivityTableTableOrderingComposer
     extends OrderingComposer<_$AppDatabase, $UserDailyActivityTableTable> {
   $$UserDailyActivityTableTableOrderingComposer(super.$state);
   ColumnOrderings<String> get activityDate => $state.composableBuilder(
-    column: $state.table.activityDate,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.activityDate,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<String> get completedTaskId => $state.composableBuilder(
-    column: $state.table.completedTaskId,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.completedTaskId,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<String> get completedSunnahId => $state.composableBuilder(
-    column: $state.table.completedSunnahId,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.completedSunnahId,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<String> get updatedAt => $state.composableBuilder(
-    column: $state.table.updatedAt,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.updatedAt,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 }
 
-class $$UserDailyActivityTableTableTableManager
-    extends
-        RootTableManager<
-          _$AppDatabase,
-          $UserDailyActivityTableTable,
-          UserDailyActivity,
-          $$UserDailyActivityTableTableFilterComposer,
-          $$UserDailyActivityTableTableOrderingComposer,
-          $$UserDailyActivityTableTableCreateCompanionBuilder,
-          $$UserDailyActivityTableTableUpdateCompanionBuilder,
-          (
-            UserDailyActivity,
-            BaseReferences<
-              _$AppDatabase,
-              $UserDailyActivityTableTable,
-              UserDailyActivity
-            >,
-          ),
-          UserDailyActivity,
-          PrefetchHooks Function()
-        > {
+class $$UserDailyActivityTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $UserDailyActivityTableTable,
+    UserDailyActivity,
+    $$UserDailyActivityTableTableFilterComposer,
+    $$UserDailyActivityTableTableOrderingComposer,
+    $$UserDailyActivityTableTableCreateCompanionBuilder,
+    $$UserDailyActivityTableTableUpdateCompanionBuilder,
+    (
+      UserDailyActivity,
+      BaseReferences<_$AppDatabase, $UserDailyActivityTableTable,
+          UserDailyActivity>
+    ),
+    UserDailyActivity,
+    PrefetchHooks Function()> {
   $$UserDailyActivityTableTableTableManager(
-    _$AppDatabase db,
-    $UserDailyActivityTableTable table,
-  ) : super(
-        TableManagerState(
+      _$AppDatabase db, $UserDailyActivityTableTable table)
+      : super(TableManagerState(
           db: db,
           table: table,
           filteringComposer: $$UserDailyActivityTableTableFilterComposer(
-            ComposerState(db, table),
-          ),
+              ComposerState(db, table)),
           orderingComposer: $$UserDailyActivityTableTableOrderingComposer(
-            ComposerState(db, table),
+              ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<String> activityDate = const Value.absent(),
+            Value<String?> completedTaskId = const Value.absent(),
+            Value<String?> completedSunnahId = const Value.absent(),
+            Value<String> updatedAt = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              UserDailyActivityTableCompanion(
+            activityDate: activityDate,
+            completedTaskId: completedTaskId,
+            completedSunnahId: completedSunnahId,
+            updatedAt: updatedAt,
+            rowid: rowid,
           ),
-          updateCompanionCallback:
-              ({
-                Value<String> activityDate = const Value.absent(),
-                Value<String?> completedTaskId = const Value.absent(),
-                Value<String?> completedSunnahId = const Value.absent(),
-                Value<String> updatedAt = const Value.absent(),
-                Value<int> rowid = const Value.absent(),
-              }) => UserDailyActivityTableCompanion(
-                activityDate: activityDate,
-                completedTaskId: completedTaskId,
-                completedSunnahId: completedSunnahId,
-                updatedAt: updatedAt,
-                rowid: rowid,
-              ),
-          createCompanionCallback:
-              ({
-                required String activityDate,
-                Value<String?> completedTaskId = const Value.absent(),
-                Value<String?> completedSunnahId = const Value.absent(),
-                required String updatedAt,
-                Value<int> rowid = const Value.absent(),
-              }) => UserDailyActivityTableCompanion.insert(
-                activityDate: activityDate,
-                completedTaskId: completedTaskId,
-                completedSunnahId: completedSunnahId,
-                updatedAt: updatedAt,
-                rowid: rowid,
-              ),
+          createCompanionCallback: ({
+            required String activityDate,
+            Value<String?> completedTaskId = const Value.absent(),
+            Value<String?> completedSunnahId = const Value.absent(),
+            required String updatedAt,
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              UserDailyActivityTableCompanion.insert(
+            activityDate: activityDate,
+            completedTaskId: completedTaskId,
+            completedSunnahId: completedSunnahId,
+            updatedAt: updatedAt,
+            rowid: rowid,
+          ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
               .toList(),
           prefetchHooksCallback: null,
-        ),
-      );
+        ));
 }
 
-typedef $$UserDailyActivityTableTableProcessedTableManager =
-    ProcessedTableManager<
-      _$AppDatabase,
-      $UserDailyActivityTableTable,
-      UserDailyActivity,
-      $$UserDailyActivityTableTableFilterComposer,
-      $$UserDailyActivityTableTableOrderingComposer,
-      $$UserDailyActivityTableTableCreateCompanionBuilder,
-      $$UserDailyActivityTableTableUpdateCompanionBuilder,
-      (
+typedef $$UserDailyActivityTableTableProcessedTableManager
+    = ProcessedTableManager<
+        _$AppDatabase,
+        $UserDailyActivityTableTable,
         UserDailyActivity,
-        BaseReferences<
-          _$AppDatabase,
-          $UserDailyActivityTableTable,
-          UserDailyActivity
-        >,
-      ),
-      UserDailyActivity,
-      PrefetchHooks Function()
-    >;
-typedef $$MemoryThreadTableTableCreateCompanionBuilder =
-    MemoryThreadTableCompanion Function({
-      required String id,
-      required String sourceKind,
-      required String sourceCanonicalId,
-      required String sourceLabel,
-      Value<String?> sourceBook,
-      Value<String?> sourceCitation,
-      Value<String?> sourceVersion,
-      Value<String?> sourceSecondaryReference,
-      Value<String?> userContextKind,
-      Value<String?> userContextLabel,
-      Value<String?> userLabel,
-      Value<String> status,
-      Value<String> resurfacing,
-      Value<String?> legacyKey,
-      required String createdAt,
-      required String updatedAt,
-      Value<String?> lastReturnedAt,
-      Value<int> rowid,
-    });
-typedef $$MemoryThreadTableTableUpdateCompanionBuilder =
-    MemoryThreadTableCompanion Function({
-      Value<String> id,
-      Value<String> sourceKind,
-      Value<String> sourceCanonicalId,
-      Value<String> sourceLabel,
-      Value<String?> sourceBook,
-      Value<String?> sourceCitation,
-      Value<String?> sourceVersion,
-      Value<String?> sourceSecondaryReference,
-      Value<String?> userContextKind,
-      Value<String?> userContextLabel,
-      Value<String?> userLabel,
-      Value<String> status,
-      Value<String> resurfacing,
-      Value<String?> legacyKey,
-      Value<String> createdAt,
-      Value<String> updatedAt,
-      Value<String?> lastReturnedAt,
-      Value<int> rowid,
-    });
+        $$UserDailyActivityTableTableFilterComposer,
+        $$UserDailyActivityTableTableOrderingComposer,
+        $$UserDailyActivityTableTableCreateCompanionBuilder,
+        $$UserDailyActivityTableTableUpdateCompanionBuilder,
+        (
+          UserDailyActivity,
+          BaseReferences<_$AppDatabase, $UserDailyActivityTableTable,
+              UserDailyActivity>
+        ),
+        UserDailyActivity,
+        PrefetchHooks Function()>;
+typedef $$MemoryThreadTableTableCreateCompanionBuilder
+    = MemoryThreadTableCompanion Function({
+  required String id,
+  required String sourceKind,
+  required String sourceCanonicalId,
+  required String sourceLabel,
+  Value<String?> sourceBook,
+  Value<String?> sourceCitation,
+  Value<String?> sourceVersion,
+  Value<String?> sourceSecondaryReference,
+  Value<String?> userContextKind,
+  Value<String?> userContextLabel,
+  Value<String?> userLabel,
+  Value<String> status,
+  Value<String> resurfacing,
+  Value<String?> legacyKey,
+  required String createdAt,
+  required String updatedAt,
+  Value<String?> lastReturnedAt,
+  Value<int> rowid,
+});
+typedef $$MemoryThreadTableTableUpdateCompanionBuilder
+    = MemoryThreadTableCompanion Function({
+  Value<String> id,
+  Value<String> sourceKind,
+  Value<String> sourceCanonicalId,
+  Value<String> sourceLabel,
+  Value<String?> sourceBook,
+  Value<String?> sourceCitation,
+  Value<String?> sourceVersion,
+  Value<String?> sourceSecondaryReference,
+  Value<String?> userContextKind,
+  Value<String?> userContextLabel,
+  Value<String?> userLabel,
+  Value<String> status,
+  Value<String> resurfacing,
+  Value<String?> legacyKey,
+  Value<String> createdAt,
+  Value<String> updatedAt,
+  Value<String?> lastReturnedAt,
+  Value<int> rowid,
+});
 
 class $$MemoryThreadTableTableFilterComposer
     extends FilterComposer<_$AppDatabase, $MemoryThreadTableTable> {
   $$MemoryThreadTableTableFilterComposer(super.$state);
   ColumnFilters<String> get id => $state.composableBuilder(
-    column: $state.table.id,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<String> get sourceKind => $state.composableBuilder(
-    column: $state.table.sourceKind,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.sourceKind,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<String> get sourceCanonicalId => $state.composableBuilder(
-    column: $state.table.sourceCanonicalId,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.sourceCanonicalId,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<String> get sourceLabel => $state.composableBuilder(
-    column: $state.table.sourceLabel,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.sourceLabel,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<String> get sourceBook => $state.composableBuilder(
-    column: $state.table.sourceBook,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.sourceBook,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<String> get sourceCitation => $state.composableBuilder(
-    column: $state.table.sourceCitation,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.sourceCitation,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<String> get sourceVersion => $state.composableBuilder(
-    column: $state.table.sourceVersion,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.sourceVersion,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<String> get sourceSecondaryReference =>
       $state.composableBuilder(
-        column: $state.table.sourceSecondaryReference,
-        builder: (column, joinBuilders) =>
-            ColumnFilters(column, joinBuilders: joinBuilders),
-      );
+          column: $state.table.sourceSecondaryReference,
+          builder: (column, joinBuilders) =>
+              ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<String> get userContextKind => $state.composableBuilder(
-    column: $state.table.userContextKind,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.userContextKind,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<String> get userContextLabel => $state.composableBuilder(
-    column: $state.table.userContextLabel,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.userContextLabel,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<String> get userLabel => $state.composableBuilder(
-    column: $state.table.userLabel,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.userLabel,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<String> get status => $state.composableBuilder(
-    column: $state.table.status,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.status,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<String> get resurfacing => $state.composableBuilder(
-    column: $state.table.resurfacing,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.resurfacing,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<String> get legacyKey => $state.composableBuilder(
-    column: $state.table.legacyKey,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.legacyKey,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<String> get createdAt => $state.composableBuilder(
-    column: $state.table.createdAt,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.createdAt,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<String> get updatedAt => $state.composableBuilder(
-    column: $state.table.updatedAt,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.updatedAt,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<String> get lastReturnedAt => $state.composableBuilder(
-    column: $state.table.lastReturnedAt,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.lastReturnedAt,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 }
 
 class $$MemoryThreadTableTableOrderingComposer
     extends OrderingComposer<_$AppDatabase, $MemoryThreadTableTable> {
   $$MemoryThreadTableTableOrderingComposer(super.$state);
   ColumnOrderings<String> get id => $state.composableBuilder(
-    column: $state.table.id,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<String> get sourceKind => $state.composableBuilder(
-    column: $state.table.sourceKind,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.sourceKind,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<String> get sourceCanonicalId => $state.composableBuilder(
-    column: $state.table.sourceCanonicalId,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.sourceCanonicalId,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<String> get sourceLabel => $state.composableBuilder(
-    column: $state.table.sourceLabel,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.sourceLabel,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<String> get sourceBook => $state.composableBuilder(
-    column: $state.table.sourceBook,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.sourceBook,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<String> get sourceCitation => $state.composableBuilder(
-    column: $state.table.sourceCitation,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.sourceCitation,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<String> get sourceVersion => $state.composableBuilder(
-    column: $state.table.sourceVersion,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.sourceVersion,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<String> get sourceSecondaryReference =>
       $state.composableBuilder(
-        column: $state.table.sourceSecondaryReference,
-        builder: (column, joinBuilders) =>
-            ColumnOrderings(column, joinBuilders: joinBuilders),
-      );
+          column: $state.table.sourceSecondaryReference,
+          builder: (column, joinBuilders) =>
+              ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<String> get userContextKind => $state.composableBuilder(
-    column: $state.table.userContextKind,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.userContextKind,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<String> get userContextLabel => $state.composableBuilder(
-    column: $state.table.userContextLabel,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.userContextLabel,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<String> get userLabel => $state.composableBuilder(
-    column: $state.table.userLabel,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.userLabel,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<String> get status => $state.composableBuilder(
-    column: $state.table.status,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.status,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<String> get resurfacing => $state.composableBuilder(
-    column: $state.table.resurfacing,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.resurfacing,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<String> get legacyKey => $state.composableBuilder(
-    column: $state.table.legacyKey,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.legacyKey,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<String> get createdAt => $state.composableBuilder(
-    column: $state.table.createdAt,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.createdAt,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<String> get updatedAt => $state.composableBuilder(
-    column: $state.table.updatedAt,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.updatedAt,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<String> get lastReturnedAt => $state.composableBuilder(
-    column: $state.table.lastReturnedAt,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.lastReturnedAt,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 }
 
-class $$MemoryThreadTableTableTableManager
-    extends
-        RootTableManager<
-          _$AppDatabase,
-          $MemoryThreadTableTable,
-          MemoryThreadRow,
-          $$MemoryThreadTableTableFilterComposer,
-          $$MemoryThreadTableTableOrderingComposer,
-          $$MemoryThreadTableTableCreateCompanionBuilder,
-          $$MemoryThreadTableTableUpdateCompanionBuilder,
-          (
-            MemoryThreadRow,
-            BaseReferences<
-              _$AppDatabase,
-              $MemoryThreadTableTable,
-              MemoryThreadRow
-            >,
-          ),
-          MemoryThreadRow,
-          PrefetchHooks Function()
-        > {
+class $$MemoryThreadTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $MemoryThreadTableTable,
+    MemoryThreadRow,
+    $$MemoryThreadTableTableFilterComposer,
+    $$MemoryThreadTableTableOrderingComposer,
+    $$MemoryThreadTableTableCreateCompanionBuilder,
+    $$MemoryThreadTableTableUpdateCompanionBuilder,
+    (
+      MemoryThreadRow,
+      BaseReferences<_$AppDatabase, $MemoryThreadTableTable, MemoryThreadRow>
+    ),
+    MemoryThreadRow,
+    PrefetchHooks Function()> {
   $$MemoryThreadTableTableTableManager(
-    _$AppDatabase db,
-    $MemoryThreadTableTable table,
-  ) : super(
-        TableManagerState(
+      _$AppDatabase db, $MemoryThreadTableTable table)
+      : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer: $$MemoryThreadTableTableFilterComposer(
-            ComposerState(db, table),
-          ),
+          filteringComposer:
+              $$MemoryThreadTableTableFilterComposer(ComposerState(db, table)),
           orderingComposer: $$MemoryThreadTableTableOrderingComposer(
-            ComposerState(db, table),
+              ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<String> id = const Value.absent(),
+            Value<String> sourceKind = const Value.absent(),
+            Value<String> sourceCanonicalId = const Value.absent(),
+            Value<String> sourceLabel = const Value.absent(),
+            Value<String?> sourceBook = const Value.absent(),
+            Value<String?> sourceCitation = const Value.absent(),
+            Value<String?> sourceVersion = const Value.absent(),
+            Value<String?> sourceSecondaryReference = const Value.absent(),
+            Value<String?> userContextKind = const Value.absent(),
+            Value<String?> userContextLabel = const Value.absent(),
+            Value<String?> userLabel = const Value.absent(),
+            Value<String> status = const Value.absent(),
+            Value<String> resurfacing = const Value.absent(),
+            Value<String?> legacyKey = const Value.absent(),
+            Value<String> createdAt = const Value.absent(),
+            Value<String> updatedAt = const Value.absent(),
+            Value<String?> lastReturnedAt = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              MemoryThreadTableCompanion(
+            id: id,
+            sourceKind: sourceKind,
+            sourceCanonicalId: sourceCanonicalId,
+            sourceLabel: sourceLabel,
+            sourceBook: sourceBook,
+            sourceCitation: sourceCitation,
+            sourceVersion: sourceVersion,
+            sourceSecondaryReference: sourceSecondaryReference,
+            userContextKind: userContextKind,
+            userContextLabel: userContextLabel,
+            userLabel: userLabel,
+            status: status,
+            resurfacing: resurfacing,
+            legacyKey: legacyKey,
+            createdAt: createdAt,
+            updatedAt: updatedAt,
+            lastReturnedAt: lastReturnedAt,
+            rowid: rowid,
           ),
-          updateCompanionCallback:
-              ({
-                Value<String> id = const Value.absent(),
-                Value<String> sourceKind = const Value.absent(),
-                Value<String> sourceCanonicalId = const Value.absent(),
-                Value<String> sourceLabel = const Value.absent(),
-                Value<String?> sourceBook = const Value.absent(),
-                Value<String?> sourceCitation = const Value.absent(),
-                Value<String?> sourceVersion = const Value.absent(),
-                Value<String?> sourceSecondaryReference = const Value.absent(),
-                Value<String?> userContextKind = const Value.absent(),
-                Value<String?> userContextLabel = const Value.absent(),
-                Value<String?> userLabel = const Value.absent(),
-                Value<String> status = const Value.absent(),
-                Value<String> resurfacing = const Value.absent(),
-                Value<String?> legacyKey = const Value.absent(),
-                Value<String> createdAt = const Value.absent(),
-                Value<String> updatedAt = const Value.absent(),
-                Value<String?> lastReturnedAt = const Value.absent(),
-                Value<int> rowid = const Value.absent(),
-              }) => MemoryThreadTableCompanion(
-                id: id,
-                sourceKind: sourceKind,
-                sourceCanonicalId: sourceCanonicalId,
-                sourceLabel: sourceLabel,
-                sourceBook: sourceBook,
-                sourceCitation: sourceCitation,
-                sourceVersion: sourceVersion,
-                sourceSecondaryReference: sourceSecondaryReference,
-                userContextKind: userContextKind,
-                userContextLabel: userContextLabel,
-                userLabel: userLabel,
-                status: status,
-                resurfacing: resurfacing,
-                legacyKey: legacyKey,
-                createdAt: createdAt,
-                updatedAt: updatedAt,
-                lastReturnedAt: lastReturnedAt,
-                rowid: rowid,
-              ),
-          createCompanionCallback:
-              ({
-                required String id,
-                required String sourceKind,
-                required String sourceCanonicalId,
-                required String sourceLabel,
-                Value<String?> sourceBook = const Value.absent(),
-                Value<String?> sourceCitation = const Value.absent(),
-                Value<String?> sourceVersion = const Value.absent(),
-                Value<String?> sourceSecondaryReference = const Value.absent(),
-                Value<String?> userContextKind = const Value.absent(),
-                Value<String?> userContextLabel = const Value.absent(),
-                Value<String?> userLabel = const Value.absent(),
-                Value<String> status = const Value.absent(),
-                Value<String> resurfacing = const Value.absent(),
-                Value<String?> legacyKey = const Value.absent(),
-                required String createdAt,
-                required String updatedAt,
-                Value<String?> lastReturnedAt = const Value.absent(),
-                Value<int> rowid = const Value.absent(),
-              }) => MemoryThreadTableCompanion.insert(
-                id: id,
-                sourceKind: sourceKind,
-                sourceCanonicalId: sourceCanonicalId,
-                sourceLabel: sourceLabel,
-                sourceBook: sourceBook,
-                sourceCitation: sourceCitation,
-                sourceVersion: sourceVersion,
-                sourceSecondaryReference: sourceSecondaryReference,
-                userContextKind: userContextKind,
-                userContextLabel: userContextLabel,
-                userLabel: userLabel,
-                status: status,
-                resurfacing: resurfacing,
-                legacyKey: legacyKey,
-                createdAt: createdAt,
-                updatedAt: updatedAt,
-                lastReturnedAt: lastReturnedAt,
-                rowid: rowid,
-              ),
+          createCompanionCallback: ({
+            required String id,
+            required String sourceKind,
+            required String sourceCanonicalId,
+            required String sourceLabel,
+            Value<String?> sourceBook = const Value.absent(),
+            Value<String?> sourceCitation = const Value.absent(),
+            Value<String?> sourceVersion = const Value.absent(),
+            Value<String?> sourceSecondaryReference = const Value.absent(),
+            Value<String?> userContextKind = const Value.absent(),
+            Value<String?> userContextLabel = const Value.absent(),
+            Value<String?> userLabel = const Value.absent(),
+            Value<String> status = const Value.absent(),
+            Value<String> resurfacing = const Value.absent(),
+            Value<String?> legacyKey = const Value.absent(),
+            required String createdAt,
+            required String updatedAt,
+            Value<String?> lastReturnedAt = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              MemoryThreadTableCompanion.insert(
+            id: id,
+            sourceKind: sourceKind,
+            sourceCanonicalId: sourceCanonicalId,
+            sourceLabel: sourceLabel,
+            sourceBook: sourceBook,
+            sourceCitation: sourceCitation,
+            sourceVersion: sourceVersion,
+            sourceSecondaryReference: sourceSecondaryReference,
+            userContextKind: userContextKind,
+            userContextLabel: userContextLabel,
+            userLabel: userLabel,
+            status: status,
+            resurfacing: resurfacing,
+            legacyKey: legacyKey,
+            createdAt: createdAt,
+            updatedAt: updatedAt,
+            lastReturnedAt: lastReturnedAt,
+            rowid: rowid,
+          ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
               .toList(),
           prefetchHooksCallback: null,
-        ),
-      );
+        ));
 }
 
-typedef $$MemoryThreadTableTableProcessedTableManager =
-    ProcessedTableManager<
-      _$AppDatabase,
-      $MemoryThreadTableTable,
+typedef $$MemoryThreadTableTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $MemoryThreadTableTable,
+    MemoryThreadRow,
+    $$MemoryThreadTableTableFilterComposer,
+    $$MemoryThreadTableTableOrderingComposer,
+    $$MemoryThreadTableTableCreateCompanionBuilder,
+    $$MemoryThreadTableTableUpdateCompanionBuilder,
+    (
       MemoryThreadRow,
-      $$MemoryThreadTableTableFilterComposer,
-      $$MemoryThreadTableTableOrderingComposer,
-      $$MemoryThreadTableTableCreateCompanionBuilder,
-      $$MemoryThreadTableTableUpdateCompanionBuilder,
-      (
-        MemoryThreadRow,
-        BaseReferences<_$AppDatabase, $MemoryThreadTableTable, MemoryThreadRow>,
-      ),
-      MemoryThreadRow,
-      PrefetchHooks Function()
-    >;
-typedef $$ReflectionEntryTableTableCreateCompanionBuilder =
-    ReflectionEntryTableCompanion Function({
-      required String id,
-      required String threadId,
-      required String body,
-      required String createdAt,
-      required String updatedAt,
-      Value<String?> deletedAt,
-      Value<int> rowid,
-    });
-typedef $$ReflectionEntryTableTableUpdateCompanionBuilder =
-    ReflectionEntryTableCompanion Function({
-      Value<String> id,
-      Value<String> threadId,
-      Value<String> body,
-      Value<String> createdAt,
-      Value<String> updatedAt,
-      Value<String?> deletedAt,
-      Value<int> rowid,
-    });
+      BaseReferences<_$AppDatabase, $MemoryThreadTableTable, MemoryThreadRow>
+    ),
+    MemoryThreadRow,
+    PrefetchHooks Function()>;
+typedef $$ReflectionEntryTableTableCreateCompanionBuilder
+    = ReflectionEntryTableCompanion Function({
+  required String id,
+  required String threadId,
+  required String body,
+  required String createdAt,
+  required String updatedAt,
+  Value<String?> deletedAt,
+  Value<int> rowid,
+});
+typedef $$ReflectionEntryTableTableUpdateCompanionBuilder
+    = ReflectionEntryTableCompanion Function({
+  Value<String> id,
+  Value<String> threadId,
+  Value<String> body,
+  Value<String> createdAt,
+  Value<String> updatedAt,
+  Value<String?> deletedAt,
+  Value<int> rowid,
+});
 
 class $$ReflectionEntryTableTableFilterComposer
     extends FilterComposer<_$AppDatabase, $ReflectionEntryTableTable> {
   $$ReflectionEntryTableTableFilterComposer(super.$state);
   ColumnFilters<String> get id => $state.composableBuilder(
-    column: $state.table.id,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<String> get threadId => $state.composableBuilder(
-    column: $state.table.threadId,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.threadId,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<String> get body => $state.composableBuilder(
-    column: $state.table.body,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.body,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<String> get createdAt => $state.composableBuilder(
-    column: $state.table.createdAt,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.createdAt,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<String> get updatedAt => $state.composableBuilder(
-    column: $state.table.updatedAt,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.updatedAt,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<String> get deletedAt => $state.composableBuilder(
-    column: $state.table.deletedAt,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.deletedAt,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 }
 
 class $$ReflectionEntryTableTableOrderingComposer
     extends OrderingComposer<_$AppDatabase, $ReflectionEntryTableTable> {
   $$ReflectionEntryTableTableOrderingComposer(super.$state);
   ColumnOrderings<String> get id => $state.composableBuilder(
-    column: $state.table.id,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<String> get threadId => $state.composableBuilder(
-    column: $state.table.threadId,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.threadId,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<String> get body => $state.composableBuilder(
-    column: $state.table.body,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.body,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<String> get createdAt => $state.composableBuilder(
-    column: $state.table.createdAt,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.createdAt,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<String> get updatedAt => $state.composableBuilder(
-    column: $state.table.updatedAt,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.updatedAt,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<String> get deletedAt => $state.composableBuilder(
-    column: $state.table.deletedAt,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.deletedAt,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 }
 
-class $$ReflectionEntryTableTableTableManager
-    extends
-        RootTableManager<
-          _$AppDatabase,
-          $ReflectionEntryTableTable,
-          ReflectionEntryRow,
-          $$ReflectionEntryTableTableFilterComposer,
-          $$ReflectionEntryTableTableOrderingComposer,
-          $$ReflectionEntryTableTableCreateCompanionBuilder,
-          $$ReflectionEntryTableTableUpdateCompanionBuilder,
-          (
-            ReflectionEntryRow,
-            BaseReferences<
-              _$AppDatabase,
-              $ReflectionEntryTableTable,
-              ReflectionEntryRow
-            >,
-          ),
-          ReflectionEntryRow,
-          PrefetchHooks Function()
-        > {
+class $$ReflectionEntryTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $ReflectionEntryTableTable,
+    ReflectionEntryRow,
+    $$ReflectionEntryTableTableFilterComposer,
+    $$ReflectionEntryTableTableOrderingComposer,
+    $$ReflectionEntryTableTableCreateCompanionBuilder,
+    $$ReflectionEntryTableTableUpdateCompanionBuilder,
+    (
+      ReflectionEntryRow,
+      BaseReferences<_$AppDatabase, $ReflectionEntryTableTable,
+          ReflectionEntryRow>
+    ),
+    ReflectionEntryRow,
+    PrefetchHooks Function()> {
   $$ReflectionEntryTableTableTableManager(
-    _$AppDatabase db,
-    $ReflectionEntryTableTable table,
-  ) : super(
-        TableManagerState(
+      _$AppDatabase db, $ReflectionEntryTableTable table)
+      : super(TableManagerState(
           db: db,
           table: table,
           filteringComposer: $$ReflectionEntryTableTableFilterComposer(
-            ComposerState(db, table),
-          ),
+              ComposerState(db, table)),
           orderingComposer: $$ReflectionEntryTableTableOrderingComposer(
-            ComposerState(db, table),
+              ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<String> id = const Value.absent(),
+            Value<String> threadId = const Value.absent(),
+            Value<String> body = const Value.absent(),
+            Value<String> createdAt = const Value.absent(),
+            Value<String> updatedAt = const Value.absent(),
+            Value<String?> deletedAt = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              ReflectionEntryTableCompanion(
+            id: id,
+            threadId: threadId,
+            body: body,
+            createdAt: createdAt,
+            updatedAt: updatedAt,
+            deletedAt: deletedAt,
+            rowid: rowid,
           ),
-          updateCompanionCallback:
-              ({
-                Value<String> id = const Value.absent(),
-                Value<String> threadId = const Value.absent(),
-                Value<String> body = const Value.absent(),
-                Value<String> createdAt = const Value.absent(),
-                Value<String> updatedAt = const Value.absent(),
-                Value<String?> deletedAt = const Value.absent(),
-                Value<int> rowid = const Value.absent(),
-              }) => ReflectionEntryTableCompanion(
-                id: id,
-                threadId: threadId,
-                body: body,
-                createdAt: createdAt,
-                updatedAt: updatedAt,
-                deletedAt: deletedAt,
-                rowid: rowid,
-              ),
-          createCompanionCallback:
-              ({
-                required String id,
-                required String threadId,
-                required String body,
-                required String createdAt,
-                required String updatedAt,
-                Value<String?> deletedAt = const Value.absent(),
-                Value<int> rowid = const Value.absent(),
-              }) => ReflectionEntryTableCompanion.insert(
-                id: id,
-                threadId: threadId,
-                body: body,
-                createdAt: createdAt,
-                updatedAt: updatedAt,
-                deletedAt: deletedAt,
-                rowid: rowid,
-              ),
+          createCompanionCallback: ({
+            required String id,
+            required String threadId,
+            required String body,
+            required String createdAt,
+            required String updatedAt,
+            Value<String?> deletedAt = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              ReflectionEntryTableCompanion.insert(
+            id: id,
+            threadId: threadId,
+            body: body,
+            createdAt: createdAt,
+            updatedAt: updatedAt,
+            deletedAt: deletedAt,
+            rowid: rowid,
+          ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
               .toList(),
           prefetchHooksCallback: null,
-        ),
-      );
+        ));
 }
 
-typedef $$ReflectionEntryTableTableProcessedTableManager =
-    ProcessedTableManager<
-      _$AppDatabase,
-      $ReflectionEntryTableTable,
-      ReflectionEntryRow,
-      $$ReflectionEntryTableTableFilterComposer,
-      $$ReflectionEntryTableTableOrderingComposer,
-      $$ReflectionEntryTableTableCreateCompanionBuilder,
-      $$ReflectionEntryTableTableUpdateCompanionBuilder,
-      (
+typedef $$ReflectionEntryTableTableProcessedTableManager
+    = ProcessedTableManager<
+        _$AppDatabase,
+        $ReflectionEntryTableTable,
         ReflectionEntryRow,
-        BaseReferences<
-          _$AppDatabase,
-          $ReflectionEntryTableTable,
-          ReflectionEntryRow
-        >,
-      ),
-      ReflectionEntryRow,
-      PrefetchHooks Function()
-    >;
-typedef $$ReadingAnchorTableTableCreateCompanionBuilder =
-    ReadingAnchorTableCompanion Function({
-      required String id,
-      Value<String?> threadId,
-      required String sourceCanonicalId,
-      Value<int?> surahNumber,
-      Value<int?> ayahNumber,
-      Value<int?> pageNumber,
-      Value<int?> itemIndex,
-      Value<double?> scrollOffset,
-      required String updatedAt,
-      Value<int> rowid,
-    });
-typedef $$ReadingAnchorTableTableUpdateCompanionBuilder =
-    ReadingAnchorTableCompanion Function({
-      Value<String> id,
-      Value<String?> threadId,
-      Value<String> sourceCanonicalId,
-      Value<int?> surahNumber,
-      Value<int?> ayahNumber,
-      Value<int?> pageNumber,
-      Value<int?> itemIndex,
-      Value<double?> scrollOffset,
-      Value<String> updatedAt,
-      Value<int> rowid,
-    });
+        $$ReflectionEntryTableTableFilterComposer,
+        $$ReflectionEntryTableTableOrderingComposer,
+        $$ReflectionEntryTableTableCreateCompanionBuilder,
+        $$ReflectionEntryTableTableUpdateCompanionBuilder,
+        (
+          ReflectionEntryRow,
+          BaseReferences<_$AppDatabase, $ReflectionEntryTableTable,
+              ReflectionEntryRow>
+        ),
+        ReflectionEntryRow,
+        PrefetchHooks Function()>;
+typedef $$ReadingAnchorTableTableCreateCompanionBuilder
+    = ReadingAnchorTableCompanion Function({
+  required String id,
+  Value<String?> threadId,
+  required String sourceCanonicalId,
+  Value<int?> surahNumber,
+  Value<int?> ayahNumber,
+  Value<int?> pageNumber,
+  Value<int?> itemIndex,
+  Value<double?> scrollOffset,
+  required String updatedAt,
+  Value<int> rowid,
+});
+typedef $$ReadingAnchorTableTableUpdateCompanionBuilder
+    = ReadingAnchorTableCompanion Function({
+  Value<String> id,
+  Value<String?> threadId,
+  Value<String> sourceCanonicalId,
+  Value<int?> surahNumber,
+  Value<int?> ayahNumber,
+  Value<int?> pageNumber,
+  Value<int?> itemIndex,
+  Value<double?> scrollOffset,
+  Value<String> updatedAt,
+  Value<int> rowid,
+});
 
 class $$ReadingAnchorTableTableFilterComposer
     extends FilterComposer<_$AppDatabase, $ReadingAnchorTableTable> {
   $$ReadingAnchorTableTableFilterComposer(super.$state);
   ColumnFilters<String> get id => $state.composableBuilder(
-    column: $state.table.id,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<String> get threadId => $state.composableBuilder(
-    column: $state.table.threadId,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.threadId,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<String> get sourceCanonicalId => $state.composableBuilder(
-    column: $state.table.sourceCanonicalId,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.sourceCanonicalId,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<int> get surahNumber => $state.composableBuilder(
-    column: $state.table.surahNumber,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.surahNumber,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<int> get ayahNumber => $state.composableBuilder(
-    column: $state.table.ayahNumber,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.ayahNumber,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<int> get pageNumber => $state.composableBuilder(
-    column: $state.table.pageNumber,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.pageNumber,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<int> get itemIndex => $state.composableBuilder(
-    column: $state.table.itemIndex,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.itemIndex,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<double> get scrollOffset => $state.composableBuilder(
-    column: $state.table.scrollOffset,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.scrollOffset,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<String> get updatedAt => $state.composableBuilder(
-    column: $state.table.updatedAt,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.updatedAt,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 }
 
 class $$ReadingAnchorTableTableOrderingComposer
     extends OrderingComposer<_$AppDatabase, $ReadingAnchorTableTable> {
   $$ReadingAnchorTableTableOrderingComposer(super.$state);
   ColumnOrderings<String> get id => $state.composableBuilder(
-    column: $state.table.id,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<String> get threadId => $state.composableBuilder(
-    column: $state.table.threadId,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.threadId,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<String> get sourceCanonicalId => $state.composableBuilder(
-    column: $state.table.sourceCanonicalId,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.sourceCanonicalId,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<int> get surahNumber => $state.composableBuilder(
-    column: $state.table.surahNumber,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.surahNumber,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<int> get ayahNumber => $state.composableBuilder(
-    column: $state.table.ayahNumber,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.ayahNumber,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<int> get pageNumber => $state.composableBuilder(
-    column: $state.table.pageNumber,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.pageNumber,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<int> get itemIndex => $state.composableBuilder(
-    column: $state.table.itemIndex,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.itemIndex,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<double> get scrollOffset => $state.composableBuilder(
-    column: $state.table.scrollOffset,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.scrollOffset,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<String> get updatedAt => $state.composableBuilder(
-    column: $state.table.updatedAt,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.updatedAt,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 }
 
-class $$ReadingAnchorTableTableTableManager
-    extends
-        RootTableManager<
-          _$AppDatabase,
-          $ReadingAnchorTableTable,
-          ReadingAnchorRow,
-          $$ReadingAnchorTableTableFilterComposer,
-          $$ReadingAnchorTableTableOrderingComposer,
-          $$ReadingAnchorTableTableCreateCompanionBuilder,
-          $$ReadingAnchorTableTableUpdateCompanionBuilder,
-          (
-            ReadingAnchorRow,
-            BaseReferences<
-              _$AppDatabase,
-              $ReadingAnchorTableTable,
-              ReadingAnchorRow
-            >,
-          ),
-          ReadingAnchorRow,
-          PrefetchHooks Function()
-        > {
+class $$ReadingAnchorTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $ReadingAnchorTableTable,
+    ReadingAnchorRow,
+    $$ReadingAnchorTableTableFilterComposer,
+    $$ReadingAnchorTableTableOrderingComposer,
+    $$ReadingAnchorTableTableCreateCompanionBuilder,
+    $$ReadingAnchorTableTableUpdateCompanionBuilder,
+    (
+      ReadingAnchorRow,
+      BaseReferences<_$AppDatabase, $ReadingAnchorTableTable, ReadingAnchorRow>
+    ),
+    ReadingAnchorRow,
+    PrefetchHooks Function()> {
   $$ReadingAnchorTableTableTableManager(
-    _$AppDatabase db,
-    $ReadingAnchorTableTable table,
-  ) : super(
-        TableManagerState(
+      _$AppDatabase db, $ReadingAnchorTableTable table)
+      : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer: $$ReadingAnchorTableTableFilterComposer(
-            ComposerState(db, table),
-          ),
+          filteringComposer:
+              $$ReadingAnchorTableTableFilterComposer(ComposerState(db, table)),
           orderingComposer: $$ReadingAnchorTableTableOrderingComposer(
-            ComposerState(db, table),
+              ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<String> id = const Value.absent(),
+            Value<String?> threadId = const Value.absent(),
+            Value<String> sourceCanonicalId = const Value.absent(),
+            Value<int?> surahNumber = const Value.absent(),
+            Value<int?> ayahNumber = const Value.absent(),
+            Value<int?> pageNumber = const Value.absent(),
+            Value<int?> itemIndex = const Value.absent(),
+            Value<double?> scrollOffset = const Value.absent(),
+            Value<String> updatedAt = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              ReadingAnchorTableCompanion(
+            id: id,
+            threadId: threadId,
+            sourceCanonicalId: sourceCanonicalId,
+            surahNumber: surahNumber,
+            ayahNumber: ayahNumber,
+            pageNumber: pageNumber,
+            itemIndex: itemIndex,
+            scrollOffset: scrollOffset,
+            updatedAt: updatedAt,
+            rowid: rowid,
           ),
-          updateCompanionCallback:
-              ({
-                Value<String> id = const Value.absent(),
-                Value<String?> threadId = const Value.absent(),
-                Value<String> sourceCanonicalId = const Value.absent(),
-                Value<int?> surahNumber = const Value.absent(),
-                Value<int?> ayahNumber = const Value.absent(),
-                Value<int?> pageNumber = const Value.absent(),
-                Value<int?> itemIndex = const Value.absent(),
-                Value<double?> scrollOffset = const Value.absent(),
-                Value<String> updatedAt = const Value.absent(),
-                Value<int> rowid = const Value.absent(),
-              }) => ReadingAnchorTableCompanion(
-                id: id,
-                threadId: threadId,
-                sourceCanonicalId: sourceCanonicalId,
-                surahNumber: surahNumber,
-                ayahNumber: ayahNumber,
-                pageNumber: pageNumber,
-                itemIndex: itemIndex,
-                scrollOffset: scrollOffset,
-                updatedAt: updatedAt,
-                rowid: rowid,
-              ),
-          createCompanionCallback:
-              ({
-                required String id,
-                Value<String?> threadId = const Value.absent(),
-                required String sourceCanonicalId,
-                Value<int?> surahNumber = const Value.absent(),
-                Value<int?> ayahNumber = const Value.absent(),
-                Value<int?> pageNumber = const Value.absent(),
-                Value<int?> itemIndex = const Value.absent(),
-                Value<double?> scrollOffset = const Value.absent(),
-                required String updatedAt,
-                Value<int> rowid = const Value.absent(),
-              }) => ReadingAnchorTableCompanion.insert(
-                id: id,
-                threadId: threadId,
-                sourceCanonicalId: sourceCanonicalId,
-                surahNumber: surahNumber,
-                ayahNumber: ayahNumber,
-                pageNumber: pageNumber,
-                itemIndex: itemIndex,
-                scrollOffset: scrollOffset,
-                updatedAt: updatedAt,
-                rowid: rowid,
-              ),
+          createCompanionCallback: ({
+            required String id,
+            Value<String?> threadId = const Value.absent(),
+            required String sourceCanonicalId,
+            Value<int?> surahNumber = const Value.absent(),
+            Value<int?> ayahNumber = const Value.absent(),
+            Value<int?> pageNumber = const Value.absent(),
+            Value<int?> itemIndex = const Value.absent(),
+            Value<double?> scrollOffset = const Value.absent(),
+            required String updatedAt,
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              ReadingAnchorTableCompanion.insert(
+            id: id,
+            threadId: threadId,
+            sourceCanonicalId: sourceCanonicalId,
+            surahNumber: surahNumber,
+            ayahNumber: ayahNumber,
+            pageNumber: pageNumber,
+            itemIndex: itemIndex,
+            scrollOffset: scrollOffset,
+            updatedAt: updatedAt,
+            rowid: rowid,
+          ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
               .toList(),
           prefetchHooksCallback: null,
-        ),
-      );
+        ));
 }
 
-typedef $$ReadingAnchorTableTableProcessedTableManager =
-    ProcessedTableManager<
-      _$AppDatabase,
-      $ReadingAnchorTableTable,
+typedef $$ReadingAnchorTableTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $ReadingAnchorTableTable,
+    ReadingAnchorRow,
+    $$ReadingAnchorTableTableFilterComposer,
+    $$ReadingAnchorTableTableOrderingComposer,
+    $$ReadingAnchorTableTableCreateCompanionBuilder,
+    $$ReadingAnchorTableTableUpdateCompanionBuilder,
+    (
       ReadingAnchorRow,
-      $$ReadingAnchorTableTableFilterComposer,
-      $$ReadingAnchorTableTableOrderingComposer,
-      $$ReadingAnchorTableTableCreateCompanionBuilder,
-      $$ReadingAnchorTableTableUpdateCompanionBuilder,
-      (
-        ReadingAnchorRow,
-        BaseReferences<
-          _$AppDatabase,
-          $ReadingAnchorTableTable,
-          ReadingAnchorRow
-        >,
-      ),
-      ReadingAnchorRow,
-      PrefetchHooks Function()
-    >;
-typedef $$ReturnEventTableTableCreateCompanionBuilder =
-    ReturnEventTableCompanion Function({
-      required String id,
-      required String threadId,
-      required String kind,
-      required String occurredAt,
-      Value<int?> durationSeconds,
-      Value<String?> reflectionId,
-      Value<int> rowid,
-    });
-typedef $$ReturnEventTableTableUpdateCompanionBuilder =
-    ReturnEventTableCompanion Function({
-      Value<String> id,
-      Value<String> threadId,
-      Value<String> kind,
-      Value<String> occurredAt,
-      Value<int?> durationSeconds,
-      Value<String?> reflectionId,
-      Value<int> rowid,
-    });
+      BaseReferences<_$AppDatabase, $ReadingAnchorTableTable, ReadingAnchorRow>
+    ),
+    ReadingAnchorRow,
+    PrefetchHooks Function()>;
+typedef $$ReturnEventTableTableCreateCompanionBuilder
+    = ReturnEventTableCompanion Function({
+  required String id,
+  required String threadId,
+  required String kind,
+  required String occurredAt,
+  Value<int?> durationSeconds,
+  Value<String?> reflectionId,
+  Value<int> rowid,
+});
+typedef $$ReturnEventTableTableUpdateCompanionBuilder
+    = ReturnEventTableCompanion Function({
+  Value<String> id,
+  Value<String> threadId,
+  Value<String> kind,
+  Value<String> occurredAt,
+  Value<int?> durationSeconds,
+  Value<String?> reflectionId,
+  Value<int> rowid,
+});
 
 class $$ReturnEventTableTableFilterComposer
     extends FilterComposer<_$AppDatabase, $ReturnEventTableTable> {
   $$ReturnEventTableTableFilterComposer(super.$state);
   ColumnFilters<String> get id => $state.composableBuilder(
-    column: $state.table.id,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<String> get threadId => $state.composableBuilder(
-    column: $state.table.threadId,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.threadId,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<String> get kind => $state.composableBuilder(
-    column: $state.table.kind,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.kind,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<String> get occurredAt => $state.composableBuilder(
-    column: $state.table.occurredAt,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.occurredAt,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<int> get durationSeconds => $state.composableBuilder(
-    column: $state.table.durationSeconds,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.durationSeconds,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<String> get reflectionId => $state.composableBuilder(
-    column: $state.table.reflectionId,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.reflectionId,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 }
 
 class $$ReturnEventTableTableOrderingComposer
     extends OrderingComposer<_$AppDatabase, $ReturnEventTableTable> {
   $$ReturnEventTableTableOrderingComposer(super.$state);
   ColumnOrderings<String> get id => $state.composableBuilder(
-    column: $state.table.id,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<String> get threadId => $state.composableBuilder(
-    column: $state.table.threadId,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.threadId,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<String> get kind => $state.composableBuilder(
-    column: $state.table.kind,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.kind,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<String> get occurredAt => $state.composableBuilder(
-    column: $state.table.occurredAt,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.occurredAt,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<int> get durationSeconds => $state.composableBuilder(
-    column: $state.table.durationSeconds,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.durationSeconds,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<String> get reflectionId => $state.composableBuilder(
-    column: $state.table.reflectionId,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.reflectionId,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 }
 
-class $$ReturnEventTableTableTableManager
-    extends
-        RootTableManager<
-          _$AppDatabase,
-          $ReturnEventTableTable,
-          ReturnEventRow,
-          $$ReturnEventTableTableFilterComposer,
-          $$ReturnEventTableTableOrderingComposer,
-          $$ReturnEventTableTableCreateCompanionBuilder,
-          $$ReturnEventTableTableUpdateCompanionBuilder,
-          (
-            ReturnEventRow,
-            BaseReferences<
-              _$AppDatabase,
-              $ReturnEventTableTable,
-              ReturnEventRow
-            >,
-          ),
-          ReturnEventRow,
-          PrefetchHooks Function()
-        > {
+class $$ReturnEventTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $ReturnEventTableTable,
+    ReturnEventRow,
+    $$ReturnEventTableTableFilterComposer,
+    $$ReturnEventTableTableOrderingComposer,
+    $$ReturnEventTableTableCreateCompanionBuilder,
+    $$ReturnEventTableTableUpdateCompanionBuilder,
+    (
+      ReturnEventRow,
+      BaseReferences<_$AppDatabase, $ReturnEventTableTable, ReturnEventRow>
+    ),
+    ReturnEventRow,
+    PrefetchHooks Function()> {
   $$ReturnEventTableTableTableManager(
-    _$AppDatabase db,
-    $ReturnEventTableTable table,
-  ) : super(
-        TableManagerState(
+      _$AppDatabase db, $ReturnEventTableTable table)
+      : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer: $$ReturnEventTableTableFilterComposer(
-            ComposerState(db, table),
+          filteringComposer:
+              $$ReturnEventTableTableFilterComposer(ComposerState(db, table)),
+          orderingComposer:
+              $$ReturnEventTableTableOrderingComposer(ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<String> id = const Value.absent(),
+            Value<String> threadId = const Value.absent(),
+            Value<String> kind = const Value.absent(),
+            Value<String> occurredAt = const Value.absent(),
+            Value<int?> durationSeconds = const Value.absent(),
+            Value<String?> reflectionId = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              ReturnEventTableCompanion(
+            id: id,
+            threadId: threadId,
+            kind: kind,
+            occurredAt: occurredAt,
+            durationSeconds: durationSeconds,
+            reflectionId: reflectionId,
+            rowid: rowid,
           ),
-          orderingComposer: $$ReturnEventTableTableOrderingComposer(
-            ComposerState(db, table),
+          createCompanionCallback: ({
+            required String id,
+            required String threadId,
+            required String kind,
+            required String occurredAt,
+            Value<int?> durationSeconds = const Value.absent(),
+            Value<String?> reflectionId = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              ReturnEventTableCompanion.insert(
+            id: id,
+            threadId: threadId,
+            kind: kind,
+            occurredAt: occurredAt,
+            durationSeconds: durationSeconds,
+            reflectionId: reflectionId,
+            rowid: rowid,
           ),
-          updateCompanionCallback:
-              ({
-                Value<String> id = const Value.absent(),
-                Value<String> threadId = const Value.absent(),
-                Value<String> kind = const Value.absent(),
-                Value<String> occurredAt = const Value.absent(),
-                Value<int?> durationSeconds = const Value.absent(),
-                Value<String?> reflectionId = const Value.absent(),
-                Value<int> rowid = const Value.absent(),
-              }) => ReturnEventTableCompanion(
-                id: id,
-                threadId: threadId,
-                kind: kind,
-                occurredAt: occurredAt,
-                durationSeconds: durationSeconds,
-                reflectionId: reflectionId,
-                rowid: rowid,
-              ),
-          createCompanionCallback:
-              ({
-                required String id,
-                required String threadId,
-                required String kind,
-                required String occurredAt,
-                Value<int?> durationSeconds = const Value.absent(),
-                Value<String?> reflectionId = const Value.absent(),
-                Value<int> rowid = const Value.absent(),
-              }) => ReturnEventTableCompanion.insert(
-                id: id,
-                threadId: threadId,
-                kind: kind,
-                occurredAt: occurredAt,
-                durationSeconds: durationSeconds,
-                reflectionId: reflectionId,
-                rowid: rowid,
-              ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
               .toList(),
           prefetchHooksCallback: null,
-        ),
-      );
+        ));
 }
 
-typedef $$ReturnEventTableTableProcessedTableManager =
-    ProcessedTableManager<
-      _$AppDatabase,
-      $ReturnEventTableTable,
+typedef $$ReturnEventTableTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $ReturnEventTableTable,
+    ReturnEventRow,
+    $$ReturnEventTableTableFilterComposer,
+    $$ReturnEventTableTableOrderingComposer,
+    $$ReturnEventTableTableCreateCompanionBuilder,
+    $$ReturnEventTableTableUpdateCompanionBuilder,
+    (
       ReturnEventRow,
-      $$ReturnEventTableTableFilterComposer,
-      $$ReturnEventTableTableOrderingComposer,
-      $$ReturnEventTableTableCreateCompanionBuilder,
-      $$ReturnEventTableTableUpdateCompanionBuilder,
-      (
-        ReturnEventRow,
-        BaseReferences<_$AppDatabase, $ReturnEventTableTable, ReturnEventRow>,
-      ),
-      ReturnEventRow,
-      PrefetchHooks Function()
-    >;
-typedef $$ReminderIntentTableTableCreateCompanionBuilder =
-    ReminderIntentTableCompanion Function({
-      required String id,
-      required String threadId,
-      required String scheduledAt,
-      Value<bool> enabled,
-      Value<int> rowid,
-    });
-typedef $$ReminderIntentTableTableUpdateCompanionBuilder =
-    ReminderIntentTableCompanion Function({
-      Value<String> id,
-      Value<String> threadId,
-      Value<String> scheduledAt,
-      Value<bool> enabled,
-      Value<int> rowid,
-    });
+      BaseReferences<_$AppDatabase, $ReturnEventTableTable, ReturnEventRow>
+    ),
+    ReturnEventRow,
+    PrefetchHooks Function()>;
+typedef $$ReminderIntentTableTableCreateCompanionBuilder
+    = ReminderIntentTableCompanion Function({
+  required String id,
+  required String threadId,
+  required String scheduledAt,
+  Value<bool> enabled,
+  Value<int> rowid,
+});
+typedef $$ReminderIntentTableTableUpdateCompanionBuilder
+    = ReminderIntentTableCompanion Function({
+  Value<String> id,
+  Value<String> threadId,
+  Value<String> scheduledAt,
+  Value<bool> enabled,
+  Value<int> rowid,
+});
 
 class $$ReminderIntentTableTableFilterComposer
     extends FilterComposer<_$AppDatabase, $ReminderIntentTableTable> {
   $$ReminderIntentTableTableFilterComposer(super.$state);
   ColumnFilters<String> get id => $state.composableBuilder(
-    column: $state.table.id,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<String> get threadId => $state.composableBuilder(
-    column: $state.table.threadId,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.threadId,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<String> get scheduledAt => $state.composableBuilder(
-    column: $state.table.scheduledAt,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.scheduledAt,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
   ColumnFilters<bool> get enabled => $state.composableBuilder(
-    column: $state.table.enabled,
-    builder: (column, joinBuilders) =>
-        ColumnFilters(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.enabled,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 }
 
 class $$ReminderIntentTableTableOrderingComposer
     extends OrderingComposer<_$AppDatabase, $ReminderIntentTableTable> {
   $$ReminderIntentTableTableOrderingComposer(super.$state);
   ColumnOrderings<String> get id => $state.composableBuilder(
-    column: $state.table.id,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<String> get threadId => $state.composableBuilder(
-    column: $state.table.threadId,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.threadId,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<String> get scheduledAt => $state.composableBuilder(
-    column: $state.table.scheduledAt,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.scheduledAt,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 
   ColumnOrderings<bool> get enabled => $state.composableBuilder(
-    column: $state.table.enabled,
-    builder: (column, joinBuilders) =>
-        ColumnOrderings(column, joinBuilders: joinBuilders),
-  );
+      column: $state.table.enabled,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 }
 
-class $$ReminderIntentTableTableTableManager
-    extends
-        RootTableManager<
-          _$AppDatabase,
-          $ReminderIntentTableTable,
-          ReminderIntentRow,
-          $$ReminderIntentTableTableFilterComposer,
-          $$ReminderIntentTableTableOrderingComposer,
-          $$ReminderIntentTableTableCreateCompanionBuilder,
-          $$ReminderIntentTableTableUpdateCompanionBuilder,
-          (
-            ReminderIntentRow,
-            BaseReferences<
-              _$AppDatabase,
-              $ReminderIntentTableTable,
-              ReminderIntentRow
-            >,
-          ),
-          ReminderIntentRow,
-          PrefetchHooks Function()
-        > {
+class $$ReminderIntentTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $ReminderIntentTableTable,
+    ReminderIntentRow,
+    $$ReminderIntentTableTableFilterComposer,
+    $$ReminderIntentTableTableOrderingComposer,
+    $$ReminderIntentTableTableCreateCompanionBuilder,
+    $$ReminderIntentTableTableUpdateCompanionBuilder,
+    (
+      ReminderIntentRow,
+      BaseReferences<_$AppDatabase, $ReminderIntentTableTable,
+          ReminderIntentRow>
+    ),
+    ReminderIntentRow,
+    PrefetchHooks Function()> {
   $$ReminderIntentTableTableTableManager(
-    _$AppDatabase db,
-    $ReminderIntentTableTable table,
-  ) : super(
-        TableManagerState(
+      _$AppDatabase db, $ReminderIntentTableTable table)
+      : super(TableManagerState(
           db: db,
           table: table,
           filteringComposer: $$ReminderIntentTableTableFilterComposer(
-            ComposerState(db, table),
-          ),
+              ComposerState(db, table)),
           orderingComposer: $$ReminderIntentTableTableOrderingComposer(
-            ComposerState(db, table),
+              ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<String> id = const Value.absent(),
+            Value<String> threadId = const Value.absent(),
+            Value<String> scheduledAt = const Value.absent(),
+            Value<bool> enabled = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              ReminderIntentTableCompanion(
+            id: id,
+            threadId: threadId,
+            scheduledAt: scheduledAt,
+            enabled: enabled,
+            rowid: rowid,
           ),
-          updateCompanionCallback:
-              ({
-                Value<String> id = const Value.absent(),
-                Value<String> threadId = const Value.absent(),
-                Value<String> scheduledAt = const Value.absent(),
-                Value<bool> enabled = const Value.absent(),
-                Value<int> rowid = const Value.absent(),
-              }) => ReminderIntentTableCompanion(
-                id: id,
-                threadId: threadId,
-                scheduledAt: scheduledAt,
-                enabled: enabled,
-                rowid: rowid,
-              ),
-          createCompanionCallback:
-              ({
-                required String id,
-                required String threadId,
-                required String scheduledAt,
-                Value<bool> enabled = const Value.absent(),
-                Value<int> rowid = const Value.absent(),
-              }) => ReminderIntentTableCompanion.insert(
-                id: id,
-                threadId: threadId,
-                scheduledAt: scheduledAt,
-                enabled: enabled,
-                rowid: rowid,
-              ),
+          createCompanionCallback: ({
+            required String id,
+            required String threadId,
+            required String scheduledAt,
+            Value<bool> enabled = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              ReminderIntentTableCompanion.insert(
+            id: id,
+            threadId: threadId,
+            scheduledAt: scheduledAt,
+            enabled: enabled,
+            rowid: rowid,
+          ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
               .toList(),
           prefetchHooksCallback: null,
-        ),
-      );
+        ));
 }
 
-typedef $$ReminderIntentTableTableProcessedTableManager =
-    ProcessedTableManager<
-      _$AppDatabase,
-      $ReminderIntentTableTable,
+typedef $$ReminderIntentTableTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $ReminderIntentTableTable,
+    ReminderIntentRow,
+    $$ReminderIntentTableTableFilterComposer,
+    $$ReminderIntentTableTableOrderingComposer,
+    $$ReminderIntentTableTableCreateCompanionBuilder,
+    $$ReminderIntentTableTableUpdateCompanionBuilder,
+    (
       ReminderIntentRow,
-      $$ReminderIntentTableTableFilterComposer,
-      $$ReminderIntentTableTableOrderingComposer,
-      $$ReminderIntentTableTableCreateCompanionBuilder,
-      $$ReminderIntentTableTableUpdateCompanionBuilder,
-      (
-        ReminderIntentRow,
-        BaseReferences<
-          _$AppDatabase,
-          $ReminderIntentTableTable,
-          ReminderIntentRow
-        >,
-      ),
-      ReminderIntentRow,
-      PrefetchHooks Function()
-    >;
+      BaseReferences<_$AppDatabase, $ReminderIntentTableTable,
+          ReminderIntentRow>
+    ),
+    ReminderIntentRow,
+    PrefetchHooks Function()>;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -8963,9 +7625,7 @@ class $AppDatabaseManager {
       $$UserFavoriteTableTableTableManager(_db, _db.userFavoriteTable);
   $$UserDailyActivityTableTableTableManager get userDailyActivityTable =>
       $$UserDailyActivityTableTableTableManager(
-        _db,
-        _db.userDailyActivityTable,
-      );
+          _db, _db.userDailyActivityTable);
   $$MemoryThreadTableTableTableManager get memoryThreadTable =>
       $$MemoryThreadTableTableTableManager(_db, _db.memoryThreadTable);
   $$ReflectionEntryTableTableTableManager get reflectionEntryTable =>
