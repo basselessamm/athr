@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:midrar/vendor/quran_core/quran.dart';
 
 import 'package:midrar/core/widgets/midrar_scaffold.dart';
@@ -173,6 +174,7 @@ class _WelcomeHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = theme.brightness == Brightness.dark;
     final hour = DateTime.now().hour;
     final greeting = hour < 12
         ? 'صباحٌ هادئ'
@@ -182,15 +184,21 @@ class _WelcomeHeader extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 20, 20, 18),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topRight,
-          end: Alignment.bottomLeft,
-          colors: [
-            theme.colorScheme.primaryContainer,
-            theme.colorScheme.surfaceContainerHighest,
-          ],
+        color: theme.colorScheme.surface,
+        borderRadius: BorderRadius.circular(AppColors.radiusXl),
+        border: Border.all(
+          color: theme.colorScheme.outline,
+          width: 1.0,
         ),
-        borderRadius: BorderRadius.circular(30),
+        boxShadow: [
+          BoxShadow(
+            color: isDark
+                ? Colors.black.withValues(alpha: 0.25)
+                : const Color(0xFF1C443B).withValues(alpha: 0.04),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
       child: Row(
         children: [
@@ -198,11 +206,18 @@ class _WelcomeHeader extends StatelessWidget {
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: theme.colorScheme.surface.withValues(alpha: .74),
+              color: theme.colorScheme.primaryContainer.withValues(
+                alpha: isDark ? 0.45 : 0.7,
+              ),
+              border: Border.all(
+                color: theme.colorScheme.primary.withValues(alpha: 0.2),
+                width: 1,
+              ),
             ),
             child: Icon(
               Icons.auto_awesome_outlined,
               color: theme.colorScheme.primary,
+              size: 24,
             ),
           ),
           const SizedBox(width: 14),
@@ -217,12 +232,13 @@ class _WelcomeHeader extends StatelessWidget {
                   ),
                   textAlign: TextAlign.right,
                 ),
-                const SizedBox(height: 5),
+                const SizedBox(height: 4),
                 Text(
                   'مكانٌ للقراءة والذكر والعودة إلى ما كان ذا معنى.',
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: theme.colorScheme.onSurfaceVariant,
                     height: 1.5,
+                    fontSize: 12.5,
                   ),
                   textAlign: TextAlign.right,
                 ),
@@ -254,25 +270,25 @@ class _QuickAccessGrid extends StatelessWidget {
       _QuickAccessItem(
         'القرآن الكريم',
         'اقرأ وتدبّر',
-        Icons.menu_book_outlined,
+        Icons.menu_book_rounded,
         onQuran,
       ),
       _QuickAccessItem(
         'الأذكار',
         'وردك بهدوء',
-        Icons.wb_twilight_outlined,
+        Icons.spa_rounded,
         onAzkar,
       ),
       _QuickAccessItem(
         'الحديث',
         'مصادر موثقة',
-        Icons.library_books_outlined,
+        Icons.import_contacts_rounded,
         onHadith,
       ),
       _QuickAccessItem(
-        'المفضلة',
-        'ما حفظته سابقًا',
-        Icons.favorite_border,
+        'أَثَـر',
+        'خيوط العودة',
+        Icons.bookmark_added_rounded,
         onFavorites,
       ),
     ];
@@ -282,9 +298,9 @@ class _QuickAccessGrid extends StatelessWidget {
       itemCount: items.length,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        mainAxisSpacing: 10,
-        crossAxisSpacing: 10,
-        childAspectRatio: 1.72,
+        mainAxisSpacing: 12,
+        crossAxisSpacing: 12,
+        childAspectRatio: 1.75,
       ),
       itemBuilder: (context, index) => _QuickAccessCard(item: items[index]),
     );
@@ -307,30 +323,44 @@ class _QuickAccessCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
+    final isDark = theme.brightness == Brightness.dark;
+
     return Material(
       color: scheme.surface,
-      borderRadius: BorderRadius.circular(22),
+      borderRadius: BorderRadius.circular(AppColors.radiusLg),
       child: InkWell(
-        borderRadius: BorderRadius.circular(22),
+        borderRadius: BorderRadius.circular(AppColors.radiusLg),
         onTap: item.onTap,
         child: Container(
-          padding: const EdgeInsets.all(14),
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(22),
-            border: Border.all(color: scheme.outlineVariant),
+            borderRadius: BorderRadius.circular(AppColors.radiusLg),
+            border: Border.all(color: scheme.outline),
+            boxShadow: [
+              BoxShadow(
+                color: isDark
+                    ? Colors.black.withValues(alpha: 0.2)
+                    : const Color(0xFF1C443B).withValues(alpha: 0.03),
+                blurRadius: 8,
+                offset: const Offset(0, 2),
+              ),
+            ],
           ),
           child: Row(
             children: [
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: scheme.secondaryContainer,
+                  color: scheme.primaryContainer.withValues(
+                    alpha: isDark ? 0.4 : 0.6,
+                  ),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: Icon(item.icon, size: 19, color: scheme.secondary),
+                child: Icon(item.icon, size: 20, color: scheme.primary),
               ),
-              const SizedBox(width: 9),
+              const SizedBox(width: 10),
               Expanded(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -349,7 +379,9 @@ class _QuickAccessCard extends StatelessWidget {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.right,
-                      style: Theme.of(context).textTheme.labelSmall,
+                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                        color: scheme.onSurfaceVariant,
+                      ),
                     ),
                   ],
                 ),
@@ -396,9 +428,9 @@ class _DeferredContinuationCanvasState
     return Container(
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: scheme.surfaceContainerLow,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: scheme.outlineVariant),
+        color: scheme.surface,
+        borderRadius: BorderRadius.circular(AppColors.radiusLg),
+        border: Border.all(color: scheme.outline),
       ),
       child: Row(
         children: [
@@ -494,18 +526,33 @@ class _DiscoveryCardBody extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final scheme = theme.colorScheme;
+    final isDark = theme.brightness == Brightness.dark;
+
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
-        color: scheme.tertiaryContainer,
-        borderRadius: BorderRadius.circular(28),
+        color: scheme.surface,
+        borderRadius: BorderRadius.circular(AppColors.radiusXl),
+        border: Border.all(
+          color: AppColors.mushafGold.withValues(alpha: isDark ? 0.35 : 0.45),
+          width: 1.2,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: isDark
+                ? Colors.black.withValues(alpha: 0.25)
+                : const Color(0xFFC59B3F).withValues(alpha: 0.05),
+            blurRadius: 12,
+            offset: const Offset(0, 3),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Row(
             children: [
-              Icon(Icons.menu_book_outlined, color: scheme.tertiary),
+              Icon(Icons.menu_book_rounded, color: AppColors.lightGold),
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
@@ -513,7 +560,7 @@ class _DiscoveryCardBody extends StatelessWidget {
                   textAlign: TextAlign.right,
                   style: TextStyle(
                     fontWeight: FontWeight.w900,
-                    color: scheme.onTertiaryContainer,
+                    color: scheme.onSurface,
                   ),
                 ),
               ),
@@ -535,21 +582,25 @@ class _DiscoveryCardBody extends StatelessWidget {
             Text(
               verse!,
               textAlign: TextAlign.center,
-              style: theme.textTheme.titleLarge?.copyWith(
+              style: GoogleFonts.amiri(
+                fontSize: 22,
                 height: 1.9,
                 fontWeight: FontWeight.w700,
+                color: scheme.onSurface,
               ),
             ),
           const SizedBox(height: 10),
           Text(
             'سورة الملك · الآية ٣',
             textAlign: TextAlign.center,
-            style: theme.textTheme.labelMedium,
+            style: theme.textTheme.labelMedium?.copyWith(
+              color: scheme.onSurfaceVariant,
+            ),
           ),
           const SizedBox(height: 14),
           OutlinedButton.icon(
             onPressed: onOpen,
-            icon: const Icon(Icons.arrow_back),
+            icon: const Icon(Icons.arrow_back, size: 18),
             label: const Text('فتح موضع القراءة'),
           ),
         ],

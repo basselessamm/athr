@@ -13,112 +13,129 @@ class HadithBooksScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final booksAsync = ref.watch(hadithBooksProvider);
 
-    return MidrarScaffold(
-      title: 'الأحاديث النبوية',
-      body: booksAsync.when(
-        data: (books) {
-          if (books.isEmpty) {
-            return const Center(child: Text('لا توجد كتب أحاديث بعد.'));
-          }
-          return ListView.builder(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
-            itemCount: books.length,
-            itemBuilder: (context, index) {
-              final book = books[index];
-              // Map English names to Arabic
-              String arabicName = book;
-              if (book.toLowerCase().contains('bukhari')) {
-                arabicName = 'صحيح البخاري';
-              }
-              if (book.toLowerCase().contains('muslim')) {
-                arabicName = 'صحيح مسلم';
-              }
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: MidrarScaffold(
+        title: 'الأحاديث النبوية',
+        body: booksAsync.when(
+          data: (books) {
+            if (books.isEmpty) {
+              return const Center(child: Text('لا توجد كتب أحاديث بعد.'));
+            }
+            return ListView.builder(
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              itemCount: books.length,
+              itemBuilder: (context, index) {
+                final book = books[index];
+                // Map English names to Arabic
+                String arabicName = book;
+                String description = 'أصح كتب الحديث النبوي الشريف';
+                if (book.toLowerCase().contains('bukhari')) {
+                  arabicName = 'صحيح البخاري';
+                  description = 'الجامع المسند الصحيح المختصر · الإمام البخاري';
+                }
+                if (book.toLowerCase().contains('muslim')) {
+                  arabicName = 'صحيح مسلم';
+                  description = 'المسند الصحيح المختصر بنقل العدل · الإمام مسلم';
+                }
 
-              return Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16.0,
-                  vertical: 8.0,
-                ),
-                child: InkWell(
-                  onTap: () {
-                    context.pushNamed('hadithReading', pathParameters: {'bookName': book});
-                  },
-                  borderRadius: BorderRadius.circular(16),
-                  child: Container(
-                    padding: const EdgeInsets.all(24.0),
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [
-                          Theme.of(
-                            context,
-                          ).colorScheme.primaryContainer.withValues(alpha: 0.5),
-                          Theme.of(context).colorScheme.surface,
+                final theme = Theme.of(context);
+                final scheme = theme.colorScheme;
+                final isDark = theme.brightness == Brightness.dark;
+
+                return Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16.0,
+                    vertical: 8.0,
+                  ),
+                  child: InkWell(
+                    onTap: () {
+                      context.pushNamed(
+                        'hadithReading',
+                        pathParameters: {'bookName': book},
+                      );
+                    },
+                    borderRadius: BorderRadius.circular(20),
+                    child: Container(
+                      padding: const EdgeInsets.all(20.0),
+                      decoration: BoxDecoration(
+                        color: scheme.surface,
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                          color: scheme.outline,
+                          width: 1.0,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: isDark
+                                ? Colors.black.withValues(alpha: 0.25)
+                                : const Color(0xFF1C443B).withValues(alpha: 0.04),
+                            blurRadius: 10,
+                            offset: const Offset(0, 3),
+                          ),
                         ],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
                       ),
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(
-                        color: Theme.of(
-                          context,
-                        ).colorScheme.primary.withValues(alpha: 0.1),
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Theme.of(
-                            context,
-                          ).colorScheme.primary.withValues(alpha: 0.05),
-                          blurRadius: 10,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.all(12),
-                              decoration: BoxDecoration(
-                                color: Theme.of(
-                                  context,
-                                ).colorScheme.primary.withValues(alpha: 0.1),
-                                shape: BoxShape.circle,
-                              ),
-                              child: Icon(
-                                Icons.menu_book,
-                                color: Theme.of(context).colorScheme.primary,
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 48,
+                            height: 48,
+                            decoration: BoxDecoration(
+                              color: scheme.primaryContainer,
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: scheme.primary.withValues(alpha: 0.2),
                               ),
                             ),
-                            const SizedBox(width: 16),
-                            Text(
-                              arabicName,
-                              style: GoogleFonts.amiri(
-                                fontSize: 22,
-                                fontWeight: FontWeight.bold,
-                                color: Theme.of(context).colorScheme.onSurface,
-                              ),
+                            child: Icon(
+                              Icons.import_contacts_rounded,
+                              color: scheme.primary,
+                              size: 22,
                             ),
-                          ],
-                        ),
-                        Icon(
-                          Icons.arrow_forward_ios,
-                          size: 16,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                      ],
+                          ),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  arabicName,
+                                  style: GoogleFonts.amiri(
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.bold,
+                                    color: scheme.onSurface,
+                                  ),
+                                ),
+                                const SizedBox(height: 3),
+                                Text(
+                                  description,
+                                  style: theme.textTheme.bodySmall?.copyWith(
+                                    color: scheme.onSurfaceVariant,
+                                    fontSize: 11.5,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Icon(
+                            Icons.arrow_back_ios_new_rounded,
+                            size: 16,
+                            color: scheme.primary,
+                            textDirection: TextDirection.rtl,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              );
-            },
-          );
-        },
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, st) => Center(child: Text('خطأ: $e')),
+                );
+              },
+            );
+          },
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (error, stack) => Center(child: Text('خطأ في تحميل الكتب: $error')),
+        ),
+        bottomNavigationBar: const MainNavigationBar(selectedIndex: 3),
       ),
-      bottomNavigationBar: const MainNavigationBar(selectedIndex: 3),
     );
   }
 }

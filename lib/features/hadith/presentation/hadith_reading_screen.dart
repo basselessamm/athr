@@ -48,24 +48,34 @@ class _HadithReadingScreenState extends ConsumerState<HadithReadingScreen> {
     return index < 0 ? 0 : index;
   }
 
+  String _getArabicBookName(String name) {
+    if (name.toLowerCase().contains('bukhari')) return 'صحيح البخاري';
+    if (name.toLowerCase().contains('muslim')) return 'صحيح مسلم';
+    return name;
+  }
+
   @override
   Widget build(BuildContext context) {
     final hadithsAsync = ref.watch(allHadithsProvider(widget.bookName));
     final fontSize = ref.watch(fontSizeProvider);
+    final arabicTitle = _getArabicBookName(widget.bookName);
 
     return Scaffold(
-      backgroundColor: Colors.black, // Dark background outside the book
+      backgroundColor: AppColors.mushafBackground,
       appBar: AppBar(
         title: Text(
-          widget.bookName,
-          style: const TextStyle(fontWeight: FontWeight.bold),
+          arabicTitle,
+          style: const TextStyle(fontWeight: FontWeight.w700),
         ),
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppColors.mushafBackground,
         elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.white),
-        titleTextStyle: const TextStyle(color: Colors.white, fontSize: 20),
+        iconTheme: const IconThemeData(color: AppColors.mushafPaperAlt),
+        titleTextStyle: const TextStyle(
+          color: AppColors.mushafPaperAlt,
+          fontSize: 21,
+          fontWeight: FontWeight.w700,
+        ),
       ),
-      extendBodyBehindAppBar: true,
       body: SafeArea(
         child: Center(
           child: hadithsAsync.when(
@@ -74,7 +84,7 @@ class _HadithReadingScreenState extends ConsumerState<HadithReadingScreen> {
                 return const Center(
                   child: Text(
                     'لا توجد أحاديث في هذا الكتاب.',
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(color: AppColors.mushafPaperAlt),
                   ),
                 );
               }

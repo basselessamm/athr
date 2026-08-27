@@ -33,8 +33,12 @@ class PrayerTimesScreen extends ConsumerWidget {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: scheme.primaryContainer,
+                  color: scheme.primaryContainer.withValues(alpha: 0.5),
                   borderRadius: BorderRadius.circular(22),
+                  border: Border.all(
+                    color: scheme.primary.withValues(alpha: 0.3),
+                    width: 1.0,
+                  ),
                 ),
                 child: Row(
                   children: [

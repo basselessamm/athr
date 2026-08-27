@@ -22,38 +22,41 @@ class ThreadDetailScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final threadAsync = ref.watch(memoryThreadProvider(threadId));
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('الخيط'),
-        actions: [
-          threadAsync.maybeWhen(
-            data: (thread) => thread == null
-                ? const SizedBox.shrink()
-                : PopupMenuButton<String>(
-                    onSelected: (value) =>
-                        _handleMenu(context, ref, thread, value),
-                    itemBuilder: (context) => const [
-                      PopupMenuItem(
-                        value: 'archive',
-                        child: Text('أرشفة الخيط'),
-                      ),
-                      PopupMenuItem(value: 'delete', child: Text('حذف الخيط')),
-                    ],
-                  ),
-            orElse: () => const SizedBox.shrink(),
-          ),
-        ],
-      ),
-      body: threadAsync.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stack) =>
-            Center(child: Text('تعذر تحميل الخيط: $error')),
-        data: (thread) {
-          if (thread == null) {
-            return const Center(child: Text('هذا الخيط غير متاح.'));
-          }
-          return _ThreadDetailBody(thread: thread);
-        },
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('الخيط'),
+          actions: [
+            threadAsync.maybeWhen(
+              data: (thread) => thread == null
+                  ? const SizedBox.shrink()
+                  : PopupMenuButton<String>(
+                      onSelected: (value) =>
+                          _handleMenu(context, ref, thread, value),
+                      itemBuilder: (context) => const [
+                        PopupMenuItem(
+                          value: 'archive',
+                          child: Text('أرشفة الخيط'),
+                        ),
+                        PopupMenuItem(value: 'delete', child: Text('حذف الخيط')),
+                      ],
+                    ),
+              orElse: () => const SizedBox.shrink(),
+            ),
+          ],
+        ),
+        body: threadAsync.when(
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (error, stack) =>
+              Center(child: Text('تعذر تحميل الخيط: $error')),
+          data: (thread) {
+            if (thread == null) {
+              return const Center(child: Text('هذا الخيط غير متاح.'));
+            }
+            return _ThreadDetailBody(thread: thread);
+          },
+        ),
       ),
     );
   }
@@ -117,6 +120,11 @@ class _ThreadDetailBody extends ConsumerWidget {
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
       children: [
         Card(
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+            side: BorderSide(color: theme.colorScheme.outline),
+          ),
           child: Padding(
             padding: const EdgeInsets.all(18),
             child: Column(
@@ -157,14 +165,17 @@ class _ThreadDetailBody extends ConsumerWidget {
         ),
         if (thread.context != null) ...[
           const SizedBox(height: 12),
-          ListTile(
-            shape: RoundedRectangleBorder(
+          Container(
+            decoration: BoxDecoration(
+              color: theme.colorScheme.surface,
               borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: theme.colorScheme.outline),
             ),
-            tileColor: theme.colorScheme.surfaceContainerHighest,
-            leading: const Icon(Icons.bookmark_outline),
-            title: const Text('سياق العودة'),
-            subtitle: Text(_contextLabel(thread.context!)),
+            child: ListTile(
+              leading: Icon(Icons.bookmark_outline, color: theme.colorScheme.primary),
+              title: const Text('سياق العودة', style: TextStyle(fontWeight: FontWeight.bold)),
+              subtitle: Text(_contextLabel(thread.context!)),
+            ),
           ),
         ],
         const SizedBox(height: 12),

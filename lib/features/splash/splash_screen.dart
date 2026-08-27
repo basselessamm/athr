@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:midrar/core/theme/app_colors.dart';
-import 'package:go_router/go_router.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -64,28 +65,33 @@ class _SplashScreenState extends State<SplashScreen>
                   children: [
                     Image.asset(
                       'assets/brand/logo_primary_1024.png',
-                      width: 220,
-                      height: 220,
+                      width: 200,
+                      height: 200,
                     ),
-                    const SizedBox(height: 28),
-                    const Text(
-                      'مِدرار',
-                      style: TextStyle(
-                        fontSize: 44,
-                        fontWeight: FontWeight.w800,
+                    const SizedBox(height: 24),
+                    Text(
+                      'أَثَـر',
+                      style: GoogleFonts.amiri(
+                        fontSize: 48,
+                        fontWeight: FontWeight.w700,
                         color: AppColors.lightAccent,
+                        letterSpacing: 1.2,
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 4),
                     const Text(
-                      'تدفّقٌ يوميّ هادئ',
+                      'مِدرار · خيوط العودة وتأمل الآيات',
                       style: TextStyle(
-                        fontSize: 17,
+                        fontSize: 15,
                         color: AppColors.lightOnSurfaceVariant,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
-                    const SizedBox(height: 48),
-                    const CircularProgressIndicator(color: AppColors.lightAccent),
+                    const SizedBox(height: 40),
+                    const CircularProgressIndicator(
+                      color: AppColors.lightAccent,
+                      strokeWidth: 2.5,
+                    ),
                   ],
                 ),
               ),

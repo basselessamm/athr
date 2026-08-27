@@ -16,7 +16,7 @@ class FavoritesScreen extends ConsumerWidget {
     final favoritesAsync = ref.watch(favoritesProvider);
 
     return MidrarScaffold(
-      title: 'المفضلة',
+      title: 'المحفوظات والأثر',
       body: favoritesAsync.when(
         data: (favorites) {
           if (favorites.isEmpty) {
@@ -24,7 +24,7 @@ class FavoritesScreen extends ConsumerWidget {
               child: Padding(
                 padding: const EdgeInsets.all(24),
                 child: Text(
-                  'لم تحفظ أي عنصر بعد. أثناء القراءة اضغط على القلب للاحتفاظ بالآيات والأحاديث والأدعية المهمة لك.',
+                  'لم تحفظ أي عنصر بعد. أثناء القراءة اضغط على الحفظ للاحتفاظ بالآيات والأحاديث والأدعية المهمة لك.',
                   style: Theme.of(
                     context,
                   ).textTheme.bodyLarge?.copyWith(height: 1.7),
@@ -45,7 +45,7 @@ class FavoritesScreen extends ConsumerWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
                   side: BorderSide(
-                    color: Theme.of(context).colorScheme.outlineVariant,
+                    color: Theme.of(context).colorScheme.outline,
                   ),
                 ),
                 child: InkWell(
@@ -62,7 +62,7 @@ class FavoritesScreen extends ConsumerWidget {
                               child: Text(
                                 item.title,
                                 style: Theme.of(context).textTheme.titleMedium
-                                    ?.copyWith(fontWeight: FontWeight.bold),
+                                    ?.copyWith(fontWeight: FontWeight.w800),
                               ),
                             ),
                             IconButton(
@@ -80,8 +80,8 @@ class FavoritesScreen extends ConsumerWidget {
                                     );
                               },
                               icon: Icon(
-                                Icons.favorite,
-                                color: Theme.of(context).colorScheme.error,
+                                Icons.bookmark_rounded,
+                                color: Theme.of(context).colorScheme.primary,
                               ),
                             ),
                           ],
@@ -99,6 +99,7 @@ class FavoritesScreen extends ConsumerWidget {
                           style: Theme.of(context).textTheme.bodySmall
                               ?.copyWith(
                                 color: Theme.of(context).colorScheme.primary,
+                                fontWeight: FontWeight.w600,
                               ),
                         ),
                       ],

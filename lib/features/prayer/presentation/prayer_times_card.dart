@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:midrar/core/theme/app_colors.dart';
 
 import 'package:midrar/features/prayer/application/prayer_times.dart';
 
@@ -250,23 +251,31 @@ class _PrayerPill extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final color = emphasized
         ? scheme.primary
         : current
-        ? scheme.tertiary
-        : scheme.surfaceContainerHighest;
-    final foreground = emphasized || current
+        ? scheme.secondary
+        : (isDark ? scheme.surfaceContainerHigh : scheme.primaryContainer.withValues(alpha: 0.35));
+    final foreground = emphasized
         ? scheme.onPrimary
-        : scheme.onSurfaceVariant;
+        : current
+        ? scheme.onSecondary
+        : scheme.onSurface;
     return Container(
       constraints: const BoxConstraints(minWidth: 58),
-      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
       decoration: BoxDecoration(
         color: color,
         borderRadius: BorderRadius.circular(14),
-        border: emphasized
-            ? Border.all(color: scheme.primary.withValues(alpha: .5))
-            : null,
+        border: Border.all(
+          color: emphasized
+              ? scheme.primary
+              : current
+              ? scheme.secondary
+              : scheme.outline,
+          width: 1.0,
+        ),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -280,7 +289,14 @@ class _PrayerPill extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 2),
-          Text(time, style: TextStyle(fontSize: 11, color: foreground)),
+          Text(
+            time,
+            style: TextStyle(
+              fontSize: 11,
+              color: foreground.withValues(alpha: 0.9),
+              fontWeight: FontWeight.w600,
+            ),
+          ),
         ],
       ),
     );
@@ -294,16 +310,21 @@ class _PrayerCardShell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Container(
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface,
-        borderRadius: BorderRadius.circular(28),
-        border: Border.all(color: Theme.of(context).colorScheme.outlineVariant),
+        color: theme.colorScheme.surface,
+        borderRadius: BorderRadius.circular(AppColors.radiusXl),
+        border: Border.all(color: theme.colorScheme.outline, width: 1.0),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: .04),
-            blurRadius: 18,
-            offset: const Offset(0, 8),
+            color: isDark
+                ? Colors.black.withValues(alpha: 0.25)
+                : const Color(0xFF1C443B).withValues(alpha: 0.04),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
           ),
         ],
       ),

@@ -119,71 +119,115 @@ class _ThreadCanvasCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     final source = thread.source;
     final citation = [
       source.sourceBook,
       source.sourceCitation,
     ].whereType<String>().where((value) => value.isNotEmpty).join(' · ');
 
-    return Card(
+    return Container(
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surface,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: theme.colorScheme.outline,
+          width: 1.0,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: isDark
+                ? Colors.black.withValues(alpha: 0.25)
+                : const Color(0xFF1C443B).withValues(alpha: 0.04),
+            blurRadius: 10,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
       clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: onOpen,
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      source.sourceLabel,
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onOpen,
+          child: Padding(
+            padding: const EdgeInsets.all(18),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: theme.colorScheme.primaryContainer.withValues(
+                          alpha: isDark ? 0.4 : 0.6,
+                        ),
+                        borderRadius: BorderRadius.circular(12),
                       ),
-                      textAlign: TextAlign.right,
+                      child: Icon(
+                        _iconFor(source.kind),
+                        color: theme.colorScheme.primary,
+                        size: 20,
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Text(
+                        source.sourceLabel,
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w800,
+                        ),
+                        textAlign: TextAlign.right,
+                      ),
+                    ),
+                  ],
+                ),
+                if (citation.isNotEmpty) ...[
+                  const SizedBox(height: 8),
+                  Text(
+                    citation,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                      height: 1.5,
+                    ),
+                    textAlign: TextAlign.right,
+                  ),
+                ],
+                if (thread.context != null) ...[
+                  const SizedBox(height: 12),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Chip(
+                      avatar: Icon(
+                        Icons.bookmark_outline,
+                        size: 15,
+                        color: theme.colorScheme.primary,
+                      ),
+                      label: Text(
+                        _contextLabel(thread.context!),
+                        style: const TextStyle(fontSize: 12),
+                      ),
+                      side: BorderSide(color: theme.colorScheme.outline),
                     ),
                   ),
-                  const SizedBox(width: 12),
-                  Icon(_iconFor(source.kind), color: theme.colorScheme.primary),
                 ],
-              ),
-              if (citation.isNotEmpty) ...[
-                const SizedBox(height: 5),
-                Text(
-                  citation,
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: theme.colorScheme.onSurfaceVariant,
-                  ),
-                  textAlign: TextAlign.right,
+                const SizedBox(height: 16),
+                FilledButton.tonalIcon(
+                  onPressed: onReturn,
+                  icon: const Icon(Icons.keyboard_return, size: 18),
+                  label: const Text('العودة إلى المصدر'),
                 ),
-              ],
-              if (thread.context != null) ...[
-                const SizedBox(height: 12),
+                const SizedBox(height: 4),
                 Align(
                   alignment: Alignment.centerRight,
-                  child: Chip(
-                    avatar: const Icon(Icons.bookmark_outline, size: 16),
-                    label: Text(_contextLabel(thread.context!)),
+                  child: TextButton(
+                    onPressed: onOpen,
+                    child: const Text('فتح تفاصيل الخيط'),
                   ),
                 ),
               ],
-              const SizedBox(height: 14),
-              FilledButton.tonalIcon(
-                onPressed: onReturn,
-                icon: const Icon(Icons.keyboard_return),
-                label: const Text('العودة إلى المصدر'),
-              ),
-              const SizedBox(height: 4),
-              Align(
-                alignment: Alignment.centerRight,
-                child: TextButton(
-                  onPressed: onOpen,
-                  child: const Text('فتح تفاصيل الخيط'),
-                ),
-              ),
-            ],
+            ),
           ),
         ),
       ),

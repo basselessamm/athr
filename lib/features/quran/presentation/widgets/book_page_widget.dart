@@ -105,9 +105,7 @@ class BookPageWidget extends StatelessWidget {
                     child: Container(
                       decoration: BoxDecoration(
                         border: Border.all(
-                          color: const Color(
-                            0xFFB89E73,
-                          ), // Muted gold classical frame
+                          color: AppColors.mushafGoldMuted,
                           width: 1.5,
                         ),
                       ),
@@ -115,9 +113,7 @@ class BookPageWidget extends StatelessWidget {
                         margin: const EdgeInsets.all(4.0),
                         decoration: BoxDecoration(
                           border: Border.all(
-                            color: const Color(
-                              0xFFB89E73,
-                            ).withValues(alpha: 0.4),
+                            color: AppColors.mushafGoldMuted.withValues(alpha: 0.4),
                             width: 1.0,
                           ),
                         ),

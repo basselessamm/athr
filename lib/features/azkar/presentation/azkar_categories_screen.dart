@@ -78,63 +78,88 @@ class AzkarCategoriesScreen extends ConsumerWidget {
                       child: Semantics(
                         button: true,
                         label: 'فتح أذكار $category',
-                        child: Material(
-                          color: scheme.surface,
-                          borderRadius: BorderRadius.circular(20),
-                          clipBehavior: Clip.antiAlias,
-                          child: InkWell(
-                            onTap: () => context.pushNamed(
-                              'azkarReading',
-                              pathParameters: {'category': category},
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: scheme.surface,
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(
+                              color: scheme.outline,
+                              width: 1.0,
                             ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(18),
-                              child: Row(
-                                children: [
-                                  Container(
-                                    width: 48,
-                                    height: 48,
-                                    decoration: BoxDecoration(
-                                      color: scheme.primaryContainer,
-                                      shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Theme.of(context).brightness ==
+                                        Brightness.dark
+                                    ? Colors.black.withValues(alpha: 0.2)
+                                    : const Color(0xFF1C443B).withValues(alpha: 0.03),
+                                blurRadius: 8,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                          child: Material(
+                            color: Colors.transparent,
+                            borderRadius: BorderRadius.circular(20),
+                            clipBehavior: Clip.antiAlias,
+                            child: InkWell(
+                              onTap: () => context.pushNamed(
+                                'azkarReading',
+                                pathParameters: {'category': category},
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(18),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      width: 48,
+                                      height: 48,
+                                      decoration: BoxDecoration(
+                                        color: scheme.primaryContainer,
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                          color: scheme.primary.withValues(alpha: 0.2),
+                                        ),
+                                      ),
+                                      child: Icon(
+                                        Icons.spa_rounded,
+                                        color: scheme.primary,
+                                        size: 22,
+                                      ),
                                     ),
-                                    child: Icon(
-                                      Icons.menu_book_outlined,
-                                      color: scheme.primary,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 14),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          category,
-                                          style: GoogleFonts.amiri(
-                                            fontSize: 23,
-                                            height: 1.15,
-                                            color: scheme.onSurface,
-                                            fontWeight: FontWeight.w700,
+                                    const SizedBox(width: 14),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            category,
+                                            style: GoogleFonts.amiri(
+                                              fontSize: 23,
+                                              height: 1.15,
+                                              color: scheme.onSurface,
+                                              fontWeight: FontWeight.w700,
+                                            ),
                                           ),
-                                        ),
-                                        const SizedBox(height: 4),
-                                        Text(
-                                          'قراءة هادئة قابلة للعودة',
-                                          style: theme.textTheme.bodySmall
-                                              ?.copyWith(
-                                                color: scheme.onSurfaceVariant,
-                                              ),
-                                        ),
-                                      ],
+                                          const SizedBox(height: 4),
+                                          Text(
+                                            'قراءة هادئة قابلة للعودة',
+                                            style: theme.textTheme.bodySmall
+                                                ?.copyWith(
+                                              color: scheme.onSurfaceVariant,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                  Icon(
-                                    Icons.arrow_back_ios_new_rounded,
-                                    size: 17,
-                                    color: scheme.primary,
-                                  ),
-                                ],
+                                    Icon(
+                                      Icons.arrow_back_ios_new_rounded,
+                                      size: 16,
+                                      color: scheme.primary,
+                                      textDirection: TextDirection.rtl,
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),

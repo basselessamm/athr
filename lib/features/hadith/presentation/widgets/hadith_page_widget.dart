@@ -68,9 +68,7 @@ class HadithPageWidget extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
                 border: Border.all(
-                  color: const Color(
-                    0xFFC7A87D,
-                  ), // Golden/Brownish elegant border
+                  color: AppColors.mushafGold,
                   width: 2.0,
                 ),
               ),
