@@ -44,3 +44,8 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 temp_content/
+
+# Release signing secrets (never commit)
+android/key.properties
+*.jks
+*.keystore

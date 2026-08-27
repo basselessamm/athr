@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+
+import 'package:midrar/core/theme/app_colors.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class HadithPageWidget extends StatelessWidget {
@@ -32,7 +34,7 @@ class HadithPageWidget extends StatelessWidget {
       child: Container(
         width: double.infinity,
         height: double.infinity,
-        color: const Color(0xFFFDF7EF), // Base paper color
+        color: AppColors.mushafPaper, // Base paper color
         child: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
@@ -90,7 +92,7 @@ class HadithPageWidget extends StatelessWidget {
                               hadithText,
                               style: GoogleFonts.amiri(
                                 fontSize: fontSize,
-                                color: const Color(0xFF2C1E16),
+                                color: AppColors.mushafBackgroundDeep,
                                 height: 1.9,
                               ),
                               textAlign: TextAlign.justify,
@@ -101,7 +103,7 @@ class HadithPageWidget extends StatelessWidget {
                                 reference!,
                                 style: GoogleFonts.amiri(
                                   fontSize: fontSize * 0.7,
-                                  color: const Color(0xFF5A4328),
+                                  color: AppColors.mushafInkStrong,
                                   fontWeight: FontWeight.bold,
                                 ),
                                 textAlign: TextAlign.center,
@@ -126,7 +128,7 @@ class HadithPageWidget extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: const BoxDecoration(
         border: Border(
-          bottom: BorderSide(color: Color(0xFFC7A87D), width: 1.5),
+          bottom: BorderSide(color: AppColors.mushafGold, width: 1.5),
         ),
       ),
       child: Row(
@@ -136,7 +138,7 @@ class HadithPageWidget extends StatelessWidget {
             child: Text(
               headerSubtitle, // e.g. "كتاب الإيمان"
               style: GoogleFonts.amiri(
-                color: const Color(0xFF5A4328),
+                color: AppColors.mushafInkStrong,
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
               ),
@@ -149,12 +151,12 @@ class HadithPageWidget extends StatelessWidget {
             onPressed: onCapturePressed,
             tooltip: 'اترك أثرًا',
             icon: const Icon(Icons.bookmark_add_outlined),
-            color: const Color(0xFF5A4328),
+            color: AppColors.mushafInkStrong,
           ),
           Text(
             headerTitle, // e.g. "صحيح البخاري"
             style: GoogleFonts.amiri(
-              color: const Color(0xFF5A4328),
+              color: AppColors.mushafInkStrong,
               fontSize: 16,
               fontWeight: FontWeight.bold,
             ),
@@ -168,13 +170,13 @@ class HadithPageWidget extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 8),
       decoration: const BoxDecoration(
-        border: Border(top: BorderSide(color: Color(0xFFC7A87D), width: 1.5)),
+        border: Border(top: BorderSide(color: AppColors.mushafGold, width: 1.5)),
       ),
       child: Center(
         child: Text(
           _toArabicNumerals(pageNumber),
           style: GoogleFonts.amiri(
-            color: const Color(0xFF5A4328),
+            color: AppColors.mushafInkStrong,
             fontSize: 16,
             fontWeight: FontWeight.bold,
           ),

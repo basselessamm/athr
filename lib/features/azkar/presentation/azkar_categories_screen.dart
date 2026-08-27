@@ -3,9 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'package:athr/core/widgets/athr_scaffold.dart';
-import 'package:athr/core/widgets/main_navigation_bar.dart';
-import 'package:athr/features/azkar/providers/azkar_providers.dart';
+import 'package:midrar/core/widgets/midrar_scaffold.dart';
+import 'package:midrar/core/widgets/main_navigation_bar.dart';
+import 'package:midrar/features/azkar/providers/azkar_providers.dart';
 
 class AzkarCategoriesScreen extends ConsumerWidget {
   const AzkarCategoriesScreen({super.key});
@@ -18,7 +18,7 @@ class AzkarCategoriesScreen extends ConsumerWidget {
 
     return Directionality(
       textDirection: TextDirection.rtl,
-      child: AthrScaffold(
+      child: MidrarScaffold(
         title: 'الأذكار',
         body: categoriesAsync.when(
           data: (categories) {

@@ -2,8 +2,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:athr/features/quran/providers/bookmark_provider.dart';
-import 'package:athr/features/settings/providers/settings_providers.dart';
+import 'package:midrar/features/quran/providers/bookmark_provider.dart';
+import 'package:midrar/features/settings/providers/settings_providers.dart';
 
 void main() {
   ProviderContainer containerFor(SharedPreferences preferences) {

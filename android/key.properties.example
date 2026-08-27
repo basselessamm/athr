@@ -1,0 +1,12 @@
+# Production signing configuration template
+#
+# Copy this file to android/key.properties and fill in real values.
+# NEVER commit key.properties or the keystore file itself.
+# CI should provide the same values via environment variables instead:
+#   MIDRAR_SIGNING_STOREFILE, MIDRAR_SIGNING_STOREPASSWORD,
+#   MIDRAR_SIGNING_KEYALIAS, MIDRAR_SIGNING_KEYPASSWORD
+
+storeFile=../midrar-release.jks
+storePassword=CHANGE_ME
+keyAlias=midrar
+keyPassword=CHANGE_ME

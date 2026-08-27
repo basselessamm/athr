@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:athr/core/memory/domain/memory_contracts.dart';
-import 'package:athr/core/memory/migration/legacy_memory_migration.dart';
+import 'package:midrar/core/memory/domain/memory_contracts.dart';
+import 'package:midrar/core/memory/migration/legacy_memory_migration.dart';
 
 void main() {
   group('SourceReference canonical contracts', () {

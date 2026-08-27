@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:athr/core/memory/domain/memory_contracts.dart';
-import 'package:athr/core/memory/memory_providers.dart';
-import 'package:athr/core/memory/memory_thread_repository.dart';
+import 'package:midrar/core/memory/domain/memory_contracts.dart';
+import 'package:midrar/core/memory/memory_providers.dart';
+import 'package:midrar/core/memory/memory_thread_repository.dart';
 
 class CaptureSource {
   final SourceReference reference;

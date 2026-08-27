@@ -1,17 +1,20 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+
+import 'package:midrar/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:quran_flutter/quran.dart';
+import 'package:midrar/vendor/quran_core/quran.dart';
 
-import 'package:athr/features/quran/presentation/widgets/book_page_widget.dart';
-import 'package:athr/core/widgets/premium_quran_flip_widget.dart';
-import 'package:athr/features/quran/presentation/widgets/verse_bottom_sheet.dart';
-import 'package:athr/features/quran/application/quran_audio.dart';
-import 'package:athr/features/quran/presentation/widgets/quran_audio_player.dart';
-import 'package:athr/features/quran/providers/bookmark_provider.dart';
-import 'package:athr/features/quran/providers/quran_providers.dart';
+import 'package:midrar/features/quran/presentation/widgets/book_page_widget.dart';
+import 'package:midrar/core/widgets/premium_quran_flip_widget.dart';
+import 'package:midrar/features/quran/presentation/widgets/verse_bottom_sheet.dart';
+import 'package:midrar/features/quran/application/quran_audio.dart';
+import 'package:midrar/features/quran/presentation/widgets/quran_audio_player.dart';
+import 'package:midrar/features/quran/providers/bookmark_provider.dart';
+import 'package:midrar/features/quran/providers/quran_providers.dart';
+import 'package:midrar/features/settings/providers/settings_providers.dart';
 
 class QuranPageModel {
   final int pageNumber;
@@ -45,10 +48,33 @@ class _QuranReadingScreenState extends ConsumerState<QuranReadingScreen> {
   Object? _initializationError;
   var _currentPageIndex = 0;
 
+  /// Drives audio follow-along: when recitation advances, the mushaf turns
+  /// to the page of the playing ayah.
+  final ValueNotifier<int> _audioFollowIndex = ValueNotifier<int>(-1);
+  int? _lastFollowedAyah;
+
   @override
   void initState() {
     super.initState();
     _initializeQuran();
+  }
+
+  void _syncAudioFollow(QuranAudioState audio) {
+    if (!audio.isPlaying ||
+        audio.surah != widget.surahNumber ||
+        audio.ayah == null ||
+        _pages.isEmpty) {
+      return;
+    }
+    final ayah = audio.ayah!;
+    if (ayah == _lastFollowedAyah) return;
+    _lastFollowedAyah = ayah;
+    final pageIndex = _pages.indexWhere(
+      (page) => page.verses.any((verse) => verse.verseNumber == ayah),
+    );
+    if (pageIndex >= 0 && pageIndex != _audioFollowIndex.value) {
+      _audioFollowIndex.value = pageIndex;
+    }
   }
 
   Future<void> _initializeQuran() async {
@@ -143,10 +169,12 @@ class _QuranReadingScreenState extends ConsumerState<QuranReadingScreen> {
     }
     final page = _pages[index];
     final ayah = page.verses.first.verseNumber as int;
+    // Automatic progress only — the explicit bookmark is never overwritten
+    // by browsing.
     unawaited(
       ref
-          .read(bookmarkProvider.notifier)
-          .saveBookmark(
+          .read(lastReadProvider.notifier)
+          .recordProgress(
             surah: widget.surahNumber,
             ayah: ayah,
             pageNumber: page.pageNumber,
@@ -161,11 +189,26 @@ class _QuranReadingScreenState extends ConsumerState<QuranReadingScreen> {
     );
     unawaited(
       ref
+          .read(lastReadProvider.notifier)
+          .recordProgress(
+            surah: widget.surahNumber,
+            ayah: ayah,
+            pageNumber: pageNumber,
+          ),
+    );
+  }
+
+  void _pinExplicitBookmark() {
+    if (_pages.isEmpty) return;
+    final page = _pages[_currentPageIndex.clamp(0, _pages.length - 1)];
+    final ayah = page.verses.isEmpty ? 1 : page.verses.first.verseNumber as int;
+    unawaited(
+      ref
           .read(bookmarkProvider.notifier)
           .saveBookmark(
             surah: widget.surahNumber,
             ayah: ayah,
-            pageNumber: pageNumber,
+            pageNumber: page.pageNumber,
           ),
     );
   }
@@ -174,10 +217,10 @@ class _QuranReadingScreenState extends ConsumerState<QuranReadingScreen> {
   Widget build(BuildContext context) {
     if (!_isQuranReady) {
       return Scaffold(
-        backgroundColor: const Color(0xFF2C241C),
+        backgroundColor: AppColors.mushafBackground,
         appBar: AppBar(
-          backgroundColor: const Color(0xFF2C241C),
-          foregroundColor: const Color(0xFFF9F6EE),
+          backgroundColor: AppColors.mushafBackground,
+          foregroundColor: AppColors.mushafPaperAlt,
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios),
             onPressed: () => context.pop(),
@@ -191,59 +234,66 @@ class _QuranReadingScreenState extends ConsumerState<QuranReadingScreen> {
                 ? const Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      CircularProgressIndicator(color: Color(0xFFC7A87D)),
+                      CircularProgressIndicator(color: AppColors.mushafGold),
                       SizedBox(height: 16),
                       Text(
                         'يُهيَّأ المصحف للقراءة…',
                         textAlign: TextAlign.center,
-                        style: TextStyle(color: Color(0xFFF9F6EE)),
+                        style: TextStyle(color: AppColors.mushafPaperAlt),
                       ),
                     ],
                   )
                 : const Text(
                     'تعذرت تهيئة المصحف الآن. حاول مرة أخرى بعد قليل.',
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: Color(0xFFF9F6EE)),
+                    style: TextStyle(color: AppColors.mushafPaperAlt),
                   ),
           ),
         ),
       );
     }
 
-    final textScale = MediaQuery.textScalerOf(
+    final systemScale = MediaQuery.textScalerOf(
       context,
     ).scale(1).clamp(0.9, 1.32).toDouble();
+    // Combine the OS accessibility scale with the user's in-app reading
+    // font size so both affect the mushaf predictably.
+    final userFontSize = ref.watch(fontSizeProvider);
+    final textScale = (systemScale * (userFontSize / 24)).clamp(0.75, 1.9);
+
+    // Follow-along: turn pages as recitation advances (only while playing).
+    ref.listen(quranAudioControllerProvider, (_, audio) => _syncAudioFollow(audio));
     final audioState = ref.watch(quranAudioControllerProvider);
     final highlightedAyah = audioState.surah == widget.surahNumber
         ? audioState.ayah
         : null;
 
     return Scaffold(
-      backgroundColor: const Color(0xFF2C241C),
+      backgroundColor: AppColors.mushafBackground,
       appBar: AppBar(
         title: Text('سورة ${Quran.getSurahName(widget.surahNumber)}'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios),
           onPressed: () => context.pop(),
         ),
-        backgroundColor: const Color(0xFF2C241C),
-        foregroundColor: const Color(0xFFF9F6EE),
+        backgroundColor: AppColors.mushafBackground,
+        foregroundColor: AppColors.mushafPaperAlt,
         elevation: 0,
         titleTextStyle: const TextStyle(
-          color: Color(0xFFF9F6EE),
+          color: AppColors.mushafPaperAlt,
           fontSize: 21,
           fontWeight: FontWeight.w700,
         ),
         actions: [
           IconButton(
-            tooltip: 'حفظ موضع القراءة',
+            tooltip: 'علّمة هذا الموضع للعودة إليه',
             onPressed: _pages.isEmpty
                 ? null
                 : () {
-                    _saveReadingAnchorForPage(_currentPageIndex);
+                    _pinExplicitBookmark();
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
-                        content: Text('حُفظ موضع القراءة للعودة إليه لاحقًا.'),
+                        content: Text('عُلّم هذا الموضع؛ تظهر علامة العودة هنا دائمًا حتى تغيّره.'),
                       ),
                     );
                   },
@@ -253,6 +303,7 @@ class _QuranReadingScreenState extends ConsumerState<QuranReadingScreen> {
       ),
       body: SafeArea(
         child: PremiumQuranFlipWidget(
+          followIndexNotifier: _audioFollowIndex,
           initialIndex: _focusPageIndex,
           itemCount: _pages.length,
           semanticPageLabel: (index, total) =>
@@ -262,7 +313,7 @@ class _QuranReadingScreenState extends ConsumerState<QuranReadingScreen> {
             _saveReadingAnchorForPage(index);
           },
           endPage: Container(
-            color: const Color(0xFFFDF7EF),
+            color: AppColors.mushafPaper,
             alignment: Alignment.center,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -270,14 +321,14 @@ class _QuranReadingScreenState extends ConsumerState<QuranReadingScreen> {
                 const Icon(
                   Icons.check_circle_outline,
                   size: 80,
-                  color: Color(0xFFC7A87D),
+                  color: AppColors.mushafGold,
                 ),
                 const SizedBox(height: 24),
                 const Text(
                   'نهاية السورة',
                   style: TextStyle(
                     fontSize: 32,
-                    color: Color(0xFF5A4328),
+                    color: AppColors.mushafInkStrong,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -286,14 +337,14 @@ class _QuranReadingScreenState extends ConsumerState<QuranReadingScreen> {
                   'سورة ${Quran.getSurahName(widget.surahNumber)}',
                   style: const TextStyle(
                     fontSize: 22,
-                    color: Color(0xFF8B6F4E),
+                    color: AppColors.mushafInkSoft,
                   ),
                 ),
                 const SizedBox(height: 48),
                 ElevatedButton(
                   onPressed: () => context.pop(),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFC7A87D),
+                    backgroundColor: AppColors.mushafGold,
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(
                       horizontal: 40,

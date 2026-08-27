@@ -89,13 +89,13 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "com.athr" "\0"
-            VALUE "FileDescription", "athr" "\0"
+            VALUE "CompanyName", "com.midrar" "\0"
+            VALUE "FileDescription", "midrar" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "athr" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2026 com.athr. All rights reserved." "\0"
-            VALUE "OriginalFilename", "athr.exe" "\0"
-            VALUE "ProductName", "athr" "\0"
+            VALUE "InternalName", "midrar" "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2026 com.midrar. All rights reserved." "\0"
+            VALUE "OriginalFilename", "midrar.exe" "\0"
+            VALUE "ProductName", "midrar" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:quran_flutter/quran.dart';
+import 'package:midrar/vendor/quran_core/quran.dart';
 
-import 'package:athr/core/database/database_providers.dart';
-import 'package:athr/core/memory/domain/memory_contracts.dart';
-import 'package:athr/features/favorites/providers/favorites_providers.dart';
-import 'package:athr/features/memory_capture/presentation/capture_flow.dart';
-import 'package:athr/features/quran/application/quran_audio.dart';
-import 'package:athr/features/quran/providers/bookmark_provider.dart';
-import 'package:athr/features/quran/providers/quran_providers.dart';
+import 'package:midrar/core/database/database_providers.dart';
+import 'package:midrar/core/memory/domain/memory_contracts.dart';
+import 'package:midrar/features/favorites/providers/favorites_providers.dart';
+import 'package:midrar/features/memory_capture/presentation/capture_flow.dart';
+import 'package:midrar/features/quran/application/quran_audio.dart';
+import 'package:midrar/features/quran/providers/bookmark_provider.dart';
+import 'package:midrar/features/quran/providers/quran_providers.dart';
 
 class VerseBottomSheet extends ConsumerWidget {
   const VerseBottomSheet({

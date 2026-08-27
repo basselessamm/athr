@@ -1,4 +1,4 @@
-import 'package:athr/features/quran/presentation/widgets/book_page_widget.dart';
+import 'package:midrar/features/quran/presentation/widgets/book_page_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 

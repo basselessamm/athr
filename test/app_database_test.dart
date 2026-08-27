@@ -1,7 +1,9 @@
+import 'package:drift/drift.dart' show Value;
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:athr/core/database/app_database.dart';
+import 'package:midrar/core/database/app_database.dart';
+import 'package:midrar/core/utils/arabic_normalization.dart';
 
 void main() {
   late AppDatabase database;
@@ -39,25 +41,6 @@ void main() {
     expect(favoritesAfterDelete, isEmpty);
   });
 
-  test('daily task and sunnah completion persist in same row', () async {
-    await database.setDailyTaskCompletion(taskId: 'task-1', isCompleted: true);
-    await database.setDailySunnahCompletion(
-      sunnahId: 'sunnah-1',
-      isCompleted: true,
-    );
-
-    final todayActivity = await database.watchTodayActivity().first;
-    expect(todayActivity, isNotNull);
-    expect(todayActivity!.completedTaskId, 'task-1');
-    expect(todayActivity.completedSunnahId, 'sunnah-1');
-
-    await database.setDailyTaskCompletion(taskId: 'task-1', isCompleted: false);
-    final updatedActivity = await database.watchTodayActivity().first;
-    expect(updatedActivity, isNotNull);
-    expect(updatedActivity!.completedTaskId, isNull);
-    expect(updatedActivity.completedSunnahId, 'sunnah-1');
-  });
-
   test('saveMuhasabaEntry persists note and booleans', () async {
     await database.saveMuhasabaEntry(
       prayed: true,
@@ -79,40 +62,40 @@ void main() {
     expect(entry.note, 'مراجعة جيدة لليوم');
   });
 
-  test(
-    'database-backed daily sunnah and task can be selected by seed',
-    () async {
-      await database
-          .into(database.dailySunnahTable)
-          .insert(
-            DailySunnahTableCompanion.insert(
-              id: 's1',
-              title: 'سنة 1',
-              description: 'وصف',
-              howToApply: 'تطبيق',
-              source: 'مصدر',
-              sortOrder: 0,
-            ),
-          );
-      await database
-          .into(database.dailyTaskTable)
-          .insert(
-            DailyTaskTableCompanion.insert(
-              id: 't1',
-              title: 'مهمة 1',
-              description: 'وصف',
-              impact: 'أثر',
-              sortOrder: 0,
-            ),
-          );
+  test('hadith search matches normalized text without diacritics', () async {
+    final inserts = <HadithTableCompanion>[
+      HadithTableCompanion.insert(
+        bookName: 'صحيح البخاري',
+        chapterName: const Value('كتاب الإيمان'),
+        reference: const Value('صحيح البخاري - حديث 1'),
+        hadithTextAr: 'إِنَّمَا الأَعْمَالُ بِالنِّيَّاتِ وَإِنَّمَا لِكُلِّ امْرِئٍ مَا نَوَى',
+      ),
+      HadithTableCompanion.insert(
+        bookName: 'صحيح البخاري',
+        chapterName: const Value('كتاب العلم'),
+        reference: const Value('صحيح البخاري - حديث 2'),
+        hadithTextAr: 'مَنْ يُرِدِ اللَّهُ بِهِ خَيْرًا يُفَقِّهْهُ فِي الدِّينِ',
+      ),
+    ];
+    for (final insert in inserts) {
+      // Mirror the seeder's normalization so the test reflects production.
+      await database.into(database.hadithTable).insert(insert.copyWith(
+            hadithTextArNorm: Value(normalizeArabic(insert.hadithTextAr.value)),
+          ));
+    }
 
-      final sunnah = await database.getDailySunnahForSeed(1234);
-      final task = await database.getDailyTaskForSeed(1234);
+    // Unvocalized query must find the vocalized hadith.
+    final results =
+        await database.searchHadith('انما الاعمال بالنیات');
+    expect(results, hasLength(1));
+    expect(results.first.reference, 'صحيح البخاري - حديث 1');
 
-      expect(sunnah, isNotNull);
-      expect(task, isNotNull);
-      expect(sunnah!.id, 's1');
-      expect(task!.id, 't1');
-    },
-  );
+    // Chapter-name matching also works unvocalized.
+    final byChapter = await database.searchHadith('كتاب العلم');
+    expect(byChapter, hasLength(1));
+
+    // SQL wildcards in user input are neutralized instead of matching all.
+    final wildcard = await database.searchHadith('%');
+    expect(wildcard, isEmpty);
+  });
 }

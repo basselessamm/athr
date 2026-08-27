@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+
+import 'package:midrar/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:athr/core/widgets/premium_quran_flip_widget.dart';
-import 'package:athr/core/database/app_database.dart';
-import 'package:athr/features/hadith/providers/hadith_providers.dart';
-import 'package:athr/features/settings/providers/settings_providers.dart';
-import 'package:athr/features/hadith/presentation/widgets/hadith_page_widget.dart';
-import 'package:athr/features/memory_capture/presentation/capture_flow.dart';
-import 'package:athr/core/memory/domain/memory_contracts.dart';
+import 'package:midrar/core/widgets/premium_quran_flip_widget.dart';
+import 'package:midrar/core/database/app_database.dart';
+import 'package:midrar/features/hadith/providers/hadith_providers.dart';
+import 'package:midrar/features/settings/providers/settings_providers.dart';
+import 'package:midrar/features/hadith/presentation/widgets/hadith_page_widget.dart';
+import 'package:midrar/features/memory_capture/presentation/capture_flow.dart';
+import 'package:midrar/core/memory/domain/memory_contracts.dart';
 
 class HadithReadingScreen extends ConsumerStatefulWidget {
   final String bookName;
@@ -81,7 +83,7 @@ class _HadithReadingScreenState extends ConsumerState<HadithReadingScreen> {
                 initialIndex: _focusIndex(hadiths),
                 itemCount: hadiths.length,
                 endPage: Container(
-                  color: const Color(0xFFFDF7EF),
+                  color: AppColors.mushafPaper,
                   alignment: Alignment.center,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -89,14 +91,14 @@ class _HadithReadingScreenState extends ConsumerState<HadithReadingScreen> {
                       const Icon(
                         Icons.menu_book_rounded,
                         size: 80,
-                        color: Color(0xFFC7A87D),
+                        color: AppColors.mushafGold,
                       ),
                       const SizedBox(height: 24),
                       const Text(
                         'نهاية الكتاب',
                         style: TextStyle(
                           fontSize: 32,
-                          color: Color(0xFF5A4328),
+                          color: AppColors.mushafInkStrong,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -105,14 +107,14 @@ class _HadithReadingScreenState extends ConsumerState<HadithReadingScreen> {
                         widget.bookName,
                         style: const TextStyle(
                           fontSize: 22,
-                          color: Color(0xFF8B6F4E),
+                          color: AppColors.mushafInkSoft,
                         ),
                       ),
                       const SizedBox(height: 48),
                       ElevatedButton(
                         onPressed: () => context.pop(),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFFC7A87D),
+                          backgroundColor: AppColors.mushafGold,
                           foregroundColor: Colors.white,
                           padding: const EdgeInsets.symmetric(
                             horizontal: 40,

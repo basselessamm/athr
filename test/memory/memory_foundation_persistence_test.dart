@@ -2,9 +2,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:drift/native.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:athr/core/database/app_database.dart';
-import 'package:athr/core/memory/domain/memory_contracts.dart';
-import 'package:athr/core/memory/memory_thread_repository.dart';
+import 'package:midrar/core/database/app_database.dart';
+import 'package:midrar/core/memory/domain/memory_contracts.dart';
+import 'package:midrar/core/memory/memory_thread_repository.dart';
 
 void main() {
   late AppDatabase database;
@@ -116,7 +116,7 @@ void main() {
       expect(threads.every((row) => row.userLabel == null), isTrue);
       expect(legacyRows, hasLength(3));
       expect(legacyRows.last.contentText, 'fallback text');
-      expect(database.schemaVersion, 6);
+      expect(database.schemaVersion, 8);
       expect(
         await database.select(database.reminderIntentTable).get(),
         isEmpty,
@@ -257,3 +257,4 @@ void _createV4Schema(dynamic db) {
     )
   ''');
 }
+

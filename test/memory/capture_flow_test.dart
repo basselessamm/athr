@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:athr/core/database/app_database.dart';
-import 'package:athr/core/memory/domain/memory_contracts.dart';
-import 'package:athr/core/memory/memory_providers.dart';
-import 'package:athr/core/memory/memory_thread_repository.dart';
-import 'package:athr/features/memory_capture/presentation/capture_flow.dart';
+import 'package:midrar/core/database/app_database.dart';
+import 'package:midrar/core/memory/domain/memory_contracts.dart';
+import 'package:midrar/core/memory/memory_providers.dart';
+import 'package:midrar/core/memory/memory_thread_repository.dart';
+import 'package:midrar/features/memory_capture/presentation/capture_flow.dart';
 
 void main() {
   late AppDatabase database;

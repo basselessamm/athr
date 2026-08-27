@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
@@ -7,7 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/data/latest_all.dart' as tz_data;
 import 'package:timezone/timezone.dart' as tz;
 
-import 'package:athr/features/settings/providers/settings_providers.dart';
+import 'package:midrar/features/settings/providers/settings_providers.dart';
 
 var _timeZonesInitialized = false;
 
@@ -35,6 +36,19 @@ enum PrayerName {
   const PrayerName(this.apiKey, this.arabicLabel);
 
   final String apiKey;
+  final String arabicLabel;
+}
+
+/// The Asr shadow factor is a matter of scholarly methodology (madhhab),
+/// not a universal constant. Both positions are exposed and the active one
+/// is always disclosed in the UI.
+enum AsrSchool {
+  shafii(0, 'الجمهور (شافعي وغيرهم)'),
+  hanafi(1, 'حنفي');
+
+  const AsrSchool(this.apiValue, this.arabicLabel);
+
+  final int apiValue;
   final String arabicLabel;
 }
 
@@ -95,11 +109,13 @@ class PrayerSchedule {
     required this.days,
     required this.location,
     required this.calculationMethod,
+    required this.asrSchool,
   });
 
   final List<PrayerDay> days;
   final PrayerLocation location;
   final int calculationMethod;
+  final AsrSchool asrSchool;
 
   PrayerDay? get today {
     final now = DateTime.now();
@@ -117,24 +133,31 @@ class PrayerSchedule {
 class PrayerSettings {
   const PrayerSettings({
     required this.calculationMethod,
+    required this.asrHanafi,
     required this.notificationsEnabled,
     required this.soundEnabled,
     required this.enabledPrayers,
   });
 
   final int calculationMethod;
+  final bool asrHanafi;
   final bool notificationsEnabled;
   final bool soundEnabled;
   final Set<PrayerName> enabledPrayers;
 
+  AsrSchool get asrSchool =>
+      asrHanafi ? AsrSchool.hanafi : AsrSchool.shafii;
+
   PrayerSettings copyWith({
     int? calculationMethod,
+    bool? asrHanafi,
     bool? notificationsEnabled,
     bool? soundEnabled,
     Set<PrayerName>? enabledPrayers,
   }) {
     return PrayerSettings(
       calculationMethod: calculationMethod ?? this.calculationMethod,
+      asrHanafi: asrHanafi ?? this.asrHanafi,
       notificationsEnabled: notificationsEnabled ?? this.notificationsEnabled,
       soundEnabled: soundEnabled ?? this.soundEnabled,
       enabledPrayers: enabledPrayers ?? this.enabledPrayers,
@@ -146,6 +169,7 @@ class PrayerSettingsNotifier extends StateNotifier<PrayerSettings> {
   PrayerSettingsNotifier(this._prefs) : super(_load(_prefs));
 
   static const _methodKey = 'prayer_calculation_method';
+  static const _asrHanafiKey = 'prayer_asr_hanafi';
   static const _notificationsKey = 'prayer_notifications_enabled';
   static const _soundKey = 'prayer_notifications_sound_enabled';
   static const _prayersKey = 'prayer_notifications_selected';
@@ -166,6 +190,7 @@ class PrayerSettingsNotifier extends StateNotifier<PrayerSettings> {
               .toSet();
     return PrayerSettings(
       calculationMethod: prefs.getInt(_methodKey) ?? 5,
+      asrHanafi: prefs.getBool(_asrHanafiKey) ?? false,
       notificationsEnabled: prefs.getBool(_notificationsKey) ?? false,
       soundEnabled: prefs.getBool(_soundKey) ?? true,
       enabledPrayers: names,
@@ -175,6 +200,11 @@ class PrayerSettingsNotifier extends StateNotifier<PrayerSettings> {
   Future<void> setMethod(int method) async {
     state = state.copyWith(calculationMethod: method);
     await _prefs.setInt(_methodKey, method);
+  }
+
+  Future<void> setAsrHanafi(bool hanafi) async {
+    state = state.copyWith(asrHanafi: hanafi);
+    await _prefs.setBool(_asrHanafiKey, hanafi);
   }
 
   Future<void> setNotifications(bool enabled) async {
@@ -269,14 +299,17 @@ class PrayerTimesRepository {
     required PrayerLocation location,
     required DateTime anchor,
     required int calculationMethod,
+    AsrSchool asrSchool = AsrSchool.shafii,
   }) async {
     // This is intentionally initialized only when a real timetable is
     // requested, rather than during Home startup or notification bootstrap.
     _ensureTimeZonesInitialized();
     final days = <PrayerDay>[];
-    for (var offset = 0; offset < 2; offset++) {
+    // Three months guarantee full coverage of the 60-day scheduling window
+    // regardless of where within a month the anchor falls.
+    for (var offset = 0; offset < 3; offset++) {
       final month = DateTime(anchor.year, anchor.month + offset);
-      final key = _cacheKey(location, month, calculationMethod);
+      final key = cacheKeyFor(location, month, calculationMethod, asrSchool);
       final cached = _prefs.getString(key);
       Map<String, dynamic>? payload;
       if (cached != null) {
@@ -289,19 +322,27 @@ class PrayerTimesRepository {
             'latitude': location.latitude.toStringAsFixed(6),
             'longitude': location.longitude.toStringAsFixed(6),
             'method': '$calculationMethod',
-            'school': '0',
+            'school': '${asrSchool.apiValue}',
           },
         );
-        final response = await _client
-            .get(uri)
-            .timeout(const Duration(seconds: 15));
-        if (response.statusCode != 200) {
-          throw StateError('تعذر جلب مواعيد الصلاة من المصدر الآن.');
+        try {
+          final response = await _client
+              .get(uri)
+              .timeout(const Duration(seconds: 15));
+          if (response.statusCode != 200) {
+            throw StateError('تعذر جلب مواعيد الصلاة من المصدر الآن.');
+          }
+          payload = jsonDecode(response.body) as Map<String, dynamic>;
+          await _prefs.setString(key, jsonEncode(payload));
+        } on StateError {
+          rethrow;
+        } catch (_) {
+          throw StateError(
+            'لا يتوفر اتصال بالإنترنت لتحديث المواقيت. أوقات محفوظة سابقًا تُعرض عند توفرها.',
+          );
         }
-        payload = jsonDecode(response.body) as Map<String, dynamic>;
-        await _prefs.setString(key, jsonEncode(payload));
       }
-      final rows = payload['data'] as List<dynamic>;
+      final rows = payload['data'] as List<dynamic>? ?? const [];
       for (final row in rows.cast<Map<String, dynamic>>()) {
         final day = _parseDay(row);
         if (!day.gregorianDate.isBefore(
@@ -312,10 +353,13 @@ class PrayerTimesRepository {
                 anchor.year,
                 anchor.month,
                 anchor.day,
-              ).add(const Duration(days: 31)),
+              ).add(const Duration(days: 60)),
             )) {
           days.add(day);
         }
+      }
+      if (payload['data'] == null && cached == null) {
+        throw StateError('استجابة غير صالحة من مصدر المواقيت.');
       }
     }
     days.sort((a, b) => a.gregorianDate.compareTo(b.gregorianDate));
@@ -323,12 +367,21 @@ class PrayerTimesRepository {
       days: days,
       location: location,
       calculationMethod: calculationMethod,
+      asrSchool: asrSchool,
     );
   }
 
-  String _cacheKey(PrayerLocation location, DateTime month, int method) {
-    return 'prayer-calendar-${month.year}-${month.month}-${location.latitude.toStringAsFixed(2)}-${location.longitude.toStringAsFixed(2)}-$method';
+  String cacheKeyFor(
+    PrayerLocation location,
+    DateTime month,
+    int method,
+    AsrSchool asrSchool,
+  ) {
+    return 'prayer-calendar-${month.year}-${month.month}-${location.latitude.toStringAsFixed(2)}-${location.longitude.toStringAsFixed(2)}-$method-${asrSchool.apiValue}';
   }
+
+  @visibleForTesting
+  PrayerDay parseDayForTest(Map<String, dynamic> row) => _parseDay(row);
 
   PrayerDay _parseDay(Map<String, dynamic> row) {
     final meta = row['meta'] as Map<String, dynamic>;
@@ -416,5 +469,12 @@ final prayerScheduleProvider = FutureProvider<PrayerSchedule>((ref) async {
         location: location,
         anchor: DateTime.now(),
         calculationMethod: settings.calculationMethod,
+        asrSchool: settings.asrSchool,
       );
 });
+
+/// Hijri dates shown in the app come from the timetable source (astronomical
+/// Umm al-Qura based calculation). Local religious authorities may announce
+/// dates by actual moon sighting; a user-facing offset exists for display
+/// adjustment without implying any religious authority.
+const String kHijriMethodDisclosure = 'حسب الحساب الفلكي (أم القرى) وقد يختلف عن الرؤية الشرعية المحلية';

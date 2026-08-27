@@ -1,94 +1,160 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'dart:async';
+import 'dart:ui';
 
+import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:athr/core/services/notification_service.dart';
-import 'package:athr/core/router/app_router.dart';
-import 'package:athr/core/theme/app_theme.dart';
-import 'package:athr/features/settings/providers/settings_providers.dart';
-import 'package:athr/core/memory/memory_providers.dart';
-import 'package:athr/core/memory/domain/memory_contracts.dart';
-import 'package:athr/features/memory_return/application/memory_return_service.dart';
+import 'package:midrar/core/services/notification_service.dart';
+import 'package:midrar/core/router/app_router.dart';
+import 'package:midrar/core/theme/app_theme.dart';
+import 'package:midrar/features/settings/providers/settings_providers.dart';
+import 'package:midrar/features/prayer/application/prayer_times.dart';
+import 'package:midrar/features/prayer/application/prayer_alarm_maintenance.dart';
+import 'package:midrar/core/memory/memory_providers.dart';
+import 'package:midrar/core/memory/domain/memory_contracts.dart';
+import 'package:midrar/features/memory_return/application/memory_return_service.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+void main() {
+  runZonedGuarded(() async {
+    WidgetsFlutterBinding.ensureInitialized();
 
-  final prefs = await SharedPreferences.getInstance();
+    FlutterError.onError = (details) {
+      FlutterError.presentError(details);
+      debugPrint('Midrar flutter error: ${details.exception}');
+    };
+    PlatformDispatcher.instance.onError = (error, stackTrace) {
+      debugPrint('Midrar uncaught platform error: $error\n$stackTrace');
+      return true;
+    };
 
-  final container = ProviderContainer(
-    overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
-  );
+    final prefs = await SharedPreferences.getInstance();
 
-  runApp(
-    UncontrolledProviderScope(container: container, child: const AthrApp()),
-  );
+    // All fonts (Amiri scripture + Cairo UI) ship inside the binary; the
+    // app never fetches typography over the network.
+    GoogleFonts.config.allowRuntimeFetching = false;
 
-  // The idempotent legacy migration is scheduled after Flutter has presented
-  // its first frame. Quran and notification platform initialization are both
-  // deferred to the exact user-facing feature that needs them.
-  WidgetsBinding.instance.addPostFrameCallback((_) {
-    unawaited(_bootstrapAfterFirstFrame(container));
+    final container = ProviderContainer(
+      overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
+    );
+
+    // Notification initialization MUST happen before runApp so that a
+    // cold start launched by tapping a notification delivers its payload
+    // deterministically (launch details are only available right after the
+    // plugin is created, and pending taps must not be lost).
+    try {
+      await container.read(notificationServiceProvider).init();
+    } catch (error, stackTrace) {
+      debugPrint('Midrar notification init deferred: $error\n$stackTrace');
+    }
+
+    runApp(
+      UncontrolledProviderScope(container: container, child: const MidrarApp()),
+    );
+
+    // Deferred bootstrap: legacy migration and prayer-alarm maintenance run
+    // after the first interactive frame so startup stays instant.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      unawaited(_bootstrapAfterFirstFrame(container));
+    });
+  }, (error, stackTrace) {
+    debugPrint('Midrar uncaught zone error: $error\n$stackTrace');
   });
 }
 
 Future<void> _bootstrapAfterFirstFrame(ProviderContainer container) async {
   try {
     // The legacy migration opens Drift/SQLite. Keep the first interactive Home
-    // frame independent of that work; the idempotent migration still runs in
-    // this session before any scheduled/return background work depends on it.
-    await Future<void>.delayed(const Duration(seconds: 10));
+    // frame independent of that work.
     await Future.wait([
       container.read(memoryFoundationMigrationProvider.future),
     ]);
   } catch (error, stackTrace) {
-    // Preserve a usable Home even if an optional platform bootstrap is
-    // temporarily unavailable. The app's own feature paths report actionable
-    // errors where relevant, and no migration completion flag is set on error.
-    debugPrint('Athr bootstrap deferred: $error\n$stackTrace');
+    debugPrint('Midrar migration deferred: $error\n$stackTrace');
   }
+
+  // Keep Athan reliable: extend/repair scheduled prayer notifications from
+  // the cached timetable whenever the app starts. Never blocks or crashes
+  // startup; failures are logged and retried on next resume.
+  await container.read(prayerAlarmMaintenanceProvider.future);
 }
 
-class AthrApp extends ConsumerWidget {
-  const AthrApp({super.key});
+class MidrarApp extends ConsumerStatefulWidget {
+  const MidrarApp({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final router = ref.watch(appRouterProvider);
-    final themeMode = ref.watch(themeModeProvider);
-    ref.read(notificationServiceProvider).setDeepLinkHandler((deepLink) {
-      () async {
-        final threadRoute = NotificationService.parseThreadSourceDeepLink(
-          deepLink,
-        );
-        var destination = deepLink;
+  ConsumerState<MidrarApp> createState() => _MidrarAppState();
+}
 
-        if (threadRoute != null) {
-          final thread = await ref
-              .read(memoryThreadRepositoryProvider)
-              .findThread(threadRoute.threadId);
-          if (thread != null) {
-            await ref
-                .read(memoryReturnServiceProvider)
-                .recordReturn(thread, kind: ReturnEventKind.resumed);
-          }
-          destination = threadRoute.sourceRoute;
+class _MidrarAppState extends ConsumerState<MidrarApp>
+    with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    ref.read(notificationServiceProvider).setDeepLinkHandler(_handleDeepLink);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      // Refresh stale timetables (midnight rollover, timezone changes while
+      // backgrounded) and re-assert scheduled alarms so they never silently
+      // expire.
+      ref.invalidate(prayerScheduleProvider);
+      unawaited(
+        ref.read(prayerAlarmMaintenanceProvider.future).catchError((e) {
+          debugPrint('Midrar alarm refresh failed: $e');
+        }),
+      );
+    }
+  }
+
+  void _handleDeepLink(String deepLink) {
+    final router = ref.read(appRouterProvider);
+    () async {
+      final threadRoute = NotificationService.parseThreadSourceDeepLink(
+        deepLink,
+      );
+      var destination = deepLink;
+
+      if (threadRoute != null) {
+        final thread = await ref
+            .read(memoryThreadRepositoryProvider)
+            .findThread(threadRoute.threadId);
+        if (thread != null) {
+          await ref
+              .read(memoryReturnServiceProvider)
+              .recordReturn(thread, kind: ReturnEventKind.resumed);
         }
+        destination = threadRoute.sourceRoute;
+      }
 
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (context.mounted) router.go(destination);
-        });
-      }();
-    });
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted && context.mounted) router.go(destination);
+      });
+    }();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final themeMode = ref.watch(themeModeProvider);
 
     return MaterialApp.router(
-      title: 'Athr',
+      title: 'Midrar',
       themeMode: themeMode,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       debugShowCheckedModeBanner: false,
-      routerConfig: router,
+      routerConfig: ref.watch(appRouterProvider),
       // Enforce Arabic RTL globally
       locale: const Locale('ar', 'SA'),
       supportedLocales: const [Locale('ar', 'SA')],

@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:athr/core/database/app_database.dart';
-import 'package:athr/core/database/database_providers.dart';
-import 'package:athr/core/widgets/athr_scaffold.dart';
-import 'package:athr/core/widgets/main_navigation_bar.dart';
-import 'package:athr/features/favorites/providers/favorites_providers.dart';
+import 'package:midrar/core/database/app_database.dart';
+import 'package:midrar/core/database/database_providers.dart';
+import 'package:midrar/core/widgets/midrar_scaffold.dart';
+import 'package:midrar/core/widgets/main_navigation_bar.dart';
+import 'package:midrar/features/favorites/providers/favorites_providers.dart';
 
 class FavoritesScreen extends ConsumerWidget {
   const FavoritesScreen({super.key});
@@ -15,7 +15,7 @@ class FavoritesScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final favoritesAsync = ref.watch(favoritesProvider);
 
-    return AthrScaffold(
+    return MidrarScaffold(
       title: 'المفضلة',
       body: favoritesAsync.when(
         data: (favorites) {

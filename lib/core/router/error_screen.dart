@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:athr/core/widgets/athr_scaffold.dart';
+import 'package:midrar/core/widgets/midrar_scaffold.dart';
 
 class ErrorScreen extends StatelessWidget {
   final GoException? error;
@@ -9,7 +9,7 @@ class ErrorScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AthrScaffold(
+    return MidrarScaffold(
       title: 'خطأ في التوجيه',
       body: Center(
         child: Padding(

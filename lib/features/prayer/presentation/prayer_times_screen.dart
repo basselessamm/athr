@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:athr/core/widgets/athr_scaffold.dart';
-import 'package:athr/features/prayer/application/prayer_times.dart';
-import 'package:athr/features/prayer/presentation/prayer_times_card.dart';
+import 'package:midrar/core/widgets/midrar_scaffold.dart';
+import 'package:midrar/features/prayer/application/prayer_times.dart';
+import 'package:midrar/features/prayer/presentation/prayer_times_card.dart';
 
 class PrayerTimesScreen extends ConsumerWidget {
   const PrayerTimesScreen({super.key, this.highlightedPrayer});
@@ -15,7 +15,7 @@ class PrayerTimesScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final scheme = theme.colorScheme;
-    return AthrScaffold(
+    return MidrarScaffold(
       title: 'مواقيت الصلاة',
       actions: [
         IconButton(

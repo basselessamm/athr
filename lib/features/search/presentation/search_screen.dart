@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:go_router/go_router.dart';
-import 'package:quran_flutter/quran.dart';
+import 'package:midrar/vendor/quran_core/quran.dart';
 
-import 'package:athr/core/widgets/athr_scaffold.dart';
-import 'package:athr/features/search/providers/search_providers.dart';
-import 'package:athr/features/settings/providers/settings_providers.dart';
+import 'package:midrar/core/widgets/midrar_scaffold.dart';
+import 'package:midrar/features/search/providers/search_providers.dart';
+import 'package:midrar/features/settings/providers/settings_providers.dart';
 
 class SearchScreen extends ConsumerStatefulWidget {
   const SearchScreen({super.key});
@@ -39,7 +39,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen>
     final theme = Theme.of(context);
     final fontSize = ref.watch(fontSizeProvider);
 
-    return AthrScaffold(
+    return MidrarScaffold(
       title: 'البحث الشامل',
       body: Column(
         children: [
@@ -211,21 +211,34 @@ class _SearchScreenState extends ConsumerState<SearchScreen>
       padding: const EdgeInsets.all(16),
       itemCount: results.length,
       itemBuilder: (context, index) {
-        final dua = results[index];
+        final zikr = results[index];
         return Card(
           margin: const EdgeInsets.only(bottom: 12),
-          child: ListTile(
-            contentPadding: const EdgeInsets.all(16),
-            title: Text(
-              dua.duaText,
-              style: GoogleFonts.amiri(fontSize: fontSize, height: 1.8),
-              textDirection: TextDirection.rtl,
-            ),
-            subtitle: Padding(
-              padding: const EdgeInsets.only(top: 12.0),
-              child: Text(
-                dua.category ?? 'ذكر',
-                style: TextStyle(color: Theme.of(context).colorScheme.primary),
+          child: InkWell(
+            borderRadius: BorderRadius.circular(12),
+            onTap: () => context.push('/azkar/${Uri.encodeComponent(zikr.category)}?item=${zikr.id}'),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    zikr.zikrText,
+                    style: GoogleFonts.amiri(fontSize: fontSize, height: 1.8),
+                    textDirection: TextDirection.rtl,
+                    maxLines: 6,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 12.0),
+                    child: Text(
+                      zikr.category,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),

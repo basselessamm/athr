@@ -1,10 +1,10 @@
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:athr/core/database/app_database.dart';
-import 'package:athr/core/memory/domain/memory_contracts.dart';
-import 'package:athr/core/memory/domain/reminder_intent.dart';
-import 'package:athr/core/memory/memory_thread_repository.dart';
+import 'package:midrar/core/database/app_database.dart';
+import 'package:midrar/core/memory/domain/memory_contracts.dart';
+import 'package:midrar/core/memory/domain/reminder_intent.dart';
+import 'package:midrar/core/memory/memory_thread_repository.dart';
 
 void main() {
   late AppDatabase database;

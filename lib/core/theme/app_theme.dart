@@ -4,17 +4,37 @@ import 'package:google_fonts/google_fonts.dart';
 import 'app_colors.dart';
 
 class AppTheme {
-  static const _radius = 20.0;
+  static const _radius = AppColors.radiusLg;
+
+  /// Scripture typography (bundled Amiri via google_fonts assets).
+  static TextStyle amiri({
+    double? fontSize,
+    double? height,
+    FontWeight? fontWeight,
+    Color? color,
+  }) {
+    return GoogleFonts.amiri(
+      fontSize: fontSize,
+      height: height,
+      fontWeight: fontWeight,
+      color: color,
+    );
+  }
 
   static ThemeData get lightTheme {
     const scheme = ColorScheme.light(
       primary: AppColors.lightAccent,
       onPrimary: Colors.white,
       primaryContainer: AppColors.lightAccentLight,
+      onPrimaryContainer: Color(0xFF163A30),
+      secondary: AppColors.lightGold,
+      onSecondary: Colors.white,
+      secondaryContainer: Color(0xFFF3EAD5),
+      onSecondaryContainer: Color(0xFF4C3D14),
       surface: AppColors.lightSurface,
       onSurface: AppColors.lightOnSurface,
-      outline: Color(0xFFB9AA94),
-      outlineVariant: Color(0xFFE3D9CB),
+      onSurfaceVariant: AppColors.lightOnSurfaceVariant,
+      error: AppColors.lightError,
     );
 
     return ThemeData(
@@ -45,7 +65,31 @@ class AppTheme {
         margin: EdgeInsets.zero,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(_radius),
-          side: const BorderSide(color: Color(0xFFE7DED1)),
+          side: const BorderSide(color: Color(0xFFE7E0D2)),
+        ),
+      ),
+      chipTheme: ChipThemeData(
+        backgroundColor: AppColors.lightSurface,
+        side: const BorderSide(color: Color(0xFFDCD4C4)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppColors.radiusSm),
+        ),
+        labelStyle: GoogleFonts.cairo(fontWeight: FontWeight.w600),
+        selectedColor: AppColors.lightAccentLight,
+      ),
+      snackBarTheme: SnackBarThemeData(
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: const Color(0xFF232B27),
+        contentTextStyle: GoogleFonts.cairo(color: Colors.white),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppColors.radiusSm),
+        ),
+      ),
+      dialogTheme: DialogThemeData(
+        backgroundColor: AppColors.lightSurface,
+        surfaceTintColor: Colors.transparent,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppColors.radiusLg),
         ),
       ),
       navigationBarTheme: NavigationBarThemeData(
@@ -66,7 +110,7 @@ class AppTheme {
         backgroundColor: AppColors.lightSurface,
         surfaceTintColor: Colors.transparent,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(AppColors.radiusXl)),
         ),
         dragHandleColor: Color(0xFFB9AA94),
       ),
@@ -75,7 +119,7 @@ class AppTheme {
           minimumSize: const Size.fromHeight(52),
           padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 14),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(AppColors.radiusMd),
           ),
           textStyle: GoogleFonts.cairo(fontWeight: FontWeight.w700),
         ),
@@ -85,7 +129,7 @@ class AppTheme {
           minimumSize: const Size.fromHeight(48),
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(AppColors.radiusMd),
           ),
           side: const BorderSide(color: Color(0xFFB9AA94)),
           textStyle: GoogleFonts.cairo(fontWeight: FontWeight.w700),
@@ -99,15 +143,15 @@ class AppTheme {
           vertical: 16,
         ),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(AppColors.radiusMd),
           borderSide: const BorderSide(color: Color(0xFFE0D6C7)),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(AppColors.radiusMd),
           borderSide: const BorderSide(color: Color(0xFFE0D6C7)),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(AppColors.radiusMd),
           borderSide: const BorderSide(
             color: AppColors.lightAccent,
             width: 1.5,
@@ -125,12 +169,17 @@ class AppTheme {
   static ThemeData get darkTheme {
     const scheme = ColorScheme.dark(
       primary: AppColors.darkAccent,
-      onPrimary: Color(0xFF14211C),
+      onPrimary: Color(0xFF10201A),
       primaryContainer: AppColors.darkAccentLight,
+      onPrimaryContainer: Color(0xFFD7EBE1),
+      secondary: AppColors.darkGold,
+      onSecondary: Color(0xFF241B06),
+      secondaryContainer: Color(0xFF33290F),
+      onSecondaryContainer: Color(0xFFEFDFB6),
       surface: AppColors.darkSurface,
       onSurface: AppColors.darkOnSurface,
-      outline: Color(0xFF8F9C91),
-      outlineVariant: Color(0xFF3D4A42),
+      onSurfaceVariant: AppColors.darkOnSurfaceVariant,
+      error: AppColors.darkError,
     );
 
     return ThemeData(
@@ -161,7 +210,31 @@ class AppTheme {
         margin: EdgeInsets.zero,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(_radius),
-          side: const BorderSide(color: Color(0xFF37443C)),
+          side: const BorderSide(color: Color(0xFF26332C)),
+        ),
+      ),
+      chipTheme: ChipThemeData(
+        backgroundColor: AppColors.darkSurface,
+        side: const BorderSide(color: Color(0xFF33413A)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppColors.radiusSm),
+        ),
+        labelStyle: GoogleFonts.cairo(fontWeight: FontWeight.w600),
+        selectedColor: AppColors.darkAccentLight,
+      ),
+      snackBarTheme: SnackBarThemeData(
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: const Color(0xFFDCE6E0),
+        contentTextStyle: GoogleFonts.cairo(color: const Color(0xFF101714)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppColors.radiusSm),
+        ),
+      ),
+      dialogTheme: DialogThemeData(
+        backgroundColor: AppColors.darkSurface,
+        surfaceTintColor: Colors.transparent,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppColors.radiusLg),
         ),
       ),
       navigationBarTheme: NavigationBarThemeData(
@@ -182,15 +255,16 @@ class AppTheme {
         backgroundColor: AppColors.darkSurface,
         surfaceTintColor: Colors.transparent,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(AppColors.radiusXl)),
         ),
+        dragHandleColor: Color(0xFF46554A),
       ),
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
           minimumSize: const Size.fromHeight(52),
           padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 14),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(AppColors.radiusMd),
           ),
           textStyle: GoogleFonts.cairo(fontWeight: FontWeight.w700),
         ),
@@ -200,30 +274,36 @@ class AppTheme {
           minimumSize: const Size.fromHeight(48),
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(AppColors.radiusMd),
           ),
+          side: const BorderSide(color: Color(0xFF46554A)),
           textStyle: GoogleFonts.cairo(fontWeight: FontWeight.w700),
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: const Color(0xFF253129),
+        fillColor: const Color(0xFF202B25),
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 16,
           vertical: 16,
         ),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color: Color(0xFF46554A)),
+          borderRadius: BorderRadius.circular(AppColors.radiusMd),
+          borderSide: const BorderSide(color: Color(0xFF33413A)),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color: Color(0xFF46554A)),
+          borderRadius: BorderRadius.circular(AppColors.radiusMd),
+          borderSide: const BorderSide(color: Color(0xFF33413A)),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color: AppColors.darkAccent, width: 1.5),
+          borderRadius: BorderRadius.circular(AppColors.radiusMd),
+          borderSide: BorderSide(color: AppColors.darkAccent, width: 1.5),
         ),
+      ),
+      dividerTheme: DividerThemeData(
+        color: const Color(0xFF26332C),
+        space: 1,
+        thickness: 1,
       ),
     );
   }

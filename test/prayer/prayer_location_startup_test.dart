@@ -3,8 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:athr/features/prayer/application/prayer_times.dart';
-import 'package:athr/features/settings/providers/settings_providers.dart';
+import 'package:midrar/features/prayer/application/prayer_times.dart';
+import 'package:midrar/features/settings/providers/settings_providers.dart';
 
 void main() {
   ProviderContainer containerFor(SharedPreferences preferences) {

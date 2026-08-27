@@ -7,7 +7,7 @@
 		<key>CFBundleDevelopmentRegion</key>
 		<string>$(DEVELOPMENT_LANGUAGE)</string>
 		<key>CFBundleDisplayName</key>
-		<string>أَثَر</string>
+		<string>مدرار</string>
 		<key>CFBundleExecutable</key>
 		<string>$(EXECUTABLE_NAME)</string>
 		<key>CFBundleIdentifier</key>
@@ -15,7 +15,7 @@
 		<key>CFBundleInfoDictionaryVersion</key>
 		<string>6.0</string>
 		<key>CFBundleName</key>
-		<string>athr</string>
+		<string>midrar</string>
 		<key>CFBundlePackageType</key>
 		<string>APPL</string>
 		<key>CFBundleShortVersionString</key>
@@ -26,6 +26,12 @@
 		<string>$(FLUTTER_BUILD_NUMBER)</string>
 		<key>LSRequiresIPhoneOS</key>
 		<true/>
+		<key>NSLocationWhenInUseUsageDescription</key>
+		<string>يستخدم مدرار موقعك لحساب مواعيد الصلاة واتجاه القبلة بدقة في مكانك الحالي. لا يُرسل الموقع إلى أي جهة خارج التطبيق.</string>
+		<key>UIBackgroundModes</key>
+		<array>
+			<string>audio</string>
+		</array>
 		<key>UIApplicationSceneManifest</key>
 		<dict>
 			<key>UIApplicationSupportsMultipleScenes</key>

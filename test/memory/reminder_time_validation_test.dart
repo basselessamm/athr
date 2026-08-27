@@ -1,4 +1,4 @@
-import 'package:athr/features/memory_return/presentation/thread_detail_screen.dart';
+import 'package:midrar/features/memory_return/presentation/thread_detail_screen.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

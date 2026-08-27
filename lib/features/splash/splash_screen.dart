@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+
+import 'package:midrar/core/theme/app_colors.dart';
 import 'package:go_router/go_router.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -49,9 +51,7 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(
-        0xFFFDF7EF,
-      ), // Match the logo's vintage paper background
+      backgroundColor: AppColors.lightBackground,
       body: Stack(
         children: [
           Center(
@@ -63,29 +63,29 @@ class _SplashScreenState extends State<SplashScreen>
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Image.asset(
-                      'assets/images/logo.png',
-                      width: 250,
-                      height: 250,
+                      'assets/brand/logo_primary_1024.png',
+                      width: 220,
+                      height: 220,
                     ),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 28),
                     const Text(
-                      'أَثَر',
+                      'مِدرار',
                       style: TextStyle(
-                        fontSize: 48,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF333333), // Charcoal
+                        fontSize: 44,
+                        fontWeight: FontWeight.w800,
+                        color: AppColors.lightAccent,
                       ),
                     ),
                     const SizedBox(height: 8),
                     const Text(
-                      'مواضع تعود إليها كما تحب',
+                      'تدفّقٌ يوميّ هادئ',
                       style: TextStyle(
-                        fontSize: 18,
-                        color: Color(0xFF5A7B72), // Sage green
+                        fontSize: 17,
+                        color: AppColors.lightOnSurfaceVariant,
                       ),
                     ),
                     const SizedBox(height: 48),
-                    const CircularProgressIndicator(color: Color(0xFF5A7B72)),
+                    const CircularProgressIndicator(color: AppColors.lightAccent),
                   ],
                 ),
               ),
@@ -105,7 +105,7 @@ class _SplashScreenState extends State<SplashScreen>
                     style: TextStyle(
                       fontSize: 10,
                       letterSpacing: 3.0,
-                      color: Color(0xFF999999),
+                      color: AppColors.lightOnSurfaceVariant,
                       fontWeight: FontWeight.w400,
                     ),
                   ),
@@ -115,7 +115,7 @@ class _SplashScreenState extends State<SplashScreen>
                     style: TextStyle(
                       fontSize: 14,
                       letterSpacing: 4.0,
-                      color: Color(0xFF5A7B72),
+                      color: AppColors.lightAccent,
                       fontWeight: FontWeight.w600,
                     ),
                   ),

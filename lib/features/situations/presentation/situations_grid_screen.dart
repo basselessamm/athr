@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:athr/core/widgets/athr_scaffold.dart';
-import 'package:athr/features/situations/providers/situations_providers.dart';
+import 'package:midrar/core/widgets/midrar_scaffold.dart';
+import 'package:midrar/features/situations/providers/situations_providers.dart';
 
 class SituationsGridScreen extends ConsumerWidget {
   const SituationsGridScreen({super.key});
@@ -11,7 +11,7 @@ class SituationsGridScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final situations = ref.watch(situationsProvider);
 
-    return AthrScaffold(
+    return MidrarScaffold(
       title: 'مواقف الحياة',
       body: GridView.builder(
         padding: const EdgeInsets.all(16.0),

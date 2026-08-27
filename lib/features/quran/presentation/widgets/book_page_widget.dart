@@ -1,7 +1,9 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+
+import 'package:midrar/core/theme/app_colors.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:quran_flutter/quran.dart';
+import 'package:midrar/vendor/quran_core/quran.dart';
 
 class BookPageWidget extends StatelessWidget {
   final int pageNumber;
@@ -35,7 +37,7 @@ class BookPageWidget extends StatelessWidget {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Container(
-        color: const Color(0xFFF0EBE1), // Outer background
+        color: AppColors.mushafPaperEdge, // Outer background
         child: Padding(
           padding: EdgeInsets.only(
             left: isRightPage ? leftThickness : 16.0 + leftThickness,
@@ -45,7 +47,7 @@ class BookPageWidget extends StatelessWidget {
           ),
           child: Container(
             decoration: BoxDecoration(
-              color: const Color(0xFFF9F6EE), // Antique cream paper color
+              color: AppColors.mushafPaperAlt, // Antique cream paper color
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withValues(alpha: 0.15),
@@ -56,7 +58,7 @@ class BookPageWidget extends StatelessWidget {
                 ),
                 // Stack of pages illusion
                 BoxShadow(
-                  color: const Color(0xFFDCD5C6),
+                  color: AppColors.mushafBorderSoft,
                   offset: isRightPage
                       ? Offset(rightThickness, 0)
                       : Offset(-leftThickness, 0),
@@ -148,7 +150,7 @@ class BookPageWidget extends StatelessWidget {
                       width: 16,
                       height: 60,
                       decoration: BoxDecoration(
-                        color: const Color(0xFF7A3E3E), // Muted burgundy
+                        color: AppColors.mushafMarkerRed, // Muted burgundy
                         boxShadow: [
                           BoxShadow(
                             color: Colors.black.withValues(alpha: 0.2),
@@ -173,7 +175,7 @@ class BookPageWidget extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
       decoration: const BoxDecoration(
         border: Border(
-          bottom: BorderSide(color: Color(0xFFB89E73), width: 1.0),
+          bottom: BorderSide(color: AppColors.mushafGoldMuted, width: 1.0),
         ),
       ),
       child: Row(
@@ -182,7 +184,7 @@ class BookPageWidget extends StatelessWidget {
           Text(
             headerSubtitle, // Juz
             style: GoogleFonts.amiri(
-              color: const Color(0xFF7A6242),
+              color: AppColors.mushafInkFaint,
               fontSize: 14,
               fontWeight: FontWeight.w600,
             ),
@@ -190,7 +192,7 @@ class BookPageWidget extends StatelessWidget {
           Text(
             headerTitle, // Surah
             style: GoogleFonts.amiri(
-              color: const Color(0xFF7A6242),
+              color: AppColors.mushafInkFaint,
               fontSize: 14,
               fontWeight: FontWeight.bold,
             ),
@@ -213,13 +215,13 @@ class BookPageWidget extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 6),
       decoration: const BoxDecoration(
-        border: Border(top: BorderSide(color: Color(0xFFB89E73), width: 1.0)),
+        border: Border(top: BorderSide(color: AppColors.mushafGoldMuted, width: 1.0)),
       ),
       child: Center(
         child: Text(
           _toArabicNumerals(pageNumber),
           style: GoogleFonts.amiri(
-            color: const Color(0xFF7A6242),
+            color: AppColors.mushafInkFaint,
             fontSize: 14,
             fontWeight: FontWeight.bold,
           ),
@@ -312,7 +314,7 @@ class _AyahRichTextState extends State<_AyahRichText> {
                     text: '${Quran.bismillah}\n',
                     style: GoogleFonts.amiri(
                       fontSize: 26 * widget.textScale,
-                      color: const Color(0xFF1C130D),
+                      color: AppColors.mushafInk,
                       fontWeight: FontWeight.bold,
                       height: 2.2,
                     ),
@@ -322,10 +324,10 @@ class _AyahRichTextState extends State<_AyahRichText> {
                   recognizer: _recognizerFor(verse),
                   style: GoogleFonts.amiri(
                     fontSize: 24 * widget.textScale,
-                    color: const Color(0xFF1C130D),
+                    color: AppColors.mushafInk,
                     height: 2.2,
                     backgroundColor: verse.verseNumber == widget.highlightedAyah
-                        ? const Color(0x33C7A87D)
+                        ? AppColors.mushafGold.withValues(alpha: 0.20)
                         : null,
                   ),
                 ),
@@ -355,7 +357,7 @@ class _AyahRichTextState extends State<_AyahRichText> {
                               '\u06DD',
                               style: GoogleFonts.amiri(
                                 fontSize: 34 * widget.textScale,
-                                color: const Color(0xFFB89E73),
+                                color: AppColors.mushafGoldMuted,
                                 height: 1.0,
                               ),
                             ),
@@ -363,7 +365,7 @@ class _AyahRichTextState extends State<_AyahRichText> {
                               _toArabicNumerals(verse.verseNumber),
                               style: GoogleFonts.amiri(
                                 fontSize: 13 * widget.textScale,
-                                color: const Color(0xFF5A4328),
+                                color: AppColors.mushafInkStrong,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -398,7 +400,7 @@ class BookmarkPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
       ..color =
-          const Color(0xFFF9F6EE) // Match paper color to "cut out" the triangle
+          AppColors.mushafPaperAlt // Match paper color to "cut out" the triangle
       ..style = PaintingStyle.fill;
 
     final path = Path()

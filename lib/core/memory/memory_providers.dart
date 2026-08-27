@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:athr/core/database/database_providers.dart';
-import 'package:athr/features/settings/providers/settings_providers.dart';
+import 'package:midrar/core/database/database_providers.dart';
+import 'package:midrar/features/settings/providers/settings_providers.dart';
 import 'domain/memory_contracts.dart';
 import 'memory_thread_repository.dart';
 

@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:athr/core/services/notification_service.dart';
-import 'package:athr/features/prayer/application/prayer_times.dart';
+import 'package:midrar/core/services/notification_service.dart';
+import 'package:midrar/features/prayer/application/prayer_times.dart';
 
 void main() {
   test('delivers selected thread deep link to the registered handler', () {

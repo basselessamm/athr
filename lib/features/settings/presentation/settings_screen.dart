@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:quran_flutter/quran.dart';
+import 'package:midrar/vendor/quran_core/quran.dart';
 
-import 'package:athr/core/services/notification_service.dart';
-import 'package:athr/core/widgets/athr_scaffold.dart';
-import 'package:athr/features/prayer/application/prayer_times.dart';
-import 'package:athr/features/settings/providers/settings_providers.dart';
+import 'package:midrar/core/services/notification_service.dart';
+import 'package:midrar/core/widgets/midrar_scaffold.dart';
+import 'package:midrar/features/prayer/application/prayer_times.dart';
+import 'package:midrar/features/settings/providers/settings_providers.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
@@ -18,7 +18,7 @@ class SettingsScreen extends ConsumerWidget {
     final prayerSettings = ref.watch(prayerSettingsProvider);
     final prayerSchedule = ref.watch(prayerScheduleProvider);
 
-    return AthrScaffold(
+    return MidrarScaffold(
       title: 'الإعدادات',
       body: Directionality(
         textDirection: TextDirection.rtl,
@@ -59,10 +59,12 @@ class SettingsScreen extends ConsumerWidget {
             const SizedBox(height: 18),
             ListTile(
               title: const Text(
-                'حجم خط القرآن والأذكار',
+                'حجم خط القراءة',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
-              subtitle: const Text('يطبّق على تجربة القراءة دون تغيير النص.'),
+              subtitle: const Text(
+                'يطبّق على المصحف والأذكار والحديث، مع دعم تكبير خط النظام.',
+              ),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -163,7 +165,9 @@ class SettingsScreen extends ConsumerWidget {
                 'طريقة الحساب',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
-              subtitle: const Text('يمكن تعديلها وفق الجهة المعتمدة في بلدك.'),
+              subtitle: const Text(
+                'جهات حوسبة معتمدة؛ اختر ما تعتمده جهتك المحلية. لا تُقدَّم أيّ طريقة كالوحيدة الصحيحة.',
+              ),
               trailing: DropdownButton<int>(
                 value: prayerSettings.calculationMethod,
                 onChanged: (method) async {
@@ -172,6 +176,10 @@ class SettingsScreen extends ConsumerWidget {
                       .read(prayerSettingsProvider.notifier)
                       .setMethod(method);
                   ref.invalidate(prayerScheduleProvider);
+                  if (prayerSettings.notificationsEnabled) {
+                    if (!context.mounted) return;
+                    await _reschedulePrayers(context, ref);
+                  }
                 },
                 items: const [
                   DropdownMenuItem(
@@ -184,6 +192,47 @@ class SettingsScreen extends ConsumerWidget {
                   ),
                   DropdownMenuItem(value: 4, child: Text('أم القرى')),
                 ],
+              ),
+            ),
+            ListTile(
+              title: const Text(
+                'مذهب حساب العصر',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              subtitle: const Text(
+                'خلاف مشروع بين الفقهاء: الجمهور تظلل واحد، والحنفيان تظليلان. اختر ما يوافق مذهبك.',
+              ),
+              trailing: DropdownButton<AsrSchool>(
+                value: prayerSettings.asrSchool,
+                onChanged: (school) async {
+                  if (school == null) return;
+                  await ref
+                      .read(prayerSettingsProvider.notifier)
+                      .setAsrHanafi(school == AsrSchool.hanafi);
+                  ref.invalidate(prayerScheduleProvider);
+                  if (prayerSettings.notificationsEnabled) {
+                    if (!context.mounted) return;
+                    await _reschedulePrayers(context, ref);
+                  }
+                },
+                items: AsrSchool.values
+                    .map(
+                      (school) => DropdownMenuItem(
+                        value: school,
+                        child: Text(school.arabicLabel),
+                      ),
+                    )
+                    .toList(growable: false),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Text(
+                'التقويم الهجري المعروض فلكي حسابي وقد يختلف عن الرؤية الشرعية في بلدك بيوم أو أكثر.',
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: Theme.of(context).colorScheme.outline,
+                    ),
+                textAlign: TextAlign.right,
               ),
             ),
             SwitchListTile.adaptive(

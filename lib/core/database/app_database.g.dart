@@ -310,6 +310,14 @@ class $HadithTableTable extends HadithTable
   late final GeneratedColumn<String> hadithTextAr = GeneratedColumn<String>(
       'hadith_text_ar', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _hadithTextArNormMeta =
+      const VerificationMeta('hadithTextArNorm');
+  @override
+  late final GeneratedColumn<String> hadithTextArNorm = GeneratedColumn<String>(
+      'hadith_text_ar_norm', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(''));
   static const VerificationMeta _hadithTextEnMeta =
       const VerificationMeta('hadithTextEn');
   @override
@@ -333,6 +341,7 @@ class $HadithTableTable extends HadithTable
         chapterName,
         reference,
         hadithTextAr,
+        hadithTextArNorm,
         hadithTextEn,
         isBookmarked
       ];
@@ -373,6 +382,12 @@ class $HadithTableTable extends HadithTable
     } else if (isInserting) {
       context.missing(_hadithTextArMeta);
     }
+    if (data.containsKey('hadith_text_ar_norm')) {
+      context.handle(
+          _hadithTextArNormMeta,
+          hadithTextArNorm.isAcceptableOrUnknown(
+              data['hadith_text_ar_norm']!, _hadithTextArNormMeta));
+    }
     if (data.containsKey('hadith_text_en')) {
       context.handle(
           _hadithTextEnMeta,
@@ -404,6 +419,8 @@ class $HadithTableTable extends HadithTable
           .read(DriftSqlType.string, data['${effectivePrefix}reference']),
       hadithTextAr: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}hadith_text_ar'])!,
+      hadithTextArNorm: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}hadith_text_ar_norm'])!,
       hadithTextEn: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}hadith_text_en']),
       isBookmarked: attachedDatabase.typeMapping
@@ -423,6 +440,7 @@ class Hadith extends DataClass implements Insertable<Hadith> {
   final String? chapterName;
   final String? reference;
   final String hadithTextAr;
+  final String hadithTextArNorm;
   final String? hadithTextEn;
   final bool isBookmarked;
   const Hadith(
@@ -431,6 +449,7 @@ class Hadith extends DataClass implements Insertable<Hadith> {
       this.chapterName,
       this.reference,
       required this.hadithTextAr,
+      required this.hadithTextArNorm,
       this.hadithTextEn,
       required this.isBookmarked});
   @override
@@ -445,6 +464,7 @@ class Hadith extends DataClass implements Insertable<Hadith> {
       map['reference'] = Variable<String>(reference);
     }
     map['hadith_text_ar'] = Variable<String>(hadithTextAr);
+    map['hadith_text_ar_norm'] = Variable<String>(hadithTextArNorm);
     if (!nullToAbsent || hadithTextEn != null) {
       map['hadith_text_en'] = Variable<String>(hadithTextEn);
     }
@@ -463,6 +483,7 @@ class Hadith extends DataClass implements Insertable<Hadith> {
           ? const Value.absent()
           : Value(reference),
       hadithTextAr: Value(hadithTextAr),
+      hadithTextArNorm: Value(hadithTextArNorm),
       hadithTextEn: hadithTextEn == null && nullToAbsent
           ? const Value.absent()
           : Value(hadithTextEn),
@@ -479,6 +500,7 @@ class Hadith extends DataClass implements Insertable<Hadith> {
       chapterName: serializer.fromJson<String?>(json['chapterName']),
       reference: serializer.fromJson<String?>(json['reference']),
       hadithTextAr: serializer.fromJson<String>(json['hadithTextAr']),
+      hadithTextArNorm: serializer.fromJson<String>(json['hadithTextArNorm']),
       hadithTextEn: serializer.fromJson<String?>(json['hadithTextEn']),
       isBookmarked: serializer.fromJson<bool>(json['isBookmarked']),
     );
@@ -492,6 +514,7 @@ class Hadith extends DataClass implements Insertable<Hadith> {
       'chapterName': serializer.toJson<String?>(chapterName),
       'reference': serializer.toJson<String?>(reference),
       'hadithTextAr': serializer.toJson<String>(hadithTextAr),
+      'hadithTextArNorm': serializer.toJson<String>(hadithTextArNorm),
       'hadithTextEn': serializer.toJson<String?>(hadithTextEn),
       'isBookmarked': serializer.toJson<bool>(isBookmarked),
     };
@@ -503,6 +526,7 @@ class Hadith extends DataClass implements Insertable<Hadith> {
           Value<String?> chapterName = const Value.absent(),
           Value<String?> reference = const Value.absent(),
           String? hadithTextAr,
+          String? hadithTextArNorm,
           Value<String?> hadithTextEn = const Value.absent(),
           bool? isBookmarked}) =>
       Hadith(
@@ -511,6 +535,7 @@ class Hadith extends DataClass implements Insertable<Hadith> {
         chapterName: chapterName.present ? chapterName.value : this.chapterName,
         reference: reference.present ? reference.value : this.reference,
         hadithTextAr: hadithTextAr ?? this.hadithTextAr,
+        hadithTextArNorm: hadithTextArNorm ?? this.hadithTextArNorm,
         hadithTextEn:
             hadithTextEn.present ? hadithTextEn.value : this.hadithTextEn,
         isBookmarked: isBookmarked ?? this.isBookmarked,
@@ -525,6 +550,9 @@ class Hadith extends DataClass implements Insertable<Hadith> {
       hadithTextAr: data.hadithTextAr.present
           ? data.hadithTextAr.value
           : this.hadithTextAr,
+      hadithTextArNorm: data.hadithTextArNorm.present
+          ? data.hadithTextArNorm.value
+          : this.hadithTextArNorm,
       hadithTextEn: data.hadithTextEn.present
           ? data.hadithTextEn.value
           : this.hadithTextEn,
@@ -542,6 +570,7 @@ class Hadith extends DataClass implements Insertable<Hadith> {
           ..write('chapterName: $chapterName, ')
           ..write('reference: $reference, ')
           ..write('hadithTextAr: $hadithTextAr, ')
+          ..write('hadithTextArNorm: $hadithTextArNorm, ')
           ..write('hadithTextEn: $hadithTextEn, ')
           ..write('isBookmarked: $isBookmarked')
           ..write(')'))
@@ -550,7 +579,7 @@ class Hadith extends DataClass implements Insertable<Hadith> {
 
   @override
   int get hashCode => Object.hash(id, bookName, chapterName, reference,
-      hadithTextAr, hadithTextEn, isBookmarked);
+      hadithTextAr, hadithTextArNorm, hadithTextEn, isBookmarked);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -560,6 +589,7 @@ class Hadith extends DataClass implements Insertable<Hadith> {
           other.chapterName == this.chapterName &&
           other.reference == this.reference &&
           other.hadithTextAr == this.hadithTextAr &&
+          other.hadithTextArNorm == this.hadithTextArNorm &&
           other.hadithTextEn == this.hadithTextEn &&
           other.isBookmarked == this.isBookmarked);
 }
@@ -570,6 +600,7 @@ class HadithTableCompanion extends UpdateCompanion<Hadith> {
   final Value<String?> chapterName;
   final Value<String?> reference;
   final Value<String> hadithTextAr;
+  final Value<String> hadithTextArNorm;
   final Value<String?> hadithTextEn;
   final Value<bool> isBookmarked;
   const HadithTableCompanion({
@@ -578,6 +609,7 @@ class HadithTableCompanion extends UpdateCompanion<Hadith> {
     this.chapterName = const Value.absent(),
     this.reference = const Value.absent(),
     this.hadithTextAr = const Value.absent(),
+    this.hadithTextArNorm = const Value.absent(),
     this.hadithTextEn = const Value.absent(),
     this.isBookmarked = const Value.absent(),
   });
@@ -587,6 +619,7 @@ class HadithTableCompanion extends UpdateCompanion<Hadith> {
     this.chapterName = const Value.absent(),
     this.reference = const Value.absent(),
     required String hadithTextAr,
+    this.hadithTextArNorm = const Value.absent(),
     this.hadithTextEn = const Value.absent(),
     this.isBookmarked = const Value.absent(),
   })  : bookName = Value(bookName),
@@ -597,6 +630,7 @@ class HadithTableCompanion extends UpdateCompanion<Hadith> {
     Expression<String>? chapterName,
     Expression<String>? reference,
     Expression<String>? hadithTextAr,
+    Expression<String>? hadithTextArNorm,
     Expression<String>? hadithTextEn,
     Expression<bool>? isBookmarked,
   }) {
@@ -606,6 +640,7 @@ class HadithTableCompanion extends UpdateCompanion<Hadith> {
       if (chapterName != null) 'chapter_name': chapterName,
       if (reference != null) 'reference': reference,
       if (hadithTextAr != null) 'hadith_text_ar': hadithTextAr,
+      if (hadithTextArNorm != null) 'hadith_text_ar_norm': hadithTextArNorm,
       if (hadithTextEn != null) 'hadith_text_en': hadithTextEn,
       if (isBookmarked != null) 'is_bookmarked': isBookmarked,
     });
@@ -617,6 +652,7 @@ class HadithTableCompanion extends UpdateCompanion<Hadith> {
       Value<String?>? chapterName,
       Value<String?>? reference,
       Value<String>? hadithTextAr,
+      Value<String>? hadithTextArNorm,
       Value<String?>? hadithTextEn,
       Value<bool>? isBookmarked}) {
     return HadithTableCompanion(
@@ -625,6 +661,7 @@ class HadithTableCompanion extends UpdateCompanion<Hadith> {
       chapterName: chapterName ?? this.chapterName,
       reference: reference ?? this.reference,
       hadithTextAr: hadithTextAr ?? this.hadithTextAr,
+      hadithTextArNorm: hadithTextArNorm ?? this.hadithTextArNorm,
       hadithTextEn: hadithTextEn ?? this.hadithTextEn,
       isBookmarked: isBookmarked ?? this.isBookmarked,
     );
@@ -648,6 +685,9 @@ class HadithTableCompanion extends UpdateCompanion<Hadith> {
     if (hadithTextAr.present) {
       map['hadith_text_ar'] = Variable<String>(hadithTextAr.value);
     }
+    if (hadithTextArNorm.present) {
+      map['hadith_text_ar_norm'] = Variable<String>(hadithTextArNorm.value);
+    }
     if (hadithTextEn.present) {
       map['hadith_text_en'] = Variable<String>(hadithTextEn.value);
     }
@@ -665,6 +705,7 @@ class HadithTableCompanion extends UpdateCompanion<Hadith> {
           ..write('chapterName: $chapterName, ')
           ..write('reference: $reference, ')
           ..write('hadithTextAr: $hadithTextAr, ')
+          ..write('hadithTextArNorm: $hadithTextArNorm, ')
           ..write('hadithTextEn: $hadithTextEn, ')
           ..write('isBookmarked: $isBookmarked')
           ..write(')'))
@@ -698,6 +739,14 @@ class $DuaTableTable extends DuaTable with TableInfo<$DuaTableTable, Dua> {
   late final GeneratedColumn<String> duaText = GeneratedColumn<String>(
       'dua_text', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _duaTextNormMeta =
+      const VerificationMeta('duaTextNorm');
+  @override
+  late final GeneratedColumn<String> duaTextNorm = GeneratedColumn<String>(
+      'dua_text_norm', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(''));
   static const VerificationMeta _referenceMeta =
       const VerificationMeta('reference');
   @override
@@ -716,7 +765,7 @@ class $DuaTableTable extends DuaTable with TableInfo<$DuaTableTable, Dua> {
       defaultValue: const Constant(false));
   @override
   List<GeneratedColumn> get $columns =>
-      [id, category, duaText, reference, isBookmarked];
+      [id, category, duaText, duaTextNorm, reference, isBookmarked];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -741,6 +790,12 @@ class $DuaTableTable extends DuaTable with TableInfo<$DuaTableTable, Dua> {
           duaText.isAcceptableOrUnknown(data['dua_text']!, _duaTextMeta));
     } else if (isInserting) {
       context.missing(_duaTextMeta);
+    }
+    if (data.containsKey('dua_text_norm')) {
+      context.handle(
+          _duaTextNormMeta,
+          duaTextNorm.isAcceptableOrUnknown(
+              data['dua_text_norm']!, _duaTextNormMeta));
     }
     if (data.containsKey('reference')) {
       context.handle(_referenceMeta,
@@ -767,6 +822,8 @@ class $DuaTableTable extends DuaTable with TableInfo<$DuaTableTable, Dua> {
           .read(DriftSqlType.string, data['${effectivePrefix}category'])!,
       duaText: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}dua_text'])!,
+      duaTextNorm: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}dua_text_norm'])!,
       reference: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}reference']),
       isBookmarked: attachedDatabase.typeMapping
@@ -784,12 +841,14 @@ class Dua extends DataClass implements Insertable<Dua> {
   final int id;
   final String category;
   final String duaText;
+  final String duaTextNorm;
   final String? reference;
   final bool isBookmarked;
   const Dua(
       {required this.id,
       required this.category,
       required this.duaText,
+      required this.duaTextNorm,
       this.reference,
       required this.isBookmarked});
   @override
@@ -798,6 +857,7 @@ class Dua extends DataClass implements Insertable<Dua> {
     map['id'] = Variable<int>(id);
     map['category'] = Variable<String>(category);
     map['dua_text'] = Variable<String>(duaText);
+    map['dua_text_norm'] = Variable<String>(duaTextNorm);
     if (!nullToAbsent || reference != null) {
       map['reference'] = Variable<String>(reference);
     }
@@ -810,6 +870,7 @@ class Dua extends DataClass implements Insertable<Dua> {
       id: Value(id),
       category: Value(category),
       duaText: Value(duaText),
+      duaTextNorm: Value(duaTextNorm),
       reference: reference == null && nullToAbsent
           ? const Value.absent()
           : Value(reference),
@@ -824,6 +885,7 @@ class Dua extends DataClass implements Insertable<Dua> {
       id: serializer.fromJson<int>(json['id']),
       category: serializer.fromJson<String>(json['category']),
       duaText: serializer.fromJson<String>(json['duaText']),
+      duaTextNorm: serializer.fromJson<String>(json['duaTextNorm']),
       reference: serializer.fromJson<String?>(json['reference']),
       isBookmarked: serializer.fromJson<bool>(json['isBookmarked']),
     );
@@ -835,6 +897,7 @@ class Dua extends DataClass implements Insertable<Dua> {
       'id': serializer.toJson<int>(id),
       'category': serializer.toJson<String>(category),
       'duaText': serializer.toJson<String>(duaText),
+      'duaTextNorm': serializer.toJson<String>(duaTextNorm),
       'reference': serializer.toJson<String?>(reference),
       'isBookmarked': serializer.toJson<bool>(isBookmarked),
     };
@@ -844,12 +907,14 @@ class Dua extends DataClass implements Insertable<Dua> {
           {int? id,
           String? category,
           String? duaText,
+          String? duaTextNorm,
           Value<String?> reference = const Value.absent(),
           bool? isBookmarked}) =>
       Dua(
         id: id ?? this.id,
         category: category ?? this.category,
         duaText: duaText ?? this.duaText,
+        duaTextNorm: duaTextNorm ?? this.duaTextNorm,
         reference: reference.present ? reference.value : this.reference,
         isBookmarked: isBookmarked ?? this.isBookmarked,
       );
@@ -858,6 +923,8 @@ class Dua extends DataClass implements Insertable<Dua> {
       id: data.id.present ? data.id.value : this.id,
       category: data.category.present ? data.category.value : this.category,
       duaText: data.duaText.present ? data.duaText.value : this.duaText,
+      duaTextNorm:
+          data.duaTextNorm.present ? data.duaTextNorm.value : this.duaTextNorm,
       reference: data.reference.present ? data.reference.value : this.reference,
       isBookmarked: data.isBookmarked.present
           ? data.isBookmarked.value
@@ -871,6 +938,7 @@ class Dua extends DataClass implements Insertable<Dua> {
           ..write('id: $id, ')
           ..write('category: $category, ')
           ..write('duaText: $duaText, ')
+          ..write('duaTextNorm: $duaTextNorm, ')
           ..write('reference: $reference, ')
           ..write('isBookmarked: $isBookmarked')
           ..write(')'))
@@ -879,7 +947,7 @@ class Dua extends DataClass implements Insertable<Dua> {
 
   @override
   int get hashCode =>
-      Object.hash(id, category, duaText, reference, isBookmarked);
+      Object.hash(id, category, duaText, duaTextNorm, reference, isBookmarked);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -887,6 +955,7 @@ class Dua extends DataClass implements Insertable<Dua> {
           other.id == this.id &&
           other.category == this.category &&
           other.duaText == this.duaText &&
+          other.duaTextNorm == this.duaTextNorm &&
           other.reference == this.reference &&
           other.isBookmarked == this.isBookmarked);
 }
@@ -895,12 +964,14 @@ class DuaTableCompanion extends UpdateCompanion<Dua> {
   final Value<int> id;
   final Value<String> category;
   final Value<String> duaText;
+  final Value<String> duaTextNorm;
   final Value<String?> reference;
   final Value<bool> isBookmarked;
   const DuaTableCompanion({
     this.id = const Value.absent(),
     this.category = const Value.absent(),
     this.duaText = const Value.absent(),
+    this.duaTextNorm = const Value.absent(),
     this.reference = const Value.absent(),
     this.isBookmarked = const Value.absent(),
   });
@@ -908,6 +979,7 @@ class DuaTableCompanion extends UpdateCompanion<Dua> {
     this.id = const Value.absent(),
     required String category,
     required String duaText,
+    this.duaTextNorm = const Value.absent(),
     this.reference = const Value.absent(),
     this.isBookmarked = const Value.absent(),
   })  : category = Value(category),
@@ -916,6 +988,7 @@ class DuaTableCompanion extends UpdateCompanion<Dua> {
     Expression<int>? id,
     Expression<String>? category,
     Expression<String>? duaText,
+    Expression<String>? duaTextNorm,
     Expression<String>? reference,
     Expression<bool>? isBookmarked,
   }) {
@@ -923,6 +996,7 @@ class DuaTableCompanion extends UpdateCompanion<Dua> {
       if (id != null) 'id': id,
       if (category != null) 'category': category,
       if (duaText != null) 'dua_text': duaText,
+      if (duaTextNorm != null) 'dua_text_norm': duaTextNorm,
       if (reference != null) 'reference': reference,
       if (isBookmarked != null) 'is_bookmarked': isBookmarked,
     });
@@ -932,12 +1006,14 @@ class DuaTableCompanion extends UpdateCompanion<Dua> {
       {Value<int>? id,
       Value<String>? category,
       Value<String>? duaText,
+      Value<String>? duaTextNorm,
       Value<String?>? reference,
       Value<bool>? isBookmarked}) {
     return DuaTableCompanion(
       id: id ?? this.id,
       category: category ?? this.category,
       duaText: duaText ?? this.duaText,
+      duaTextNorm: duaTextNorm ?? this.duaTextNorm,
       reference: reference ?? this.reference,
       isBookmarked: isBookmarked ?? this.isBookmarked,
     );
@@ -955,6 +1031,9 @@ class DuaTableCompanion extends UpdateCompanion<Dua> {
     if (duaText.present) {
       map['dua_text'] = Variable<String>(duaText.value);
     }
+    if (duaTextNorm.present) {
+      map['dua_text_norm'] = Variable<String>(duaTextNorm.value);
+    }
     if (reference.present) {
       map['reference'] = Variable<String>(reference.value);
     }
@@ -970,6 +1049,7 @@ class DuaTableCompanion extends UpdateCompanion<Dua> {
           ..write('id: $id, ')
           ..write('category: $category, ')
           ..write('duaText: $duaText, ')
+          ..write('duaTextNorm: $duaTextNorm, ')
           ..write('reference: $reference, ')
           ..write('isBookmarked: $isBookmarked')
           ..write(')'))
@@ -977,96 +1057,127 @@ class DuaTableCompanion extends UpdateCompanion<Dua> {
   }
 }
 
-class $DailySunnahTableTable extends DailySunnahTable
-    with TableInfo<$DailySunnahTableTable, DailySunnah> {
+class $ZikrTableTable extends ZikrTable with TableInfo<$ZikrTableTable, Zikr> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $DailySunnahTableTable(this.attachedDatabase, [this._alias]);
+  $ZikrTableTable(this.attachedDatabase, [this._alias]);
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
-  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
       'id', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _titleMeta = const VerificationMeta('title');
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _categoryMeta =
+      const VerificationMeta('category');
   @override
-  late final GeneratedColumn<String> title = GeneratedColumn<String>(
-      'title', aliasedName, false,
+  late final GeneratedColumn<String> category = GeneratedColumn<String>(
+      'category', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _descriptionMeta =
-      const VerificationMeta('description');
+  static const VerificationMeta _zikrIndexMeta =
+      const VerificationMeta('zikrIndex');
   @override
-  late final GeneratedColumn<String> description = GeneratedColumn<String>(
-      'description', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _howToApplyMeta =
-      const VerificationMeta('howToApply');
-  @override
-  late final GeneratedColumn<String> howToApply = GeneratedColumn<String>(
-      'how_to_apply', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _sourceMeta = const VerificationMeta('source');
-  @override
-  late final GeneratedColumn<String> source = GeneratedColumn<String>(
-      'source', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _sortOrderMeta =
-      const VerificationMeta('sortOrder');
-  @override
-  late final GeneratedColumn<int> sortOrder = GeneratedColumn<int>(
-      'sort_order', aliasedName, false,
+  late final GeneratedColumn<int> zikrIndex = GeneratedColumn<int>(
+      'zikr_index', aliasedName, false,
       type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _zikrTextMeta =
+      const VerificationMeta('zikrText');
   @override
-  List<GeneratedColumn> get $columns =>
-      [id, title, description, howToApply, source, sortOrder];
+  late final GeneratedColumn<String> zikrText = GeneratedColumn<String>(
+      'zikr_text', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _textNormMeta =
+      const VerificationMeta('textNorm');
+  @override
+  late final GeneratedColumn<String> textNorm = GeneratedColumn<String>(
+      'text_norm', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(''));
+  static const VerificationMeta _repetitionCountMeta =
+      const VerificationMeta('repetitionCount');
+  @override
+  late final GeneratedColumn<int> repetitionCount = GeneratedColumn<int>(
+      'repetition_count', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _repetitionLabelMeta =
+      const VerificationMeta('repetitionLabel');
+  @override
+  late final GeneratedColumn<String> repetitionLabel = GeneratedColumn<String>(
+      'repetition_label', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _timeMarkerMeta =
+      const VerificationMeta('timeMarker');
+  @override
+  late final GeneratedColumn<String> timeMarker = GeneratedColumn<String>(
+      'time_marker', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        category,
+        zikrIndex,
+        zikrText,
+        textNorm,
+        repetitionCount,
+        repetitionLabel,
+        timeMarker
+      ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
-  static const String $name = 'daily_sunnah_table';
+  static const String $name = 'zikr_table';
   @override
-  VerificationContext validateIntegrity(Insertable<DailySunnah> instance,
+  VerificationContext validateIntegrity(Insertable<Zikr> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
-    } else if (isInserting) {
-      context.missing(_idMeta);
     }
-    if (data.containsKey('title')) {
+    if (data.containsKey('category')) {
+      context.handle(_categoryMeta,
+          category.isAcceptableOrUnknown(data['category']!, _categoryMeta));
+    } else if (isInserting) {
+      context.missing(_categoryMeta);
+    }
+    if (data.containsKey('zikr_index')) {
+      context.handle(_zikrIndexMeta,
+          zikrIndex.isAcceptableOrUnknown(data['zikr_index']!, _zikrIndexMeta));
+    } else if (isInserting) {
+      context.missing(_zikrIndexMeta);
+    }
+    if (data.containsKey('zikr_text')) {
+      context.handle(_zikrTextMeta,
+          zikrText.isAcceptableOrUnknown(data['zikr_text']!, _zikrTextMeta));
+    } else if (isInserting) {
+      context.missing(_zikrTextMeta);
+    }
+    if (data.containsKey('text_norm')) {
+      context.handle(_textNormMeta,
+          textNorm.isAcceptableOrUnknown(data['text_norm']!, _textNormMeta));
+    }
+    if (data.containsKey('repetition_count')) {
       context.handle(
-          _titleMeta, title.isAcceptableOrUnknown(data['title']!, _titleMeta));
-    } else if (isInserting) {
-      context.missing(_titleMeta);
+          _repetitionCountMeta,
+          repetitionCount.isAcceptableOrUnknown(
+              data['repetition_count']!, _repetitionCountMeta));
     }
-    if (data.containsKey('description')) {
+    if (data.containsKey('repetition_label')) {
       context.handle(
-          _descriptionMeta,
-          description.isAcceptableOrUnknown(
-              data['description']!, _descriptionMeta));
-    } else if (isInserting) {
-      context.missing(_descriptionMeta);
+          _repetitionLabelMeta,
+          repetitionLabel.isAcceptableOrUnknown(
+              data['repetition_label']!, _repetitionLabelMeta));
     }
-    if (data.containsKey('how_to_apply')) {
+    if (data.containsKey('time_marker')) {
       context.handle(
-          _howToApplyMeta,
-          howToApply.isAcceptableOrUnknown(
-              data['how_to_apply']!, _howToApplyMeta));
-    } else if (isInserting) {
-      context.missing(_howToApplyMeta);
-    }
-    if (data.containsKey('source')) {
-      context.handle(_sourceMeta,
-          source.isAcceptableOrUnknown(data['source']!, _sourceMeta));
-    } else if (isInserting) {
-      context.missing(_sourceMeta);
-    }
-    if (data.containsKey('sort_order')) {
-      context.handle(_sortOrderMeta,
-          sortOrder.isAcceptableOrUnknown(data['sort_order']!, _sortOrderMeta));
-    } else if (isInserting) {
-      context.missing(_sortOrderMeta);
+          _timeMarkerMeta,
+          timeMarker.isAcceptableOrUnknown(
+              data['time_marker']!, _timeMarkerMeta));
     }
     return context;
   }
@@ -1074,215 +1185,264 @@ class $DailySunnahTableTable extends DailySunnahTable
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  DailySunnah map(Map<String, dynamic> data, {String? tablePrefix}) {
+  Zikr map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return DailySunnah(
+    return Zikr(
       id: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
-      title: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}title'])!,
-      description: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}description'])!,
-      howToApply: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}how_to_apply'])!,
-      source: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}source'])!,
-      sortOrder: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}sort_order'])!,
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      category: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}category'])!,
+      zikrIndex: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}zikr_index'])!,
+      zikrText: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}zikr_text'])!,
+      textNorm: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}text_norm'])!,
+      repetitionCount: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}repetition_count']),
+      repetitionLabel: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}repetition_label']),
+      timeMarker: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}time_marker']),
     );
   }
 
   @override
-  $DailySunnahTableTable createAlias(String alias) {
-    return $DailySunnahTableTable(attachedDatabase, alias);
+  $ZikrTableTable createAlias(String alias) {
+    return $ZikrTableTable(attachedDatabase, alias);
   }
 }
 
-class DailySunnah extends DataClass implements Insertable<DailySunnah> {
-  final String id;
-  final String title;
-  final String description;
-  final String howToApply;
-  final String source;
-  final int sortOrder;
-  const DailySunnah(
+class Zikr extends DataClass implements Insertable<Zikr> {
+  final int id;
+  final String category;
+  final int zikrIndex;
+  final String zikrText;
+  final String textNorm;
+  final int? repetitionCount;
+  final String? repetitionLabel;
+  final String? timeMarker;
+  const Zikr(
       {required this.id,
-      required this.title,
-      required this.description,
-      required this.howToApply,
-      required this.source,
-      required this.sortOrder});
+      required this.category,
+      required this.zikrIndex,
+      required this.zikrText,
+      required this.textNorm,
+      this.repetitionCount,
+      this.repetitionLabel,
+      this.timeMarker});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    map['id'] = Variable<String>(id);
-    map['title'] = Variable<String>(title);
-    map['description'] = Variable<String>(description);
-    map['how_to_apply'] = Variable<String>(howToApply);
-    map['source'] = Variable<String>(source);
-    map['sort_order'] = Variable<int>(sortOrder);
+    map['id'] = Variable<int>(id);
+    map['category'] = Variable<String>(category);
+    map['zikr_index'] = Variable<int>(zikrIndex);
+    map['zikr_text'] = Variable<String>(zikrText);
+    map['text_norm'] = Variable<String>(textNorm);
+    if (!nullToAbsent || repetitionCount != null) {
+      map['repetition_count'] = Variable<int>(repetitionCount);
+    }
+    if (!nullToAbsent || repetitionLabel != null) {
+      map['repetition_label'] = Variable<String>(repetitionLabel);
+    }
+    if (!nullToAbsent || timeMarker != null) {
+      map['time_marker'] = Variable<String>(timeMarker);
+    }
     return map;
   }
 
-  DailySunnahTableCompanion toCompanion(bool nullToAbsent) {
-    return DailySunnahTableCompanion(
+  ZikrTableCompanion toCompanion(bool nullToAbsent) {
+    return ZikrTableCompanion(
       id: Value(id),
-      title: Value(title),
-      description: Value(description),
-      howToApply: Value(howToApply),
-      source: Value(source),
-      sortOrder: Value(sortOrder),
+      category: Value(category),
+      zikrIndex: Value(zikrIndex),
+      zikrText: Value(zikrText),
+      textNorm: Value(textNorm),
+      repetitionCount: repetitionCount == null && nullToAbsent
+          ? const Value.absent()
+          : Value(repetitionCount),
+      repetitionLabel: repetitionLabel == null && nullToAbsent
+          ? const Value.absent()
+          : Value(repetitionLabel),
+      timeMarker: timeMarker == null && nullToAbsent
+          ? const Value.absent()
+          : Value(timeMarker),
     );
   }
 
-  factory DailySunnah.fromJson(Map<String, dynamic> json,
+  factory Zikr.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return DailySunnah(
-      id: serializer.fromJson<String>(json['id']),
-      title: serializer.fromJson<String>(json['title']),
-      description: serializer.fromJson<String>(json['description']),
-      howToApply: serializer.fromJson<String>(json['howToApply']),
-      source: serializer.fromJson<String>(json['source']),
-      sortOrder: serializer.fromJson<int>(json['sortOrder']),
+    return Zikr(
+      id: serializer.fromJson<int>(json['id']),
+      category: serializer.fromJson<String>(json['category']),
+      zikrIndex: serializer.fromJson<int>(json['zikrIndex']),
+      zikrText: serializer.fromJson<String>(json['zikrText']),
+      textNorm: serializer.fromJson<String>(json['textNorm']),
+      repetitionCount: serializer.fromJson<int?>(json['repetitionCount']),
+      repetitionLabel: serializer.fromJson<String?>(json['repetitionLabel']),
+      timeMarker: serializer.fromJson<String?>(json['timeMarker']),
     );
   }
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
-      'id': serializer.toJson<String>(id),
-      'title': serializer.toJson<String>(title),
-      'description': serializer.toJson<String>(description),
-      'howToApply': serializer.toJson<String>(howToApply),
-      'source': serializer.toJson<String>(source),
-      'sortOrder': serializer.toJson<int>(sortOrder),
+      'id': serializer.toJson<int>(id),
+      'category': serializer.toJson<String>(category),
+      'zikrIndex': serializer.toJson<int>(zikrIndex),
+      'zikrText': serializer.toJson<String>(zikrText),
+      'textNorm': serializer.toJson<String>(textNorm),
+      'repetitionCount': serializer.toJson<int?>(repetitionCount),
+      'repetitionLabel': serializer.toJson<String?>(repetitionLabel),
+      'timeMarker': serializer.toJson<String?>(timeMarker),
     };
   }
 
-  DailySunnah copyWith(
-          {String? id,
-          String? title,
-          String? description,
-          String? howToApply,
-          String? source,
-          int? sortOrder}) =>
-      DailySunnah(
+  Zikr copyWith(
+          {int? id,
+          String? category,
+          int? zikrIndex,
+          String? zikrText,
+          String? textNorm,
+          Value<int?> repetitionCount = const Value.absent(),
+          Value<String?> repetitionLabel = const Value.absent(),
+          Value<String?> timeMarker = const Value.absent()}) =>
+      Zikr(
         id: id ?? this.id,
-        title: title ?? this.title,
-        description: description ?? this.description,
-        howToApply: howToApply ?? this.howToApply,
-        source: source ?? this.source,
-        sortOrder: sortOrder ?? this.sortOrder,
+        category: category ?? this.category,
+        zikrIndex: zikrIndex ?? this.zikrIndex,
+        zikrText: zikrText ?? this.zikrText,
+        textNorm: textNorm ?? this.textNorm,
+        repetitionCount: repetitionCount.present
+            ? repetitionCount.value
+            : this.repetitionCount,
+        repetitionLabel: repetitionLabel.present
+            ? repetitionLabel.value
+            : this.repetitionLabel,
+        timeMarker: timeMarker.present ? timeMarker.value : this.timeMarker,
       );
-  DailySunnah copyWithCompanion(DailySunnahTableCompanion data) {
-    return DailySunnah(
+  Zikr copyWithCompanion(ZikrTableCompanion data) {
+    return Zikr(
       id: data.id.present ? data.id.value : this.id,
-      title: data.title.present ? data.title.value : this.title,
-      description:
-          data.description.present ? data.description.value : this.description,
-      howToApply:
-          data.howToApply.present ? data.howToApply.value : this.howToApply,
-      source: data.source.present ? data.source.value : this.source,
-      sortOrder: data.sortOrder.present ? data.sortOrder.value : this.sortOrder,
+      category: data.category.present ? data.category.value : this.category,
+      zikrIndex: data.zikrIndex.present ? data.zikrIndex.value : this.zikrIndex,
+      zikrText: data.zikrText.present ? data.zikrText.value : this.zikrText,
+      textNorm: data.textNorm.present ? data.textNorm.value : this.textNorm,
+      repetitionCount: data.repetitionCount.present
+          ? data.repetitionCount.value
+          : this.repetitionCount,
+      repetitionLabel: data.repetitionLabel.present
+          ? data.repetitionLabel.value
+          : this.repetitionLabel,
+      timeMarker:
+          data.timeMarker.present ? data.timeMarker.value : this.timeMarker,
     );
   }
 
   @override
   String toString() {
-    return (StringBuffer('DailySunnah(')
+    return (StringBuffer('Zikr(')
           ..write('id: $id, ')
-          ..write('title: $title, ')
-          ..write('description: $description, ')
-          ..write('howToApply: $howToApply, ')
-          ..write('source: $source, ')
-          ..write('sortOrder: $sortOrder')
+          ..write('category: $category, ')
+          ..write('zikrIndex: $zikrIndex, ')
+          ..write('zikrText: $zikrText, ')
+          ..write('textNorm: $textNorm, ')
+          ..write('repetitionCount: $repetitionCount, ')
+          ..write('repetitionLabel: $repetitionLabel, ')
+          ..write('timeMarker: $timeMarker')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode =>
-      Object.hash(id, title, description, howToApply, source, sortOrder);
+  int get hashCode => Object.hash(id, category, zikrIndex, zikrText, textNorm,
+      repetitionCount, repetitionLabel, timeMarker);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is DailySunnah &&
+      (other is Zikr &&
           other.id == this.id &&
-          other.title == this.title &&
-          other.description == this.description &&
-          other.howToApply == this.howToApply &&
-          other.source == this.source &&
-          other.sortOrder == this.sortOrder);
+          other.category == this.category &&
+          other.zikrIndex == this.zikrIndex &&
+          other.zikrText == this.zikrText &&
+          other.textNorm == this.textNorm &&
+          other.repetitionCount == this.repetitionCount &&
+          other.repetitionLabel == this.repetitionLabel &&
+          other.timeMarker == this.timeMarker);
 }
 
-class DailySunnahTableCompanion extends UpdateCompanion<DailySunnah> {
-  final Value<String> id;
-  final Value<String> title;
-  final Value<String> description;
-  final Value<String> howToApply;
-  final Value<String> source;
-  final Value<int> sortOrder;
-  final Value<int> rowid;
-  const DailySunnahTableCompanion({
+class ZikrTableCompanion extends UpdateCompanion<Zikr> {
+  final Value<int> id;
+  final Value<String> category;
+  final Value<int> zikrIndex;
+  final Value<String> zikrText;
+  final Value<String> textNorm;
+  final Value<int?> repetitionCount;
+  final Value<String?> repetitionLabel;
+  final Value<String?> timeMarker;
+  const ZikrTableCompanion({
     this.id = const Value.absent(),
-    this.title = const Value.absent(),
-    this.description = const Value.absent(),
-    this.howToApply = const Value.absent(),
-    this.source = const Value.absent(),
-    this.sortOrder = const Value.absent(),
-    this.rowid = const Value.absent(),
+    this.category = const Value.absent(),
+    this.zikrIndex = const Value.absent(),
+    this.zikrText = const Value.absent(),
+    this.textNorm = const Value.absent(),
+    this.repetitionCount = const Value.absent(),
+    this.repetitionLabel = const Value.absent(),
+    this.timeMarker = const Value.absent(),
   });
-  DailySunnahTableCompanion.insert({
-    required String id,
-    required String title,
-    required String description,
-    required String howToApply,
-    required String source,
-    required int sortOrder,
-    this.rowid = const Value.absent(),
-  })  : id = Value(id),
-        title = Value(title),
-        description = Value(description),
-        howToApply = Value(howToApply),
-        source = Value(source),
-        sortOrder = Value(sortOrder);
-  static Insertable<DailySunnah> custom({
-    Expression<String>? id,
-    Expression<String>? title,
-    Expression<String>? description,
-    Expression<String>? howToApply,
-    Expression<String>? source,
-    Expression<int>? sortOrder,
-    Expression<int>? rowid,
+  ZikrTableCompanion.insert({
+    this.id = const Value.absent(),
+    required String category,
+    required int zikrIndex,
+    required String zikrText,
+    this.textNorm = const Value.absent(),
+    this.repetitionCount = const Value.absent(),
+    this.repetitionLabel = const Value.absent(),
+    this.timeMarker = const Value.absent(),
+  })  : category = Value(category),
+        zikrIndex = Value(zikrIndex),
+        zikrText = Value(zikrText);
+  static Insertable<Zikr> custom({
+    Expression<int>? id,
+    Expression<String>? category,
+    Expression<int>? zikrIndex,
+    Expression<String>? zikrText,
+    Expression<String>? textNorm,
+    Expression<int>? repetitionCount,
+    Expression<String>? repetitionLabel,
+    Expression<String>? timeMarker,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
-      if (title != null) 'title': title,
-      if (description != null) 'description': description,
-      if (howToApply != null) 'how_to_apply': howToApply,
-      if (source != null) 'source': source,
-      if (sortOrder != null) 'sort_order': sortOrder,
-      if (rowid != null) 'rowid': rowid,
+      if (category != null) 'category': category,
+      if (zikrIndex != null) 'zikr_index': zikrIndex,
+      if (zikrText != null) 'zikr_text': zikrText,
+      if (textNorm != null) 'text_norm': textNorm,
+      if (repetitionCount != null) 'repetition_count': repetitionCount,
+      if (repetitionLabel != null) 'repetition_label': repetitionLabel,
+      if (timeMarker != null) 'time_marker': timeMarker,
     });
   }
 
-  DailySunnahTableCompanion copyWith(
-      {Value<String>? id,
-      Value<String>? title,
-      Value<String>? description,
-      Value<String>? howToApply,
-      Value<String>? source,
-      Value<int>? sortOrder,
-      Value<int>? rowid}) {
-    return DailySunnahTableCompanion(
+  ZikrTableCompanion copyWith(
+      {Value<int>? id,
+      Value<String>? category,
+      Value<int>? zikrIndex,
+      Value<String>? zikrText,
+      Value<String>? textNorm,
+      Value<int?>? repetitionCount,
+      Value<String?>? repetitionLabel,
+      Value<String?>? timeMarker}) {
+    return ZikrTableCompanion(
       id: id ?? this.id,
-      title: title ?? this.title,
-      description: description ?? this.description,
-      howToApply: howToApply ?? this.howToApply,
-      source: source ?? this.source,
-      sortOrder: sortOrder ?? this.sortOrder,
-      rowid: rowid ?? this.rowid,
+      category: category ?? this.category,
+      zikrIndex: zikrIndex ?? this.zikrIndex,
+      zikrText: zikrText ?? this.zikrText,
+      textNorm: textNorm ?? this.textNorm,
+      repetitionCount: repetitionCount ?? this.repetitionCount,
+      repetitionLabel: repetitionLabel ?? this.repetitionLabel,
+      timeMarker: timeMarker ?? this.timeMarker,
     );
   }
 
@@ -1290,349 +1450,43 @@ class DailySunnahTableCompanion extends UpdateCompanion<DailySunnah> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     if (id.present) {
-      map['id'] = Variable<String>(id.value);
+      map['id'] = Variable<int>(id.value);
     }
-    if (title.present) {
-      map['title'] = Variable<String>(title.value);
+    if (category.present) {
+      map['category'] = Variable<String>(category.value);
     }
-    if (description.present) {
-      map['description'] = Variable<String>(description.value);
+    if (zikrIndex.present) {
+      map['zikr_index'] = Variable<int>(zikrIndex.value);
     }
-    if (howToApply.present) {
-      map['how_to_apply'] = Variable<String>(howToApply.value);
+    if (zikrText.present) {
+      map['zikr_text'] = Variable<String>(zikrText.value);
     }
-    if (source.present) {
-      map['source'] = Variable<String>(source.value);
+    if (textNorm.present) {
+      map['text_norm'] = Variable<String>(textNorm.value);
     }
-    if (sortOrder.present) {
-      map['sort_order'] = Variable<int>(sortOrder.value);
+    if (repetitionCount.present) {
+      map['repetition_count'] = Variable<int>(repetitionCount.value);
     }
-    if (rowid.present) {
-      map['rowid'] = Variable<int>(rowid.value);
+    if (repetitionLabel.present) {
+      map['repetition_label'] = Variable<String>(repetitionLabel.value);
     }
-    return map;
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('DailySunnahTableCompanion(')
-          ..write('id: $id, ')
-          ..write('title: $title, ')
-          ..write('description: $description, ')
-          ..write('howToApply: $howToApply, ')
-          ..write('source: $source, ')
-          ..write('sortOrder: $sortOrder, ')
-          ..write('rowid: $rowid')
-          ..write(')'))
-        .toString();
-  }
-}
-
-class $DailyTaskTableTable extends DailyTaskTable
-    with TableInfo<$DailyTaskTableTable, DailyTask> {
-  @override
-  final GeneratedDatabase attachedDatabase;
-  final String? _alias;
-  $DailyTaskTableTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _idMeta = const VerificationMeta('id');
-  @override
-  late final GeneratedColumn<String> id = GeneratedColumn<String>(
-      'id', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _titleMeta = const VerificationMeta('title');
-  @override
-  late final GeneratedColumn<String> title = GeneratedColumn<String>(
-      'title', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _descriptionMeta =
-      const VerificationMeta('description');
-  @override
-  late final GeneratedColumn<String> description = GeneratedColumn<String>(
-      'description', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _impactMeta = const VerificationMeta('impact');
-  @override
-  late final GeneratedColumn<String> impact = GeneratedColumn<String>(
-      'impact', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _sortOrderMeta =
-      const VerificationMeta('sortOrder');
-  @override
-  late final GeneratedColumn<int> sortOrder = GeneratedColumn<int>(
-      'sort_order', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
-  @override
-  List<GeneratedColumn> get $columns =>
-      [id, title, description, impact, sortOrder];
-  @override
-  String get aliasedName => _alias ?? actualTableName;
-  @override
-  String get actualTableName => $name;
-  static const String $name = 'daily_task_table';
-  @override
-  VerificationContext validateIntegrity(Insertable<DailyTask> instance,
-      {bool isInserting = false}) {
-    final context = VerificationContext();
-    final data = instance.toColumns(true);
-    if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
-    } else if (isInserting) {
-      context.missing(_idMeta);
-    }
-    if (data.containsKey('title')) {
-      context.handle(
-          _titleMeta, title.isAcceptableOrUnknown(data['title']!, _titleMeta));
-    } else if (isInserting) {
-      context.missing(_titleMeta);
-    }
-    if (data.containsKey('description')) {
-      context.handle(
-          _descriptionMeta,
-          description.isAcceptableOrUnknown(
-              data['description']!, _descriptionMeta));
-    } else if (isInserting) {
-      context.missing(_descriptionMeta);
-    }
-    if (data.containsKey('impact')) {
-      context.handle(_impactMeta,
-          impact.isAcceptableOrUnknown(data['impact']!, _impactMeta));
-    } else if (isInserting) {
-      context.missing(_impactMeta);
-    }
-    if (data.containsKey('sort_order')) {
-      context.handle(_sortOrderMeta,
-          sortOrder.isAcceptableOrUnknown(data['sort_order']!, _sortOrderMeta));
-    } else if (isInserting) {
-      context.missing(_sortOrderMeta);
-    }
-    return context;
-  }
-
-  @override
-  Set<GeneratedColumn> get $primaryKey => {id};
-  @override
-  DailyTask map(Map<String, dynamic> data, {String? tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return DailyTask(
-      id: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
-      title: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}title'])!,
-      description: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}description'])!,
-      impact: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}impact'])!,
-      sortOrder: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}sort_order'])!,
-    );
-  }
-
-  @override
-  $DailyTaskTableTable createAlias(String alias) {
-    return $DailyTaskTableTable(attachedDatabase, alias);
-  }
-}
-
-class DailyTask extends DataClass implements Insertable<DailyTask> {
-  final String id;
-  final String title;
-  final String description;
-  final String impact;
-  final int sortOrder;
-  const DailyTask(
-      {required this.id,
-      required this.title,
-      required this.description,
-      required this.impact,
-      required this.sortOrder});
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    map['id'] = Variable<String>(id);
-    map['title'] = Variable<String>(title);
-    map['description'] = Variable<String>(description);
-    map['impact'] = Variable<String>(impact);
-    map['sort_order'] = Variable<int>(sortOrder);
-    return map;
-  }
-
-  DailyTaskTableCompanion toCompanion(bool nullToAbsent) {
-    return DailyTaskTableCompanion(
-      id: Value(id),
-      title: Value(title),
-      description: Value(description),
-      impact: Value(impact),
-      sortOrder: Value(sortOrder),
-    );
-  }
-
-  factory DailyTask.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return DailyTask(
-      id: serializer.fromJson<String>(json['id']),
-      title: serializer.fromJson<String>(json['title']),
-      description: serializer.fromJson<String>(json['description']),
-      impact: serializer.fromJson<String>(json['impact']),
-      sortOrder: serializer.fromJson<int>(json['sortOrder']),
-    );
-  }
-  @override
-  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return <String, dynamic>{
-      'id': serializer.toJson<String>(id),
-      'title': serializer.toJson<String>(title),
-      'description': serializer.toJson<String>(description),
-      'impact': serializer.toJson<String>(impact),
-      'sortOrder': serializer.toJson<int>(sortOrder),
-    };
-  }
-
-  DailyTask copyWith(
-          {String? id,
-          String? title,
-          String? description,
-          String? impact,
-          int? sortOrder}) =>
-      DailyTask(
-        id: id ?? this.id,
-        title: title ?? this.title,
-        description: description ?? this.description,
-        impact: impact ?? this.impact,
-        sortOrder: sortOrder ?? this.sortOrder,
-      );
-  DailyTask copyWithCompanion(DailyTaskTableCompanion data) {
-    return DailyTask(
-      id: data.id.present ? data.id.value : this.id,
-      title: data.title.present ? data.title.value : this.title,
-      description:
-          data.description.present ? data.description.value : this.description,
-      impact: data.impact.present ? data.impact.value : this.impact,
-      sortOrder: data.sortOrder.present ? data.sortOrder.value : this.sortOrder,
-    );
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('DailyTask(')
-          ..write('id: $id, ')
-          ..write('title: $title, ')
-          ..write('description: $description, ')
-          ..write('impact: $impact, ')
-          ..write('sortOrder: $sortOrder')
-          ..write(')'))
-        .toString();
-  }
-
-  @override
-  int get hashCode => Object.hash(id, title, description, impact, sortOrder);
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is DailyTask &&
-          other.id == this.id &&
-          other.title == this.title &&
-          other.description == this.description &&
-          other.impact == this.impact &&
-          other.sortOrder == this.sortOrder);
-}
-
-class DailyTaskTableCompanion extends UpdateCompanion<DailyTask> {
-  final Value<String> id;
-  final Value<String> title;
-  final Value<String> description;
-  final Value<String> impact;
-  final Value<int> sortOrder;
-  final Value<int> rowid;
-  const DailyTaskTableCompanion({
-    this.id = const Value.absent(),
-    this.title = const Value.absent(),
-    this.description = const Value.absent(),
-    this.impact = const Value.absent(),
-    this.sortOrder = const Value.absent(),
-    this.rowid = const Value.absent(),
-  });
-  DailyTaskTableCompanion.insert({
-    required String id,
-    required String title,
-    required String description,
-    required String impact,
-    required int sortOrder,
-    this.rowid = const Value.absent(),
-  })  : id = Value(id),
-        title = Value(title),
-        description = Value(description),
-        impact = Value(impact),
-        sortOrder = Value(sortOrder);
-  static Insertable<DailyTask> custom({
-    Expression<String>? id,
-    Expression<String>? title,
-    Expression<String>? description,
-    Expression<String>? impact,
-    Expression<int>? sortOrder,
-    Expression<int>? rowid,
-  }) {
-    return RawValuesInsertable({
-      if (id != null) 'id': id,
-      if (title != null) 'title': title,
-      if (description != null) 'description': description,
-      if (impact != null) 'impact': impact,
-      if (sortOrder != null) 'sort_order': sortOrder,
-      if (rowid != null) 'rowid': rowid,
-    });
-  }
-
-  DailyTaskTableCompanion copyWith(
-      {Value<String>? id,
-      Value<String>? title,
-      Value<String>? description,
-      Value<String>? impact,
-      Value<int>? sortOrder,
-      Value<int>? rowid}) {
-    return DailyTaskTableCompanion(
-      id: id ?? this.id,
-      title: title ?? this.title,
-      description: description ?? this.description,
-      impact: impact ?? this.impact,
-      sortOrder: sortOrder ?? this.sortOrder,
-      rowid: rowid ?? this.rowid,
-    );
-  }
-
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (id.present) {
-      map['id'] = Variable<String>(id.value);
-    }
-    if (title.present) {
-      map['title'] = Variable<String>(title.value);
-    }
-    if (description.present) {
-      map['description'] = Variable<String>(description.value);
-    }
-    if (impact.present) {
-      map['impact'] = Variable<String>(impact.value);
-    }
-    if (sortOrder.present) {
-      map['sort_order'] = Variable<int>(sortOrder.value);
-    }
-    if (rowid.present) {
-      map['rowid'] = Variable<int>(rowid.value);
+    if (timeMarker.present) {
+      map['time_marker'] = Variable<String>(timeMarker.value);
     }
     return map;
   }
 
   @override
   String toString() {
-    return (StringBuffer('DailyTaskTableCompanion(')
+    return (StringBuffer('ZikrTableCompanion(')
           ..write('id: $id, ')
-          ..write('title: $title, ')
-          ..write('description: $description, ')
-          ..write('impact: $impact, ')
-          ..write('sortOrder: $sortOrder, ')
-          ..write('rowid: $rowid')
+          ..write('category: $category, ')
+          ..write('zikrIndex: $zikrIndex, ')
+          ..write('zikrText: $zikrText, ')
+          ..write('textNorm: $textNorm, ')
+          ..write('repetitionCount: $repetitionCount, ')
+          ..write('repetitionLabel: $repetitionLabel, ')
+          ..write('timeMarker: $timeMarker')
           ..write(')'))
         .toString();
   }
@@ -2562,302 +2416,6 @@ class UserFavoriteTableCompanion extends UpdateCompanion<UserFavorite> {
           ..write('contentText: $contentText, ')
           ..write('source: $source, ')
           ..write('createdAt: $createdAt')
-          ..write(')'))
-        .toString();
-  }
-}
-
-class $UserDailyActivityTableTable extends UserDailyActivityTable
-    with TableInfo<$UserDailyActivityTableTable, UserDailyActivity> {
-  @override
-  final GeneratedDatabase attachedDatabase;
-  final String? _alias;
-  $UserDailyActivityTableTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _activityDateMeta =
-      const VerificationMeta('activityDate');
-  @override
-  late final GeneratedColumn<String> activityDate = GeneratedColumn<String>(
-      'activity_date', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _completedTaskIdMeta =
-      const VerificationMeta('completedTaskId');
-  @override
-  late final GeneratedColumn<String> completedTaskId = GeneratedColumn<String>(
-      'completed_task_id', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
-  static const VerificationMeta _completedSunnahIdMeta =
-      const VerificationMeta('completedSunnahId');
-  @override
-  late final GeneratedColumn<String> completedSunnahId =
-      GeneratedColumn<String>('completed_sunnah_id', aliasedName, true,
-          type: DriftSqlType.string, requiredDuringInsert: false);
-  static const VerificationMeta _updatedAtMeta =
-      const VerificationMeta('updatedAt');
-  @override
-  late final GeneratedColumn<String> updatedAt = GeneratedColumn<String>(
-      'updated_at', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  @override
-  List<GeneratedColumn> get $columns =>
-      [activityDate, completedTaskId, completedSunnahId, updatedAt];
-  @override
-  String get aliasedName => _alias ?? actualTableName;
-  @override
-  String get actualTableName => $name;
-  static const String $name = 'user_daily_activity_table';
-  @override
-  VerificationContext validateIntegrity(Insertable<UserDailyActivity> instance,
-      {bool isInserting = false}) {
-    final context = VerificationContext();
-    final data = instance.toColumns(true);
-    if (data.containsKey('activity_date')) {
-      context.handle(
-          _activityDateMeta,
-          activityDate.isAcceptableOrUnknown(
-              data['activity_date']!, _activityDateMeta));
-    } else if (isInserting) {
-      context.missing(_activityDateMeta);
-    }
-    if (data.containsKey('completed_task_id')) {
-      context.handle(
-          _completedTaskIdMeta,
-          completedTaskId.isAcceptableOrUnknown(
-              data['completed_task_id']!, _completedTaskIdMeta));
-    }
-    if (data.containsKey('completed_sunnah_id')) {
-      context.handle(
-          _completedSunnahIdMeta,
-          completedSunnahId.isAcceptableOrUnknown(
-              data['completed_sunnah_id']!, _completedSunnahIdMeta));
-    }
-    if (data.containsKey('updated_at')) {
-      context.handle(_updatedAtMeta,
-          updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta));
-    } else if (isInserting) {
-      context.missing(_updatedAtMeta);
-    }
-    return context;
-  }
-
-  @override
-  Set<GeneratedColumn> get $primaryKey => {activityDate};
-  @override
-  UserDailyActivity map(Map<String, dynamic> data, {String? tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return UserDailyActivity(
-      activityDate: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}activity_date'])!,
-      completedTaskId: attachedDatabase.typeMapping.read(
-          DriftSqlType.string, data['${effectivePrefix}completed_task_id']),
-      completedSunnahId: attachedDatabase.typeMapping.read(
-          DriftSqlType.string, data['${effectivePrefix}completed_sunnah_id']),
-      updatedAt: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}updated_at'])!,
-    );
-  }
-
-  @override
-  $UserDailyActivityTableTable createAlias(String alias) {
-    return $UserDailyActivityTableTable(attachedDatabase, alias);
-  }
-}
-
-class UserDailyActivity extends DataClass
-    implements Insertable<UserDailyActivity> {
-  final String activityDate;
-  final String? completedTaskId;
-  final String? completedSunnahId;
-  final String updatedAt;
-  const UserDailyActivity(
-      {required this.activityDate,
-      this.completedTaskId,
-      this.completedSunnahId,
-      required this.updatedAt});
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    map['activity_date'] = Variable<String>(activityDate);
-    if (!nullToAbsent || completedTaskId != null) {
-      map['completed_task_id'] = Variable<String>(completedTaskId);
-    }
-    if (!nullToAbsent || completedSunnahId != null) {
-      map['completed_sunnah_id'] = Variable<String>(completedSunnahId);
-    }
-    map['updated_at'] = Variable<String>(updatedAt);
-    return map;
-  }
-
-  UserDailyActivityTableCompanion toCompanion(bool nullToAbsent) {
-    return UserDailyActivityTableCompanion(
-      activityDate: Value(activityDate),
-      completedTaskId: completedTaskId == null && nullToAbsent
-          ? const Value.absent()
-          : Value(completedTaskId),
-      completedSunnahId: completedSunnahId == null && nullToAbsent
-          ? const Value.absent()
-          : Value(completedSunnahId),
-      updatedAt: Value(updatedAt),
-    );
-  }
-
-  factory UserDailyActivity.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return UserDailyActivity(
-      activityDate: serializer.fromJson<String>(json['activityDate']),
-      completedTaskId: serializer.fromJson<String?>(json['completedTaskId']),
-      completedSunnahId:
-          serializer.fromJson<String?>(json['completedSunnahId']),
-      updatedAt: serializer.fromJson<String>(json['updatedAt']),
-    );
-  }
-  @override
-  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return <String, dynamic>{
-      'activityDate': serializer.toJson<String>(activityDate),
-      'completedTaskId': serializer.toJson<String?>(completedTaskId),
-      'completedSunnahId': serializer.toJson<String?>(completedSunnahId),
-      'updatedAt': serializer.toJson<String>(updatedAt),
-    };
-  }
-
-  UserDailyActivity copyWith(
-          {String? activityDate,
-          Value<String?> completedTaskId = const Value.absent(),
-          Value<String?> completedSunnahId = const Value.absent(),
-          String? updatedAt}) =>
-      UserDailyActivity(
-        activityDate: activityDate ?? this.activityDate,
-        completedTaskId: completedTaskId.present
-            ? completedTaskId.value
-            : this.completedTaskId,
-        completedSunnahId: completedSunnahId.present
-            ? completedSunnahId.value
-            : this.completedSunnahId,
-        updatedAt: updatedAt ?? this.updatedAt,
-      );
-  UserDailyActivity copyWithCompanion(UserDailyActivityTableCompanion data) {
-    return UserDailyActivity(
-      activityDate: data.activityDate.present
-          ? data.activityDate.value
-          : this.activityDate,
-      completedTaskId: data.completedTaskId.present
-          ? data.completedTaskId.value
-          : this.completedTaskId,
-      completedSunnahId: data.completedSunnahId.present
-          ? data.completedSunnahId.value
-          : this.completedSunnahId,
-      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
-    );
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('UserDailyActivity(')
-          ..write('activityDate: $activityDate, ')
-          ..write('completedTaskId: $completedTaskId, ')
-          ..write('completedSunnahId: $completedSunnahId, ')
-          ..write('updatedAt: $updatedAt')
-          ..write(')'))
-        .toString();
-  }
-
-  @override
-  int get hashCode =>
-      Object.hash(activityDate, completedTaskId, completedSunnahId, updatedAt);
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is UserDailyActivity &&
-          other.activityDate == this.activityDate &&
-          other.completedTaskId == this.completedTaskId &&
-          other.completedSunnahId == this.completedSunnahId &&
-          other.updatedAt == this.updatedAt);
-}
-
-class UserDailyActivityTableCompanion
-    extends UpdateCompanion<UserDailyActivity> {
-  final Value<String> activityDate;
-  final Value<String?> completedTaskId;
-  final Value<String?> completedSunnahId;
-  final Value<String> updatedAt;
-  final Value<int> rowid;
-  const UserDailyActivityTableCompanion({
-    this.activityDate = const Value.absent(),
-    this.completedTaskId = const Value.absent(),
-    this.completedSunnahId = const Value.absent(),
-    this.updatedAt = const Value.absent(),
-    this.rowid = const Value.absent(),
-  });
-  UserDailyActivityTableCompanion.insert({
-    required String activityDate,
-    this.completedTaskId = const Value.absent(),
-    this.completedSunnahId = const Value.absent(),
-    required String updatedAt,
-    this.rowid = const Value.absent(),
-  })  : activityDate = Value(activityDate),
-        updatedAt = Value(updatedAt);
-  static Insertable<UserDailyActivity> custom({
-    Expression<String>? activityDate,
-    Expression<String>? completedTaskId,
-    Expression<String>? completedSunnahId,
-    Expression<String>? updatedAt,
-    Expression<int>? rowid,
-  }) {
-    return RawValuesInsertable({
-      if (activityDate != null) 'activity_date': activityDate,
-      if (completedTaskId != null) 'completed_task_id': completedTaskId,
-      if (completedSunnahId != null) 'completed_sunnah_id': completedSunnahId,
-      if (updatedAt != null) 'updated_at': updatedAt,
-      if (rowid != null) 'rowid': rowid,
-    });
-  }
-
-  UserDailyActivityTableCompanion copyWith(
-      {Value<String>? activityDate,
-      Value<String?>? completedTaskId,
-      Value<String?>? completedSunnahId,
-      Value<String>? updatedAt,
-      Value<int>? rowid}) {
-    return UserDailyActivityTableCompanion(
-      activityDate: activityDate ?? this.activityDate,
-      completedTaskId: completedTaskId ?? this.completedTaskId,
-      completedSunnahId: completedSunnahId ?? this.completedSunnahId,
-      updatedAt: updatedAt ?? this.updatedAt,
-      rowid: rowid ?? this.rowid,
-    );
-  }
-
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (activityDate.present) {
-      map['activity_date'] = Variable<String>(activityDate.value);
-    }
-    if (completedTaskId.present) {
-      map['completed_task_id'] = Variable<String>(completedTaskId.value);
-    }
-    if (completedSunnahId.present) {
-      map['completed_sunnah_id'] = Variable<String>(completedSunnahId.value);
-    }
-    if (updatedAt.present) {
-      map['updated_at'] = Variable<String>(updatedAt.value);
-    }
-    if (rowid.present) {
-      map['rowid'] = Variable<int>(rowid.value);
-    }
-    return map;
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('UserDailyActivityTableCompanion(')
-          ..write('activityDate: $activityDate, ')
-          ..write('completedTaskId: $completedTaskId, ')
-          ..write('completedSunnahId: $completedSunnahId, ')
-          ..write('updatedAt: $updatedAt, ')
-          ..write('rowid: $rowid')
           ..write(')'))
         .toString();
   }
@@ -5205,6 +4763,332 @@ class ReminderIntentTableCompanion extends UpdateCompanion<ReminderIntentRow> {
   }
 }
 
+class $SeedStateTableTable extends SeedStateTable
+    with TableInfo<$SeedStateTableTable, SeedState> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $SeedStateTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _datasetKeyMeta =
+      const VerificationMeta('datasetKey');
+  @override
+  late final GeneratedColumn<String> datasetKey = GeneratedColumn<String>(
+      'dataset_key', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _contentVersionMeta =
+      const VerificationMeta('contentVersion');
+  @override
+  late final GeneratedColumn<int> contentVersion = GeneratedColumn<int>(
+      'content_version', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _expectedCountMeta =
+      const VerificationMeta('expectedCount');
+  @override
+  late final GeneratedColumn<int> expectedCount = GeneratedColumn<int>(
+      'expected_count', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _actualCountMeta =
+      const VerificationMeta('actualCount');
+  @override
+  late final GeneratedColumn<int> actualCount = GeneratedColumn<int>(
+      'actual_count', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _seededAtMeta =
+      const VerificationMeta('seededAt');
+  @override
+  late final GeneratedColumn<String> seededAt = GeneratedColumn<String>(
+      'seeded_at', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [datasetKey, contentVersion, expectedCount, actualCount, seededAt];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'seed_state_table';
+  @override
+  VerificationContext validateIntegrity(Insertable<SeedState> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('dataset_key')) {
+      context.handle(
+          _datasetKeyMeta,
+          datasetKey.isAcceptableOrUnknown(
+              data['dataset_key']!, _datasetKeyMeta));
+    } else if (isInserting) {
+      context.missing(_datasetKeyMeta);
+    }
+    if (data.containsKey('content_version')) {
+      context.handle(
+          _contentVersionMeta,
+          contentVersion.isAcceptableOrUnknown(
+              data['content_version']!, _contentVersionMeta));
+    } else if (isInserting) {
+      context.missing(_contentVersionMeta);
+    }
+    if (data.containsKey('expected_count')) {
+      context.handle(
+          _expectedCountMeta,
+          expectedCount.isAcceptableOrUnknown(
+              data['expected_count']!, _expectedCountMeta));
+    } else if (isInserting) {
+      context.missing(_expectedCountMeta);
+    }
+    if (data.containsKey('actual_count')) {
+      context.handle(
+          _actualCountMeta,
+          actualCount.isAcceptableOrUnknown(
+              data['actual_count']!, _actualCountMeta));
+    } else if (isInserting) {
+      context.missing(_actualCountMeta);
+    }
+    if (data.containsKey('seeded_at')) {
+      context.handle(_seededAtMeta,
+          seededAt.isAcceptableOrUnknown(data['seeded_at']!, _seededAtMeta));
+    } else if (isInserting) {
+      context.missing(_seededAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {datasetKey};
+  @override
+  SeedState map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return SeedState(
+      datasetKey: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}dataset_key'])!,
+      contentVersion: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}content_version'])!,
+      expectedCount: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}expected_count'])!,
+      actualCount: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}actual_count'])!,
+      seededAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}seeded_at'])!,
+    );
+  }
+
+  @override
+  $SeedStateTableTable createAlias(String alias) {
+    return $SeedStateTableTable(attachedDatabase, alias);
+  }
+}
+
+class SeedState extends DataClass implements Insertable<SeedState> {
+  final String datasetKey;
+  final int contentVersion;
+  final int expectedCount;
+  final int actualCount;
+  final String seededAt;
+  const SeedState(
+      {required this.datasetKey,
+      required this.contentVersion,
+      required this.expectedCount,
+      required this.actualCount,
+      required this.seededAt});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['dataset_key'] = Variable<String>(datasetKey);
+    map['content_version'] = Variable<int>(contentVersion);
+    map['expected_count'] = Variable<int>(expectedCount);
+    map['actual_count'] = Variable<int>(actualCount);
+    map['seeded_at'] = Variable<String>(seededAt);
+    return map;
+  }
+
+  SeedStateTableCompanion toCompanion(bool nullToAbsent) {
+    return SeedStateTableCompanion(
+      datasetKey: Value(datasetKey),
+      contentVersion: Value(contentVersion),
+      expectedCount: Value(expectedCount),
+      actualCount: Value(actualCount),
+      seededAt: Value(seededAt),
+    );
+  }
+
+  factory SeedState.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return SeedState(
+      datasetKey: serializer.fromJson<String>(json['datasetKey']),
+      contentVersion: serializer.fromJson<int>(json['contentVersion']),
+      expectedCount: serializer.fromJson<int>(json['expectedCount']),
+      actualCount: serializer.fromJson<int>(json['actualCount']),
+      seededAt: serializer.fromJson<String>(json['seededAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'datasetKey': serializer.toJson<String>(datasetKey),
+      'contentVersion': serializer.toJson<int>(contentVersion),
+      'expectedCount': serializer.toJson<int>(expectedCount),
+      'actualCount': serializer.toJson<int>(actualCount),
+      'seededAt': serializer.toJson<String>(seededAt),
+    };
+  }
+
+  SeedState copyWith(
+          {String? datasetKey,
+          int? contentVersion,
+          int? expectedCount,
+          int? actualCount,
+          String? seededAt}) =>
+      SeedState(
+        datasetKey: datasetKey ?? this.datasetKey,
+        contentVersion: contentVersion ?? this.contentVersion,
+        expectedCount: expectedCount ?? this.expectedCount,
+        actualCount: actualCount ?? this.actualCount,
+        seededAt: seededAt ?? this.seededAt,
+      );
+  SeedState copyWithCompanion(SeedStateTableCompanion data) {
+    return SeedState(
+      datasetKey:
+          data.datasetKey.present ? data.datasetKey.value : this.datasetKey,
+      contentVersion: data.contentVersion.present
+          ? data.contentVersion.value
+          : this.contentVersion,
+      expectedCount: data.expectedCount.present
+          ? data.expectedCount.value
+          : this.expectedCount,
+      actualCount:
+          data.actualCount.present ? data.actualCount.value : this.actualCount,
+      seededAt: data.seededAt.present ? data.seededAt.value : this.seededAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SeedState(')
+          ..write('datasetKey: $datasetKey, ')
+          ..write('contentVersion: $contentVersion, ')
+          ..write('expectedCount: $expectedCount, ')
+          ..write('actualCount: $actualCount, ')
+          ..write('seededAt: $seededAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      datasetKey, contentVersion, expectedCount, actualCount, seededAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is SeedState &&
+          other.datasetKey == this.datasetKey &&
+          other.contentVersion == this.contentVersion &&
+          other.expectedCount == this.expectedCount &&
+          other.actualCount == this.actualCount &&
+          other.seededAt == this.seededAt);
+}
+
+class SeedStateTableCompanion extends UpdateCompanion<SeedState> {
+  final Value<String> datasetKey;
+  final Value<int> contentVersion;
+  final Value<int> expectedCount;
+  final Value<int> actualCount;
+  final Value<String> seededAt;
+  final Value<int> rowid;
+  const SeedStateTableCompanion({
+    this.datasetKey = const Value.absent(),
+    this.contentVersion = const Value.absent(),
+    this.expectedCount = const Value.absent(),
+    this.actualCount = const Value.absent(),
+    this.seededAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  SeedStateTableCompanion.insert({
+    required String datasetKey,
+    required int contentVersion,
+    required int expectedCount,
+    required int actualCount,
+    required String seededAt,
+    this.rowid = const Value.absent(),
+  })  : datasetKey = Value(datasetKey),
+        contentVersion = Value(contentVersion),
+        expectedCount = Value(expectedCount),
+        actualCount = Value(actualCount),
+        seededAt = Value(seededAt);
+  static Insertable<SeedState> custom({
+    Expression<String>? datasetKey,
+    Expression<int>? contentVersion,
+    Expression<int>? expectedCount,
+    Expression<int>? actualCount,
+    Expression<String>? seededAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (datasetKey != null) 'dataset_key': datasetKey,
+      if (contentVersion != null) 'content_version': contentVersion,
+      if (expectedCount != null) 'expected_count': expectedCount,
+      if (actualCount != null) 'actual_count': actualCount,
+      if (seededAt != null) 'seeded_at': seededAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  SeedStateTableCompanion copyWith(
+      {Value<String>? datasetKey,
+      Value<int>? contentVersion,
+      Value<int>? expectedCount,
+      Value<int>? actualCount,
+      Value<String>? seededAt,
+      Value<int>? rowid}) {
+    return SeedStateTableCompanion(
+      datasetKey: datasetKey ?? this.datasetKey,
+      contentVersion: contentVersion ?? this.contentVersion,
+      expectedCount: expectedCount ?? this.expectedCount,
+      actualCount: actualCount ?? this.actualCount,
+      seededAt: seededAt ?? this.seededAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (datasetKey.present) {
+      map['dataset_key'] = Variable<String>(datasetKey.value);
+    }
+    if (contentVersion.present) {
+      map['content_version'] = Variable<int>(contentVersion.value);
+    }
+    if (expectedCount.present) {
+      map['expected_count'] = Variable<int>(expectedCount.value);
+    }
+    if (actualCount.present) {
+      map['actual_count'] = Variable<int>(actualCount.value);
+    }
+    if (seededAt.present) {
+      map['seeded_at'] = Variable<String>(seededAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SeedStateTableCompanion(')
+          ..write('datasetKey: $datasetKey, ')
+          ..write('contentVersion: $contentVersion, ')
+          ..write('expectedCount: $expectedCount, ')
+          ..write('actualCount: $actualCount, ')
+          ..write('seededAt: $seededAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -5212,15 +5096,11 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       $QuranTafseerTableTable(this);
   late final $HadithTableTable hadithTable = $HadithTableTable(this);
   late final $DuaTableTable duaTable = $DuaTableTable(this);
-  late final $DailySunnahTableTable dailySunnahTable =
-      $DailySunnahTableTable(this);
-  late final $DailyTaskTableTable dailyTaskTable = $DailyTaskTableTable(this);
+  late final $ZikrTableTable zikrTable = $ZikrTableTable(this);
   late final $MuhasabaEntryTableTable muhasabaEntryTable =
       $MuhasabaEntryTableTable(this);
   late final $UserFavoriteTableTable userFavoriteTable =
       $UserFavoriteTableTable(this);
-  late final $UserDailyActivityTableTable userDailyActivityTable =
-      $UserDailyActivityTableTable(this);
   late final $MemoryThreadTableTable memoryThreadTable =
       $MemoryThreadTableTable(this);
   late final $ReflectionEntryTableTable reflectionEntryTable =
@@ -5231,6 +5111,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       $ReturnEventTableTable(this);
   late final $ReminderIntentTableTable reminderIntentTable =
       $ReminderIntentTableTable(this);
+  late final $SeedStateTableTable seedStateTable = $SeedStateTableTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -5239,16 +5120,15 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         quranTafseerTable,
         hadithTable,
         duaTable,
-        dailySunnahTable,
-        dailyTaskTable,
+        zikrTable,
         muhasabaEntryTable,
         userFavoriteTable,
-        userDailyActivityTable,
         memoryThreadTable,
         reflectionEntryTable,
         readingAnchorTable,
         returnEventTable,
-        reminderIntentTable
+        reminderIntentTable,
+        seedStateTable
       ];
 }
 
@@ -5390,6 +5270,7 @@ typedef $$HadithTableTableCreateCompanionBuilder = HadithTableCompanion
   Value<String?> chapterName,
   Value<String?> reference,
   required String hadithTextAr,
+  Value<String> hadithTextArNorm,
   Value<String?> hadithTextEn,
   Value<bool> isBookmarked,
 });
@@ -5400,6 +5281,7 @@ typedef $$HadithTableTableUpdateCompanionBuilder = HadithTableCompanion
   Value<String?> chapterName,
   Value<String?> reference,
   Value<String> hadithTextAr,
+  Value<String> hadithTextArNorm,
   Value<String?> hadithTextEn,
   Value<bool> isBookmarked,
 });
@@ -5429,6 +5311,11 @@ class $$HadithTableTableFilterComposer
 
   ColumnFilters<String> get hadithTextAr => $state.composableBuilder(
       column: $state.table.hadithTextAr,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get hadithTextArNorm => $state.composableBuilder(
+      column: $state.table.hadithTextArNorm,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
@@ -5471,6 +5358,11 @@ class $$HadithTableTableOrderingComposer
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 
+  ColumnOrderings<String> get hadithTextArNorm => $state.composableBuilder(
+      column: $state.table.hadithTextArNorm,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
   ColumnOrderings<String> get hadithTextEn => $state.composableBuilder(
       column: $state.table.hadithTextEn,
       builder: (column, joinBuilders) =>
@@ -5507,6 +5399,7 @@ class $$HadithTableTableTableManager extends RootTableManager<
             Value<String?> chapterName = const Value.absent(),
             Value<String?> reference = const Value.absent(),
             Value<String> hadithTextAr = const Value.absent(),
+            Value<String> hadithTextArNorm = const Value.absent(),
             Value<String?> hadithTextEn = const Value.absent(),
             Value<bool> isBookmarked = const Value.absent(),
           }) =>
@@ -5516,6 +5409,7 @@ class $$HadithTableTableTableManager extends RootTableManager<
             chapterName: chapterName,
             reference: reference,
             hadithTextAr: hadithTextAr,
+            hadithTextArNorm: hadithTextArNorm,
             hadithTextEn: hadithTextEn,
             isBookmarked: isBookmarked,
           ),
@@ -5525,6 +5419,7 @@ class $$HadithTableTableTableManager extends RootTableManager<
             Value<String?> chapterName = const Value.absent(),
             Value<String?> reference = const Value.absent(),
             required String hadithTextAr,
+            Value<String> hadithTextArNorm = const Value.absent(),
             Value<String?> hadithTextEn = const Value.absent(),
             Value<bool> isBookmarked = const Value.absent(),
           }) =>
@@ -5534,6 +5429,7 @@ class $$HadithTableTableTableManager extends RootTableManager<
             chapterName: chapterName,
             reference: reference,
             hadithTextAr: hadithTextAr,
+            hadithTextArNorm: hadithTextArNorm,
             hadithTextEn: hadithTextEn,
             isBookmarked: isBookmarked,
           ),
@@ -5559,6 +5455,7 @@ typedef $$DuaTableTableCreateCompanionBuilder = DuaTableCompanion Function({
   Value<int> id,
   required String category,
   required String duaText,
+  Value<String> duaTextNorm,
   Value<String?> reference,
   Value<bool> isBookmarked,
 });
@@ -5566,6 +5463,7 @@ typedef $$DuaTableTableUpdateCompanionBuilder = DuaTableCompanion Function({
   Value<int> id,
   Value<String> category,
   Value<String> duaText,
+  Value<String> duaTextNorm,
   Value<String?> reference,
   Value<bool> isBookmarked,
 });
@@ -5585,6 +5483,11 @@ class $$DuaTableTableFilterComposer
 
   ColumnFilters<String> get duaText => $state.composableBuilder(
       column: $state.table.duaText,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get duaTextNorm => $state.composableBuilder(
+      column: $state.table.duaTextNorm,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
@@ -5614,6 +5517,11 @@ class $$DuaTableTableOrderingComposer
 
   ColumnOrderings<String> get duaText => $state.composableBuilder(
       column: $state.table.duaText,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get duaTextNorm => $state.composableBuilder(
+      column: $state.table.duaTextNorm,
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 
@@ -5651,6 +5559,7 @@ class $$DuaTableTableTableManager extends RootTableManager<
             Value<int> id = const Value.absent(),
             Value<String> category = const Value.absent(),
             Value<String> duaText = const Value.absent(),
+            Value<String> duaTextNorm = const Value.absent(),
             Value<String?> reference = const Value.absent(),
             Value<bool> isBookmarked = const Value.absent(),
           }) =>
@@ -5658,6 +5567,7 @@ class $$DuaTableTableTableManager extends RootTableManager<
             id: id,
             category: category,
             duaText: duaText,
+            duaTextNorm: duaTextNorm,
             reference: reference,
             isBookmarked: isBookmarked,
           ),
@@ -5665,6 +5575,7 @@ class $$DuaTableTableTableManager extends RootTableManager<
             Value<int> id = const Value.absent(),
             required String category,
             required String duaText,
+            Value<String> duaTextNorm = const Value.absent(),
             Value<String?> reference = const Value.absent(),
             Value<bool> isBookmarked = const Value.absent(),
           }) =>
@@ -5672,6 +5583,7 @@ class $$DuaTableTableTableManager extends RootTableManager<
             id: id,
             category: category,
             duaText: duaText,
+            duaTextNorm: duaTextNorm,
             reference: reference,
             isBookmarked: isBookmarked,
           ),
@@ -5693,153 +5605,173 @@ typedef $$DuaTableTableProcessedTableManager = ProcessedTableManager<
     (Dua, BaseReferences<_$AppDatabase, $DuaTableTable, Dua>),
     Dua,
     PrefetchHooks Function()>;
-typedef $$DailySunnahTableTableCreateCompanionBuilder
-    = DailySunnahTableCompanion Function({
-  required String id,
-  required String title,
-  required String description,
-  required String howToApply,
-  required String source,
-  required int sortOrder,
-  Value<int> rowid,
+typedef $$ZikrTableTableCreateCompanionBuilder = ZikrTableCompanion Function({
+  Value<int> id,
+  required String category,
+  required int zikrIndex,
+  required String zikrText,
+  Value<String> textNorm,
+  Value<int?> repetitionCount,
+  Value<String?> repetitionLabel,
+  Value<String?> timeMarker,
 });
-typedef $$DailySunnahTableTableUpdateCompanionBuilder
-    = DailySunnahTableCompanion Function({
-  Value<String> id,
-  Value<String> title,
-  Value<String> description,
-  Value<String> howToApply,
-  Value<String> source,
-  Value<int> sortOrder,
-  Value<int> rowid,
+typedef $$ZikrTableTableUpdateCompanionBuilder = ZikrTableCompanion Function({
+  Value<int> id,
+  Value<String> category,
+  Value<int> zikrIndex,
+  Value<String> zikrText,
+  Value<String> textNorm,
+  Value<int?> repetitionCount,
+  Value<String?> repetitionLabel,
+  Value<String?> timeMarker,
 });
 
-class $$DailySunnahTableTableFilterComposer
-    extends FilterComposer<_$AppDatabase, $DailySunnahTableTable> {
-  $$DailySunnahTableTableFilterComposer(super.$state);
-  ColumnFilters<String> get id => $state.composableBuilder(
+class $$ZikrTableTableFilterComposer
+    extends FilterComposer<_$AppDatabase, $ZikrTableTable> {
+  $$ZikrTableTableFilterComposer(super.$state);
+  ColumnFilters<int> get id => $state.composableBuilder(
       column: $state.table.id,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
-  ColumnFilters<String> get title => $state.composableBuilder(
-      column: $state.table.title,
+  ColumnFilters<String> get category => $state.composableBuilder(
+      column: $state.table.category,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
-  ColumnFilters<String> get description => $state.composableBuilder(
-      column: $state.table.description,
+  ColumnFilters<int> get zikrIndex => $state.composableBuilder(
+      column: $state.table.zikrIndex,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
-  ColumnFilters<String> get howToApply => $state.composableBuilder(
-      column: $state.table.howToApply,
+  ColumnFilters<String> get zikrText => $state.composableBuilder(
+      column: $state.table.zikrText,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
-  ColumnFilters<String> get source => $state.composableBuilder(
-      column: $state.table.source,
+  ColumnFilters<String> get textNorm => $state.composableBuilder(
+      column: $state.table.textNorm,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
-  ColumnFilters<int> get sortOrder => $state.composableBuilder(
-      column: $state.table.sortOrder,
+  ColumnFilters<int> get repetitionCount => $state.composableBuilder(
+      column: $state.table.repetitionCount,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get repetitionLabel => $state.composableBuilder(
+      column: $state.table.repetitionLabel,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get timeMarker => $state.composableBuilder(
+      column: $state.table.timeMarker,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 }
 
-class $$DailySunnahTableTableOrderingComposer
-    extends OrderingComposer<_$AppDatabase, $DailySunnahTableTable> {
-  $$DailySunnahTableTableOrderingComposer(super.$state);
-  ColumnOrderings<String> get id => $state.composableBuilder(
+class $$ZikrTableTableOrderingComposer
+    extends OrderingComposer<_$AppDatabase, $ZikrTableTable> {
+  $$ZikrTableTableOrderingComposer(super.$state);
+  ColumnOrderings<int> get id => $state.composableBuilder(
       column: $state.table.id,
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 
-  ColumnOrderings<String> get title => $state.composableBuilder(
-      column: $state.table.title,
+  ColumnOrderings<String> get category => $state.composableBuilder(
+      column: $state.table.category,
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 
-  ColumnOrderings<String> get description => $state.composableBuilder(
-      column: $state.table.description,
+  ColumnOrderings<int> get zikrIndex => $state.composableBuilder(
+      column: $state.table.zikrIndex,
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 
-  ColumnOrderings<String> get howToApply => $state.composableBuilder(
-      column: $state.table.howToApply,
+  ColumnOrderings<String> get zikrText => $state.composableBuilder(
+      column: $state.table.zikrText,
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 
-  ColumnOrderings<String> get source => $state.composableBuilder(
-      column: $state.table.source,
+  ColumnOrderings<String> get textNorm => $state.composableBuilder(
+      column: $state.table.textNorm,
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 
-  ColumnOrderings<int> get sortOrder => $state.composableBuilder(
-      column: $state.table.sortOrder,
+  ColumnOrderings<int> get repetitionCount => $state.composableBuilder(
+      column: $state.table.repetitionCount,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get repetitionLabel => $state.composableBuilder(
+      column: $state.table.repetitionLabel,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get timeMarker => $state.composableBuilder(
+      column: $state.table.timeMarker,
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 }
 
-class $$DailySunnahTableTableTableManager extends RootTableManager<
+class $$ZikrTableTableTableManager extends RootTableManager<
     _$AppDatabase,
-    $DailySunnahTableTable,
-    DailySunnah,
-    $$DailySunnahTableTableFilterComposer,
-    $$DailySunnahTableTableOrderingComposer,
-    $$DailySunnahTableTableCreateCompanionBuilder,
-    $$DailySunnahTableTableUpdateCompanionBuilder,
-    (
-      DailySunnah,
-      BaseReferences<_$AppDatabase, $DailySunnahTableTable, DailySunnah>
-    ),
-    DailySunnah,
+    $ZikrTableTable,
+    Zikr,
+    $$ZikrTableTableFilterComposer,
+    $$ZikrTableTableOrderingComposer,
+    $$ZikrTableTableCreateCompanionBuilder,
+    $$ZikrTableTableUpdateCompanionBuilder,
+    (Zikr, BaseReferences<_$AppDatabase, $ZikrTableTable, Zikr>),
+    Zikr,
     PrefetchHooks Function()> {
-  $$DailySunnahTableTableTableManager(
-      _$AppDatabase db, $DailySunnahTableTable table)
+  $$ZikrTableTableTableManager(_$AppDatabase db, $ZikrTableTable table)
       : super(TableManagerState(
           db: db,
           table: table,
           filteringComposer:
-              $$DailySunnahTableTableFilterComposer(ComposerState(db, table)),
+              $$ZikrTableTableFilterComposer(ComposerState(db, table)),
           orderingComposer:
-              $$DailySunnahTableTableOrderingComposer(ComposerState(db, table)),
+              $$ZikrTableTableOrderingComposer(ComposerState(db, table)),
           updateCompanionCallback: ({
-            Value<String> id = const Value.absent(),
-            Value<String> title = const Value.absent(),
-            Value<String> description = const Value.absent(),
-            Value<String> howToApply = const Value.absent(),
-            Value<String> source = const Value.absent(),
-            Value<int> sortOrder = const Value.absent(),
-            Value<int> rowid = const Value.absent(),
+            Value<int> id = const Value.absent(),
+            Value<String> category = const Value.absent(),
+            Value<int> zikrIndex = const Value.absent(),
+            Value<String> zikrText = const Value.absent(),
+            Value<String> textNorm = const Value.absent(),
+            Value<int?> repetitionCount = const Value.absent(),
+            Value<String?> repetitionLabel = const Value.absent(),
+            Value<String?> timeMarker = const Value.absent(),
           }) =>
-              DailySunnahTableCompanion(
+              ZikrTableCompanion(
             id: id,
-            title: title,
-            description: description,
-            howToApply: howToApply,
-            source: source,
-            sortOrder: sortOrder,
-            rowid: rowid,
+            category: category,
+            zikrIndex: zikrIndex,
+            zikrText: zikrText,
+            textNorm: textNorm,
+            repetitionCount: repetitionCount,
+            repetitionLabel: repetitionLabel,
+            timeMarker: timeMarker,
           ),
           createCompanionCallback: ({
-            required String id,
-            required String title,
-            required String description,
-            required String howToApply,
-            required String source,
-            required int sortOrder,
-            Value<int> rowid = const Value.absent(),
+            Value<int> id = const Value.absent(),
+            required String category,
+            required int zikrIndex,
+            required String zikrText,
+            Value<String> textNorm = const Value.absent(),
+            Value<int?> repetitionCount = const Value.absent(),
+            Value<String?> repetitionLabel = const Value.absent(),
+            Value<String?> timeMarker = const Value.absent(),
           }) =>
-              DailySunnahTableCompanion.insert(
+              ZikrTableCompanion.insert(
             id: id,
-            title: title,
-            description: description,
-            howToApply: howToApply,
-            source: source,
-            sortOrder: sortOrder,
-            rowid: rowid,
+            category: category,
+            zikrIndex: zikrIndex,
+            zikrText: zikrText,
+            textNorm: textNorm,
+            repetitionCount: repetitionCount,
+            repetitionLabel: repetitionLabel,
+            timeMarker: timeMarker,
           ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
@@ -5848,166 +5780,16 @@ class $$DailySunnahTableTableTableManager extends RootTableManager<
         ));
 }
 
-typedef $$DailySunnahTableTableProcessedTableManager = ProcessedTableManager<
+typedef $$ZikrTableTableProcessedTableManager = ProcessedTableManager<
     _$AppDatabase,
-    $DailySunnahTableTable,
-    DailySunnah,
-    $$DailySunnahTableTableFilterComposer,
-    $$DailySunnahTableTableOrderingComposer,
-    $$DailySunnahTableTableCreateCompanionBuilder,
-    $$DailySunnahTableTableUpdateCompanionBuilder,
-    (
-      DailySunnah,
-      BaseReferences<_$AppDatabase, $DailySunnahTableTable, DailySunnah>
-    ),
-    DailySunnah,
-    PrefetchHooks Function()>;
-typedef $$DailyTaskTableTableCreateCompanionBuilder = DailyTaskTableCompanion
-    Function({
-  required String id,
-  required String title,
-  required String description,
-  required String impact,
-  required int sortOrder,
-  Value<int> rowid,
-});
-typedef $$DailyTaskTableTableUpdateCompanionBuilder = DailyTaskTableCompanion
-    Function({
-  Value<String> id,
-  Value<String> title,
-  Value<String> description,
-  Value<String> impact,
-  Value<int> sortOrder,
-  Value<int> rowid,
-});
-
-class $$DailyTaskTableTableFilterComposer
-    extends FilterComposer<_$AppDatabase, $DailyTaskTableTable> {
-  $$DailyTaskTableTableFilterComposer(super.$state);
-  ColumnFilters<String> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get title => $state.composableBuilder(
-      column: $state.table.title,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get description => $state.composableBuilder(
-      column: $state.table.description,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get impact => $state.composableBuilder(
-      column: $state.table.impact,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<int> get sortOrder => $state.composableBuilder(
-      column: $state.table.sortOrder,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-}
-
-class $$DailyTaskTableTableOrderingComposer
-    extends OrderingComposer<_$AppDatabase, $DailyTaskTableTable> {
-  $$DailyTaskTableTableOrderingComposer(super.$state);
-  ColumnOrderings<String> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get title => $state.composableBuilder(
-      column: $state.table.title,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get description => $state.composableBuilder(
-      column: $state.table.description,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get impact => $state.composableBuilder(
-      column: $state.table.impact,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<int> get sortOrder => $state.composableBuilder(
-      column: $state.table.sortOrder,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-}
-
-class $$DailyTaskTableTableTableManager extends RootTableManager<
-    _$AppDatabase,
-    $DailyTaskTableTable,
-    DailyTask,
-    $$DailyTaskTableTableFilterComposer,
-    $$DailyTaskTableTableOrderingComposer,
-    $$DailyTaskTableTableCreateCompanionBuilder,
-    $$DailyTaskTableTableUpdateCompanionBuilder,
-    (DailyTask, BaseReferences<_$AppDatabase, $DailyTaskTableTable, DailyTask>),
-    DailyTask,
-    PrefetchHooks Function()> {
-  $$DailyTaskTableTableTableManager(
-      _$AppDatabase db, $DailyTaskTableTable table)
-      : super(TableManagerState(
-          db: db,
-          table: table,
-          filteringComposer:
-              $$DailyTaskTableTableFilterComposer(ComposerState(db, table)),
-          orderingComposer:
-              $$DailyTaskTableTableOrderingComposer(ComposerState(db, table)),
-          updateCompanionCallback: ({
-            Value<String> id = const Value.absent(),
-            Value<String> title = const Value.absent(),
-            Value<String> description = const Value.absent(),
-            Value<String> impact = const Value.absent(),
-            Value<int> sortOrder = const Value.absent(),
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              DailyTaskTableCompanion(
-            id: id,
-            title: title,
-            description: description,
-            impact: impact,
-            sortOrder: sortOrder,
-            rowid: rowid,
-          ),
-          createCompanionCallback: ({
-            required String id,
-            required String title,
-            required String description,
-            required String impact,
-            required int sortOrder,
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              DailyTaskTableCompanion.insert(
-            id: id,
-            title: title,
-            description: description,
-            impact: impact,
-            sortOrder: sortOrder,
-            rowid: rowid,
-          ),
-          withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
-              .toList(),
-          prefetchHooksCallback: null,
-        ));
-}
-
-typedef $$DailyTaskTableTableProcessedTableManager = ProcessedTableManager<
-    _$AppDatabase,
-    $DailyTaskTableTable,
-    DailyTask,
-    $$DailyTaskTableTableFilterComposer,
-    $$DailyTaskTableTableOrderingComposer,
-    $$DailyTaskTableTableCreateCompanionBuilder,
-    $$DailyTaskTableTableUpdateCompanionBuilder,
-    (DailyTask, BaseReferences<_$AppDatabase, $DailyTaskTableTable, DailyTask>),
-    DailyTask,
+    $ZikrTableTable,
+    Zikr,
+    $$ZikrTableTableFilterComposer,
+    $$ZikrTableTableOrderingComposer,
+    $$ZikrTableTableCreateCompanionBuilder,
+    $$ZikrTableTableUpdateCompanionBuilder,
+    (Zikr, BaseReferences<_$AppDatabase, $ZikrTableTable, Zikr>),
+    Zikr,
     PrefetchHooks Function()>;
 typedef $$MuhasabaEntryTableTableCreateCompanionBuilder
     = MuhasabaEntryTableCompanion Function({
@@ -6421,146 +6203,6 @@ typedef $$UserFavoriteTableTableProcessedTableManager = ProcessedTableManager<
     ),
     UserFavorite,
     PrefetchHooks Function()>;
-typedef $$UserDailyActivityTableTableCreateCompanionBuilder
-    = UserDailyActivityTableCompanion Function({
-  required String activityDate,
-  Value<String?> completedTaskId,
-  Value<String?> completedSunnahId,
-  required String updatedAt,
-  Value<int> rowid,
-});
-typedef $$UserDailyActivityTableTableUpdateCompanionBuilder
-    = UserDailyActivityTableCompanion Function({
-  Value<String> activityDate,
-  Value<String?> completedTaskId,
-  Value<String?> completedSunnahId,
-  Value<String> updatedAt,
-  Value<int> rowid,
-});
-
-class $$UserDailyActivityTableTableFilterComposer
-    extends FilterComposer<_$AppDatabase, $UserDailyActivityTableTable> {
-  $$UserDailyActivityTableTableFilterComposer(super.$state);
-  ColumnFilters<String> get activityDate => $state.composableBuilder(
-      column: $state.table.activityDate,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get completedTaskId => $state.composableBuilder(
-      column: $state.table.completedTaskId,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get completedSunnahId => $state.composableBuilder(
-      column: $state.table.completedSunnahId,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get updatedAt => $state.composableBuilder(
-      column: $state.table.updatedAt,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-}
-
-class $$UserDailyActivityTableTableOrderingComposer
-    extends OrderingComposer<_$AppDatabase, $UserDailyActivityTableTable> {
-  $$UserDailyActivityTableTableOrderingComposer(super.$state);
-  ColumnOrderings<String> get activityDate => $state.composableBuilder(
-      column: $state.table.activityDate,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get completedTaskId => $state.composableBuilder(
-      column: $state.table.completedTaskId,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get completedSunnahId => $state.composableBuilder(
-      column: $state.table.completedSunnahId,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get updatedAt => $state.composableBuilder(
-      column: $state.table.updatedAt,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-}
-
-class $$UserDailyActivityTableTableTableManager extends RootTableManager<
-    _$AppDatabase,
-    $UserDailyActivityTableTable,
-    UserDailyActivity,
-    $$UserDailyActivityTableTableFilterComposer,
-    $$UserDailyActivityTableTableOrderingComposer,
-    $$UserDailyActivityTableTableCreateCompanionBuilder,
-    $$UserDailyActivityTableTableUpdateCompanionBuilder,
-    (
-      UserDailyActivity,
-      BaseReferences<_$AppDatabase, $UserDailyActivityTableTable,
-          UserDailyActivity>
-    ),
-    UserDailyActivity,
-    PrefetchHooks Function()> {
-  $$UserDailyActivityTableTableTableManager(
-      _$AppDatabase db, $UserDailyActivityTableTable table)
-      : super(TableManagerState(
-          db: db,
-          table: table,
-          filteringComposer: $$UserDailyActivityTableTableFilterComposer(
-              ComposerState(db, table)),
-          orderingComposer: $$UserDailyActivityTableTableOrderingComposer(
-              ComposerState(db, table)),
-          updateCompanionCallback: ({
-            Value<String> activityDate = const Value.absent(),
-            Value<String?> completedTaskId = const Value.absent(),
-            Value<String?> completedSunnahId = const Value.absent(),
-            Value<String> updatedAt = const Value.absent(),
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              UserDailyActivityTableCompanion(
-            activityDate: activityDate,
-            completedTaskId: completedTaskId,
-            completedSunnahId: completedSunnahId,
-            updatedAt: updatedAt,
-            rowid: rowid,
-          ),
-          createCompanionCallback: ({
-            required String activityDate,
-            Value<String?> completedTaskId = const Value.absent(),
-            Value<String?> completedSunnahId = const Value.absent(),
-            required String updatedAt,
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              UserDailyActivityTableCompanion.insert(
-            activityDate: activityDate,
-            completedTaskId: completedTaskId,
-            completedSunnahId: completedSunnahId,
-            updatedAt: updatedAt,
-            rowid: rowid,
-          ),
-          withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
-              .toList(),
-          prefetchHooksCallback: null,
-        ));
-}
-
-typedef $$UserDailyActivityTableTableProcessedTableManager
-    = ProcessedTableManager<
-        _$AppDatabase,
-        $UserDailyActivityTableTable,
-        UserDailyActivity,
-        $$UserDailyActivityTableTableFilterComposer,
-        $$UserDailyActivityTableTableOrderingComposer,
-        $$UserDailyActivityTableTableCreateCompanionBuilder,
-        $$UserDailyActivityTableTableUpdateCompanionBuilder,
-        (
-          UserDailyActivity,
-          BaseReferences<_$AppDatabase, $UserDailyActivityTableTable,
-              UserDailyActivity>
-        ),
-        UserDailyActivity,
-        PrefetchHooks Function()>;
 typedef $$MemoryThreadTableTableCreateCompanionBuilder
     = MemoryThreadTableCompanion Function({
   required String id,
@@ -7605,6 +7247,153 @@ typedef $$ReminderIntentTableTableProcessedTableManager = ProcessedTableManager<
     ),
     ReminderIntentRow,
     PrefetchHooks Function()>;
+typedef $$SeedStateTableTableCreateCompanionBuilder = SeedStateTableCompanion
+    Function({
+  required String datasetKey,
+  required int contentVersion,
+  required int expectedCount,
+  required int actualCount,
+  required String seededAt,
+  Value<int> rowid,
+});
+typedef $$SeedStateTableTableUpdateCompanionBuilder = SeedStateTableCompanion
+    Function({
+  Value<String> datasetKey,
+  Value<int> contentVersion,
+  Value<int> expectedCount,
+  Value<int> actualCount,
+  Value<String> seededAt,
+  Value<int> rowid,
+});
+
+class $$SeedStateTableTableFilterComposer
+    extends FilterComposer<_$AppDatabase, $SeedStateTableTable> {
+  $$SeedStateTableTableFilterComposer(super.$state);
+  ColumnFilters<String> get datasetKey => $state.composableBuilder(
+      column: $state.table.datasetKey,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<int> get contentVersion => $state.composableBuilder(
+      column: $state.table.contentVersion,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<int> get expectedCount => $state.composableBuilder(
+      column: $state.table.expectedCount,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<int> get actualCount => $state.composableBuilder(
+      column: $state.table.actualCount,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get seededAt => $state.composableBuilder(
+      column: $state.table.seededAt,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+}
+
+class $$SeedStateTableTableOrderingComposer
+    extends OrderingComposer<_$AppDatabase, $SeedStateTableTable> {
+  $$SeedStateTableTableOrderingComposer(super.$state);
+  ColumnOrderings<String> get datasetKey => $state.composableBuilder(
+      column: $state.table.datasetKey,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<int> get contentVersion => $state.composableBuilder(
+      column: $state.table.contentVersion,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<int> get expectedCount => $state.composableBuilder(
+      column: $state.table.expectedCount,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<int> get actualCount => $state.composableBuilder(
+      column: $state.table.actualCount,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get seededAt => $state.composableBuilder(
+      column: $state.table.seededAt,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+}
+
+class $$SeedStateTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $SeedStateTableTable,
+    SeedState,
+    $$SeedStateTableTableFilterComposer,
+    $$SeedStateTableTableOrderingComposer,
+    $$SeedStateTableTableCreateCompanionBuilder,
+    $$SeedStateTableTableUpdateCompanionBuilder,
+    (SeedState, BaseReferences<_$AppDatabase, $SeedStateTableTable, SeedState>),
+    SeedState,
+    PrefetchHooks Function()> {
+  $$SeedStateTableTableTableManager(
+      _$AppDatabase db, $SeedStateTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer:
+              $$SeedStateTableTableFilterComposer(ComposerState(db, table)),
+          orderingComposer:
+              $$SeedStateTableTableOrderingComposer(ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<String> datasetKey = const Value.absent(),
+            Value<int> contentVersion = const Value.absent(),
+            Value<int> expectedCount = const Value.absent(),
+            Value<int> actualCount = const Value.absent(),
+            Value<String> seededAt = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              SeedStateTableCompanion(
+            datasetKey: datasetKey,
+            contentVersion: contentVersion,
+            expectedCount: expectedCount,
+            actualCount: actualCount,
+            seededAt: seededAt,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required String datasetKey,
+            required int contentVersion,
+            required int expectedCount,
+            required int actualCount,
+            required String seededAt,
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              SeedStateTableCompanion.insert(
+            datasetKey: datasetKey,
+            contentVersion: contentVersion,
+            expectedCount: expectedCount,
+            actualCount: actualCount,
+            seededAt: seededAt,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$SeedStateTableTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $SeedStateTableTable,
+    SeedState,
+    $$SeedStateTableTableFilterComposer,
+    $$SeedStateTableTableOrderingComposer,
+    $$SeedStateTableTableCreateCompanionBuilder,
+    $$SeedStateTableTableUpdateCompanionBuilder,
+    (SeedState, BaseReferences<_$AppDatabase, $SeedStateTableTable, SeedState>),
+    SeedState,
+    PrefetchHooks Function()>;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -7615,17 +7404,12 @@ class $AppDatabaseManager {
       $$HadithTableTableTableManager(_db, _db.hadithTable);
   $$DuaTableTableTableManager get duaTable =>
       $$DuaTableTableTableManager(_db, _db.duaTable);
-  $$DailySunnahTableTableTableManager get dailySunnahTable =>
-      $$DailySunnahTableTableTableManager(_db, _db.dailySunnahTable);
-  $$DailyTaskTableTableTableManager get dailyTaskTable =>
-      $$DailyTaskTableTableTableManager(_db, _db.dailyTaskTable);
+  $$ZikrTableTableTableManager get zikrTable =>
+      $$ZikrTableTableTableManager(_db, _db.zikrTable);
   $$MuhasabaEntryTableTableTableManager get muhasabaEntryTable =>
       $$MuhasabaEntryTableTableTableManager(_db, _db.muhasabaEntryTable);
   $$UserFavoriteTableTableTableManager get userFavoriteTable =>
       $$UserFavoriteTableTableTableManager(_db, _db.userFavoriteTable);
-  $$UserDailyActivityTableTableTableManager get userDailyActivityTable =>
-      $$UserDailyActivityTableTableTableManager(
-          _db, _db.userDailyActivityTable);
   $$MemoryThreadTableTableTableManager get memoryThreadTable =>
       $$MemoryThreadTableTableTableManager(_db, _db.memoryThreadTable);
   $$ReflectionEntryTableTableTableManager get reflectionEntryTable =>
@@ -7636,4 +7420,6 @@ class $AppDatabaseManager {
       $$ReturnEventTableTableTableManager(_db, _db.returnEventTable);
   $$ReminderIntentTableTableTableManager get reminderIntentTable =>
       $$ReminderIntentTableTableTableManager(_db, _db.reminderIntentTable);
+  $$SeedStateTableTableTableManager get seedStateTable =>
+      $$SeedStateTableTableTableManager(_db, _db.seedStateTable);
 }

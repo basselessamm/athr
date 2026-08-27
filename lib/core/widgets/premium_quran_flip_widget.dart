@@ -10,6 +10,10 @@ class PremiumQuranFlipWidget extends StatefulWidget {
   final ValueChanged<int>? onPageChanged;
   final String Function(int index, int total)? semanticPageLabel;
 
+  /// When provided, writing a page index into this notifier makes the pager
+  /// animate to it — used for audio follow-along without rebuilding parents.
+  final ValueNotifier<int>? followIndexNotifier;
+
   const PremiumQuranFlipWidget({
     super.key,
     required this.itemCount,
@@ -18,6 +22,7 @@ class PremiumQuranFlipWidget extends StatefulWidget {
     this.initialIndex = 0,
     this.onPageChanged,
     this.semanticPageLabel,
+    this.followIndexNotifier,
   });
 
   @override
@@ -34,6 +39,29 @@ class _PremiumQuranFlipWidgetState extends State<PremiumQuranFlipWidget> {
     _currentPageValue = widget.initialIndex.toDouble();
     _controller = PageController(initialPage: widget.initialIndex);
     _controller.addListener(_onScroll);
+    widget.followIndexNotifier?.addListener(_onFollowIndex);
+  }
+
+  void _onFollowIndex() {
+    if (!mounted) return;
+    final target = widget.followIndexNotifier!.value;
+    if (target < 0 || target >= widget.itemCount) return;
+    final current = _controller.hasClients ? (_controller.page ?? 0).round() : widget.initialIndex;
+    if (target == current) return;
+    _controller.animateToPage(
+      target,
+      duration: const Duration(milliseconds: 380),
+      curve: Curves.easeOutCubic,
+    );
+  }
+
+  @override
+  void didUpdateWidget(covariant PremiumQuranFlipWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.followIndexNotifier != widget.followIndexNotifier) {
+      oldWidget.followIndexNotifier?.removeListener(_onFollowIndex);
+      widget.followIndexNotifier?.addListener(_onFollowIndex);
+    }
   }
 
   void _onScroll() {
@@ -43,6 +71,7 @@ class _PremiumQuranFlipWidgetState extends State<PremiumQuranFlipWidget> {
 
   @override
   void dispose() {
+    widget.followIndexNotifier?.removeListener(_onFollowIndex);
     _controller
       ..removeListener(_onScroll)
       ..dispose();

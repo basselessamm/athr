@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:quran_flutter/quran.dart';
+import 'package:midrar/vendor/quran_core/quran.dart';
 
-import 'package:athr/core/database/app_database.dart';
-import 'package:athr/core/widgets/athr_scaffold.dart';
-import 'package:athr/features/azkar/providers/azkar_providers.dart';
-import 'package:athr/features/settings/providers/settings_providers.dart';
-import 'package:athr/features/situations/providers/situations_providers.dart';
+import 'package:midrar/core/database/app_database.dart';
+import 'package:midrar/core/widgets/midrar_scaffold.dart';
+import 'package:midrar/features/azkar/providers/azkar_providers.dart';
+import 'package:midrar/features/settings/providers/settings_providers.dart';
+import 'package:midrar/features/situations/providers/situations_providers.dart';
 
 class SituationDetailScreen extends ConsumerWidget {
   final String id;
@@ -22,7 +22,7 @@ class SituationDetailScreen extends ConsumerWidget {
     final hadithsAsync = ref.watch(situationHadithProvider(id));
     final fontSize = ref.watch(fontSizeProvider);
 
-    return AthrScaffold(
+    return MidrarScaffold(
       title: situation.title,
       body: ListView(
         padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),

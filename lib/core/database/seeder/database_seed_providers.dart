@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:athr/core/database/database_providers.dart';
+import 'package:midrar/core/database/database_providers.dart';
 import 'db_seeder.dart';
 
 final databaseSeederProvider = Provider<DatabaseSeeder>((ref) {

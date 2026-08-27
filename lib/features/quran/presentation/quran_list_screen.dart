@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:quran_flutter/quran.dart';
+import 'package:midrar/vendor/quran_core/quran.dart';
 
-import 'package:athr/core/widgets/athr_scaffold.dart';
-import 'package:athr/core/widgets/main_navigation_bar.dart';
-import 'package:athr/features/quran/presentation/widgets/surah_list_tile.dart';
-import 'package:athr/features/quran/providers/bookmark_provider.dart';
-import 'package:athr/features/quran/providers/quran_providers.dart';
+import 'package:midrar/core/widgets/midrar_scaffold.dart';
+import 'package:midrar/core/widgets/main_navigation_bar.dart';
+import 'package:midrar/features/quran/presentation/widgets/surah_list_tile.dart';
+import 'package:midrar/features/quran/providers/bookmark_provider.dart';
+import 'package:midrar/features/quran/providers/quran_providers.dart';
 
 class QuranListScreen extends ConsumerWidget {
   const QuranListScreen({super.key});
@@ -22,7 +22,7 @@ class QuranListScreen extends ConsumerWidget {
     if (quranInitialization.isLoading) {
       return Directionality(
         textDirection: TextDirection.rtl,
-        child: AthrScaffold(
+        child: MidrarScaffold(
           title: 'القرآن الكريم',
           body: Center(
             child: Column(
@@ -45,7 +45,7 @@ class QuranListScreen extends ConsumerWidget {
     if (quranInitialization.hasError) {
       return Directionality(
         textDirection: TextDirection.rtl,
-        child: AthrScaffold(
+        child: MidrarScaffold(
           title: 'القرآن الكريم',
           body: Center(
             child: Padding(
@@ -62,10 +62,12 @@ class QuranListScreen extends ConsumerWidget {
       );
     }
 
-    final bookmark = ref.watch(bookmarkProvider);
+    // "Continue reading" follows automatic progress; the explicit bookmark
+    // remains a separate pinned position.
+    final lastRead = ref.watch(lastReadProvider) ?? ref.watch(bookmarkProvider);
     return Directionality(
       textDirection: TextDirection.rtl,
-      child: AthrScaffold(
+      child: MidrarScaffold(
         title: 'القرآن الكريم',
         body: CustomScrollView(
           slivers: [
@@ -99,21 +101,21 @@ class QuranListScreen extends ConsumerWidget {
                 ),
               ),
             ),
-            if (bookmark != null)
+            if (lastRead != null)
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsetsDirectional.fromSTEB(16, 6, 16, 14),
                   child: Semantics(
                     button: true,
                     label:
-                        'إكمال القراءة من سورة ${Quran.getSurahName(bookmark.surah)}، الآية ${bookmark.ayah}',
+                        'إكمال القراءة من سورة ${Quran.getSurahName(lastRead.surah)}، الآية ${lastRead.ayah}',
                     child: Material(
                       color: scheme.primaryContainer,
                       borderRadius: BorderRadius.circular(20),
                       clipBehavior: Clip.antiAlias,
                       child: InkWell(
                         onTap: () => context.push(
-                          '/quran/${bookmark.surah}?ayah=${bookmark.ayah}',
+                          '/quran/${lastRead.surah}?ayah=${lastRead.ayah}',
                         ),
                         child: Padding(
                           padding: const EdgeInsets.all(18),
@@ -146,7 +148,7 @@ class QuranListScreen extends ConsumerWidget {
                                     ),
                                     const SizedBox(height: 3),
                                     Text(
-                                      'سورة ${Quran.getSurahName(bookmark.surah)} · الآية ${bookmark.ayah}',
+                                      'سورة ${Quran.getSurahName(lastRead.surah)} · الآية ${lastRead.ayah}',
                                       style: GoogleFonts.amiri(
                                         fontSize: 23,
                                         height: 1.15,
@@ -195,3 +197,4 @@ class QuranListScreen extends ConsumerWidget {
     );
   }
 }
+

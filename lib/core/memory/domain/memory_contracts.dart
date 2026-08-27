@@ -1,4 +1,4 @@
-/// Domain contracts for Athr's local memory model.
+/// Domain contracts for Midrar's local memory model.
 ///
 /// These contracts deliberately keep verified religious source data separate
 /// from user-authored memory. A MemoryThread references a SourceReference; it

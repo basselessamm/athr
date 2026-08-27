@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:athr/core/database/app_database.dart';
+import 'package:midrar/core/database/app_database.dart';
 import 'domain/memory_contracts.dart';
 import 'domain/reminder_intent.dart';
 

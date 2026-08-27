@@ -1,8 +1,9 @@
+import 'package:drift/drift.dart' hide Column;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:athr/core/database/app_database.dart';
-import 'package:athr/core/database/database_providers.dart';
-import 'package:athr/features/situations/data/situations_content.dart';
+import 'package:midrar/core/database/app_database.dart';
+import 'package:midrar/core/database/database_providers.dart';
+import 'package:midrar/features/situations/data/situations_content.dart';
 
 class Situation {
   final String id;
@@ -74,7 +75,7 @@ const List<Situation> lifeSituations = [
     id: '8',
     title: 'عند الغضب',
     emoji: '😡',
-    duaCategory: 'دعاء طرد الشيطان ووساوسه', // Closest match, usually isti'adha
+    duaCategory: 'دعاء الغضب',
     description: 'الاستعاذة بالله والتحكم في النفس عند الغضب.',
   ),
 ];
@@ -96,6 +97,11 @@ final situationContentProvider = Provider.family<SituationContentBlock, String>(
   },
 );
 
+/// Resolves supporting hadiths for a life situation by querying the FULL
+/// local corpus through an indexed SQL predicate. Chapter keywords are
+/// matched against every row of the requested book (deterministic order),
+/// never against an arbitrary window, so content that exists locally is
+/// always found.
 final situationHadithProvider = FutureProvider.family<List<Hadith>, String>((
   ref,
   id,
@@ -104,22 +110,42 @@ final situationHadithProvider = FutureProvider.family<List<Hadith>, String>((
   final content = ref.watch(situationContentProvider(id));
   final items = <Hadith>[];
 
+  const maxPerReference = 1;
+  const maxTotal = 3;
+
   for (final reference in content.hadiths) {
-    final candidates =
-        await (db.select(db.hadithTable)
-              ..where((t) => t.bookName.equals(reference.bookName))
-              ..limit(120))
-            .get();
+    if (items.length >= maxTotal) break;
+    final keyword = reference.chapterKeyword.trim();
+    if (keyword.isEmpty) continue;
 
-    final hadith = candidates.cast<Hadith?>().firstWhere(
-      (item) => item?.chapterName?.contains(reference.chapterKeyword) ?? false,
-      orElse: () => null,
-    );
+    // Primary path: chapter-name match across the entire book using the
+    // (book_name, id) index; deterministic ordering keeps results stable.
+    var matches = await (db.select(db.hadithTable)
+          ..where(
+            (t) =>
+                t.bookName.equals(reference.bookName) &
+                t.chapterName.like('%$keyword%'),
+          )
+          ..orderBy([(t) => OrderingTerm.asc(t.id)])
+          ..limit(maxPerReference))
+        .get();
 
-    if (hadith != null) {
-      items.add(hadith);
+    // Fallback path: full-text match over the normalized corpus when the
+    // keyword describes content rather than a chapter heading.
+    if (matches.isEmpty) {
+      matches = await (db.select(db.hadithTable)
+            ..where(
+              (t) =>
+                  t.bookName.equals(reference.bookName) &
+                  t.hadithTextArNorm.like('%$keyword%'),
+            )
+            ..orderBy([(t) => OrderingTerm.asc(t.id)])
+            ..limit(maxPerReference))
+          .get();
     }
+
+    items.addAll(matches);
   }
 
-  return items;
+  return items.take(maxTotal).toList(growable: false);
 });

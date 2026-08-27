@@ -1,41 +1,73 @@
 import 'dart:async';
+import 'dart:io';
 
+import 'package:audio_session/audio_session.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:quran_flutter/quran.dart';
+import 'package:path/path.dart' as p;
+import 'package:path_provider/path_provider.dart';
+import 'package:midrar/vendor/quran_core/quran.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class QuranReciter {
-  const QuranReciter({
-    required this.id,
-    required this.name,
-    required this.cdnBitrate,
-  });
+import 'package:midrar/features/settings/providers/settings_providers.dart';
 
-  final String id;
-  final String name;
-  final int cdnBitrate;
+import 'package:midrar/features/quran/application/quran_reciters.dart';
+
+export 'quran_reciters.dart' show QuranReciter, quranReciters, unverifiedReciterIds;
+
+// ---------------------------------------------------------------------------
+// Smart cache: only ayahs the user actually listens to are stored.
+// ---------------------------------------------------------------------------
+
+class QuranAudioCache {
+  QuranAudioCache._();
+  static const _dirName = 'recitation_cache';
+
+  static Future<Directory> _directory() async {
+    final base = await getApplicationSupportDirectory();
+    final dir = Directory(p.join(base.path, _dirName));
+    if (!dir.existsSync()) dir.createSync(recursive: true);
+    return dir;
+  }
+
+  static Future<File> fileFor({
+    required QuranReciter reciter,
+    required int globalAyah,
+  }) async {
+    final dir = await _directory();
+    return File(
+      p.join(dir.path, '${reciter.id}_${reciter.cdnBitrate}_$globalAyah.mp3'),
+    );
+  }
+
+  static Future<int> totalSizeBytes() async {
+    try {
+      final dir = await _directory();
+      var total = 0;
+      await for (final entity in dir.list()) {
+        if (entity is File) total += entity.lengthSync();
+      }
+      return total;
+    } catch (_) {
+      return 0;
+    }
+  }
+
+  static Future<void> clear() async {
+    try {
+      final dir = await _directory();
+      if (dir.existsSync()) dir.deleteSync(recursive: true);
+    } catch (_) {
+      // Clearing is best-effort; next cache write recreates the directory.
+    }
+  }
 }
 
-const quranReciters = <QuranReciter>[
-  QuranReciter(id: 'ar.alafasy', name: 'مشاري العفاسي', cdnBitrate: 128),
-  QuranReciter(
-    id: 'ar.abdurrahmaansudais',
-    name: 'عبد الرحمن السديس',
-    cdnBitrate: 192,
-  ),
-  QuranReciter(
-    id: 'ar.abdulbasitmurattal',
-    name: 'عبد الباسط عبد الصمد',
-    cdnBitrate: 192,
-  ),
-  QuranReciter(id: 'ar.minshawi', name: 'محمد صديق المنشاوي', cdnBitrate: 128),
-  QuranReciter(id: 'ar.husary', name: 'محمود خليل الحصري', cdnBitrate: 128),
-  QuranReciter(id: 'ar.mahermuaiqly', name: 'ماهر المعيقلي', cdnBitrate: 128),
-  QuranReciter(id: 'ar.saoodshuraym', name: 'سعود الشريم', cdnBitrate: 128),
-  QuranReciter(id: 'ar.muhammadayyoub', name: 'محمد أيوب', cdnBitrate: 128),
-  QuranReciter(id: 'ar.muhammadjibreel', name: 'محمد جبريل', cdnBitrate: 128),
-  QuranReciter(id: 'ar.ahmedalajmi', name: 'أحمد العجمي', cdnBitrate: 128),
-];
+
+
+// ---------------------------------------------------------------------------
+// Stream URL construction (verified CDN layout)
+// ---------------------------------------------------------------------------
 
 class QuranAudioRepository {
   Uri ayahStream({required QuranReciter reciter, required int globalAyah}) {
@@ -53,6 +85,11 @@ class QuranAudioRepository {
     return total;
   }
 }
+// ---------------------------------------------------------------------------
+// State
+// ---------------------------------------------------------------------------
+
+enum QuranRepeatMode { off, ayah, surah }
 
 class QuranAudioState {
   const QuranAudioState({
@@ -64,6 +101,9 @@ class QuranAudioState {
     this.isLoading = false,
     this.position = Duration.zero,
     this.duration = Duration.zero,
+    this.repeatMode = QuranRepeatMode.off,
+    this.speed = 1.0,
+    this.sleepUntil,
     this.error,
   });
 
@@ -75,9 +115,20 @@ class QuranAudioState {
   final bool isLoading;
   final Duration position;
   final Duration duration;
+  final QuranRepeatMode repeatMode;
+  final double speed;
+
+  /// When the sleep timer fires (wall clock), or null when off.
+  final DateTime? sleepUntil;
+
   final String? error;
 
   bool get hasSelection => surah != null && ayah != null && totalAyahs != null;
+
+  Duration get remaining {
+    final left = duration - position;
+    return left.isNegative ? Duration.zero : left;
+  }
 
   QuranAudioState copyWith({
     QuranReciter? reciter,
@@ -88,6 +139,10 @@ class QuranAudioState {
     bool? isLoading,
     Duration? position,
     Duration? duration,
+    QuranRepeatMode? repeatMode,
+    double? speed,
+    DateTime? sleepUntil,
+    bool clearSleep = false,
     String? error,
     bool clearError = false,
   }) {
@@ -100,15 +155,23 @@ class QuranAudioState {
       isLoading: isLoading ?? this.isLoading,
       position: position ?? this.position,
       duration: duration ?? this.duration,
+      repeatMode: repeatMode ?? this.repeatMode,
+      speed: speed ?? this.speed,
+      sleepUntil: clearSleep ? null : (sleepUntil ?? this.sleepUntil),
       error: clearError ? null : (error ?? this.error),
     );
   }
 }
 
+// ---------------------------------------------------------------------------
+// Controller
+// ---------------------------------------------------------------------------
+
 class QuranAudioController extends StateNotifier<QuranAudioState> {
-  QuranAudioController(this._repository)
+  QuranAudioController(this._repository, {QuranReciter? savedReciter})
     : _player = AudioPlayer(),
-      super(QuranAudioState(reciter: quranReciters.first)) {
+      super(QuranAudioState(reciter: savedReciter ?? quranReciters.first)) {
+    _configureAudioSession();
     _positionSubscription = _player.positionStream.listen((position) {
       state = state.copyWith(position: position);
     });
@@ -123,7 +186,7 @@ class QuranAudioController extends StateNotifier<QuranAudioState> {
             playerState.processingState == ProcessingState.buffering,
       );
       if (playerState.processingState == ProcessingState.completed) {
-        unawaited(next());
+        unawaited(_onAyahCompleted());
       }
     });
     _errorSubscription = _player.playbackEventStream.listen(
@@ -144,11 +207,50 @@ class QuranAudioController extends StateNotifier<QuranAudioState> {
   late final StreamSubscription<Duration?> _durationSubscription;
   late final StreamSubscription<PlayerState> _playerStateSubscription;
   late final StreamSubscription<PlaybackEvent> _errorSubscription;
+  Timer? _sleepTimer;
+
+  // Experimental just_audio API — the official streaming-cache primitive;
+  // acceptable instability for a best-effort cache layer.
+  AudioSource _cachingSource(Uri uri, File cacheFile, {required String tag}) {
+    // ignore: experimental_member_use
+    return LockCachingAudioSource(uri, cacheFile: cacheFile, tag: tag);
+  }
+
+  /// Declares the app's audio contract with the OS: recitation pauses for
+  /// phone calls and yields politely to other media.
+  Future<void> _configureAudioSession() async {
+    try {
+      final session = await AudioSession.instance;
+      await session.configure(const AudioSessionConfiguration.speech());
+    } catch (_) {
+      // Audio focus configuration is best-effort; playback still works.
+    }
+  }
+
+  /// Completion routing: repeat modes first, then sequential advance.
+  Future<void> _onAyahCompleted() async {
+    switch (state.repeatMode) {
+      case QuranRepeatMode.ayah:
+        await playAyah(
+          surah: state.surah!,
+          ayah: state.ayah!,
+          totalAyahs: state.totalAyahs!,
+        );
+        return;
+      case QuranRepeatMode.surah:
+        await playAyah(surah: state.surah!, ayah: 1, totalAyahs: state.totalAyahs!);
+        return;
+      case QuranRepeatMode.off:
+        await next(autoAdvance: true);
+        return;
+    }
+  }
 
   Future<void> selectReciter(QuranReciter reciter) async {
     final hadSelection = state.hasSelection;
     final wasPlaying = state.isPlaying;
     state = state.copyWith(reciter: reciter, clearError: true);
+    unawaited(_persistReciter(reciter));
     if (hadSelection) {
       await playAyah(
         surah: state.surah!,
@@ -156,6 +258,15 @@ class QuranAudioController extends StateNotifier<QuranAudioState> {
         totalAyahs: state.totalAyahs!,
         autoplay: wasPlaying,
       );
+    }
+  }
+
+  Future<void> _persistReciter(QuranReciter reciter) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString(_reciterPrefKey, reciter.id);
+    } catch (_) {
+      // Selection persistence is best-effort.
     }
   }
 
@@ -176,11 +287,30 @@ class QuranAudioController extends StateNotifier<QuranAudioState> {
       clearError: true,
     );
     try {
-      final source = AudioSource.uri(
-        _repository.ayahStream(reciter: state.reciter, globalAyah: globalAyah),
-        tag: 'quran:$surah:$ayah:${state.reciter.id}',
+      final uri = _repository.ayahStream(
+        reciter: state.reciter,
+        globalAyah: globalAyah,
       );
+      // Stream-first with transparent per-ayah caching of what the user
+      // actually listens to. Never pre-downloads the whole Quran.
+      AudioSource source;
+      try {
+        final cacheFile = await QuranAudioCache.fileFor(
+          reciter: state.reciter,
+          globalAyah: globalAyah,
+        );
+        // Experimental just_audio API — the official streaming-cache
+        // primitive; acceptable instability for a best-effort cache.
+        source = _cachingSource(uri, cacheFile,
+            tag: 'quran:$surah:$ayah:${state.reciter.id}');
+      } catch (_) {
+        source = AudioSource.uri(
+          uri,
+          tag: 'quran:$surah:$ayah:${state.reciter.id}',
+        );
+      }
       await _player.setAudioSource(source).timeout(const Duration(seconds: 12));
+      await _player.setSpeed(state.speed);
       if (autoplay) await _player.play();
     } on PlayerException {
       state = state.copyWith(
@@ -215,10 +345,11 @@ class QuranAudioController extends StateNotifier<QuranAudioState> {
     }
   }
 
-  Future<void> next() async {
+  Future<void> next({bool autoAdvance = false}) async {
     if (!state.hasSelection) return;
     final ayah = state.ayah!;
     if (ayah >= state.totalAyahs!) {
+      // Surah finished: stop politely instead of playing into the void.
       await _player.pause();
       return;
     }
@@ -232,7 +363,8 @@ class QuranAudioController extends StateNotifier<QuranAudioState> {
   Future<void> previous() async {
     if (!state.hasSelection) return;
     final ayah = state.ayah!;
-    if (ayah <= 1) {
+    // Standard player behavior: restart current ayah if mid-playback.
+    if (ayah <= 1 || state.position > const Duration(seconds: 3)) {
       await _player.seek(Duration.zero);
       return;
     }
@@ -243,10 +375,67 @@ class QuranAudioController extends StateNotifier<QuranAudioState> {
     );
   }
 
+  Future<void> nextSurah() async {
+    final surah = state.surah;
+    if (surah == null || surah >= 114) return;
+    await playAyah(
+      surah: surah + 1,
+      ayah: 1,
+      totalAyahs: Quran.getTotalVersesInSurah(surah + 1),
+    );
+  }
+
+  Future<void> previousSurah() async {
+    final surah = state.surah;
+    if (surah == null || surah <= 1) return;
+    await playAyah(
+      surah: surah - 1,
+      ayah: 1,
+      totalAyahs: Quran.getTotalVersesInSurah(surah - 1),
+    );
+  }
+
   Future<void> seek(Duration value) => _player.seek(value);
+
+  Future<void> cycleRepeatMode() async {
+    final nextMode = switch (state.repeatMode) {
+      QuranRepeatMode.off => QuranRepeatMode.ayah,
+      QuranRepeatMode.ayah => QuranRepeatMode.surah,
+      QuranRepeatMode.surah => QuranRepeatMode.off,
+    };
+    state = state.copyWith(repeatMode: nextMode);
+  }
+
+  Future<void> setSpeed(double speed) async {
+    final clamped = speed.clamp(0.5, 2.0);
+    state = state.copyWith(speed: clamped);
+    try {
+      await _player.setSpeed(clamped);
+    } catch (_) {
+      // Speed application is best-effort mid-load.
+    }
+  }
+
+  void setSleepTimer(Duration? duration) {
+    _sleepTimer?.cancel();
+    _sleepTimer = null;
+    if (duration == null) {
+      state = state.copyWith(clearSleep: true);
+      return;
+    }
+    final endsAt = DateTime.now().add(duration);
+    state = state.copyWith(sleepUntil: endsAt);
+    _sleepTimer = Timer(duration, () async {
+      try {
+        await _player.pause();
+      } catch (_) {}
+      state = state.copyWith(isPlaying: false, clearSleep: true);
+    });
+  }
 
   @override
   void dispose() {
+    _sleepTimer?.cancel();
     _positionSubscription.cancel();
     _durationSubscription.cancel();
     _playerStateSubscription.cancel();
@@ -256,13 +445,28 @@ class QuranAudioController extends StateNotifier<QuranAudioState> {
   }
 }
 
+// ---------------------------------------------------------------------------
+// Providers
+// ---------------------------------------------------------------------------
+
 final quranAudioRepositoryProvider = Provider<QuranAudioRepository>((ref) {
   return QuranAudioRepository();
 });
 
+/// Lives for the whole app session (not autoDispose) so recitation keeps
+/// playing while the user navigates between screens.
 final quranAudioControllerProvider =
-    StateNotifierProvider.autoDispose<QuranAudioController, QuranAudioState>((
-      ref,
-    ) {
-      return QuranAudioController(ref.watch(quranAudioRepositoryProvider));
+    StateNotifierProvider<QuranAudioController, QuranAudioState>((ref) {
+      final prefs = ref.watch(sharedPreferencesProvider);
+      final savedId = prefs.getString(_reciterPrefKey);
+      return QuranAudioController(
+        ref.watch(quranAudioRepositoryProvider),
+        savedReciter: savedId == null ? null : reciterById(savedId),
+      );
     });
+
+const _reciterPrefKey = 'quran_reciter_id';
+
+final quranCacheSizeProvider = FutureProvider<int>((ref) async {
+  return QuranAudioCache.totalSizeBytes();
+});

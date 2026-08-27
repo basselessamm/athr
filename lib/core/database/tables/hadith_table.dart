@@ -7,6 +7,7 @@ class HadithTable extends Table {
   TextColumn get chapterName => text().nullable()();
   TextColumn get reference => text().nullable()();
   TextColumn get hadithTextAr => text()();
+  TextColumn get hadithTextArNorm => text().withDefault(const Constant(''))();
   TextColumn get hadithTextEn => text().nullable()();
   BoolColumn get isBookmarked => boolean().withDefault(const Constant(false))();
 }

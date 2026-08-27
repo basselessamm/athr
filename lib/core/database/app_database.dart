@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:math';
 
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
@@ -10,17 +9,17 @@ import 'package:sqlite3/sqlite3.dart';
 import 'tables/quran_tafseer_table.dart';
 import 'tables/hadith_table.dart';
 import 'tables/dua_table.dart';
-import 'tables/daily_sunnah_table.dart';
-import 'tables/daily_task_table.dart';
+import 'tables/zikr_table.dart';
 import 'tables/muhasaba_entry_table.dart';
-import 'tables/user_daily_activity_table.dart';
 import 'tables/user_favorite_table.dart';
 import 'tables/memory_thread_table.dart';
 import 'tables/reflection_entry_table.dart';
 import 'tables/reading_anchor_table.dart';
 import 'tables/return_event_table.dart';
 import 'tables/reminder_intent_table.dart';
-import 'package:athr/core/memory/migration/legacy_memory_migration.dart';
+import 'tables/seed_state_table.dart';
+import 'package:midrar/core/memory/migration/legacy_memory_migration.dart';
+import 'package:midrar/core/utils/arabic_normalization.dart';
 
 part 'app_database.g.dart';
 
@@ -29,16 +28,15 @@ part 'app_database.g.dart';
     QuranTafseerTable,
     HadithTable,
     DuaTable,
-    DailySunnahTable,
-    DailyTaskTable,
+    ZikrTable,
     MuhasabaEntryTable,
     UserFavoriteTable,
-    UserDailyActivityTable,
     MemoryThreadTable,
     ReflectionEntryTable,
     ReadingAnchorTable,
     ReturnEventTable,
     ReminderIntentTable,
+    SeedStateTable,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -46,7 +44,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase.forTesting(super.executor);
 
   @override
-  int get schemaVersion => 6;
+  int get schemaVersion => 8;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -57,11 +55,8 @@ class AppDatabase extends _$AppDatabase {
       if (from < 2) {
         await m.addColumn(hadithTable, hadithTable.reference);
         await m.createTable(userFavoriteTable);
-        await m.createTable(userDailyActivityTable);
       }
       if (from < 3) {
-        await m.createTable(dailySunnahTable);
-        await m.createTable(dailyTaskTable);
         await m.createTable(muhasabaEntryTable);
       }
       if (from < 4) {
@@ -81,6 +76,20 @@ class AppDatabase extends _$AppDatabase {
       }
       if (from < 6) {
         await m.createTable(reminderIntentTable);
+      }
+      if (from < 7) {
+        await m.createTable(seedStateTable);
+        await m.addColumn(hadithTable, hadithTable.hadithTextArNorm);
+        await m.addColumn(duaTable, duaTable.duaTextNorm);
+        // Remove legacy daily-content tables that shipped unseeded and had
+        // no consumers; their feature was cut.
+        await customStatement('DROP TABLE IF EXISTS daily_sunnah_table');
+        await customStatement('DROP TABLE IF EXISTS daily_task_table');
+        await customStatement('DROP TABLE IF EXISTS user_daily_activity_table');
+        await _backfillNormalizedSearchColumns();
+      }
+      if (from < 8) {
+        await m.createTable(zikrTable);
       }
     },
     beforeOpen: (details) async {
@@ -114,34 +123,17 @@ class AppDatabase extends _$AppDatabase {
       await customStatement(
         'CREATE INDEX IF NOT EXISTS idx_reminder_intent_scheduled ON reminder_intent_table (enabled, scheduled_at)',
       );
+      await customStatement(
+        'CREATE INDEX IF NOT EXISTS idx_hadith_norm ON hadith_table (hadith_text_ar_norm)',
+      );
+      await customStatement(
+        'CREATE INDEX IF NOT EXISTS idx_dua_norm ON dua_table (dua_text_norm)',
+      );
+      await customStatement(
+        'CREATE INDEX IF NOT EXISTS idx_zikr_category ON zikr_table (category, zikr_index)',
+      );
     },
   );
-
-  Future<DailySunnah?> getDailySunnahForSeed(int seed) async {
-    final count = await _countRows('daily_sunnah_table');
-    if (count == 0) {
-      return null;
-    }
-
-    final offset = Random(seed).nextInt(count);
-    return (select(dailySunnahTable)
-          ..orderBy([(t) => OrderingTerm.asc(t.sortOrder)])
-          ..limit(1, offset: offset))
-        .getSingleOrNull();
-  }
-
-  Future<DailyTask?> getDailyTaskForSeed(int seed) async {
-    final count = await _countRows('daily_task_table');
-    if (count == 0) {
-      return null;
-    }
-
-    final offset = Random(seed).nextInt(count);
-    return (select(dailyTaskTable)
-          ..orderBy([(t) => OrderingTerm.asc(t.sortOrder)])
-          ..limit(1, offset: offset))
-        .getSingleOrNull();
-  }
 
   Stream<List<UserFavorite>> watchFavorites() {
     return (select(
@@ -199,20 +191,6 @@ class AppDatabase extends _$AppDatabase {
     );
   }
 
-  Stream<UserDailyActivity?> watchTodayActivity() {
-    final today = _dateKey(DateTime.now());
-    return (select(userDailyActivityTable)
-          ..where((t) => t.activityDate.equals(today))
-          ..limit(1))
-        .watchSingleOrNull();
-  }
-
-  Stream<List<UserDailyActivity>> watchAllActivities() {
-    return (select(
-      userDailyActivityTable,
-    )..orderBy([(t) => OrderingTerm.desc(t.activityDate)])).watch();
-  }
-
   Stream<MuhasabaEntry?> watchTodayMuhasaba() {
     final today = _dateKey(DateTime.now());
     return (select(muhasabaEntryTable)
@@ -225,48 +203,6 @@ class AppDatabase extends _$AppDatabase {
     return (select(
       muhasabaEntryTable,
     )..orderBy([(t) => OrderingTerm.desc(t.activityDate)])).watch();
-  }
-
-  Future<void> setDailyTaskCompletion({
-    required String taskId,
-    required bool isCompleted,
-  }) async {
-    final today = _dateKey(DateTime.now());
-    final existing =
-        await (select(userDailyActivityTable)
-              ..where((t) => t.activityDate.equals(today))
-              ..limit(1))
-            .getSingleOrNull();
-
-    await into(userDailyActivityTable).insertOnConflictUpdate(
-      UserDailyActivityTableCompanion(
-        activityDate: Value(today),
-        completedTaskId: Value(isCompleted ? taskId : null),
-        completedSunnahId: Value(existing?.completedSunnahId),
-        updatedAt: Value(DateTime.now().toIso8601String()),
-      ),
-    );
-  }
-
-  Future<void> setDailySunnahCompletion({
-    required String sunnahId,
-    required bool isCompleted,
-  }) async {
-    final today = _dateKey(DateTime.now());
-    final existing =
-        await (select(userDailyActivityTable)
-              ..where((t) => t.activityDate.equals(today))
-              ..limit(1))
-            .getSingleOrNull();
-
-    await into(userDailyActivityTable).insertOnConflictUpdate(
-      UserDailyActivityTableCompanion(
-        activityDate: Value(today),
-        completedTaskId: Value(existing?.completedTaskId),
-        completedSunnahId: Value(isCompleted ? sunnahId : null),
-        updatedAt: Value(DateTime.now().toIso8601String()),
-      ),
-    );
   }
 
   Future<void> saveMuhasabaEntry({
@@ -295,36 +231,87 @@ class AppDatabase extends _$AppDatabase {
   }
 
   Future<List<Hadith>> searchHadith(String query) async {
-    final cleanQuery = query.trim();
-    if (cleanQuery.isEmpty) return [];
+    final patterns = _searchPatterns(query);
+    if (patterns == null) return const [];
+    final (rawPattern, normPattern) = patterns;
     return (select(hadithTable)
           ..where(
             (t) =>
-                t.hadithTextAr.like('%$cleanQuery%') |
-                t.chapterName.like('%$cleanQuery%'),
+                t.hadithTextAr.like(rawPattern) |
+                t.chapterName.like(rawPattern) |
+                t.hadithTextArNorm.like(normPattern),
           )
           ..limit(50))
         .get();
   }
 
-  Future<List<Dua>> searchAzkar(String query) async {
-    final cleanQuery = query.trim();
-    if (cleanQuery.isEmpty) return [];
-    return (select(duaTable)
+  /// Per-zikr search over the schema-v8 item rows (normalized + raw), so a
+  /// hit points at the exact zikr rather than a merged category blob.
+  Future<List<Zikr>> searchAzkar(String query) async {
+    final patterns = _searchPatterns(query);
+    if (patterns == null) return const [];
+    final (rawPattern, normPattern) = patterns;
+    return (select(zikrTable)
           ..where(
             (t) =>
-                t.duaText.like('%$cleanQuery%') |
-                t.reference.like('%$cleanQuery%'),
+                t.zikrText.like(rawPattern) |
+                t.textNorm.like(normPattern),
           )
+          ..orderBy([(t) => OrderingTerm.asc(t.category), (t) => OrderingTerm.asc(t.zikrIndex)])
           ..limit(50))
         .get();
   }
 
-  Future<int> _countRows(String tableName) async {
-    final row = await customSelect(
-      'SELECT COUNT(*) AS count FROM $tableName',
-    ).getSingle();
-    return row.read<int>('count');
+  /// Builds (raw, normalized) LIKE patterns for a user query.
+  ///
+  /// SQL wildcards typed by the user are neutralized rather than escaped;
+  /// diacritics/orthography tolerance comes from the normalized column.
+  /// Returns null when nothing searchable remains (e.g. query was only
+  /// punctuation), preventing degenerate `%%` patterns.
+  (String, String)? _searchPatterns(String query) {
+    final cleanQuery = query.trim();
+    if (cleanQuery.isEmpty) return null;
+    final safeRaw = cleanQuery.replaceAll(RegExp(r'[%_\\]'), ' ');
+    final rawCore = _collapseSpaces(safeRaw);
+    final normCore = _collapseSpaces(normalizeArabic(cleanQuery));
+    if (rawCore.isEmpty && normCore.isEmpty) return null;
+    return (
+      '%${rawCore.isEmpty ? normCore : rawCore}%',
+      '%$normCore%',
+    );
+  }
+
+  String _collapseSpaces(String input) {
+    return input.replaceAll(RegExp(r'\s+'), ' ').trim();
+  }
+
+  /// Backfills the normalized search columns for databases created before
+  /// schema v7. Runs in chunks so a large hadith corpus cannot block the
+  /// migration for long.
+  Future<void> _backfillNormalizedSearchColumns() async {
+    final hadithRows = await customSelect(
+      'SELECT id, hadith_text_ar FROM hadith_table WHERE hadith_text_ar_norm = \'\'',
+      readsFrom: {hadithTable},
+    ).get();
+    for (final row in hadithRows) {
+      await customStatement(
+        'UPDATE hadith_table SET hadith_text_ar_norm = ? WHERE id = ?',
+        [
+          normalizeArabic(row.read<String>('hadith_text_ar')),
+          row.read<int>('id'),
+        ],
+      );
+    }
+    final duaRows = await customSelect(
+      'SELECT id, dua_text FROM dua_table WHERE dua_text_norm = \'\'',
+      readsFrom: {duaTable},
+    ).get();
+    for (final row in duaRows) {
+      await customStatement(
+        'UPDATE dua_table SET dua_text_norm = ? WHERE id = ?',
+        [normalizeArabic(row.read<String>('dua_text')), row.read<int>('id')],
+      );
+    }
   }
 
   Future<void> _migrateLegacyFavorites() async {
@@ -390,7 +377,7 @@ class AppDatabase extends _$AppDatabase {
 LazyDatabase _openConnection() {
   return LazyDatabase(() async {
     final dbFolder = await getApplicationDocumentsDirectory();
-    final file = File(p.join(dbFolder.path, 'athr_db.sqlite'));
+    final file = File(p.join(dbFolder.path, 'midrar_db.sqlite'));
 
     // Make sqlite3 pick a more suitable location for temporary files - the
     // one from the system may be inaccessible due to sandboxing.
@@ -400,3 +387,4 @@ LazyDatabase _openConnection() {
     return NativeDatabase.createInBackground(file);
   });
 }
+

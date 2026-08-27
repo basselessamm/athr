@@ -6,9 +6,10 @@ import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:athr/core/memory/domain/memory_contracts.dart';
-import 'package:athr/core/memory/domain/reminder_intent.dart';
-import 'package:athr/features/prayer/application/prayer_times.dart';
+import 'package:midrar/core/memory/domain/memory_contracts.dart';
+import 'package:midrar/core/memory/domain/reminder_intent.dart';
+import 'package:midrar/features/prayer/application/prayer_times.dart';
+import 'package:midrar/features/prayer/application/prayer_notification_planner.dart';
 
 final notificationServiceProvider = Provider<NotificationService>((ref) {
   return NotificationService();
@@ -18,27 +19,37 @@ class NotificationService {
   final FlutterLocalNotificationsPlugin _notificationsPlugin =
       FlutterLocalNotificationsPlugin();
   bool _isInitialized = false;
+  bool _prayerAudioLoaded = false;
   final Map<PrayerName, String> _prayerAudioUris = {};
   String? _pendingDeepLink;
   void Function(String deepLink)? _deepLinkHandler;
 
+  /// Initializes the plugin, timezone database, and pending deep-link
+  /// delivery. Must be called before [runApp] so cold-start notification
+  /// taps are never lost; subsequent calls are no-ops.
   Future<void> init() async {
     if (_isInitialized) return;
 
     tz.initializeTimeZones();
 
-    const AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
-
-    const InitializationSettings initializationSettings =
-        InitializationSettings(android: initializationSettingsAndroid);
+    const androidSettings = AndroidInitializationSettings(
+      '@mipmap/ic_launcher',
+    );
+    const darwinSettings = DarwinInitializationSettings(
+      requestAlertPermission: false,
+      requestBadgePermission: false,
+      requestSoundPermission: false,
+    );
+    const initializationSettings = InitializationSettings(
+      android: androidSettings,
+      iOS: darwinSettings,
+      macOS: darwinSettings,
+    );
 
     await _notificationsPlugin.initialize(
       settings: initializationSettings,
       onDidReceiveNotificationResponse: _onDidReceiveNotificationResponse,
     );
-
-    await _loadPrayerAudioUris();
 
     final launchDetails = await _notificationsPlugin
         .getNotificationAppLaunchDetails();
@@ -53,9 +64,18 @@ class NotificationService {
     handleDeepLinkPayload(response.payload);
   }
 
+  /// Resolves native prayer-audio resource URIs once per process. Kept out
+  /// of [init] so cold-start delivery stays minimal; invoked by the first
+  /// scheduling path that needs sounds.
+  Future<void> ensurePrayerAudioLoaded() async {
+    if (_prayerAudioLoaded) return;
+    _prayerAudioLoaded = true;
+    await _loadPrayerAudioUris();
+  }
+
   Future<void> _loadPrayerAudioUris() async {
     if (!Platform.isAndroid) return;
-    const channel = MethodChannel('athr/prayer_audio');
+    const channel = MethodChannel('midrar/prayer_audio');
     for (final prayer in PrayerName.values) {
       try {
         final uri = await channel.invokeMethod<String>('prayerAudioUri', {
@@ -154,6 +174,21 @@ class NotificationService {
     }
     await init();
     final scheduledDate = tz.TZDateTime.from(intent.scheduledAt, tz.local);
+
+    // Exact alarms on Android 14+ require the SCHEDULE_EXACT_ALARM grant;
+    // request it for user-chosen reminders just like prayer notifications so
+    // reminders never silently degrade to inexact delivery.
+    if (Platform.isAndroid) {
+      final android = _notificationsPlugin
+          .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin
+          >();
+      final exactAllowed = await android?.canScheduleExactNotifications();
+      if (exactAllowed == false) {
+        await android?.requestExactAlarmsPermission();
+      }
+    }
+
     const androidDetails = AndroidNotificationDetails(
       'memory_thread_reminders',
       'تذكيرات خيوط العودة',
@@ -178,13 +213,15 @@ class NotificationService {
   }
 
   /// Schedules the upcoming user-selected prayers from an actual dated
-  /// timetable. This is a utility notification, not a completion prompt or an
-  /// engagement reminder.
+  /// timetable. The decision logic lives in [planPrayerNotifications] (pure,
+  /// test-verified); this method only executes it against the OS.
   Future<void> schedulePrayerNotifications({
     required PrayerSchedule schedule,
     required PrayerSettings settings,
   }) async {
     await init();
+    if (!Platform.isAndroid) return;
+    await ensurePrayerAudioLoaded();
     if (!settings.notificationsEnabled) {
       await cancelPrayerNotifications(schedule.days);
       return;
@@ -203,38 +240,49 @@ class NotificationService {
       await android?.requestExactAlarmsPermission();
     }
 
-    for (final day in schedule.days) {
-      for (final moment in day.moments) {
-        final id = _prayerNotificationId(day.gregorianDate, moment.name);
-        await _notificationsPlugin.cancel(id: id);
-        if (!settings.enabledPrayers.contains(moment.name) ||
-            !moment.at.isAfter(tz.TZDateTime.now(moment.at.location))) {
-          continue;
-        }
-        final androidDetails = AndroidNotificationDetails(
-          _prayerChannelId(moment.name, withAudio: settings.soundEnabled),
-          'تنبيه صلاة ${moment.name.arabicLabel}',
-          channelDescription: settings.soundEnabled
-              ? 'يذكر اسم صلاة ${moment.name.arabicLabel} بصوت محلي عند الموعد.'
-              : 'تنبيه صامت لصلاة ${moment.name.arabicLabel}.',
-          importance: Importance.high,
-          priority: Priority.high,
-          playSound: settings.soundEnabled,
-          sound: settings.soundEnabled ? _prayerAudioSound(moment.name) : null,
-          audioAttributesUsage: AudioAttributesUsage.alarm,
-          enableVibration: settings.soundEnabled,
-        );
-        await _notificationsPlugin.zonedSchedule(
-          id: id,
-          title: 'حان وقت صلاة ${moment.name.arabicLabel}',
-          body:
-              'موعد ${moment.name.arabicLabel} حسب إعدادات موقعك وطريقة الحساب.',
-          scheduledDate: moment.at,
-          notificationDetails: NotificationDetails(android: androidDetails),
-          payload: prayerDeepLink(moment.name),
-          androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-        );
-      }
+    final now = tz.TZDateTime.now(_safeLocal());
+    final plans = planPrayerNotifications(
+      schedule: schedule,
+      settings: settings,
+      now: now,
+      idFor: prayerNotificationId,
+    );
+
+    // Cancel everything in the window first so stale alarms from previous
+    // settings (method/madhhab/location changes) never linger.
+    await cancelPrayerNotifications(schedule.days);
+
+    for (final plan in plans) {
+      final androidDetails = AndroidNotificationDetails(
+        plan.channelId,
+        plan.title,
+        channelDescription: plan.withSound
+            ? 'يذكر اسم صلاة ${plan.name.arabicLabel} بصوت محلي عند الموعد.'
+            : 'تنبيه صامت لصلاة ${plan.name.arabicLabel}.',
+        importance: Importance.high,
+        priority: Priority.high,
+        playSound: plan.withSound,
+        sound: plan.withSound ? _prayerAudioSound(plan.name) : null,
+        audioAttributesUsage: AudioAttributesUsage.alarm,
+        enableVibration: plan.withSound,
+      );
+      await _notificationsPlugin.zonedSchedule(
+        id: plan.id,
+        title: plan.title,
+        body: plan.body,
+        scheduledDate: plan.at,
+        notificationDetails: NotificationDetails(android: androidDetails),
+        payload: plan.payload,
+        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+      );
+    }
+  }
+
+  tz.Location _safeLocal() {
+    try {
+      return tz.getLocation('UTC');
+    } catch (_) {
+      return tz.UTC;
     }
   }
 
@@ -310,7 +358,7 @@ class NotificationService {
   AndroidNotificationSound _prayerAudioSound(PrayerName name) {
     return UriAndroidNotificationSound(
       _prayerAudioUris[name] ??
-          'android.resource://com.athr.athr/raw/prayer_${name.name}',
+          'android.resource://com.midrar.app/raw/prayer_${name.name}',
     );
   }
 

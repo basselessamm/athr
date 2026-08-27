@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:athr/core/database/app_database.dart';
-import 'package:athr/features/home/providers/home_providers.dart';
+import 'package:midrar/core/database/app_database.dart';
+import 'package:midrar/features/home/providers/home_providers.dart';
 
 class MuhasabaScreen extends ConsumerStatefulWidget {
   const MuhasabaScreen({super.key});

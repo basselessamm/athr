@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:athr/core/database/app_database.dart';
+import 'package:midrar/core/database/app_database.dart';
 
-import 'package:athr/core/database/database_providers.dart';
-import 'package:athr/core/database/seeder/database_seed_providers.dart';
+import 'package:midrar/core/database/database_providers.dart';
+import 'package:midrar/core/database/seeder/database_seed_providers.dart';
 
 final hadithBooksProvider = FutureProvider<List<String>>((ref) async {
   await ref.watch(hadithSeedProvider.future);

@@ -1,9 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:drift/drift.dart';
-import 'package:quran_flutter/quran.dart';
+import 'package:midrar/vendor/quran_core/quran.dart';
 
-import 'package:athr/core/database/database_providers.dart';
-import 'package:athr/core/database/seeder/database_seed_providers.dart';
+import 'package:midrar/core/database/database_providers.dart';
+import 'package:midrar/core/database/seeder/database_seed_providers.dart';
 
 /// Loads the Quran package only when a Quran surface is opened. Its data
 /// initialization is intentionally kept off the app's Home startup path.

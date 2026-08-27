@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:athr/core/widgets/athr_scaffold.dart';
-import 'package:athr/core/widgets/main_navigation_bar.dart';
-import 'package:athr/features/hadith/providers/hadith_providers.dart';
+import 'package:midrar/core/widgets/midrar_scaffold.dart';
+import 'package:midrar/core/widgets/main_navigation_bar.dart';
+import 'package:midrar/features/hadith/providers/hadith_providers.dart';
 
 class HadithBooksScreen extends ConsumerWidget {
   const HadithBooksScreen({super.key});
@@ -13,7 +13,7 @@ class HadithBooksScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final booksAsync = ref.watch(hadithBooksProvider);
 
-    return AthrScaffold(
+    return MidrarScaffold(
       title: 'الأحاديث النبوية',
       body: booksAsync.when(
         data: (books) {
@@ -27,10 +27,12 @@ class HadithBooksScreen extends ConsumerWidget {
               final book = books[index];
               // Map English names to Arabic
               String arabicName = book;
-              if (book.toLowerCase().contains('bukhari'))
+              if (book.toLowerCase().contains('bukhari')) {
                 arabicName = 'صحيح البخاري';
-              if (book.toLowerCase().contains('muslim'))
+              }
+              if (book.toLowerCase().contains('muslim')) {
                 arabicName = 'صحيح مسلم';
+              }
 
               return Padding(
                 padding: const EdgeInsets.symmetric(

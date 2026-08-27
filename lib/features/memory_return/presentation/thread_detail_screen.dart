@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:athr/core/memory/domain/memory_contracts.dart';
-import 'package:athr/core/memory/domain/reminder_intent.dart';
-import 'package:athr/core/services/notification_service.dart';
-import 'package:athr/core/memory/memory_providers.dart';
+import 'package:midrar/core/memory/domain/memory_contracts.dart';
+import 'package:midrar/core/memory/domain/reminder_intent.dart';
+import 'package:midrar/core/services/notification_service.dart';
+import 'package:midrar/core/memory/memory_providers.dart';
 import '../application/memory_return_service.dart';
 
 /// A reminder must point to a future local instant. This is intentionally

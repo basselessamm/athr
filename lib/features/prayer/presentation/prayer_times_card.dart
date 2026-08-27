@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:athr/features/prayer/application/prayer_times.dart';
+import 'package:midrar/features/prayer/application/prayer_times.dart';
 
 class PrayerTimesCard extends ConsumerWidget {
   const PrayerTimesCard({super.key});
@@ -119,6 +119,15 @@ class _PrayerScheduleView extends StatelessWidget {
                             '${day.hijriDate} هـ · ${day.hijriMonth}',
                             textAlign: TextAlign.right,
                             style: Theme.of(context).textTheme.labelMedium,
+                          ),
+                          Text(
+                            'حساب فلكي · قد يختلف عن الرؤية المحلية',
+                            textAlign: TextAlign.right,
+                            style: Theme.of(context).textTheme.labelSmall
+                                ?.copyWith(
+                                  color:
+                                      Theme.of(context).colorScheme.outline,
+                                ),
                           ),
                         ],
                       ),

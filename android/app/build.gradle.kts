@@ -1,3 +1,6 @@
+﻿import java.util.Properties
+import java.io.FileInputStream
+
 plugins {
     id("com.android.application")
     id("kotlin-android")
@@ -5,8 +8,21 @@ plugins {
     id("dev.flutter.flutter-gradle-plugin")
 }
 
+// Production signing credentials are read from android/key.properties
+// (never committed) or from CI environment variables. See RELEASE_SIGNING.md.
+val keystoreProperties = Properties().apply {
+    val file = rootProject.file("key.properties")
+    if (file.exists()) {
+        load(FileInputStream(file))
+    }
+}
+
+fun signingProperty(name: String): String? =
+    keystoreProperties.getProperty(name)
+        ?: System.getenv("MIDRAR_SIGNING_${name.uppercase().replace('.', '_')}")
+
 android {
-    namespace = "com.athr.athr"
+    namespace = "com.midrar.app"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -20,27 +36,38 @@ android {
         jvmTarget = JavaVersion.VERSION_17.toString()
     }
 
+    signingConfigs {
+        create("release") {
+            val storeFilePath = signingProperty("storeFile")
+            val storePass = signingProperty("storePassword")
+            val keyAliasName = signingProperty("keyAlias")
+            val keyPass = signingProperty("keyPassword")
+            if (storeFilePath != null && storePass != null && keyAliasName != null && keyPass != null) {
+                storeFile = file(storeFilePath)
+                this.storePassword = storePass
+                this.keyAlias = keyAliasName
+                this.keyPassword = keyPass
+            }
+            // When credentials are absent the config stays incomplete and the
+            // release build fails fast with a clear error. Debug signing is
+            // never used as a silent fallback for releases.
+        }
+    }
+
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.athr.athr"
-        // You can update the following values to match your application needs.
-        // For more information, see: https://flutter.dev/to/review-gradle-config.
+        applicationId = "com.midrar.app"
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
     }
 
-    // aaptOptions {
-    //     ignoreAssetsPattern = "..."
-    // }
-
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.getByName("debug")
-            
+            // Fails with "Keystore file not set for signing config release"
+            // unless proper credentials are provided via key.properties or env.
+            signingConfig = signingConfigs.getByName("release")
+
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(
@@ -58,3 +85,4 @@ flutter {
 dependencies {
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
 }
+

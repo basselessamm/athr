@@ -3,13 +3,16 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:quran_flutter/quran.dart';
+import 'package:midrar/vendor/quran_core/quran.dart';
 
-import 'package:athr/core/widgets/athr_scaffold.dart';
-import 'package:athr/core/widgets/main_navigation_bar.dart';
-import 'package:athr/features/home/presentation/continuation_canvas.dart';
-import 'package:athr/features/prayer/presentation/prayer_times_card.dart';
-import 'package:athr/features/quran/providers/quran_providers.dart';
+import 'package:midrar/core/widgets/midrar_scaffold.dart';
+import 'package:midrar/core/widgets/main_navigation_bar.dart';
+import 'package:midrar/features/home/presentation/continuation_canvas.dart';
+import 'package:midrar/features/prayer/presentation/prayer_times_card.dart';
+import 'package:midrar/features/quran/application/quran_audio.dart';
+import 'package:midrar/features/quran/providers/bookmark_provider.dart';
+import 'package:midrar/features/quran/providers/quran_providers.dart';
+import 'package:midrar/core/theme/app_colors.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -17,8 +20,8 @@ class HomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    return AthrScaffold(
-      title: 'أَثَر',
+    return MidrarScaffold(
+      title: 'مدرار',
       actions: [
         IconButton(
           icon: const Icon(Icons.search),
@@ -39,7 +42,9 @@ class HomeScreen extends ConsumerWidget {
             _WelcomeHeader(theme: theme),
             const SizedBox(height: 18),
             const PrayerTimesCard(),
-            const SizedBox(height: 26),
+            const SizedBox(height: 14),
+            const _SmartContinuationCard(),
+            const SizedBox(height: 22),
             Text(
               'ابدأ من حيث تحب',
               style: theme.textTheme.titleLarge?.copyWith(
@@ -69,6 +74,94 @@ class HomeScreen extends ConsumerWidget {
         ),
       ),
       bottomNavigationBar: const MainNavigationBar(selectedIndex: 0),
+    );
+  }
+}
+
+/// One obvious "continue" action: resumes active listening first, otherwise
+/// the last reading position. Hidden entirely for first-run users.
+class _SmartContinuationCard extends ConsumerWidget {
+  const _SmartContinuationCard();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final audio = ref.watch(quranAudioControllerProvider);
+    final lastRead = ref.watch(lastReadProvider);
+
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
+
+    final bool hasListening = audio.hasSelection;
+    final bool hasReading = lastRead != null;
+    if (!hasListening && !hasReading) return const SizedBox.shrink();
+
+    final String title;
+    final String subtitle;
+    final String route;
+    if (hasListening) {
+      final surahName = Quran.getSurahName(audio.surah!);
+      title = 'استئناف الاستماع';
+      subtitle =
+          'سورة $surahName · الآية ${audio.ayah} · ${audio.reciter.displayName}';
+      route = '/quran/${audio.surah}?ayah=${audio.ayah}';
+    } else {
+      title = 'متابعة القراءة';
+      subtitle =
+          'سورة ${Quran.getSurahName(lastRead!.surah)} · الآية ${lastRead.ayah}';
+      route = '/quran/${lastRead.surah}?ayah=${lastRead.ayah}';
+    }
+
+    return Material(
+      color: scheme.secondaryContainer.withValues(alpha: 0.55),
+      borderRadius: BorderRadius.circular(AppColors.radiusLg),
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: () => context.push(route),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+          child: Row(
+            children: [
+              Icon(
+                hasListening
+                    ? Icons.graphic_eq_rounded
+                    : Icons.menu_book_outlined,
+                color: scheme.onSecondaryContainer,
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: theme.textTheme.titleSmall?.copyWith(
+                        fontWeight: FontWeight.w900,
+                        color: scheme.onSecondaryContainer,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      subtitle,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: scheme.onSecondaryContainer.withValues(
+                          alpha: 0.8,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Icon(
+                Icons.arrow_back_ios_new_rounded,
+                size: 16,
+                color: scheme.onSecondaryContainer,
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
