@@ -1,4 +1,4 @@
-# تطبيق «أثر» — Technical Specification (Flutter)
+# تطبيق «مِـدْرَار» (Midrar) — Technical Specification (Flutter)
 
 > النسخة دي معدّة عشان تتدي مباشرة لـ AI coding agent (Gemini جوه Antigravity مثلاً) ينفذها. الرؤية والمحتوى الأصلي محفوظين زي ما هما، والإضافة هنا هي الطبقة التقنية اللي كانت ناقصة عشان الـ agent ميرتجلش قرارات معمارية، ولا — الأخطر — يرتجل محتوى ديني.
 
