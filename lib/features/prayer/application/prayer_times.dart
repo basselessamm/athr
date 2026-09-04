@@ -9,6 +9,7 @@ import 'package:timezone/data/latest_all.dart' as tz_data;
 import 'package:timezone/timezone.dart' as tz;
 
 import 'package:midrar/features/settings/providers/settings_providers.dart';
+import 'astronomical_prayer_calculator.dart';
 
 var _timeZonesInitialized = false;
 
@@ -329,17 +330,38 @@ class PrayerTimesRepository {
           final response = await _client
               .get(uri)
               .timeout(const Duration(seconds: 15));
-          if (response.statusCode != 200) {
-            throw StateError('تعذر جلب مواعيد الصلاة من المصدر الآن.');
+          if (response.statusCode == 200) {
+            payload = jsonDecode(response.body) as Map<String, dynamic>;
+            await _prefs.setString(key, jsonEncode(payload));
           }
-          payload = jsonDecode(response.body) as Map<String, dynamic>;
-          await _prefs.setString(key, jsonEncode(payload));
-        } on StateError {
-          rethrow;
         } catch (_) {
-          throw StateError(
-            'لا يتوفر اتصال بالإنترنت لتحديث المواقيت. أوقات محفوظة سابقًا تُعرض عند توفرها.',
+          // Network offline / timeout
+        }
+
+        if (payload == null) {
+          // Offline fallback: calculate astronomical prayer times mathematically
+          // so user is never left stranded without a timetable.
+          final fallbackDays = _generateAstronomicalMonth(
+            month: month,
+            location: location,
+            calculationMethod: calculationMethod,
+            asrSchool: asrSchool,
           );
+          for (final day in fallbackDays) {
+            if (!day.gregorianDate.isBefore(
+                  DateTime(anchor.year, anchor.month, anchor.day),
+                ) &&
+                day.gregorianDate.isBefore(
+                  DateTime(
+                    anchor.year,
+                    anchor.month,
+                    anchor.day,
+                  ).add(const Duration(days: 60)),
+                )) {
+              days.add(day);
+            }
+          }
+          continue;
         }
       }
       final rows = payload['data'] as List<dynamic>? ?? const [];
@@ -358,9 +380,6 @@ class PrayerTimesRepository {
           days.add(day);
         }
       }
-      if (payload['data'] == null && cached == null) {
-        throw StateError('استجابة غير صالحة من مصدر المواقيت.');
-      }
     }
     days.sort((a, b) => a.gregorianDate.compareTo(b.gregorianDate));
     return PrayerSchedule(
@@ -369,6 +388,32 @@ class PrayerTimesRepository {
       calculationMethod: calculationMethod,
       asrSchool: asrSchool,
     );
+  }
+
+  List<PrayerDay> _generateAstronomicalMonth({
+    required DateTime month,
+    required PrayerLocation location,
+    required int calculationMethod,
+    required AsrSchool asrSchool,
+  }) {
+    const calculator = AstronomicalPrayerCalculator();
+    final daysInMonth = DateTime(month.year, month.month + 1, 0).day;
+    final tzName = _prefs.getString('prayer_last_timezone') ?? 'UTC';
+
+    final result = <PrayerDay>[];
+    for (var dayNum = 1; dayNum <= daysInMonth; dayNum++) {
+      final date = DateTime(month.year, month.month, dayNum);
+      result.add(
+        calculator.calculateDay(
+          date: date,
+          location: location,
+          calculationMethod: calculationMethod,
+          asrSchool: asrSchool,
+          timezoneName: tzName,
+        ),
+      );
+    }
+    return result;
   }
 
   String cacheKeyFor(
@@ -386,6 +431,9 @@ class PrayerTimesRepository {
   PrayerDay _parseDay(Map<String, dynamic> row) {
     final meta = row['meta'] as Map<String, dynamic>;
     final timezone = meta['timezone'] as String? ?? 'UTC';
+    try {
+      _prefs.setString('prayer_last_timezone', timezone);
+    } catch (_) {}
     final gregorian =
         (row['date'] as Map<String, dynamic>)['gregorian']
             as Map<String, dynamic>;

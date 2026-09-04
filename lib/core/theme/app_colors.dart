@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// Midrar & ATHR bespoke brand palette.
+/// Midrar bespoke brand palette.
 ///
 /// Crafted specifically around Andalusian manuscripts, natural warm linen,
 /// burnished brass accents, and serene night oasis tones.
@@ -44,12 +44,12 @@ class AppColors {
   // ---- Mushaf & reading surfaces ------------------------------------------
   /// Reading screens (mushaf, hadith, azkar) maintain a constant
   /// warm-parchment tactile experience in both modes — like holding a physical muṣḥaf.
-  static const Color mushafBackground = Color(0xFF241A12); // deep heritage leather chrome
-  static const Color mushafBackgroundDeep = Color(0xFF1C130B); // deep leather chrome
+  static const Color mushafBackground = Color(0xFF0F1D17); // deep pine oasis chrome (unified with app theme)
+  static const Color mushafBackgroundDeep = Color(0xFF0B1611); // deeper pine tone
   static const Color mushafPaper = Color(0xFFFAF3E7); // warm Andalusian parchment
   static const Color mushafPaperAlt = Color(0xFFF6EFE1); // text on dark chrome
   static const Color mushafPaperMuted = Color(0xFFEFE4D2); // soft paper fills
-  static const Color mushafPaperEdge = Color(0xFFE6D8C2); // page outer edge
+  static const Color mushafPaperEdge = Color(0xFF0F1D17); // page outer edge matching app background
   static const Color mushafInk = Color(0xFF18110A); // carbon-nutgall scripture ink
   static const Color mushafInkStrong = Color(0xFF523B22); // headings on paper
   static const Color mushafInkSoft = Color(0xFF806240); // subheads

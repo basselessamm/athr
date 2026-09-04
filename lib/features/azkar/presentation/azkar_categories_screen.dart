@@ -24,7 +24,7 @@ class AzkarCategoriesScreen extends ConsumerWidget {
           data: (categories) {
             if (categories.isEmpty) {
               return _AzkarState(
-                icon: Icons.auto_awesome_outlined,
+                icon: Icons.menu_book_outlined,
                 title: 'لا توجد أذكار في هذا القسم الآن',
                 body: 'ستظهر التصنيفات المتاحة هنا عند توفرها.',
               );
@@ -54,7 +54,7 @@ class AzkarCategoriesScreen extends ConsumerWidget {
                         ),
                         const SizedBox(height: 6),
                         Text(
-                          'اختر بابًا، واقرأ الذكر على مهل. يمكنك ترك أثر للعودة إليه لاحقًا دون أي ضغط.',
+                          'اختر بابًا، واقرأ الذكر على مهل. يمكنك حفظه للعودة إليه لاحقًا دون أي ضغط.',
                           style: theme.textTheme.bodyMedium?.copyWith(
                             height: 1.7,
                             color: scheme.onSurfaceVariant,

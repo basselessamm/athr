@@ -34,34 +34,29 @@ class BookPageWidget extends StatelessWidget {
     final double rightThickness = (pageNumber / 604) * 8.0;
     final double leftThickness = ((604 - pageNumber) / 604) * 8.0;
 
+    final outerBg = Theme.of(context).scaffoldBackgroundColor;
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Container(
-        color: AppColors.mushafPaperEdge, // Outer background
+        color: outerBg, // Outer background matches app theme exactly
         child: Padding(
           padding: EdgeInsets.only(
-            left: isRightPage ? leftThickness : 16.0 + leftThickness,
-            right: isRightPage ? 16.0 + rightThickness : rightThickness,
-            top: 24,
-            bottom: 24,
+            left: isRightPage ? leftThickness + 4.0 : 8.0 + leftThickness,
+            right: isRightPage ? 8.0 + rightThickness : rightThickness + 4.0,
+            top: 4,
+            bottom: 4,
           ),
           child: Container(
             decoration: BoxDecoration(
               color: AppColors.mushafPaperAlt, // Antique cream paper color
+              borderRadius: BorderRadius.circular(10),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.15),
+                  color: Colors.black.withValues(alpha: 0.25),
                   blurRadius: 10,
                   offset: isRightPage
-                      ? const Offset(-5, 0)
-                      : const Offset(5, 0),
-                ),
-                // Stack of pages illusion
-                BoxShadow(
-                  color: AppColors.mushafBorderSoft,
-                  offset: isRightPage
-                      ? Offset(rightThickness, 0)
-                      : Offset(-leftThickness, 0),
+                      ? const Offset(-3, 2)
+                      : const Offset(3, 2),
                 ),
               ],
             ),
@@ -99,8 +94,8 @@ class BookPageWidget extends StatelessWidget {
                   ),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 16.0,
-                      vertical: 24.0,
+                      horizontal: 8.0,
+                      vertical: 6.0,
                     ),
                     child: Container(
                       decoration: BoxDecoration(
@@ -110,7 +105,7 @@ class BookPageWidget extends StatelessWidget {
                         ),
                       ),
                       child: Container(
-                        margin: const EdgeInsets.all(4.0),
+                        margin: const EdgeInsets.all(3.0),
                         decoration: BoxDecoration(
                           border: Border.all(
                             color: AppColors.mushafGoldMuted.withValues(alpha: 0.4),
@@ -121,12 +116,35 @@ class BookPageWidget extends StatelessWidget {
                           children: [
                             _buildHeader(),
                             Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 16.0,
-                                  vertical: 12.0,
-                                ),
-                                child: _buildVersesText(context),
+                              child: LayoutBuilder(
+                                builder: (context, constraints) {
+                                  final isFatihah = pageNumber == 1;
+                                  return Scrollbar(
+                                    child: SingleChildScrollView(
+                                      physics: const BouncingScrollPhysics(),
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 10.0,
+                                        vertical: 8.0,
+                                      ),
+                                      child: ConstrainedBox(
+                                        constraints: BoxConstraints(
+                                          minHeight: constraints.maxHeight,
+                                        ),
+                                        child: isFatihah
+                                            ? Center(
+                                                child: _buildVersesText(
+                                                  context,
+                                                  isFatihah: true,
+                                                ),
+                                              )
+                                            : _buildVersesText(
+                                                context,
+                                                isFatihah: false,
+                                              ),
+                                      ),
+                                    ),
+                                  );
+                                },
                               ),
                             ),
                             _buildFooter(),
@@ -198,12 +216,13 @@ class BookPageWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildVersesText(BuildContext context) {
+  Widget _buildVersesText(BuildContext context, {bool isFatihah = false}) {
     return _AyahRichText(
       verses: verses,
       textScale: textScale,
       highlightedAyah: highlightedAyah,
       onAyahTapped: onAyahTapped,
+      isFatihah: isFatihah,
     );
   }
 
@@ -242,12 +261,14 @@ class _AyahRichText extends StatefulWidget {
   final double textScale;
   final int? highlightedAyah;
   final Function(int surah, int ayah)? onAyahTapped;
+  final bool isFatihah;
 
   const _AyahRichText({
     required this.verses,
     required this.textScale,
     required this.highlightedAyah,
     required this.onAyahTapped,
+    this.isFatihah = false,
   });
 
   @override
@@ -288,9 +309,15 @@ class _AyahRichTextState extends State<_AyahRichText> {
   @override
   Widget build(BuildContext context) {
     _disposeRecognizers();
+    final effectiveFontSize = widget.isFatihah
+        ? 23.5 * widget.textScale
+        : 22.0 * widget.textScale;
+    final effectiveLineHeight = widget.isFatihah ? 1.95 : 1.90;
+
     return Semantics(
       label: 'نص الصفحة. اضغط على الآية لفتح خياراتها.',
       child: RichText(
+        textAlign: widget.isFatihah ? TextAlign.center : TextAlign.justify,
         text: TextSpan(
           children: widget.verses.map((verse) {
             final isBismillah =
@@ -309,19 +336,19 @@ class _AyahRichTextState extends State<_AyahRichText> {
                   TextSpan(
                     text: '${Quran.bismillah}\n',
                     style: GoogleFonts.amiri(
-                      fontSize: 26 * widget.textScale,
+                      fontSize: 24 * widget.textScale,
                       color: AppColors.mushafInk,
                       fontWeight: FontWeight.bold,
-                      height: 2.2,
+                      height: 2.0,
                     ),
                   ),
                 TextSpan(
                   text: '$text ',
                   recognizer: _recognizerFor(verse),
                   style: GoogleFonts.amiri(
-                    fontSize: 24 * widget.textScale,
+                    fontSize: effectiveFontSize,
                     color: AppColors.mushafInk,
-                    height: 2.2,
+                    height: effectiveLineHeight,
                     backgroundColor: verse.verseNumber == widget.highlightedAyah
                         ? AppColors.mushafGold.withValues(alpha: 0.20)
                         : null,
@@ -344,28 +371,28 @@ class _AyahRichTextState extends State<_AyahRichText> {
                               verse.surahNumber,
                               verse.verseNumber,
                             ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                        child: Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            Text(
-                              '\u06DD',
-                              style: GoogleFonts.amiri(
-                                fontSize: 34 * widget.textScale,
-                                color: AppColors.mushafGoldMuted,
-                                height: 1.0,
-                              ),
-                            ),
-                            Text(
-                              _toArabicNumerals(verse.verseNumber),
-                              style: GoogleFonts.amiri(
-                                fontSize: 13 * widget.textScale,
-                                color: AppColors.mushafInkStrong,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 3.5),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 6.0,
+                          vertical: 1.5,
+                        ),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: AppColors.mushafGoldMuted,
+                            width: 1.2,
+                          ),
+                          borderRadius: BorderRadius.circular(14),
+                          color: AppColors.mushafGold.withValues(alpha: 0.10),
+                        ),
+                        child: Text(
+                          _toArabicNumerals(verse.verseNumber),
+                          style: GoogleFonts.amiri(
+                            fontSize: 13 * widget.textScale,
+                            color: AppColors.mushafInkStrong,
+                            fontWeight: FontWeight.bold,
+                            height: 1.15,
+                          ),
                         ),
                       ),
                     ),
@@ -375,7 +402,6 @@ class _AyahRichTextState extends State<_AyahRichText> {
             );
           }).toList(),
         ),
-        textAlign: TextAlign.justify,
       ),
     );
   }

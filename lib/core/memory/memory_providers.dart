@@ -12,6 +12,10 @@ final memoryThreadsProvider = StreamProvider<List<MemoryThread>>((ref) {
   return ref.watch(memoryThreadRepositoryProvider).watchActiveThreads();
 });
 
+final allMemoryThreadsProvider = StreamProvider<List<MemoryThread>>((ref) {
+  return ref.watch(memoryThreadRepositoryProvider).watchAllThreads();
+});
+
 final memoryThreadProvider = StreamProvider.family<MemoryThread?, String>((
   ref,
   threadId,

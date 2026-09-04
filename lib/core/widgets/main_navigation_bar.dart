@@ -78,7 +78,7 @@ class MainNavigationBar extends StatelessWidget {
             NavigationDestination(
               icon: Icon(Icons.bookmark_added_outlined),
               selectedIcon: Icon(Icons.bookmark_added_rounded),
-              label: 'أَثَـر',
+              label: 'المحفوظات',
             ),
           ],
         ),

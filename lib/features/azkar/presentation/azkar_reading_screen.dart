@@ -461,12 +461,10 @@ class _ZikrPageState extends State<_ZikrPage>
                               widget.zikr.zikrText,
                               style: GoogleFonts.amiri(
                                 fontSize: widget.fontSize,
-                                color: _done
-                                    ? AppColors.mushafInkSoft
-                                    : AppColors.mushafInk,
-                                height: 1.9,
+                                color: AppColors.mushafInk,
+                                height: 1.8,
                               ),
-                              textAlign: TextAlign.justify,
+                              textAlign: TextAlign.center,
                             ),
                           ],
                         ),
@@ -618,7 +616,7 @@ class _ZikrPageState extends State<_ZikrPage>
           const Spacer(),
           IconButton(
             onPressed: widget.onCapturePressed,
-            tooltip: 'اترك أثرًا',
+            tooltip: 'تدوين خاطر',
             icon: const Icon(Icons.bookmark_add_outlined),
             color: AppColors.mushafInkStrong,
             visualDensity: VisualDensity.compact,

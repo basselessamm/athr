@@ -9,6 +9,7 @@ import 'package:midrar/features/quran/presentation/quran_reading_screen.dart';
 import 'package:midrar/features/azkar/presentation/azkar_categories_screen.dart';
 import 'package:midrar/features/azkar/presentation/azkar_reading_screen.dart';
 import 'package:midrar/features/hadith/presentation/hadith_books_screen.dart';
+import 'package:midrar/features/hadith/presentation/hadith_chapters_screen.dart';
 import 'package:midrar/features/hadith/presentation/hadith_reading_screen.dart';
 import 'package:midrar/features/settings/presentation/settings_screen.dart';
 import 'package:midrar/features/situations/presentation/situations_grid_screen.dart';
@@ -77,6 +78,14 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const HadithBooksScreen(),
       ),
       GoRoute(
+        name: 'hadithChapters',
+        path: '/hadith/:bookName/chapters',
+        builder: (context, state) {
+          final bookName = state.pathParameters['bookName'] ?? '';
+          return HadithChaptersScreen(bookName: bookName);
+        },
+      ),
+      GoRoute(
         name: 'hadithReading',
         path: '/hadith/:bookName',
         builder: (context, state) {
@@ -84,9 +93,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           final hadithId = int.tryParse(
             state.uri.queryParameters['hadithId'] ?? '',
           );
+          final chapter = state.uri.queryParameters['chapter'];
           return HadithReadingScreen(
             bookName: bookName,
             focusHadithId: hadithId,
+            initialChapter: chapter,
           );
         },
       ),

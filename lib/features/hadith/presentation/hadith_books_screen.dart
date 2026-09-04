@@ -51,7 +51,7 @@ class HadithBooksScreen extends ConsumerWidget {
                   child: InkWell(
                     onTap: () {
                       context.pushNamed(
-                        'hadithReading',
+                        'hadithChapters',
                         pathParameters: {'bookName': book},
                       );
                     },

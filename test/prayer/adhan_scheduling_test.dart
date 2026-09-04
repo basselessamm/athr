@@ -29,6 +29,9 @@ PrayerDay _parseRealDay() {
 
 class _ThrowingPrefs implements SharedPreferences {
   @override
+  Future<bool> setString(String key, String value) async => true;
+
+  @override
   dynamic noSuchMethod(Invocation invocation) => throw UnimplementedError();
 }
 

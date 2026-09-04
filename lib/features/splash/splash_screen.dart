@@ -70,7 +70,7 @@ class _SplashScreenState extends State<SplashScreen>
                     ),
                     const SizedBox(height: 24),
                     Text(
-                      'أَثَـر',
+                      'مِـدْرَار',
                       style: GoogleFonts.amiri(
                         fontSize: 48,
                         fontWeight: FontWeight.w700,
@@ -80,7 +80,7 @@ class _SplashScreenState extends State<SplashScreen>
                     ),
                     const SizedBox(height: 4),
                     const Text(
-                      'مِدرار · خيوط العودة وتأمل الآيات',
+                      'رفيقك الهادئ للقرآن والحديث والأذكار',
                       style: TextStyle(
                         fontSize: 15,
                         color: AppColors.lightOnSurfaceVariant,

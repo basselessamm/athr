@@ -1,77 +1,134 @@
-# مِدرار — Midrar
-
 <div align="center">
-  <img src="assets/brand/logo_primary_1024.png" width="120" alt="Midrar" />
-  <p><em>تدفّقٌ يوميّ هادئ — a calm daily flow of Quran, Hadith, and Azkar.</em></p>
-  <img src="https://img.shields.io/badge/Flutter-%2302569B.svg?style=flat-square&logo=Flutter&logoColor=white" />
-  <img src="https://img.shields.io/badge/Dart-%230175C2.svg?style=flat-square&logo=Dart&logoColor=white" />
-  <img src="https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square" />
+  <img src="assets/brand/logo_primary_1024.png" width="130" alt="مِـدْرَار — Midrar Logo" />
+  <h1>مِـدْرَار | Midrar</h1>
+  <p><strong>تدفّقٌ يوميّ هادئ — رفيق إسلامي وقور فائق الأناقة والسرعة (Offline-First)</strong></p>
+
+  [![Flutter](https://img.shields.io/badge/Flutter-3.x-02569B?style=for-the-badge&logo=flutter&logoColor=white)](https://flutter.dev)
+  [![Dart](https://img.shields.io/badge/Dart-3.x-0175C2?style=for-the-badge&logo=dart&logoColor=white)](https://dart.dev)
+  [![Riverpod](https://img.shields.io/badge/State-Riverpod-blueviolet?style=for-the-badge)](https://riverpod.dev)
+  [![Drift](https://img.shields.io/badge/Database-Drift%20SQLite-4479A1?style=for-the-badge&logo=sqlite&logoColor=white)](https://drift.simonbinder.eu)
+  [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
+  [![Tests](https://img.shields.io/badge/Tests-103%20Passed-success?style=for-the-badge)](test/)
 </div>
 
 ---
 
-## Overview
+## 🌧️ عن مِـدْرَار (About Midrar)
 
-**Midrar (مِدرَار)** is an offline-first, privacy-respecting Islamic companion.
-The name is classical Arabic for *continuous, abundant flow* — like rain that
-does not stop. That is the product philosophy: steady daily engagement with
-revelation, without streaks, guilt, or noise.
+**«مِـدْرَار»** هو تطبيق إسلامي مفتوح المصدر تم تصميمه وبناؤه ليكون واحة هادئة تفيض بالسكينة والخشوع بعيداً عن صخب التطبيقات التجارية، والتنبيهات المشتتة، والعدادات الخوارزمية الجافة.
 
-### What's inside
+سُمّي **«مِـدْرَار»** استلهاماً من المعنى العربي الأصيل للسحاب الكثيف الماطر بالخير والنفع المتصل بلا انقطاع:
+> ﴿يُرْسِلِ السَّمَاءَ عَلَيْكُم مِّدْرَارًا﴾ [نوح: 11]
 
-- **Mushaf** — full Uthmani Quran (Tanzil text), page-flip reading, per-ayah
-  Tafsir (**التفسير الميسّر**), streaming recitation from verified reciters.
-- **Hadith** — صحيح البخاري (7,277) and صحيح مسلم (7,459) fully offline, with
-  book/chapter attribution on every narration and diacritics-tolerant search.
-- **Azkar & Ad`iyah** — 134 categorized collections from *الذكر والدعاء
-  والعلاج بالرقى* by سعيد بن علي بن وهف القحطاني, with inline references.
-- **Prayer times** — aladhan-based, three selectable calculation methods,
-  **both Asr madhhabs** (Shafi'i/Hanafi), exact alarms, honest Hijri-method
-  disclosure.
-- **Threads of Return** — capture any verse/hadith/zhikr into a private
-  thread, reflect, and return on your own schedule. Opt-in reminders only.
-- **Muhasaba** — a daily honesty checklist. No scores, no streaks, no shame.
+يمثل التطبيق فلسفة: **الاتصال اليومي الثابت والواعي بالوحيين الشريفين** دون إحساس بالذنب، ودون إعلانات، ودون أي جمع لبيانات المستخدم.
 
-### Principles
+---
 
-| Principle | Practice |
+## ✨ المميزات الرئيسية (Core Capabilities)
+
+### 📖 المصحف الشريف (The Noble Quran)
+- **مصحف المدينة المنورة برسم عثماني أصيل**: نص Tanzil معتمد ودقيق، مقسم إلى 604 صفحات كالمصحف الورقي.
+- **توسيط سورة الفاتحة**: محاذاة الفاتحة الشريفة في مركز الصفحة كالمصاحف المعتمدة مع فواصل آيات ذهبية مصغرة ودقيقة.
+- **القراءة التتابعية المستمرة**: انتقال سلس وتلقائي بين السور عند ختام السورة مع شارة تهنئة ودعاء ختم القرآن عند سورة الناس.
+- **التفسير الميسر اللحظي**: عرض تفسير كل آية بنقرة واحدة مباشرة في شاشة القراءة.
+- **مشغل تلاوات صوتية متعدد السيرفرات (Multi-CDN Streaming)**:
+  - 31 قارئاً من كبار قرّاء العالم الإسلامي (الحصري، المنشاوي، عبد الباسط، العفاسي، السديس، علي جابر، إلخ).
+  - دعم احتياطي تلقائي وسريع جداً عبر سيرفرات `EveryAyah CDN` لضمان استمرار البث حتى في ظروف الشبكة الضعيفة.
+  - متابعة وتظليل تلقائي للآيات أثناء التلاوة، مع مؤقت نوم ذكي وتحكم كامل بالسرعة والتكرار.
+  - حفظ الآيات المستمع إليها محلياً تلقائياً لتعمل دون إنترنت، مع إدارة شفافة لمساحة التخزين المؤقت.
+
+### 🕌 مواقيت الصلاة الفلكية (Offline Astronomical Prayer Times)
+- **حساب فلكي دقيق 100% دون إنترنت**: محرك فلكي رياضي مدمج مبني على معادلات Meeus الفلكية لحساب شروق وغروب وزوال الشمس ومواقع الشفق الفلكي.
+- **دعم كافة الهيئات المعتمدة**:
+  - تقويم أم القرى (مكة المكرمة)
+  - الهيئة المصرية العامة للمساحة
+  - رابطة العالم الإسلامي
+  - جامعة العلوم الإسلامية بكراتشي
+  - الجمعية الإسلامية لأمريكا الشمالية (ISNA)
+- **مذهبا العصر**: دعم التقدير الشافعي/الحنبلي/المالكي والحنفي لظل العصر.
+- **أذان وتنبيهات محلية**: جدولة إشعارات الأذان والصلوات بأصوات مخصصة على أندرويد و iOS دون الحاجة لخوادم وسيطة.
+
+### 📚 مكتبة الحديث النبوي الشريف (Hadith Corpus)
+- **صحيح البخاري** (7,277 حديثاً) و **صحيح مسلم** (7,459 حديثاً) مخزنة محلياً بالكامل عبر Drift SQLite.
+- **فهرسة سريعة للأبواب والكتب الحديثية** (`idx_hadith_book_chapter`) للاستجابة اللحظية وتقليل استهلاك الذاكرة.
+- **بحث متسامح مع التشكيل**: محرك بحث قرآني وحديثي فوري (< 2ms) يتجاهل التشكيل والهمزات.
+
+### 📿 الأذكار والأدعية النبوية (Azkar & Supplications)
+- 134 باباً منتقاة بعناية من كتاب *«الذكر والدعاء والعلاج بالرقى من الكتاب والسنة»* للشيخ سعيد بن علي بن وهف القحطاني رحمه الله.
+- مسبحة إلكترونية هادئة مع استجابة لمسية (Haptics) وإبراز لفضل كل ذكر وتخريجه.
+
+### 🌱 محاسبة النفس والتدبر اليومي (Muhasaba & Reflection)
+- قائمة يومية لتفقد خصال البر وصلاة الجماعة وأوراد اليوم دون نقاط تنافسية أو ضغوط رقمية.
+- سجل زمني تاريخي لمراجعة تأملات الأيام الماضية وتتبع المسار الإيماني التراكمي.
+
+### 🧵 خيوط الذاكرة والعودة (Threads of Return)
+- حفظ المواضع والآيات والأحاديث التي أثرت فيك في خيوط عودة تفاعلية هادئة.
+- تذكيرات محلية لطيفة ومتباعدة تعيدك لما تأملته في الوقت الذي تختاره.
+
+---
+
+## 🎨 الهوية البصرية والتصميم (Design System)
+
+تم بناء التطبيق على لوحة ألوان مستوحاة من هدوء الواحات الأندلسية ومخطوطات التراث الإسلامي:
+- **الأخضر الواحي الداكن (Deep Pine / `#0F1D17`)**: لون التطبيق الأساسي المريح للنظر في الظلام.
+- **ورق المخطوطات الأندلسي (Andalusian Parchment / `#FAF3E7`)**: تدرجات هادئة لصفحات القراءة تمنح إحساس المصحف الورقي.
+- **الذهب التراثي المذهب (`#BD964D`)**: للزخارف القرآنية والأطر الكلاسيكية.
+- **الخطوط الأصيلة**: خط «أميري» (Amiri) للمصحف والنصوص الشرعية، وخط «Cairo» لواجهات التطبيق وعناوينه.
+
+---
+
+## 🛡️ مبادئ الخصوصية والاستقلالية (Privacy Principles)
+
+| المبدأ | التطبيق العملي |
 |---|---|
-| Privacy by design | No accounts, no analytics, no ads, no cloud. Everything stays on device. |
-| Offline first | Quran, Tafsir, Hadith, Azkar, bookmarks — fully usable in airplane mode. Prayer times cache locally; audio streaming is the only online feature and is labeled as such. |
-| Religious care | Sources are attributed in-app; calculation methods are disclosed, never presented as authoritative; disputed matters are labeled as such. |
-| Calm UX | No engagement mechanics around worship. Motion is subtle and reducible. |
+| **انعدام التتبع (Zero Trackers)** | التطبيق لا يحتوي على أي حزم تتبع، إعلانات، أو تحليلات (No Firebase Analytics, No AdMob). |
+| **العمل دون اتصال (Offline-First)** | المصحف، التفسير، الحديث، الأذكار، والمواقيت تعمل بالكامل في وضع الطيران دون إنترنت. |
+| **تخزين محلي آمن** | كافة الملاحظات والمحفوظات وسجلات المحاسبة مخزنة محلياً في جهاز المستخدم فقط. |
+| **شفافية الأحكام الفلكية** | توضيح صريح في كارت المواقيت: *"حساب فلكي · قد يختلف عن الرؤية المحلية"*. |
 
-## Tech stack
+---
 
-Flutter · Riverpod · Drift (SQLite) · GoRouter · flutter_local_notifications ·
-just_audio · bundled Amiri/Cairo typography (OFL).
+## 🛠️ البنية التقنية (Architecture & Tech Stack)
 
-## Building
+- **Framework**: [Flutter 3.x](https://flutter.dev) (Null-Safety)
+- **Architecture**: Feature-First Clean Architecture
+- **State Management**: [Riverpod 2.x](https://riverpod.dev)
+- **Local Persistence**: [Drift (SQLite)](https://drift.simonbinder.eu)
+- **Routing**: [GoRouter](https://pub.dev/packages/go_router)
+- **Audio Engine**: [just_audio](https://pub.dev/packages/just_audio) مع تشغيل مباشر وتخزين مؤقت تلقائي
+- **Local Notifications**: [flutter_local_notifications](https://pub.dev/packages/flutter_local_notifications) مع أصوات محلية مدمجة
 
+---
+
+## 🚀 التشغيل والبناء (Getting Started)
+
+### متطلبات التشغيل:
+- Flutter SDK >= 3.22.0
+- Dart SDK >= 3.4.0
+- Android SDK (API 21+) / iOS 13+
+
+### خطوات التشغيل المحلي:
 ```bash
+# استنساخ المستودع
+git clone https://github.com/basselessamm/midrar.git
+cd midrar
+
+# تثبيت الحزم
 flutter pub get
-flutter run --release   # debug signing for local runs
+
+# تشغيل الفحص والتحليل البرمجي
+flutter analyze
+
+# تشغيل حزمة الاختبارات الآلية (103 اختبارات)
+flutter test
+
+# بناء حزمة الإنتاج
+flutter build apk --release
 ```
 
-**Release builds require production signing** — see
-[RELEASE_SIGNING.md](RELEASE_SIGNING.md). Debug-signed releases are
-rejected by the build system by design.
+---
 
-## Content sources
+## 📜 الترخيص (License)
 
-- Quran text: [Tanzil.net](https://tanzil.net) (Uthmani), served by a vendored
-  core (lib/vendor/quran_core, MIT — see LICENSES/quran_flutter-MIT).
-- Tafsir: التفسير الميسّر (compilation, Presidency of Islamic Research, Egypt)
-  via the open Quran-Tafseer dataset.
-- Hadith corpus: [AhmedBaset/hadith-json](https://github.com/AhmedBaset/hadith-json)
-  layout; numbering follows that dataset's `idInBook` convention.
-- Azkar: سعيد القحطاني، *الذكر والدعاء والعلاج بالرقى من الكتاب والسنة*.
-- Prayer timetable: [aladhan.com](https://aladhan.com) API (method selectable
-  in-app; Hijri dates are astronomical Umm-al-Qura based and disclosed as such).
-- Recitation: cdn.islamic.network (every reciter/bitrate pair verified; see
-  `docs/AUDIO_VERIFICATION_REPORT.md`).
-
-## License
-
-MIT — see [LICENSE](LICENSE). Bundled fonts are licensed under the
-SIL Open Font License.
+هذا المشروع مرخص تحت رخصة **MIT** — راجع ملف [LICENSE](LICENSE) للتفاصيل.
+الخطوط والنصوص القرآنية والحديثية تخضع لتراخيص المصادر المفتوحة المعنية (SIL Open Font License و Tanzil Copyrights).

@@ -126,8 +126,7 @@ class _PrayerScheduleView extends StatelessWidget {
                             textAlign: TextAlign.right,
                             style: Theme.of(context).textTheme.labelSmall
                                 ?.copyWith(
-                                  color:
-                                      Theme.of(context).colorScheme.outline,
+                                  color: Theme.of(context).colorScheme.onSurfaceVariant,
                                 ),
                           ),
                         ],
@@ -201,15 +200,6 @@ class _PrayerScheduleView extends StatelessWidget {
                         );
                       })
                       .toList(growable: false),
-                ),
-                const SizedBox(height: 6),
-                Align(
-                  alignment: AlignmentDirectional.centerStart,
-                  child: TextButton.icon(
-                    onPressed: () => context.push('/prayer'),
-                    icon: const Icon(Icons.arrow_back, size: 17),
-                    label: const Text('عرض كل المواقيت'),
-                  ),
                 ),
               ],
             ),

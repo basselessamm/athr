@@ -30,181 +30,195 @@ class QuranAudioPlayerBar extends ConsumerWidget {
     return SafeArea(
       top: false,
       child: Padding(
-        padding: const EdgeInsetsDirectional.fromSTEB(12, 8, 12, 12),
+        padding: const EdgeInsetsDirectional.fromSTEB(12, 4, 12, 6),
         child: Material(
           color: scheme.surfaceContainerLow,
-          borderRadius: BorderRadius.circular(24),
+          elevation: 4,
+          borderRadius: BorderRadius.circular(20),
           clipBehavior: Clip.antiAlias,
-          child: InkWell(
-            onTap: () => showFullPlayerSheet(context),
-            child: Container(
-              decoration: BoxDecoration(
-                border: Border.all(color: scheme.outlineVariant),
-                borderRadius: BorderRadius.circular(24),
-              ),
-              padding: const EdgeInsetsDirectional.fromSTEB(16, 12, 16, 12),
-              child: Directionality(
-                textDirection: TextDirection.rtl,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                          width: 40,
-                          height: 40,
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: scheme.outlineVariant.withValues(alpha: 0.5)),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            padding: const EdgeInsetsDirectional.fromSTEB(10, 8, 10, 8),
+            child: Directionality(
+              textDirection: TextDirection.rtl,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    children: [
+                      // Play / Pause circular action button
+                      InkWell(
+                        onTap: state.isLoading
+                            ? null
+                            : () {
+                                if (!hasAudio) {
+                                  controller.playAyah(
+                                    surah: surahNumber,
+                                    ayah: 1,
+                                    totalAyahs: totalAyahs,
+                                  );
+                                } else {
+                                  controller.toggle();
+                                }
+                              },
+                        borderRadius: BorderRadius.circular(24),
+                        child: Container(
+                          width: 42,
+                          height: 42,
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
-                            color: scheme.primaryContainer,
+                            color: scheme.primary,
                             shape: BoxShape.circle,
                           ),
-                          child: Icon(
-                            state.isLoading
-                                ? Icons.cloud_sync_outlined
-                                : Icons.graphic_eq_rounded,
-                            color: scheme.primary,
+                          child: state.isLoading
+                              ? const SizedBox(
+                                  width: 20,
+                                  height: 20,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: Colors.white,
+                                  ),
+                                )
+                              : Icon(
+                                  state.isPlaying
+                                      ? Icons.pause_rounded
+                                      : Icons.play_arrow_rounded,
+                                  color: scheme.onPrimary,
+                                  size: 26,
+                                ),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      // Reciter & Ayah Info - tap to open full player sheet
+                      Expanded(
+                        child: InkWell(
+                          onTap: () => showFullPlayerSheet(context),
+                          borderRadius: BorderRadius.circular(8),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 2.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  hasAudio
+                                      ? 'الآية $currentAyah · ${state.reciter.displayName}'
+                                      : 'استمع إلى سورة ${surahNameFor(surahNumber)}',
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: textTheme.titleSmall?.copyWith(
+                                    fontWeight: FontWeight.w800,
+                                    fontSize: 13.5,
+                                  ),
+                                ),
+                                const SizedBox(height: 2),
+                                Text(
+                                  key: const ValueKey('audio-subtitle'),
+                                  state.isLoading
+                                      ? 'جارٍ الاتصال بمصدر التلاوة…'
+                                      : state.isPlaying
+                                          ? 'جاري التلاوة الآن · انقر للمزيد'
+                                          : hasAudio
+                                              ? 'تلاوة متوقفة · انقر للاستئناف'
+                                              : 'تلاوة صوتية مع المتابعة التلقائية',
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: textTheme.labelSmall?.copyWith(
+                                    color: scheme.onSurfaceVariant,
+                                    fontSize: 11,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                hasAudio
-                                    ? 'الآية $currentAyah · ${state.reciter.displayName}'
-                                    : 'استمع إلى السورة',
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: textTheme.titleSmall?.copyWith(
-                                  fontWeight: FontWeight.w900,
-                                ),
-                              ),
-                              const SizedBox(height: 1),
-                              Text(
-                                key: const ValueKey('audio-subtitle'),
-                                state.isLoading
-                                    ? 'جارٍ الاتصال بالمصدر الصوتي…'
-                                    : hasAudio
-                                    ? 'بث مع حفظ محلي لما تسمعه'
-                                    : 'تلاوة من مصدر موثوق حسب اختيارك',
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: textTheme.labelMedium?.copyWith(
-                                  color: scheme.onSurfaceVariant,
-                                ),
-                              ),
-                            ],
-                          ),
+                      ),
+                      // Controls: Prev / Next
+                      if (hasAudio) ...[
+                        IconButton(
+                          tooltip: 'الآية السابقة',
+                          visualDensity: VisualDensity.compact,
+                          padding: EdgeInsets.zero,
+                          constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
+                          onPressed: !state.isLoading ? controller.previous : null,
+                          icon: const Icon(Icons.skip_previous_rounded, size: 22),
                         ),
                         IconButton(
-                          tooltip: 'القارئ',
-                          onPressed: () =>
-                              _selectReciter(context: context, ref: ref),
-                          icon: const Icon(
-                            Icons.person_outline_rounded,
-                            size: 20,
-                          ),
-                        ),
-                        IconButton(
-                          tooltip: 'مشغل كامل',
-                          onPressed: () => showFullPlayerSheet(context),
-                          icon: const Icon(Icons.keyboard_arrow_up_rounded),
+                          tooltip: 'الآية التالية',
+                          visualDensity: VisualDensity.compact,
+                          padding: EdgeInsets.zero,
+                          constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
+                          onPressed: !state.isLoading ? () => controller.next() : null,
+                          icon: const Icon(Icons.skip_next_rounded, size: 22),
                         ),
                       ],
-                    ),
-                    if (state.isLoading) ...[
-                      const SizedBox(height: 10),
-                      LinearProgressIndicator(
-                        minHeight: 3,
-                        borderRadius: BorderRadius.circular(99),
+                      // Reciter Picker button
+                      IconButton(
+                        tooltip: 'تغيير القارئ',
+                        visualDensity: VisualDensity.compact,
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
+                        onPressed: () => _selectReciter(context: context, ref: ref),
+                        icon: const Icon(Icons.person_outline_rounded, size: 20),
+                      ),
+                      // Expand / Full sheet button
+                      IconButton(
+                        tooltip: 'خيارات التلاوة والمشغل',
+                        visualDensity: VisualDensity.compact,
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
+                        onPressed: () => showFullPlayerSheet(context),
+                        icon: const Icon(Icons.keyboard_arrow_up_rounded, size: 24),
                       ),
                     ],
-                    if (state.error != null) ...[
-                      const SizedBox(height: 8),
-                      _AudioError(
-                        message: state.error!,
-                        onRetry: hasAudio
-                            ? () => controller.playAyah(
+                  ),
+                  // Compact Error Alert if any
+                  if (state.error != null) ...[
+                    const SizedBox(height: 6),
+                    InkWell(
+                      onTap: hasAudio
+                          ? () => controller.playAyah(
                                 surah: state.surah!,
                                 ayah: state.ayah!,
                                 totalAyahs: state.totalAyahs!,
                               )
-                            : null,
-                      ),
-                    ],
-                    const SizedBox(height: 8),
-                    Row(
-                      children: [
-                        IconButton.filledTonal(
-                          tooltip: 'الآية السابقة',
-                          onPressed:
-                              hasAudio && !state.isLoading
-                              ? controller.previous
-                              : null,
-                          icon: const Icon(Icons.skip_previous_rounded),
+                          : null,
+                      borderRadius: BorderRadius.circular(10),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: scheme.errorContainer.withValues(alpha: 0.6),
+                          borderRadius: BorderRadius.circular(10),
                         ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: FilledButton.icon(
-                            style: FilledButton.styleFrom(
-                              minimumSize: const Size.fromHeight(52),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(16),
+                        child: Row(
+                          children: [
+                            Icon(Icons.wifi_off_rounded, size: 16, color: scheme.error),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                state.error!,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: textTheme.labelSmall?.copyWith(color: scheme.onErrorContainer),
                               ),
                             ),
-                            onPressed: state.isLoading
-                                ? null
-                                : () {
-                                    if (!hasAudio) {
-                                      controller.playAyah(
-                                        surah: surahNumber,
-                                        ayah: 1,
-                                        totalAyahs: totalAyahs,
-                                      );
-                                    } else {
-                                      controller.toggle();
-                                    }
-                                  },
-                            icon: state.isLoading
-                                ? const SizedBox(
-                                    height: 20,
-                                    width: 20,
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 2,
-                                      color: Colors.white,
-                                    ),
-                                  )
-                                : Icon(
-                                    state.isPlaying
-                                        ? Icons.pause_rounded
-                                        : Icons.play_arrow_rounded,
-                                  ),
-                            label: Text(
-                              state.isLoading
-                                  ? 'جارٍ التحميل'
-                                  : state.isPlaying
-                                  ? 'إيقاف مؤقت'
-                                  : hasAudio
-                                  ? 'استئناف التلاوة'
-                                  : 'تشغيل التلاوة',
+                            const SizedBox(width: 6),
+                            Text(
+                              'إعادة المحاولة',
+                              style: textTheme.labelSmall?.copyWith(
+                                color: scheme.error,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
+                          ],
                         ),
-                        const SizedBox(width: 10),
-                        IconButton.filledTonal(
-                          tooltip: 'الآية التالية',
-                          onPressed:
-                              hasAudio && !state.isLoading
-                              ? () => controller.next()
-                              : null,
-                          icon: const Icon(Icons.skip_next_rounded),
-                        ),
-                      ],
+                      ),
                     ),
                   ],
-                ),
+                ],
               ),
             ),
           ),
@@ -508,26 +522,60 @@ class _FullPlayerSheetState extends ConsumerState<_FullPlayerSheet> {
       controller.setSleepTimer(null);
       return;
     }
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
     final choice = await showModalBottomSheet<Duration>(
       context: context,
       backgroundColor: Colors.transparent,
+      isScrollControlled: true,
       builder: (sheetContext) => Directionality(
         textDirection: TextDirection.rtl,
-        child: SafeArea(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const SizedBox(height: 14),
-              Text('إيقاف التلاوة بعد…', style: Theme.of(context).textTheme.titleMedium),
-              const SizedBox(height: 8),
-              for (final minutes in const [10, 20, 30, 60])
-                ListTile(
-                  title: Text('$minutes دقائق'),
-                  onTap: () =>
-                      Navigator.of(sheetContext).pop(Duration(minutes: minutes)),
-                ),
-              const SizedBox(height: 8),
-            ],
+        child: Material(
+          color: scheme.surface,
+          elevation: 12,
+          borderRadius: const BorderRadius.vertical(
+            top: Radius.circular(28),
+          ),
+          clipBehavior: Clip.antiAlias,
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsetsDirectional.fromSTEB(20, 16, 20, 20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Center(
+                    child: Container(
+                      width: 44,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: scheme.outlineVariant,
+                        borderRadius: BorderRadius.circular(99),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'إيقاف التلاوة بعد…',
+                    textAlign: TextAlign.center,
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  for (final minutes in const [10, 20, 30, 60])
+                    ListTile(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                      leading: const Icon(Icons.timer_outlined),
+                      title: Text('$minutes دقيقة'),
+                      onTap: () =>
+                          Navigator.of(sheetContext).pop(Duration(minutes: minutes)),
+                    ),
+                ],
+              ),
+            ),
           ),
         ),
       ),
@@ -538,42 +586,129 @@ class _FullPlayerSheetState extends ConsumerState<_FullPlayerSheet> {
   Future<void> _showCacheManager(BuildContext context, WidgetRef ref) async {
     final size = await QuranAudioCache.totalSizeBytes();
     if (!context.mounted) return;
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
     await showModalBottomSheet<void>(
       context: context,
       backgroundColor: Colors.transparent,
+      isScrollControlled: true,
       builder: (sheetContext) => Directionality(
         textDirection: TextDirection.rtl,
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(24),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  'التلاوات المحفوظة',
-                  style: Theme.of(sheetContext).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w900,
+        child: Material(
+          color: scheme.surface,
+          elevation: 12,
+          borderRadius: const BorderRadius.vertical(
+            top: Radius.circular(AppColors.radiusXl),
+          ),
+          clipBehavior: Clip.antiAlias,
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsetsDirectional.fromSTEB(24, 16, 24, 24),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Center(
+                    child: Container(
+                      width: 44,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: scheme.outlineVariant,
+                        borderRadius: BorderRadius.circular(99),
                       ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  'تحفظ مدرار تلقائيًا الآيات التي استمعت إليها لتعمل دون إنترنت عند إعادتها. لا يتم تنزيل المصحف كاملًا أبدًا.',
-                  style: Theme.of(sheetContext).textTheme.bodySmall,
-                ),
-                const SizedBox(height: 12),
-                Text('الحجم المستخدم: ${_formatBytes(size)}'),
-                const SizedBox(height: 16),
-                OutlinedButton.icon(
-                  onPressed: () async {
-                    await QuranAudioCache.clear();
-                    ref.invalidate(quranCacheSizeProvider);
-                    if (sheetContext.mounted) Navigator.of(sheetContext).pop();
-                  },
-                  icon: const Icon(Icons.delete_sweep_outlined),
-                  label: const Text('تفريغ التخزين المؤقت'),
-                ),
-              ],
+                    ),
+                  ),
+                  const SizedBox(height: 18),
+                  Row(
+                    children: [
+                      Container(
+                        width: 42,
+                        height: 42,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: scheme.primaryContainer.withValues(alpha: 0.5),
+                        ),
+                        child: Icon(
+                          Icons.storage_rounded,
+                          color: scheme.primary,
+                          size: 22,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'التلاوات المحفوظة',
+                              style: theme.textTheme.titleMedium?.copyWith(
+                                fontWeight: FontWeight.w900,
+                              ),
+                            ),
+                            Text(
+                              'الحجم المستخدم: ${_formatBytes(size)}',
+                              style: theme.textTheme.labelMedium?.copyWith(
+                                color: scheme.primary,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () => Navigator.of(sheetContext).pop(),
+                        icon: const Icon(Icons.close_rounded),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 14),
+                  Container(
+                    padding: const EdgeInsets.all(14),
+                    decoration: BoxDecoration(
+                      color: scheme.surfaceContainerHigh.withValues(alpha: 0.5),
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(
+                        color: scheme.outlineVariant.withValues(alpha: 0.3),
+                      ),
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Icon(
+                          Icons.info_outline_rounded,
+                          size: 20,
+                          color: scheme.onSurfaceVariant,
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Text(
+                            'تحفظ مدرار تلقائيًا الآيات التي استمعت إليها لتعمل دون إنترنت عند إعادتها. ولا يتم تنزيل المصحف كاملًا أبدًا لترشيد استهلاك باقة الإنترنت.',
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: scheme.onSurfaceVariant,
+                              height: 1.5,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  FilledButton.tonalIcon(
+                    onPressed: size == 0
+                        ? null
+                        : () async {
+                            await QuranAudioCache.clear();
+                            ref.invalidate(quranCacheSizeProvider);
+                            if (sheetContext.mounted) Navigator.of(sheetContext).pop();
+                          },
+                    icon: const Icon(Icons.delete_sweep_outlined),
+                    label: const Text('تفريغ التخزين المؤقت'),
+                    style: FilledButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -647,12 +782,11 @@ Future<QuranReciter?> showReciterPicker(
     backgroundColor: Colors.transparent,
     builder: (sheetContext) => Directionality(
       textDirection: TextDirection.rtl,
-      child: Container(
-        constraints: const BoxConstraints(maxHeight: 560),
-        decoration: BoxDecoration(
-          color: scheme.surface,
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(30)),
-        ),
+      child: Material(
+        color: scheme.surface,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(30)),
+        child: Container(
+          constraints: const BoxConstraints(maxHeight: 560),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -721,45 +855,11 @@ Future<QuranReciter?> showReciterPicker(
         ),
       ),
     ),
-  );
+  ),
+);
 }
 
 String surahNameFor(int surah) => Quran.getSurahName(surah);
-
-class _AudioError extends StatelessWidget {
-  const _AudioError({required this.message, this.onRetry});
-
-  final String message;
-  final VoidCallback? onRetry;
-
-  @override
-  Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    return Container(
-      padding: const EdgeInsetsDirectional.fromSTEB(12, 9, 8, 9),
-      decoration: BoxDecoration(
-        color: scheme.errorContainer.withValues(alpha: .62),
-        borderRadius: BorderRadius.circular(14),
-      ),
-      child: Row(
-        children: [
-          Icon(Icons.wifi_off_rounded, color: scheme.error),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Text(
-              message,
-              style: Theme.of(
-                context,
-              ).textTheme.bodySmall?.copyWith(color: scheme.onErrorContainer),
-            ),
-          ),
-          if (onRetry != null)
-            TextButton(onPressed: onRetry, child: const Text('إعادة المحاولة')),
-        ],
-      ),
-    );
-  }
-}
 
 String _format(Duration value) {
   final minutes = value.inMinutes.toString().padLeft(1, '0');

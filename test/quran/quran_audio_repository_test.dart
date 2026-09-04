@@ -7,15 +7,14 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   test('exposes the verified reciter catalog with unique ids', () {
-    // 18 editions verified against cdn.islamic.network on 2026-08-25.
-    expect(quranReciters, hasLength(18));
-    expect(quranReciters.map((reciter) => reciter.id).toSet(), hasLength(18));
+    expect(quranReciters, hasLength(31));
+    expect(quranReciters.map((reciter) => reciter.id).toSet(), hasLength(31));
     expect(
       quranReciters.every((reciter) => reciter.id.startsWith('ar.')),
       isTrue,
     );
     // Every catalog entry must carry a sane bitrate from the verified set.
-    const verifiedBitrates = {32, 64, 128, 192};
+    const verifiedBitrates = {32, 40, 48, 64, 128, 192};
     expect(
       quranReciters.every((r) => verifiedBitrates.contains(r.cdnBitrate)),
       isTrue,
@@ -35,6 +34,19 @@ void main() {
       'ar.abdurrahmaansudais', // السديس
       'ar.ahmedajamy', // أحمد بن علي العجمي
       'ar.hanirifai', // هاني الرفاعي
+      'ar.yasseraddussary', // ياسر الدوسري
+      'ar.saadalghamadi', // سعد الغامدي
+      'ar.faresabbad', // فارس عباد
+      'ar.nasseralqatami', // ناصر القطامي
+      'ar.alijaber', // علي جابر
+      'ar.mohammadaltablaway', // محمد محمود الطبلاوي
+      'ar.mahmoudalialbanna', // محمود علي البنا
+      'ar.salahalbudair', // صلاح البدير
+      'ar.abdullahaljuhaynee', // عبدالله عواد الجهني
+      'ar.khaalidalqahtaanee', // خالد القحطاني
+      'ar.mustafaismail', // مصطفى إسماعيل
+      'ar.khalifaaltunaiji', // خليفة الطنيجي
+      'ar.salahbukhatir', // صلاح بوخاطر
     ]) {
       expect(ids, contains(expected), reason: 'missing $expected');
     }
@@ -42,17 +54,15 @@ void main() {
 
   test('unverifiable reciters stay excluded from the catalog', () {
     final ids = quranReciters.map((r) => r.id).toSet();
-    // Not available on the verified streaming CDN — must not pretend.
     for (final banned in const [
       'ar.islamsobhi',
-      'ar.yaseraldosari',
-      'ar.faaris',
-      'ar.saadghamdi',
+      'ar.hazzaalbalushi',
       'ar.ahmedalajmi', // persistent 403
     ]) {
       expect(ids, isNot(contains(banned)), reason: '$banned must stay out');
     }
     expect(unverifiedReciterIds, contains('ar.ahmedalajmi'));
+    expect(unverifiedReciterIds, contains('ar.islamsobhi'));
   });
 
   test('duplicate "-2" mirror editions are not shipped', () {
@@ -61,18 +71,36 @@ void main() {
   });
 
   test(
-    'builds an external CDN URL for the selected reciter and global ayah',
+    'builds external CDN URLs for both IslamicNetwork and EveryAyah reciters',
     () {
       final repository = QuranAudioRepository();
-      final reciter = quranReciters.firstWhere(
+      
+      // 1. Islamic Network provider test
+      final sudais = quranReciters.firstWhere(
         (item) => item.id == 'ar.abdurrahmaansudais',
       );
+      final sudaisUri = repository.ayahStream(reciter: sudais, globalAyah: 8);
+      expect(sudaisUri.scheme, 'https');
+      expect(sudaisUri.host, 'cdn.islamic.network');
+      expect(sudaisUri.path, '/quran/audio/192/ar.abdurrahmaansudais/8.mp3');
 
-      final uri = repository.ayahStream(reciter: reciter, globalAyah: 8);
+      // 2. EveryAyah provider test (globalAyah 8 = Surah 2 Al-Baqarah, Ayah 1)
+      final yasser = quranReciters.firstWhere(
+        (item) => item.id == 'ar.yasseraddussary',
+      );
+      final yasserUri = repository.ayahStream(reciter: yasser, globalAyah: 8);
+      expect(yasserUri.scheme, 'https');
+      expect(yasserUri.host, 'everyayah.com');
+      expect(yasserUri.path, '/data/Yasser_Ad-Dussary_128kbps/002001.mp3');
 
-      expect(uri.scheme, 'https');
-      expect(uri.host, 'cdn.islamic.network');
-      expect(uri.path, '/quran/audio/192/ar.abdurrahmaansudais/8.mp3');
+      // 3. EveryAyah Al-Fatihah Ayah 1 (globalAyah 1)
+      final ghamadi = quranReciters.firstWhere(
+        (item) => item.id == 'ar.saadalghamadi',
+      );
+      final ghamadiUri = repository.ayahStream(reciter: ghamadi, globalAyah: 1);
+      expect(ghamadiUri.scheme, 'https');
+      expect(ghamadiUri.host, 'everyayah.com');
+      expect(ghamadiUri.path, '/data/Ghamadi_40kbps/001001.mp3');
     },
   );
 

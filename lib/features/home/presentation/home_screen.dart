@@ -63,6 +63,10 @@ class HomeScreen extends ConsumerWidget {
             const SizedBox(height: 28),
             const _DeferredContinuationCanvas(),
             const SizedBox(height: 28),
+            _SituationsDiscoveryCard(
+              onOpen: () => context.push('/situations'),
+            ),
+            const SizedBox(height: 20),
             _DeferredSourceDiscoveryCard(
               onOpen: () => context.push('/quran/67?ayah=3'),
             ),
@@ -70,6 +74,7 @@ class HomeScreen extends ConsumerWidget {
             _GentleUtilityRow(
               onMuhasaba: () => context.push('/muhasaba'),
               onPrayerSettings: () => context.push('/settings'),
+              onSituations: () => context.push('/situations'),
             ),
           ],
         ),
@@ -200,50 +205,25 @@ class _WelcomeHeader extends StatelessWidget {
           ),
         ],
       ),
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: theme.colorScheme.primaryContainer.withValues(
-                alpha: isDark ? 0.45 : 0.7,
-              ),
-              border: Border.all(
-                color: theme.colorScheme.primary.withValues(alpha: 0.2),
-                width: 1,
-              ),
+          Text(
+            greeting,
+            style: theme.textTheme.headlineSmall?.copyWith(
+              fontWeight: FontWeight.w900,
             ),
-            child: Icon(
-              Icons.auto_awesome_outlined,
-              color: theme.colorScheme.primary,
-              size: 24,
-            ),
+            textAlign: TextAlign.right,
           ),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text(
-                  greeting,
-                  style: theme.textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.w900,
-                  ),
-                  textAlign: TextAlign.right,
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  'مكانٌ للقراءة والذكر والعودة إلى ما كان ذا معنى.',
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: theme.colorScheme.onSurfaceVariant,
-                    height: 1.5,
-                    fontSize: 12.5,
-                  ),
-                  textAlign: TextAlign.right,
-                ),
-              ],
+          const SizedBox(height: 6),
+          Text(
+            'مكانٌ للقراءة والذكر والعودة إلى ما كان ذا معنى.',
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
+              height: 1.5,
+              fontSize: 13,
             ),
+            textAlign: TextAlign.right,
           ),
         ],
       ),
@@ -286,7 +266,7 @@ class _QuickAccessGrid extends StatelessWidget {
         onHadith,
       ),
       _QuickAccessItem(
-        'أَثَـر',
+        'المحفوظات',
         'خيوط العودة',
         Icons.bookmark_added_rounded,
         onFavorites,
@@ -434,7 +414,7 @@ class _DeferredContinuationCanvasState
       ),
       child: Row(
         children: [
-          Icon(Icons.auto_awesome_outlined, color: scheme.primary),
+          Icon(Icons.bookmark_border_rounded, color: scheme.primary),
           const SizedBox(width: 10),
           Expanded(
             child: Text(
@@ -609,14 +589,100 @@ class _DiscoveryCardBody extends StatelessWidget {
   }
 }
 
+class _SituationsDiscoveryCard extends StatelessWidget {
+  const _SituationsDiscoveryCard({required this.onOpen});
+
+  final VoidCallback onOpen;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final scheme = theme.colorScheme;
+
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: scheme.surface,
+        borderRadius: BorderRadius.circular(AppColors.radiusXl),
+        border: Border.all(
+          color: scheme.outline,
+          width: 1.0,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: isDark
+                ? Colors.black.withValues(alpha: 0.25)
+                : const Color(0xFF1C443B).withValues(alpha: 0.04),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Row(
+            children: [
+              Container(
+                width: 44,
+                height: 44,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.emotionComfort.withValues(alpha: 0.15),
+                ),
+                child: const Icon(
+                  Icons.wb_twilight_outlined,
+                  color: AppColors.emotionComfort,
+                  size: 22,
+                ),
+              ),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'سكينة في مواقف الحياة',
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      'آيات وأحاديث لما تجده في صدرك من هم أو ضيق أو شكر',
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
+                        height: 1.4,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          FilledButton.tonalIcon(
+            onPressed: onOpen,
+            icon: const Icon(Icons.explore_outlined, size: 18),
+            label: const Text('استعراض المواقف والتأملات'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class _GentleUtilityRow extends StatelessWidget {
   const _GentleUtilityRow({
     required this.onMuhasaba,
     required this.onPrayerSettings,
+    required this.onSituations,
   });
 
   final VoidCallback onMuhasaba;
   final VoidCallback onPrayerSettings;
+  final VoidCallback onSituations;
 
   @override
   Widget build(BuildContext context) {
@@ -629,6 +695,11 @@ class _GentleUtilityRow extends StatelessWidget {
           onPressed: onMuhasaba,
           icon: const Icon(Icons.edit_note_outlined),
           label: const Text('تأمل شخصي'),
+        ),
+        TextButton.icon(
+          onPressed: onSituations,
+          icon: const Icon(Icons.wb_twilight_outlined),
+          label: const Text('مواقف وتأملات'),
         ),
         TextButton.icon(
           onPressed: onPrayerSettings,

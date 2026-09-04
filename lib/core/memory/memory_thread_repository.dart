@@ -33,6 +33,15 @@ class MemoryThreadRepository {
     return query.watch().map((rows) => rows.map(_toDomain).toList());
   }
 
+  Stream<List<MemoryThread>> watchAllThreads() {
+    final query = _db.select(_db.memoryThreadTable)
+      ..orderBy([
+        (row) => OrderingTerm.desc(row.updatedAt),
+        (row) => OrderingTerm.desc(row.createdAt),
+      ]);
+    return query.watch().map((rows) => rows.map(_toDomain).toList());
+  }
+
   Future<List<MemoryThread>> listThreads({bool includeArchived = false}) async {
     final query = _db.select(_db.memoryThreadTable)
       ..orderBy([

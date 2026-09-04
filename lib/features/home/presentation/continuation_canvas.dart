@@ -39,7 +39,7 @@ class ContinuationCanvas extends ConsumerWidget {
           return _CanvasMessage(
             title: 'لا توجد خيوط بعد',
             body:
-                'ابدأ من آية أو حديث أو ذكر واترك أثرًا يمكنك العودة إليه متى شئت.',
+                'ابدأ من آية أو حديث أو ذكر واحفظ ما يلهمك لتعود إليه متى شئت.',
             actionLabel: 'اكتشاف مصدر',
             onAction: () => context.push('/quran'),
           );
@@ -83,7 +83,7 @@ class ContinuationCanvas extends ConsumerWidget {
           OutlinedButton.icon(
             onPressed: () => context.push('/quran'),
             icon: const Icon(Icons.explore_outlined),
-            label: const Text('اكتشاف أثر جديد'),
+            label: const Text('اكتشاف معنى جديد'),
           ),
         ];
         if (embedded) {
@@ -243,7 +243,7 @@ class _ThreadCanvasCard extends StatelessWidget {
         return Icons.library_books_outlined;
       case SourceKind.dua:
       case SourceKind.azkar:
-        return Icons.auto_awesome_outlined;
+        return Icons.spa_outlined;
       case SourceKind.situation:
         return Icons.lightbulb_outline;
     }

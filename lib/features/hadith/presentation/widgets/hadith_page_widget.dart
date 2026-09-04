@@ -147,7 +147,7 @@ class HadithPageWidget extends StatelessWidget {
           const SizedBox(width: 8),
           IconButton(
             onPressed: onCapturePressed,
-            tooltip: 'اترك أثرًا',
+            tooltip: 'تدوين خاطر',
             icon: const Icon(Icons.bookmark_add_outlined),
             color: AppColors.mushafInkStrong,
           ),

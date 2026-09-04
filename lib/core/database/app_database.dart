@@ -132,6 +132,9 @@ class AppDatabase extends _$AppDatabase {
       await customStatement(
         'CREATE INDEX IF NOT EXISTS idx_zikr_category ON zikr_table (category, zikr_index)',
       );
+      await customStatement(
+        'CREATE INDEX IF NOT EXISTS idx_hadith_book_chapter ON hadith_table (book_name, chapter_name)',
+      );
     },
   );
 

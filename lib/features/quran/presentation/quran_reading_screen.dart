@@ -215,12 +215,15 @@ class _QuranReadingScreenState extends ConsumerState<QuranReadingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
+
     if (!_isQuranReady) {
       return Scaffold(
-        backgroundColor: AppColors.mushafBackground,
+        backgroundColor: theme.scaffoldBackgroundColor,
         appBar: AppBar(
-          backgroundColor: AppColors.mushafBackground,
-          foregroundColor: AppColors.mushafPaperAlt,
+          backgroundColor: theme.scaffoldBackgroundColor,
+          foregroundColor: scheme.onSurface,
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios),
             onPressed: () => context.pop(),
@@ -231,22 +234,22 @@ class _QuranReadingScreenState extends ConsumerState<QuranReadingScreen> {
           child: Padding(
             padding: const EdgeInsets.all(24),
             child: _initializationError == null
-                ? const Column(
+                ? Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      CircularProgressIndicator(color: AppColors.mushafGold),
-                      SizedBox(height: 16),
+                      CircularProgressIndicator(color: scheme.primary),
+                      const SizedBox(height: 16),
                       Text(
                         'يُهيَّأ المصحف للقراءة…',
                         textAlign: TextAlign.center,
-                        style: TextStyle(color: AppColors.mushafPaperAlt),
+                        style: TextStyle(color: scheme.onSurface),
                       ),
                     ],
                   )
-                : const Text(
+                : Text(
                     'تعذرت تهيئة المصحف الآن. حاول مرة أخرى بعد قليل.',
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: AppColors.mushafPaperAlt),
+                    style: TextStyle(color: scheme.onSurface),
                   ),
           ),
         ),
@@ -269,20 +272,19 @@ class _QuranReadingScreenState extends ConsumerState<QuranReadingScreen> {
         : null;
 
     return Scaffold(
-      backgroundColor: AppColors.mushafBackground,
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
         title: Text('سورة ${Quran.getSurahName(widget.surahNumber)}'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios),
           onPressed: () => context.pop(),
         ),
-        backgroundColor: AppColors.mushafBackground,
-        foregroundColor: AppColors.mushafPaperAlt,
+        backgroundColor: theme.scaffoldBackgroundColor,
+        foregroundColor: scheme.onSurface,
         elevation: 0,
-        titleTextStyle: const TextStyle(
-          color: AppColors.mushafPaperAlt,
-          fontSize: 21,
-          fontWeight: FontWeight.w700,
+        titleTextStyle: theme.textTheme.titleLarge?.copyWith(
+          color: scheme.onSurface,
+          fontWeight: FontWeight.w800,
         ),
         actions: [
           IconButton(
@@ -297,7 +299,10 @@ class _QuranReadingScreenState extends ConsumerState<QuranReadingScreen> {
                       ),
                     );
                   },
-            icon: const Icon(Icons.bookmark_added_outlined),
+            icon: Icon(
+              Icons.bookmark_added_outlined,
+              color: scheme.onSurface,
+            ),
           ),
         ],
       ),
@@ -318,36 +323,78 @@ class _QuranReadingScreenState extends ConsumerState<QuranReadingScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(
-                  Icons.check_circle_outline,
-                  size: 80,
+                Icon(
+                  widget.surahNumber >= 114
+                      ? Icons.verified_rounded
+                      : Icons.check_circle_outline,
+                  size: 72,
                   color: AppColors.mushafGold,
                 ),
-                const SizedBox(height: 24),
-                const Text(
-                  'نهاية السورة',
-                  style: TextStyle(
-                    fontSize: 32,
+                const SizedBox(height: 20),
+                Text(
+                  widget.surahNumber >= 114
+                      ? 'ختم القرآن الكريم'
+                      : 'نهاية السورة',
+                  style: const TextStyle(
+                    fontSize: 30,
                     color: AppColors.mushafInkStrong,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 10),
                 Text(
-                  'سورة ${Quran.getSurahName(widget.surahNumber)}',
+                  widget.surahNumber >= 114
+                      ? 'تقبل الله طاعتكم وصالح أعمالكم'
+                      : 'سورة ${Quran.getSurahName(widget.surahNumber)}',
+                  textAlign: TextAlign.center,
                   style: const TextStyle(
-                    fontSize: 22,
+                    fontSize: 20,
                     color: AppColors.mushafInkSoft,
                   ),
                 ),
-                const SizedBox(height: 48),
-                ElevatedButton(
+                const SizedBox(height: 36),
+                if (widget.surahNumber < 114) ...[
+                  ElevatedButton.icon(
+                    onPressed: () {
+                      context.pushReplacementNamed(
+                        'quranReading',
+                        pathParameters: {
+                          'surahNumber': '${widget.surahNumber + 1}',
+                        },
+                      );
+                    },
+                    icon: const Icon(Icons.arrow_forward_rounded),
+                    label: Text(
+                      'الانتقال إلى سورة ${Quran.getSurahName(widget.surahNumber + 1)}',
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.mushafGold,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 28,
+                        vertical: 14,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 14),
+                ],
+                OutlinedButton(
                   onPressed: () => context.pop(),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.mushafGold,
-                    foregroundColor: Colors.white,
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: AppColors.mushafInkStrong,
+                    side: const BorderSide(
+                      color: AppColors.mushafGold,
+                      width: 1.5,
+                    ),
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 40,
+                      horizontal: 36,
                       vertical: 12,
                     ),
                     shape: RoundedRectangleBorder(
@@ -355,8 +402,8 @@ class _QuranReadingScreenState extends ConsumerState<QuranReadingScreen> {
                     ),
                   ),
                   child: const Text(
-                    'العودة للقرآن',
-                    style: TextStyle(fontSize: 18),
+                    'فهرس السور',
+                    style: TextStyle(fontSize: 16),
                   ),
                 ),
               ],

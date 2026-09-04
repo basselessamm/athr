@@ -40,8 +40,14 @@ class Quran {
   /// Total number of pages in the Quran.
   static const int pageCount = 604;
 
+  static bool _isInitialized = false;
+
+  /// Whether the Quranic data has already been initialized.
+  static bool get isInitialized => _isInitialized;
+
   /// Initializes the Quranic data (Arabic Uthmani text + metadata).
   static Future<void> initialize() async {
+    if (_isInitialized) return;
     _surahMap = MetaDataLoader.loadSurah();
     _surahList = _surahMap.values.toList();
     _quranVerses = await AssetLoader.loadQuranText();
@@ -49,6 +55,7 @@ class Quran {
     _juzList = _juzMap.values.toList();
     _pageMap = MetaDataLoader.loadPages();
     _pageList = _pageMap.values.toList();
+    _isInitialized = true;
   }
 
   /// Retrieves all the Quranic verses (Arabic).

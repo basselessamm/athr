@@ -196,12 +196,21 @@ class NotificationService {
       importance: Importance.defaultImportance,
       priority: Priority.defaultPriority,
     );
+    const darwinReminderDetails = DarwinNotificationDetails(
+      presentAlert: true,
+      presentBadge: true,
+      presentSound: true,
+    );
     await _notificationsPlugin.zonedSchedule(
       id: _notificationId(intent.id),
       title: 'عودة إلى خيطك',
       body: thread.source.sourceLabel,
       scheduledDate: scheduledDate,
-      notificationDetails: const NotificationDetails(android: androidDetails),
+      notificationDetails: const NotificationDetails(
+        android: androidDetails,
+        iOS: darwinReminderDetails,
+        macOS: darwinReminderDetails,
+      ),
       payload: deepLink,
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
     );
@@ -220,7 +229,6 @@ class NotificationService {
     required PrayerSettings settings,
   }) async {
     await init();
-    if (!Platform.isAndroid) return;
     await ensurePrayerAudioLoaded();
     if (!settings.notificationsEnabled) {
       await cancelPrayerNotifications(schedule.days);
@@ -231,13 +239,15 @@ class NotificationService {
       throw StateError('يلزم السماح بالإشعارات لتفعيل تنبيهات الصلاة.');
     }
 
-    final android = _notificationsPlugin
-        .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin
-        >();
-    final exactAllowed = await android?.canScheduleExactNotifications();
-    if (exactAllowed == false) {
-      await android?.requestExactAlarmsPermission();
+    if (Platform.isAndroid) {
+      final android = _notificationsPlugin
+          .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin
+          >();
+      final exactAllowed = await android?.canScheduleExactNotifications();
+      if (exactAllowed == false) {
+        await android?.requestExactAlarmsPermission();
+      }
     }
 
     final now = tz.TZDateTime.now(_safeLocal());
@@ -266,12 +276,22 @@ class NotificationService {
         audioAttributesUsage: AudioAttributesUsage.alarm,
         enableVibration: plan.withSound,
       );
+      final darwinDetails = DarwinNotificationDetails(
+        presentAlert: true,
+        presentBadge: true,
+        presentSound: plan.withSound,
+        sound: plan.withSound ? 'prayer_${plan.name.name}.wav' : null,
+      );
       await _notificationsPlugin.zonedSchedule(
         id: plan.id,
         title: plan.title,
         body: plan.body,
         scheduledDate: plan.at,
-        notificationDetails: NotificationDetails(android: androidDetails),
+        notificationDetails: NotificationDetails(
+          android: androidDetails,
+          iOS: darwinDetails,
+          macOS: darwinDetails,
+        ),
         payload: plan.payload,
         androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
       );
@@ -303,12 +323,22 @@ class NotificationService {
       audioAttributesUsage: AudioAttributesUsage.alarm,
       enableVibration: true,
     );
+    final darwinDetails = DarwinNotificationDetails(
+      presentAlert: true,
+      presentBadge: true,
+      presentSound: true,
+      sound: 'prayer_${prayer.name}.wav',
+    );
     await _notificationsPlugin.zonedSchedule(
       id: _notificationId('prayer-audio-background-test-${prayer.name}'),
       title: 'اختبار خلفية: حان وقت صلاة ${prayer.arabicLabel}',
       body: 'هذا اختبار محلي مجدول؛ سيُنطق اسم الصلاة حتى بعد مغادرة التطبيق.',
       scheduledDate: scheduledDate,
-      notificationDetails: NotificationDetails(android: androidDetails),
+      notificationDetails: NotificationDetails(
+        android: androidDetails,
+        iOS: darwinDetails,
+        macOS: darwinDetails,
+      ),
       payload: prayerDeepLink(
         prayer,
         extraQuery: const {'audioBackgroundTest': 'true'},
@@ -330,11 +360,21 @@ class NotificationService {
       audioAttributesUsage: AudioAttributesUsage.alarm,
       enableVibration: true,
     );
+    final darwinDetails = DarwinNotificationDetails(
+      presentAlert: true,
+      presentBadge: true,
+      presentSound: true,
+      sound: 'prayer_${prayer.name}.wav',
+    );
     await _notificationsPlugin.show(
       id: _notificationId('prayer-audio-test-${prayer.name}'),
       title: 'اختبار صوت صلاة ${prayer.arabicLabel}',
       body: 'إذا سمعت «حان وقت صلاة ${prayer.arabicLabel}» فالصوت المحلي يعمل.',
-      notificationDetails: NotificationDetails(android: androidDetails),
+      notificationDetails: NotificationDetails(
+        android: androidDetails,
+        iOS: darwinDetails,
+        macOS: darwinDetails,
+      ),
       payload: prayerDeepLink(prayer, extraQuery: const {'audioTest': 'true'}),
     );
   }
@@ -369,21 +409,35 @@ class NotificationService {
   }
 
   Future<bool> requestPermission() async {
-    final AndroidFlutterLocalNotificationsPlugin? androidImplementation =
-        _notificationsPlugin
-            .resolvePlatformSpecificImplementation<
-              AndroidFlutterLocalNotificationsPlugin
-            >();
+    if (Platform.isAndroid) {
+      final AndroidFlutterLocalNotificationsPlugin? androidImplementation =
+          _notificationsPlugin
+              .resolvePlatformSpecificImplementation<
+                AndroidFlutterLocalNotificationsPlugin
+              >();
 
-    if (androidImplementation != null) {
-      // Android versions before API 33 do not expose a runtime notification
-      // permission. The plugin therefore returns null even though posting a
-      // user-selected local reminder is allowed by the platform.
-      return await androidImplementation.requestNotificationsPermission() ??
-          true;
+      if (androidImplementation != null) {
+        // Android versions before API 33 do not expose a runtime notification
+        // permission. The plugin therefore returns null even though posting a
+        // user-selected local reminder is allowed by the platform.
+        return await androidImplementation.requestNotificationsPermission() ??
+            true;
+      }
+      return false;
     }
-
-    return false;
+    if (Platform.isIOS || Platform.isMacOS) {
+      final iosImplementation = _notificationsPlugin
+          .resolvePlatformSpecificImplementation<
+            IOSFlutterLocalNotificationsPlugin
+          >();
+      return await iosImplementation?.requestPermissions(
+            alert: true,
+            badge: true,
+            sound: true,
+          ) ??
+          false;
+    }
+    return true;
   }
 }
 

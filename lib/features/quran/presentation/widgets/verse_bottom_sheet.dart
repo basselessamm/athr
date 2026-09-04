@@ -263,7 +263,7 @@ class VerseBottomSheet extends ConsumerWidget {
                                 ),
                               ),
                               IconButton(
-                                tooltip: 'اترك أثرًا',
+                                tooltip: 'تدوين خاطر',
                                 onPressed: () {
                                   showCaptureSheet(
                                     context,

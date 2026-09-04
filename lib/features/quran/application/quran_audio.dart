@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:audio_session/audio_session.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:just_audio/just_audio.dart';
@@ -13,7 +14,7 @@ import 'package:midrar/features/settings/providers/settings_providers.dart';
 
 import 'package:midrar/features/quran/application/quran_reciters.dart';
 
-export 'quran_reciters.dart' show QuranReciter, quranReciters, unverifiedReciterIds;
+export 'quran_reciters.dart' show QuranReciter, quranReciters, unverifiedReciterIds, ReciterProvider;
 
 // ---------------------------------------------------------------------------
 // Smart cache: only ayahs the user actually listens to are stored.
@@ -71,10 +72,11 @@ class QuranAudioCache {
 
 class QuranAudioRepository {
   Uri ayahStream({required QuranReciter reciter, required int globalAyah}) {
-    return Uri.https(
-      'cdn.islamic.network',
-      '/quran/audio/${reciter.cdnBitrate}/${reciter.id}/$globalAyah.mp3',
-    );
+    return ayahStreamUri(reciter: reciter, globalAyah: globalAyah);
+  }
+
+  Uri? ayahFallbackStream({required QuranReciter reciter, required int globalAyah}) {
+    return ayahFallbackStreamUri(reciter: reciter, globalAyah: globalAyah);
   }
 
   int globalAyahNumber({required int surah, required int ayah}) {
@@ -209,12 +211,6 @@ class QuranAudioController extends StateNotifier<QuranAudioState> {
   late final StreamSubscription<PlaybackEvent> _errorSubscription;
   Timer? _sleepTimer;
 
-  // Experimental just_audio API — the official streaming-cache primitive;
-  // acceptable instability for a best-effort cache layer.
-  AudioSource _cachingSource(Uri uri, File cacheFile, {required String tag}) {
-    // ignore: experimental_member_use
-    return LockCachingAudioSource(uri, cacheFile: cacheFile, tag: tag);
-  }
 
   /// Declares the app's audio contract with the OS: recitation pauses for
   /// phone calls and yields politely to other media.
@@ -291,28 +287,56 @@ class QuranAudioController extends StateNotifier<QuranAudioState> {
         reciter: state.reciter,
         globalAyah: globalAyah,
       );
-      // Stream-first with transparent per-ayah caching of what the user
-      // actually listens to. Never pre-downloads the whole Quran.
-      AudioSource source;
+
+      // Check if we have a valid locally cached audio file
+      AudioSource? localSource;
       try {
         final cacheFile = await QuranAudioCache.fileFor(
           reciter: state.reciter,
           globalAyah: globalAyah,
         );
-        // Experimental just_audio API — the official streaming-cache
-        // primitive; acceptable instability for a best-effort cache.
-        source = _cachingSource(uri, cacheFile,
-            tag: 'quran:$surah:$ayah:${state.reciter.id}');
+        if (cacheFile.existsSync() && cacheFile.lengthSync() > 1024) {
+          localSource = AudioSource.file(
+            cacheFile.path,
+            tag: 'quran:$surah:$ayah:${state.reciter.id}:cached',
+          );
+        }
       } catch (_) {
-        source = AudioSource.uri(
-          uri,
-          tag: 'quran:$surah:$ayah:${state.reciter.id}',
-        );
+        localSource = null;
       }
-      await _player.setAudioSource(source).timeout(const Duration(seconds: 12));
+
+      if (localSource != null) {
+        await _player.setAudioSource(localSource);
+      } else {
+        // Stream directly over HTTPS, with automatic fallback if primary CDN fails
+        try {
+          final primarySource = AudioSource.uri(
+            uri,
+            tag: 'quran:$surah:$ayah:${state.reciter.id}',
+          );
+          await _player.setAudioSource(primarySource).timeout(const Duration(seconds: 7));
+        } catch (primaryErr) {
+          debugPrint('Midrar: primary audio stream failed ($primaryErr), trying EveryAyah fallback...');
+          final fallbackUri = _repository.ayahFallbackStream(
+            reciter: state.reciter,
+            globalAyah: globalAyah,
+          );
+          if (fallbackUri != null && fallbackUri != uri) {
+            final fallbackSource = AudioSource.uri(
+              fallbackUri,
+              tag: 'quran:$surah:$ayah:${state.reciter.id}:fallback',
+            );
+            await _player.setAudioSource(fallbackSource).timeout(const Duration(seconds: 9));
+          } else {
+            rethrow;
+          }
+        }
+      }
+
       await _player.setSpeed(state.speed);
       if (autoplay) await _player.play();
-    } on PlayerException {
+    } on PlayerException catch (e) {
+      debugPrint('Midrar QuranAudio PlayerException: $e');
       state = state.copyWith(
         isLoading: false,
         isPlaying: false,
@@ -320,14 +344,16 @@ class QuranAudioController extends StateNotifier<QuranAudioState> {
       );
     } on PlayerInterruptedException {
       state = state.copyWith(isLoading: false, isPlaying: false);
-    } on TimeoutException {
+    } on TimeoutException catch (e) {
+      debugPrint('Midrar QuranAudio TimeoutException: $e');
       state = state.copyWith(
         isLoading: false,
         isPlaying: false,
         error:
             'استغرق تحميل التلاوة وقتًا أطول من المتوقع. تحقق من الاتصال ثم أعد المحاولة.',
       );
-    } catch (_) {
+    } catch (e) {
+      debugPrint('Midrar QuranAudio generic error: $e');
       state = state.copyWith(
         isLoading: false,
         isPlaying: false,

@@ -48,7 +48,7 @@ void main() {
     await tester.pump();
 
     expect(find.text('لا توجد خيوط بعد'), findsOneWidget);
-    expect(find.text('اكتشاف أثر جديد'), findsNothing);
+    expect(find.text('اكتشاف معنى جديد'), findsNothing);
     expect(find.textContaining('سلسلة'), findsNothing);
     expect(find.textContaining('برنامجك اليومي'), findsNothing);
   });

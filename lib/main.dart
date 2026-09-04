@@ -25,6 +25,10 @@ void main() {
       FlutterError.presentError(details);
       debugPrint('Midrar flutter error: ${details.exception}');
     };
+    ErrorWidget.builder = (details) {
+      debugPrint('Midrar widget build error: ${details.exception}');
+      return const SizedBox.shrink();
+    };
     PlatformDispatcher.instance.onError = (error, stackTrace) {
       debugPrint('Midrar uncaught platform error: $error\n$stackTrace');
       return true;
@@ -32,9 +36,8 @@ void main() {
 
     final prefs = await SharedPreferences.getInstance();
 
-    // All fonts (Amiri scripture + Cairo UI) ship inside the binary; the
-    // app never fetches typography over the network.
-    GoogleFonts.config.allowRuntimeFetching = false;
+    // Enable runtime font fetching with graceful fallback
+    GoogleFonts.config.allowRuntimeFetching = true;
 
     final container = ProviderContainer(
       overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],

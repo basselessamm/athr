@@ -127,7 +127,7 @@ void main() {
       );
       await tester.pump();
 
-      expect(find.text('اترك أثرًا'), findsOneWidget);
+      expect(find.text('تدوين خاطر'), findsOneWidget);
       expect(find.text('من المصدر'), findsOneWidget);
       expect(find.text('صحيح البخاري'), findsWidgets);
       expect(find.text('نص الحديث من المصدر'), findsOneWidget);

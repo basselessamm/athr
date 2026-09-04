@@ -109,7 +109,7 @@ class _CaptureSheetState extends ConsumerState<CaptureSheet> {
       setState(() => _isSaving = false);
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text('تعذر حفظ الأثر: $error')));
+      ).showSnackBar(SnackBar(content: Text('تعذر حفظ الخاطرة: $error')));
     }
   }
 
@@ -150,7 +150,7 @@ class _CaptureSheetState extends ConsumerState<CaptureSheet> {
                 ),
                 const SizedBox(height: 20),
                 Text(
-                  'اترك أثرًا',
+                  'تدوين خاطر',
                   style: theme.textTheme.headlineSmall?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
@@ -266,7 +266,7 @@ class _CaptureSheetState extends ConsumerState<CaptureSheet> {
                           child: CircularProgressIndicator(strokeWidth: 2),
                         )
                       : const Icon(Icons.bookmark_add_outlined),
-                  label: Text(_isSaving ? 'يحفظ الأثر...' : 'اترك الأثر الآن'),
+                  label: Text(_isSaving ? 'جارٍ الحفظ...' : 'حفظ الخاطرة الآن'),
                 ),
               ],
             ),
