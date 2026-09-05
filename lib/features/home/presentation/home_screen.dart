@@ -67,9 +67,7 @@ class HomeScreen extends ConsumerWidget {
               onOpen: () => context.push('/situations'),
             ),
             const SizedBox(height: 20),
-            _DeferredSourceDiscoveryCard(
-              onOpen: () => context.push('/quran/67?ayah=3'),
-            ),
+            const _DeferredSourceDiscoveryCard(),
             const SizedBox(height: 16),
             _GentleUtilityRow(
               onMuhasaba: () => context.push('/muhasaba'),
@@ -432,9 +430,7 @@ class _DeferredContinuationCanvasState
 }
 
 class _DeferredSourceDiscoveryCard extends StatefulWidget {
-  const _DeferredSourceDiscoveryCard({required this.onOpen});
-
-  final VoidCallback onOpen;
+  const _DeferredSourceDiscoveryCard();
 
   @override
   State<_DeferredSourceDiscoveryCard> createState() =>
@@ -449,7 +445,7 @@ class _DeferredSourceDiscoveryCardState
   @override
   void initState() {
     super.initState();
-    _timer = Timer(const Duration(seconds: 6), () {
+    _timer = Timer(const Duration(milliseconds: 300), () {
       if (mounted) setState(() => _isReady = true);
     });
   }
@@ -462,43 +458,64 @@ class _DeferredSourceDiscoveryCardState
 
   @override
   Widget build(BuildContext context) {
-    if (_isReady) return _SourceDiscoveryCard(onOpen: widget.onOpen);
-    return _DiscoveryCardBody(onOpen: widget.onOpen, isLoading: true);
+    if (_isReady) return const _SourceDiscoveryCard();
+    return const _DiscoveryCardBody(isLoading: true);
   }
 }
 
 class _SourceDiscoveryCard extends ConsumerWidget {
-  const _SourceDiscoveryCard({required this.onOpen});
-
-  final VoidCallback onOpen;
+  const _SourceDiscoveryCard();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    const surah = 67;
-    const ayah = 3;
+    final bookmark = ref.watch(bookmarkProvider);
+    final lastRead = ref.watch(lastReadProvider);
+    final savedPosition = bookmark ?? lastRead;
+
+    final int surah = savedPosition?.surah ?? 67;
+    final int ayah = savedPosition?.ayah ?? 3;
+    final bool isSaved = savedPosition != null;
+
     final initialization = ref.watch(quranInitializationProvider);
 
     return initialization.when(
-      data: (_) => _DiscoveryCardBody(
-        verse: Quran.getVerse(surahNumber: surah, verseNumber: ayah).text,
-        onOpen: onOpen,
+      data: (_) {
+        final verseText =
+            Quran.getVerse(surahNumber: surah, verseNumber: ayah).text;
+        final surahName = Quran.getSurahName(surah);
+        return _DiscoveryCardBody(
+          verse: verseText,
+          surahName: surahName,
+          ayahNumber: ayah,
+          isSavedPosition: isSaved,
+          onOpen: () => context.push('/quran/$surah?ayah=$ayah'),
+        );
+      },
+      loading: () => const _DiscoveryCardBody(isLoading: true),
+      error: (_, _) => _DiscoveryCardBody(
+        onOpen: () => context.push('/quran/$surah?ayah=$ayah'),
+        hasError: true,
       ),
-      loading: () => _DiscoveryCardBody(onOpen: onOpen, isLoading: true),
-      error: (_, _) => _DiscoveryCardBody(onOpen: onOpen, hasError: true),
     );
   }
 }
 
 class _DiscoveryCardBody extends StatelessWidget {
   const _DiscoveryCardBody({
-    required this.onOpen,
+    this.onOpen,
     this.verse,
+    this.surahName,
+    this.ayahNumber,
+    this.isSavedPosition = false,
     this.isLoading = false,
     this.hasError = false,
   });
 
-  final VoidCallback onOpen;
+  final VoidCallback? onOpen;
   final String? verse;
+  final String? surahName;
+  final int? ayahNumber;
+  final bool isSavedPosition;
   final bool isLoading;
   final bool hasError;
 
@@ -507,6 +524,9 @@ class _DiscoveryCardBody extends StatelessWidget {
     final theme = Theme.of(context);
     final scheme = theme.colorScheme;
     final isDark = theme.brightness == Brightness.dark;
+
+    final displaySurah = surahName ?? 'الملك';
+    final displayAyah = ayahNumber ?? 3;
 
     return Container(
       padding: const EdgeInsets.all(22),
@@ -532,11 +552,16 @@ class _DiscoveryCardBody extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(Icons.menu_book_rounded, color: AppColors.lightGold),
+              Icon(
+                isSavedPosition
+                    ? Icons.bookmark_rounded
+                    : Icons.menu_book_rounded,
+                color: AppColors.lightGold,
+              ),
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
-                  'من القرآن الكريم',
+                  isSavedPosition ? 'موضع قراءتك المحفوظ' : 'من القرآن الكريم',
                   textAlign: TextAlign.right,
                   style: TextStyle(
                     fontWeight: FontWeight.w900,
@@ -560,7 +585,7 @@ class _DiscoveryCardBody extends StatelessWidget {
             )
           else
             Text(
-              verse!,
+              verse ?? '',
               textAlign: TextAlign.center,
               style: GoogleFonts.amiri(
                 fontSize: 22,
@@ -571,17 +596,20 @@ class _DiscoveryCardBody extends StatelessWidget {
             ),
           const SizedBox(height: 10),
           Text(
-            'سورة الملك · الآية ٣',
+            'سورة $displaySurah · الآية $displayAyah',
             textAlign: TextAlign.center,
             style: theme.textTheme.labelMedium?.copyWith(
               color: scheme.onSurfaceVariant,
+              fontWeight: FontWeight.w600,
             ),
           ),
           const SizedBox(height: 14),
           OutlinedButton.icon(
             onPressed: onOpen,
             icon: const Icon(Icons.arrow_back, size: 18),
-            label: const Text('فتح موضع القراءة'),
+            label: Text(
+              isSavedPosition ? 'متابعة القراءة من هذه الآية' : 'فتح موضع القراءة',
+            ),
           ),
         ],
       ),

@@ -145,24 +145,35 @@ class VerseBottomSheet extends ConsumerWidget {
                         ),
                         OutlinedButton.icon(
                           onPressed: () async {
+                            final pageNum = Quran.getPageNumber(
+                              surahNumber: surahNumber,
+                              verseNumber: ayahNumber,
+                            );
                             await ref
                                 .read(bookmarkProvider.notifier)
                                 .saveBookmark(
                                   surah: surahNumber,
                                   ayah: ayahNumber,
-                                  pageNumber: Quran.getPageNumber(
-                                    surahNumber: surahNumber,
-                                    verseNumber: ayahNumber,
-                                  ),
+                                  pageNumber: pageNum,
+                                );
+                            await ref
+                                .read(lastReadProvider.notifier)
+                                .recordProgress(
+                                  surah: surahNumber,
+                                  ayah: ayahNumber,
+                                  pageNumber: pageNum,
                                 );
                             if (!context.mounted) return;
+                            ScaffoldMessenger.of(context).clearSnackBars();
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('حُفظ موضع القراءة لهذه الآية.'),
+                              SnackBar(
+                                content: Text(
+                                  'حُفظ موضع القراءة: سورة ${Quran.getSurahName(surahNumber)} · الآية $ayahNumber',
+                                ),
                               ),
                             );
                           },
-                          icon: const Icon(Icons.bookmark_added_outlined),
+                          icon: const Icon(Icons.bookmark_rounded),
                           label: const Text('حفظ الموضع'),
                         ),
                       ],

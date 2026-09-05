@@ -202,14 +202,23 @@ class _QuranReadingScreenState extends ConsumerState<QuranReadingScreen> {
     if (_pages.isEmpty) return;
     final page = _pages[_currentPageIndex.clamp(0, _pages.length - 1)];
     final ayah = page.verses.isEmpty ? 1 : page.verses.first.verseNumber as int;
-    unawaited(
-      ref
-          .read(bookmarkProvider.notifier)
-          .saveBookmark(
-            surah: widget.surahNumber,
-            ayah: ayah,
-            pageNumber: page.pageNumber,
-          ),
+    ref.read(bookmarkProvider.notifier).saveBookmark(
+          surah: widget.surahNumber,
+          ayah: ayah,
+          pageNumber: page.pageNumber,
+        );
+    ref.read(lastReadProvider.notifier).recordProgress(
+          surah: widget.surahNumber,
+          ayah: ayah,
+          pageNumber: page.pageNumber,
+        );
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          'عُلِّم موضع القراءة: سورة ${Quran.getSurahName(widget.surahNumber)} · صفحة ${page.pageNumber}',
+        ),
+      ),
     );
   }
 
@@ -271,6 +280,16 @@ class _QuranReadingScreenState extends ConsumerState<QuranReadingScreen> {
         ? audioState.ayah
         : null;
 
+    final currentBookmark = ref.watch(bookmarkProvider);
+    final currentPageNumber = (_pages.isNotEmpty &&
+            _currentPageIndex >= 0 &&
+            _currentPageIndex < _pages.length)
+        ? _pages[_currentPageIndex].pageNumber
+        : null;
+    final isCurrentPageBookmarked = currentBookmark != null &&
+        currentBookmark.surah == widget.surahNumber &&
+        currentBookmark.pageNumber == currentPageNumber;
+
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
@@ -288,20 +307,18 @@ class _QuranReadingScreenState extends ConsumerState<QuranReadingScreen> {
         ),
         actions: [
           IconButton(
-            tooltip: 'علّمة هذا الموضع للعودة إليه',
-            onPressed: _pages.isEmpty
-                ? null
-                : () {
-                    _pinExplicitBookmark();
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('عُلّم هذا الموضع؛ تظهر علامة العودة هنا دائمًا حتى تغيّره.'),
-                      ),
-                    );
-                  },
+            tooltip: isCurrentPageBookmarked
+                ? 'الموضع محفوظ بالعلامة'
+                : 'علّمة هذا الموضع للعودة إليه',
+            onPressed: _pages.isEmpty ? null : _pinExplicitBookmark,
             icon: Icon(
-              Icons.bookmark_added_outlined,
-              color: scheme.onSurface,
+              isCurrentPageBookmarked
+                  ? Icons.bookmark_rounded
+                  : Icons.bookmark_border_rounded,
+              color: isCurrentPageBookmarked
+                  ? AppColors.lightGold
+                  : scheme.onSurface,
+              size: 26,
             ),
           ),
         ],
@@ -411,6 +428,9 @@ class _QuranReadingScreenState extends ConsumerState<QuranReadingScreen> {
           ),
           itemBuilder: (context, index) {
             final model = _pages[index];
+            final bool isPageBookmarked = currentBookmark != null &&
+                currentBookmark.surah == widget.surahNumber &&
+                currentBookmark.pageNumber == model.pageNumber;
 
             return BookPageWidget(
               pageNumber: model.pageNumber,
@@ -419,6 +439,7 @@ class _QuranReadingScreenState extends ConsumerState<QuranReadingScreen> {
               verses: model.verses,
               textScale: textScale,
               highlightedAyah: highlightedAyah,
+              isBookmarked: isPageBookmarked,
               onAyahTapped: (surah, ayah) {
                 _openFocusedAyah(ayah);
               },

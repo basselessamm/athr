@@ -13,6 +13,7 @@ import 'package:midrar/core/theme/app_theme.dart';
 import 'package:midrar/features/settings/providers/settings_providers.dart';
 import 'package:midrar/features/prayer/application/prayer_times.dart';
 import 'package:midrar/features/prayer/application/prayer_alarm_maintenance.dart';
+import 'package:midrar/features/settings/providers/azkar_wird_settings_provider.dart';
 import 'package:midrar/core/memory/memory_providers.dart';
 import 'package:midrar/core/memory/domain/memory_contracts.dart';
 import 'package:midrar/features/memory_return/application/memory_return_service.dart';
@@ -82,6 +83,7 @@ Future<void> _bootstrapAfterFirstFrame(ProviderContainer container) async {
   // the cached timetable whenever the app starts. Never blocks or crashes
   // startup; failures are logged and retried on next resume.
   await container.read(prayerAlarmMaintenanceProvider.future);
+  await container.read(azkarWirdMaintenanceProvider.future);
 }
 
 class MidrarApp extends ConsumerStatefulWidget {
@@ -116,6 +118,11 @@ class _MidrarAppState extends ConsumerState<MidrarApp>
       unawaited(
         ref.read(prayerAlarmMaintenanceProvider.future).catchError((e) {
           debugPrint('Midrar alarm refresh failed: $e');
+        }),
+      );
+      unawaited(
+        ref.read(azkarWirdMaintenanceProvider.future).catchError((e) {
+          debugPrint('Midrar azkar & wird refresh failed: $e');
         }),
       );
     }

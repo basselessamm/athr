@@ -7,6 +7,7 @@ import 'package:midrar/core/services/notification_service.dart';
 import 'package:midrar/core/widgets/midrar_scaffold.dart';
 import 'package:midrar/features/prayer/application/prayer_times.dart';
 import 'package:midrar/features/settings/providers/settings_providers.dart';
+import 'package:midrar/features/settings/providers/azkar_wird_settings_provider.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
@@ -270,13 +271,13 @@ class SettingsScreen extends ConsumerWidget {
             SwitchListTile.adaptive(
               value: prayerSettings.soundEnabled,
               title: const Text(
-                'صوت الصلاة المنطوق',
+                'صوت الأذان والتنبيه',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               subtitle: const Text(
-                'ينطق اسم الصلاة بصوت محلي قصير عند الموعد، ويعمل دون إنترنت. هذا المفتاح مستقل عن إشعار الصلاة.',
+                'تشغيل صوت الأذان الشرعي عند دخول وقت كل صلاة بدون إنترنت. يعمل تلقائياً مع تنبيهات الصلاة.',
               ),
-              secondary: const Icon(Icons.record_voice_over_outlined),
+              secondary: const Icon(Icons.volume_up_outlined),
               onChanged: (enabled) async {
                 await ref
                     .read(prayerSettingsProvider.notifier)
@@ -304,7 +305,7 @@ class SettingsScreen extends ConsumerWidget {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                               content: Text(
-                                'شغّلنا اختبار صوت الفجر؛ استمع لعبارة اسم الصلاة.',
+                                'شغّلنا اختبار أذان الفجر؛ استمع لصوت الأذان.',
                               ),
                             ),
                           );
@@ -313,14 +314,14 @@ class SettingsScreen extends ConsumerWidget {
                         if (context.mounted) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content: Text('تعذر اختبار الصوت: $error'),
+                              content: Text('تعذر اختبار صوت الأذان: $error'),
                             ),
                           );
                         }
                       }
                     },
                     icon: const Icon(Icons.play_circle_outline),
-                    label: const Text('اختبار فوري'),
+                    label: const Text('اختبار فوري للأذان'),
                   ),
                   OutlinedButton.icon(
                     onPressed: () async {
@@ -332,7 +333,7 @@ class SettingsScreen extends ConsumerWidget {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                               content: Text(
-                                'جُدول اختبار الخلفية بعد 15 ثانية؛ اترك التطبيق أو اقفل الشاشة للاستماع.',
+                                'جُدول اختبار الأذان بعد 15 ثانية؛ اترك التطبيق أو اقفل الشاشة للاستماع.',
                               ),
                             ),
                           );
@@ -341,14 +342,14 @@ class SettingsScreen extends ConsumerWidget {
                         if (context.mounted) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content: Text('تعذر جدولة اختبار الصوت: $error'),
+                              content: Text('تعذر جدولة اختبار الأذان: $error'),
                             ),
                           );
                         }
                       }
                     },
                     icon: const Icon(Icons.schedule_outlined),
-                    label: const Text('اختبار في الخلفية'),
+                    label: const Text('اختبار أذان في الخلفية'),
                   ),
                 ],
               ),
@@ -389,6 +390,14 @@ class SettingsScreen extends ConsumerWidget {
                     .toList(growable: false),
               ),
             ),
+            const Divider(height: 38),
+            const _SectionHeader(
+              icon: Icons.notifications_active_outlined,
+              title: 'إشعارات الأذكار والورد القرآني',
+              subtitle:
+                  'تنبيهات يومية منتظمة بصوت واضح تذكّرك بأذكار الصباح والمساء والنوم ووردك القرآني.',
+            ),
+            const _AzkarWirdSettingsSection(),
             const Divider(height: 38),
             const _SectionHeader(
               icon: Icons.route_outlined,
@@ -508,6 +517,200 @@ class _Signature extends StatelessWidget {
             letterSpacing: 4,
             color: Theme.of(context).colorScheme.primary,
             fontWeight: FontWeight.w600,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _AzkarWirdSettingsSection extends ConsumerWidget {
+  const _AzkarWirdSettingsSection();
+
+  String _formatTime(BuildContext context, int hour, int minute) {
+    final time = TimeOfDay(hour: hour, minute: minute);
+    return time.format(context);
+  }
+
+  Future<void> _pickTime({
+    required BuildContext context,
+    required int initialHour,
+    required int initialMinute,
+    required void Function(int hour, int minute) onSelected,
+  }) async {
+    final picked = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay(hour: initialHour, minute: initialMinute),
+    );
+    if (picked != null) {
+      onSelected(picked.hour, picked.minute);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final settings = ref.watch(azkarWirdSettingsProvider);
+    final notifier = ref.read(azkarWirdSettingsProvider.notifier);
+
+    return Column(
+      children: [
+        SwitchListTile.adaptive(
+          value: settings.morningEnabled,
+          title: const Text(
+            'أذكار الصباح',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          subtitle: Text(
+            'موعد الإشعار: ${_formatTime(context, settings.morningHour, settings.morningMinute)}',
+          ),
+          secondary: const Icon(Icons.wb_sunny_outlined),
+          onChanged: (val) => notifier.setMorning(enabled: val),
+        ),
+        if (settings.morningEnabled)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextButton.icon(
+                  onPressed: () => _pickTime(
+                    context: context,
+                    initialHour: settings.morningHour,
+                    initialMinute: settings.morningMinute,
+                    onSelected: (h, m) =>
+                        notifier.setMorning(hour: h, minute: m),
+                  ),
+                  icon: const Icon(Icons.access_time, size: 18),
+                  label: const Text('تغيير موعد أذكار الصباح'),
+                ),
+              ],
+            ),
+          ),
+        SwitchListTile.adaptive(
+          value: settings.eveningEnabled,
+          title: const Text(
+            'أذكار المساء',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          subtitle: Text(
+            'موعد الإشعار: ${_formatTime(context, settings.eveningHour, settings.eveningMinute)}',
+          ),
+          secondary: const Icon(Icons.nightlight_round_outlined),
+          onChanged: (val) => notifier.setEvening(enabled: val),
+        ),
+        if (settings.eveningEnabled)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextButton.icon(
+                  onPressed: () => _pickTime(
+                    context: context,
+                    initialHour: settings.eveningHour,
+                    initialMinute: settings.eveningMinute,
+                    onSelected: (h, m) =>
+                        notifier.setEvening(hour: h, minute: m),
+                  ),
+                  icon: const Icon(Icons.access_time, size: 18),
+                  label: const Text('تغيير موعد أذكار المساء'),
+                ),
+              ],
+            ),
+          ),
+        SwitchListTile.adaptive(
+          value: settings.sleepEnabled,
+          title: const Text(
+            'أذكار النوم',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          subtitle: Text(
+            'موعد الإشعار: ${_formatTime(context, settings.sleepHour, settings.sleepMinute)}',
+          ),
+          secondary: const Icon(Icons.bedtime_outlined),
+          onChanged: (val) => notifier.setSleep(enabled: val),
+        ),
+        if (settings.sleepEnabled)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextButton.icon(
+                  onPressed: () => _pickTime(
+                    context: context,
+                    initialHour: settings.sleepHour,
+                    initialMinute: settings.sleepMinute,
+                    onSelected: (h, m) =>
+                        notifier.setSleep(hour: h, minute: m),
+                  ),
+                  icon: const Icon(Icons.access_time, size: 18),
+                  label: const Text('تغيير موعد أذكار النوم'),
+                ),
+              ],
+            ),
+          ),
+        SwitchListTile.adaptive(
+          value: settings.wirdEnabled,
+          title: const Text(
+            'الورد القرآني اليومي',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          subtitle: Text(
+            'موعد الإشعار: ${_formatTime(context, settings.wirdHour, settings.wirdMinute)}',
+          ),
+          secondary: const Icon(Icons.auto_stories_outlined),
+          onChanged: (val) => notifier.setWird(enabled: val),
+        ),
+        if (settings.wirdEnabled)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextButton.icon(
+                  onPressed: () => _pickTime(
+                    context: context,
+                    initialHour: settings.wirdHour,
+                    initialMinute: settings.wirdMinute,
+                    onSelected: (h, m) =>
+                        notifier.setWird(hour: h, minute: m),
+                  ),
+                  icon: const Icon(Icons.access_time, size: 18),
+                  label: const Text('تغيير موعد الورد القرآني'),
+                ),
+              ],
+            ),
+          ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              OutlinedButton.icon(
+                onPressed: () async {
+                  await ref
+                      .read(notificationServiceProvider)
+                      .showTestNotification(
+                        title: 'تنبيه الأذكار والورد',
+                        body:
+                            '«أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ» · إشعار تجريبي بصوت واضح.',
+                        payload: '/azkar/أذكار الصباح والمساء',
+                      );
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text(
+                          'أرسلنا إشعاراً تجريبياً بصوت؛ تحقق من شريط الإشعارات.',
+                        ),
+                      ),
+                    );
+                  }
+                },
+                icon: const Icon(Icons.notifications_active_outlined),
+                label: const Text('اختبار فوري لإشعار الأذكار'),
+              ),
+            ],
           ),
         ),
       ],

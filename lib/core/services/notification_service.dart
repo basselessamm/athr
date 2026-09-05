@@ -10,6 +10,7 @@ import 'package:midrar/core/memory/domain/memory_contracts.dart';
 import 'package:midrar/core/memory/domain/reminder_intent.dart';
 import 'package:midrar/features/prayer/application/prayer_times.dart';
 import 'package:midrar/features/prayer/application/prayer_notification_planner.dart';
+import 'package:midrar/features/settings/providers/azkar_wird_settings_provider.dart';
 
 final notificationServiceProvider = Provider<NotificationService>((ref) {
   return NotificationService();
@@ -263,13 +264,14 @@ class NotificationService {
     await cancelPrayerNotifications(schedule.days);
 
     for (final plan in plans) {
+      final channelId = _prayerChannelId(plan.name, withAudio: plan.withSound);
       final androidDetails = AndroidNotificationDetails(
-        plan.channelId,
-        plan.title,
+        channelId,
+        'أذان صلاة ${plan.name.arabicLabel}',
         channelDescription: plan.withSound
-            ? 'يذكر اسم صلاة ${plan.name.arabicLabel} بصوت محلي عند الموعد.'
+            ? 'يشغل صوت الأذان الشرعي عند موعد صلاة ${plan.name.arabicLabel}.'
             : 'تنبيه صامت لصلاة ${plan.name.arabicLabel}.',
-        importance: Importance.high,
+        importance: Importance.max,
         priority: Priority.high,
         playSound: plan.withSound,
         sound: plan.withSound ? _prayerAudioSound(plan.name) : null,
@@ -280,7 +282,9 @@ class NotificationService {
         presentAlert: true,
         presentBadge: true,
         presentSound: plan.withSound,
-        sound: plan.withSound ? 'prayer_${plan.name.name}.wav' : null,
+        sound: plan.withSound
+            ? (plan.name == PrayerName.fajr ? 'adhan_fajr.wav' : 'adhan.wav')
+            : null,
       );
       await _notificationsPlugin.zonedSchedule(
         id: plan.id,
@@ -313,10 +317,10 @@ class NotificationService {
     ).add(const Duration(seconds: 15));
     final androidDetails = AndroidNotificationDetails(
       _prayerChannelId(prayer, withAudio: true),
-      'اختبار خلفية صوت صلاة ${prayer.arabicLabel}',
+      'اختبار أذان صلاة ${prayer.arabicLabel}',
       channelDescription:
-          'اختبار مجدول للصوت المحلي بعد خروج التطبيق من الواجهة.',
-      importance: Importance.high,
+          'اختبار مجدول لصوت الأذان الشرعي بعد خروج التطبيق من الواجهة.',
+      importance: Importance.max,
       priority: Priority.high,
       playSound: true,
       sound: _prayerAudioSound(prayer),
@@ -327,12 +331,12 @@ class NotificationService {
       presentAlert: true,
       presentBadge: true,
       presentSound: true,
-      sound: 'prayer_${prayer.name}.wav',
+      sound: prayer == PrayerName.fajr ? 'adhan_fajr.wav' : 'adhan.wav',
     );
     await _notificationsPlugin.zonedSchedule(
-      id: _notificationId('prayer-audio-background-test-${prayer.name}'),
-      title: 'اختبار خلفية: حان وقت صلاة ${prayer.arabicLabel}',
-      body: 'هذا اختبار محلي مجدول؛ سيُنطق اسم الصلاة حتى بعد مغادرة التطبيق.',
+      id: _notificationId('prayer-adhan-background-test-${prayer.name}'),
+      title: 'حان وقت صلاة ${prayer.arabicLabel}',
+      body: '«اللهُ أَكْبَرُ، اللهُ أَكْبَرُ» · هذا اختبار لصوت الأذان الشرعي.',
       scheduledDate: scheduledDate,
       notificationDetails: NotificationDetails(
         android: androidDetails,
@@ -351,9 +355,9 @@ class NotificationService {
     await init();
     final androidDetails = AndroidNotificationDetails(
       _prayerChannelId(prayer, withAudio: true),
-      'اختبار صوت صلاة ${prayer.arabicLabel}',
-      channelDescription: 'اختبار فوري للصوت المحلي الذي يذكر اسم الصلاة.',
-      importance: Importance.high,
+      'اختبار أذان صلاة ${prayer.arabicLabel}',
+      channelDescription: 'اختبار فوري لصوت الأذان الشرعي.',
+      importance: Importance.max,
       priority: Priority.high,
       playSound: true,
       sound: _prayerAudioSound(prayer),
@@ -364,18 +368,207 @@ class NotificationService {
       presentAlert: true,
       presentBadge: true,
       presentSound: true,
-      sound: 'prayer_${prayer.name}.wav',
+      sound: prayer == PrayerName.fajr ? 'adhan_fajr.wav' : 'adhan.wav',
     );
     await _notificationsPlugin.show(
-      id: _notificationId('prayer-audio-test-${prayer.name}'),
-      title: 'اختبار صوت صلاة ${prayer.arabicLabel}',
-      body: 'إذا سمعت «حان وقت صلاة ${prayer.arabicLabel}» فالصوت المحلي يعمل.',
+      id: _notificationId('prayer-adhan-test-${prayer.name}'),
+      title: 'صوت الأذان: صلاة ${prayer.arabicLabel}',
+      body: '«اللهُ أَكْبَرُ، اللهُ أَكْبَرُ» · حان الآن موعد صلاة ${prayer.arabicLabel}.',
       notificationDetails: NotificationDetails(
         android: androidDetails,
         iOS: darwinDetails,
         macOS: darwinDetails,
       ),
       payload: prayerDeepLink(prayer, extraQuery: const {'audioTest': 'true'}),
+    );
+  }
+
+  static const int azkarMorningId = 2001;
+  static const int azkarEveningId = 2002;
+  static const int azkarSleepId = 2003;
+  static const int quranWirdId = 2004;
+
+  Future<void> scheduleAzkarAndWirdNotifications(
+    AzkarWirdSettings settings,
+  ) async {
+    await init();
+    final granted = await requestPermission();
+    if (!granted) return;
+
+    if (Platform.isAndroid) {
+      final android = _notificationsPlugin
+          .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin
+          >();
+      final exactAllowed = await android?.canScheduleExactNotifications();
+      if (exactAllowed == false) {
+        await android?.requestExactAlarmsPermission();
+      }
+    }
+
+    await cancelAzkarAndWirdNotifications();
+
+    const androidDetails = AndroidNotificationDetails(
+      'azkar_and_wird_reminders_v1',
+      'أذكار وورد القرآن اليومي',
+      channelDescription:
+          'تنبيهات يومية لأذكار الصباح والمساء والنوم والورد القرآني بصوت واضح.',
+      importance: Importance.high,
+      priority: Priority.high,
+      playSound: true,
+      enableVibration: true,
+    );
+
+    const darwinDetails = DarwinNotificationDetails(
+      presentAlert: true,
+      presentBadge: true,
+      presentSound: true,
+    );
+
+    const details = NotificationDetails(
+      android: androidDetails,
+      iOS: darwinDetails,
+      macOS: darwinDetails,
+    );
+
+    final now = tz.TZDateTime.now(tz.local);
+
+    if (settings.morningEnabled) {
+      var scheduled = tz.TZDateTime(
+        tz.local,
+        now.year,
+        now.month,
+        now.day,
+        settings.morningHour,
+        settings.morningMinute,
+      );
+      if (scheduled.isBefore(now)) {
+        scheduled = scheduled.add(const Duration(days: 1));
+      }
+      await _notificationsPlugin.zonedSchedule(
+        id: azkarMorningId,
+        title: 'أذكار الصباح',
+        body: '«أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ» · ابدأ يومك بذكر الله وحصنك اليومي.',
+        scheduledDate: scheduled,
+        notificationDetails: details,
+        payload: '/azkar/أذكار الصباح والمساء',
+        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+        matchDateTimeComponents: DateTimeComponents.time,
+      );
+    }
+
+    if (settings.eveningEnabled) {
+      var scheduled = tz.TZDateTime(
+        tz.local,
+        now.year,
+        now.month,
+        now.day,
+        settings.eveningHour,
+        settings.eveningMinute,
+      );
+      if (scheduled.isBefore(now)) {
+        scheduled = scheduled.add(const Duration(days: 1));
+      }
+      await _notificationsPlugin.zonedSchedule(
+        id: azkarEveningId,
+        title: 'أذكار المساء',
+        body: '«أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ» · حصّن نفسك واختم نهارك بالذكر الطيب.',
+        scheduledDate: scheduled,
+        notificationDetails: details,
+        payload: '/azkar/أذكار الصباح والمساء',
+        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+        matchDateTimeComponents: DateTimeComponents.time,
+      );
+    }
+
+    if (settings.sleepEnabled) {
+      var scheduled = tz.TZDateTime(
+        tz.local,
+        now.year,
+        now.month,
+        now.day,
+        settings.sleepHour,
+        settings.sleepMinute,
+      );
+      if (scheduled.isBefore(now)) {
+        scheduled = scheduled.add(const Duration(days: 1));
+      }
+      await _notificationsPlugin.zonedSchedule(
+        id: azkarSleepId,
+        title: 'أذكار النوم',
+        body: '«بِاسْمِكَ رَبِّي وَضَعْتُ جَنْبِي» · استودع نفسك وأهلك في حفظ الله قبل المنام.',
+        scheduledDate: scheduled,
+        notificationDetails: details,
+        payload: '/azkar/أذكار النوم',
+        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+        matchDateTimeComponents: DateTimeComponents.time,
+      );
+    }
+
+    if (settings.wirdEnabled) {
+      var scheduled = tz.TZDateTime(
+        tz.local,
+        now.year,
+        now.month,
+        now.day,
+        settings.wirdHour,
+        settings.wirdMinute,
+      );
+      if (scheduled.isBefore(now)) {
+        scheduled = scheduled.add(const Duration(days: 1));
+      }
+      await _notificationsPlugin.zonedSchedule(
+        id: quranWirdId,
+        title: 'وردك القرآني اليومي',
+        body: '«وَرَتِّلِ الْقُرْآنَ تَرْتِيلًا» · موعد وردك اليومي، واصل القراءة من حيث توقفت.',
+        scheduledDate: scheduled,
+        notificationDetails: details,
+        payload: '/quran',
+        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+        matchDateTimeComponents: DateTimeComponents.time,
+      );
+    }
+  }
+
+  Future<void> cancelAzkarAndWirdNotifications() async {
+    await init();
+    await _notificationsPlugin.cancel(id: azkarMorningId);
+    await _notificationsPlugin.cancel(id: azkarEveningId);
+    await _notificationsPlugin.cancel(id: azkarSleepId);
+    await _notificationsPlugin.cancel(id: quranWirdId);
+  }
+
+  Future<void> showTestNotification({
+    required String title,
+    required String body,
+    required String payload,
+  }) async {
+    await init();
+    const androidDetails = AndroidNotificationDetails(
+      'azkar_and_wird_reminders_v1',
+      'أذكار وورد القرآن اليومي',
+      channelDescription:
+          'تنبيهات يومية لأذكار الصباح والمساء والنوم والورد القرآني بصوت واضح.',
+      importance: Importance.high,
+      priority: Priority.high,
+      playSound: true,
+      enableVibration: true,
+    );
+    const darwinDetails = DarwinNotificationDetails(
+      presentAlert: true,
+      presentBadge: true,
+      presentSound: true,
+    );
+    await _notificationsPlugin.show(
+      id: 9999,
+      title: title,
+      body: body,
+      notificationDetails: const NotificationDetails(
+        android: androidDetails,
+        iOS: darwinDetails,
+        macOS: darwinDetails,
+      ),
+      payload: payload,
     );
   }
 
@@ -392,14 +585,12 @@ class NotificationService {
 
   String _prayerChannelId(PrayerName name, {required bool withAudio}) {
     final mode = withAudio ? 'audio' : 'silent';
-    return 'prayer_${mode}_${name.name}_v2';
+    return 'prayer_adhan_${mode}_${name.name}_v3';
   }
 
   AndroidNotificationSound _prayerAudioSound(PrayerName name) {
-    return UriAndroidNotificationSound(
-      _prayerAudioUris[name] ??
-          'android.resource://com.midrar.app/raw/prayer_${name.name}',
-    );
+    final soundName = name == PrayerName.fajr ? 'adhan_fajr' : 'adhan';
+    return RawResourceAndroidNotificationSound(soundName);
   }
 
   int _prayerNotificationId(DateTime day, PrayerName name) {

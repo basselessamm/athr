@@ -13,6 +13,7 @@ class BookPageWidget extends StatelessWidget {
   final double textScale;
   final int? highlightedAyah;
   final Function(int surah, int ayah)? onAyahTapped;
+  final bool isBookmarked;
 
   const BookPageWidget({
     super.key,
@@ -23,6 +24,7 @@ class BookPageWidget extends StatelessWidget {
     this.textScale = 1,
     this.highlightedAyah,
     this.onAyahTapped,
+    this.isBookmarked = false,
   });
 
   @override
@@ -155,8 +157,8 @@ class BookPageWidget extends StatelessWidget {
                   ),
                 ),
 
-                // Elegant Bookmark Ribbon (only on right page for aesthetics, or based on last read)
-                if (isRightPage)
+                // Elegant Bookmark Ribbon shown only when this page is bookmarked
+                if (isBookmarked)
                   Positioned(
                     top: -10,
                     right: 40,
@@ -316,9 +318,8 @@ class _AyahRichTextState extends State<_AyahRichText> {
 
     return Semantics(
       label: 'نص الصفحة. اضغط على الآية لفتح خياراتها.',
-      child: RichText(
-        textAlign: widget.isFatihah ? TextAlign.center : TextAlign.justify,
-        text: TextSpan(
+      child: Text.rich(
+        TextSpan(
           children: widget.verses.map((verse) {
             final isBismillah =
                 verse.verseNumber == 1 &&
@@ -328,6 +329,29 @@ class _AyahRichTextState extends State<_AyahRichText> {
             String text = verse.text;
             if (isBismillah && text.startsWith(Quran.bismillah)) {
               text = text.replaceFirst(Quran.bismillah, '').trim();
+            } else {
+              text = text.trim();
+            }
+
+            final isHighlighted =
+                verse.verseNumber == widget.highlightedAyah;
+            final highlightBg = isHighlighted
+                ? AppColors.mushafGold.withValues(alpha: 0.20)
+                : null;
+
+            // Split text into leading words and last word to bind the last word
+            // atomically to the Quranic ayah marker via a non-breaking space (\u00A0).
+            // This guarantees the marker never orphans to the next line by itself,
+            // and completely eliminates the Flutter RTL WidgetSpan overlap bug.
+            final lastSpace = text.lastIndexOf(' ');
+            final String leadingText;
+            final String lastWord;
+            if (lastSpace != -1) {
+              leadingText = text.substring(0, lastSpace);
+              lastWord = text.substring(lastSpace + 1);
+            } else {
+              leadingText = '';
+              lastWord = text;
             }
 
             return TextSpan(
@@ -342,66 +366,43 @@ class _AyahRichTextState extends State<_AyahRichText> {
                       height: 2.0,
                     ),
                   ),
+                if (leadingText.isNotEmpty)
+                  TextSpan(
+                    text: '$leadingText ',
+                    recognizer: _recognizerFor(verse),
+                    style: GoogleFonts.amiri(
+                      fontSize: effectiveFontSize,
+                      color: AppColors.mushafInk,
+                      height: effectiveLineHeight,
+                      backgroundColor: highlightBg,
+                    ),
+                  ),
                 TextSpan(
-                  text: '$text ',
+                  text: '$lastWord\u00A0',
                   recognizer: _recognizerFor(verse),
                   style: GoogleFonts.amiri(
                     fontSize: effectiveFontSize,
                     color: AppColors.mushafInk,
                     height: effectiveLineHeight,
-                    backgroundColor: verse.verseNumber == widget.highlightedAyah
-                        ? AppColors.mushafGold.withValues(alpha: 0.20)
-                        : null,
+                    backgroundColor: highlightBg,
                   ),
                 ),
-                WidgetSpan(
-                  alignment: PlaceholderAlignment.middle,
-                  child: Semantics(
-                    container: true,
-                    button: true,
-                    label:
-                        'خيارات الآية ${_toArabicNumerals(verse.verseNumber)}',
-                    child: GestureDetector(
-                      key: ValueKey(
-                        'ayah-marker-${verse.surahNumber}-${verse.verseNumber}',
-                      ),
-                      onTap: widget.onAyahTapped == null
-                          ? null
-                          : () => widget.onAyahTapped!(
-                              verse.surahNumber,
-                              verse.verseNumber,
-                            ),
-                      child: Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 3.5),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 6.0,
-                          vertical: 1.5,
-                        ),
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: AppColors.mushafGoldMuted,
-                            width: 1.2,
-                          ),
-                          borderRadius: BorderRadius.circular(14),
-                          color: AppColors.mushafGold.withValues(alpha: 0.10),
-                        ),
-                        child: Text(
-                          _toArabicNumerals(verse.verseNumber),
-                          style: GoogleFonts.amiri(
-                            fontSize: 13 * widget.textScale,
-                            color: AppColors.mushafInkStrong,
-                            fontWeight: FontWeight.bold,
-                            height: 1.15,
-                          ),
-                        ),
-                      ),
-                    ),
+                TextSpan(
+                  text: '﴿${_toArabicNumerals(verse.verseNumber)}﴾ ',
+                  recognizer: _recognizerFor(verse),
+                  style: GoogleFonts.amiri(
+                    fontSize: effectiveFontSize * 0.95,
+                    color: AppColors.mushafGoldMuted,
+                    fontWeight: FontWeight.bold,
+                    height: effectiveLineHeight,
+                    backgroundColor: highlightBg,
                   ),
                 ),
               ],
             );
           }).toList(),
         ),
+        textAlign: widget.isFatihah ? TextAlign.center : TextAlign.justify,
       ),
     );
   }
